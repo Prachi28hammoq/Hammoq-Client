@@ -1,0 +1,21 @@
+.modal-dialog {
+  max-height: 500px;
+}
+
+/* Style the button and place it in the middle of the container/image */
+.container .btn2 {
+  position: absolute;
+  top: 7%;
+  left: 4%;
+  background-color: #555;
+  color: white;
+  font-size: 12px;
+  padding: 7px 7px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.container .btn2:hover {
+  background-color: black;
+}
