@@ -1,0 +1,42 @@
+.image-upload input {
+  display: none;
+}
+
+.image-upload i {
+  width: 80px;
+  cursor: pointer;
+}
+.uploaded {
+  margin: 10px;
+}
+.uploaded > div {
+  min-height: 90px;
+  margin: 10px;
+}
+.uploaded label {
+  margin: 10px 0px;
+  width: 100%;
+  text-align: center !important;
+}
+
+.modal-dialog {
+  max-height: 500px;
+}
+
+/* Style the button and place it in the middle of the container/image */
+.container .btn2 {
+  position: absolute;
+  top: 7%;
+  left: 4%;
+  background-color: #555;
+  color: white;
+  font-size: 12px;
+  padding: 7px 7px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.container .btn2:hover {
+  background-color: black;
+}

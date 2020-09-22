@@ -1,0 +1,41 @@
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.template-card {
+  height: 150px;
+}
+body {
+  font-family: "Poppins", sans-serif;
+}
+.listIt {
+  width: 800px;
+  margin: auto;
+  padding-top: 10px;
+  padding-bottom: 50px;
+}
+.row {
+  margin-bottom: 20px;
+}
+#buttonIt {
+  height: 40px;
+  width: 120px;
+}
+#waist {
+  height: 40px;
+  width: 120px;
+}
+#alignIt {
+  text-align: right;
+}
+.colorIt {
+  background-color: white;
+  border: 0px;
+}
+#imageset {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  text-align: center;
+}
