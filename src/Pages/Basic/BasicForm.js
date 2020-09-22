@@ -362,8 +362,7 @@ class BasicForm extends Component {
       },
     })
       .then((response) => {
-        console.log(response ,'usejrjkjj')
-       // window.open("/products", "_self");
+        window.open("/products", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
