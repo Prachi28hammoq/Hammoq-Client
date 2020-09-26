@@ -306,7 +306,7 @@ class BasicForm extends Component {
     data.append("price", this.state.input4);
     data.append("brand", this.state.input5);
     data.append("model", this.state.input6);
-    data.append("shortDescription", this.state.input7);
+    data.append("note", this.state.input7);
     data.append("condition_name", this.state.input1);
     if (this.state.Ebay) {
       data.append("ebayc", this.state.ebay);
