@@ -86,6 +86,7 @@ export default class extends Component {
       handleDescriptionLabel,
       templatename,
       tempcheck,
+      handleUrl
     } = this.props;
 
     if (custom.toString() == "false") {
@@ -864,6 +865,45 @@ export default class extends Component {
               rows="3"
               name="bottomDescription"
               value={data.bottomDescription}
+              onChange={handleChange}
+            ></textarea>
+          </div>
+
+          <input
+          className="form-control form-control-sm"
+          type="text"
+          name="ebay"
+          placeholder="Ebay url"
+          value={data["ebay"]["url"]}
+          onChange={handleUrl}
+        />
+        <input
+          className="form-control form-control-sm"
+          type="text"
+          name="poshmark"
+          placeholder="Poshmark url"
+          value={data["poshmark"]["url"]}
+          onChange={handleUrl}
+        />
+        <input
+          className="form-control form-control-sm"
+          type="text"
+          name="mercari"
+          placeholder="Mercari url"
+          value={data["mercari"]["url"]}
+          onChange={handleUrl}
+        />
+
+              <div className="form-group">
+            <label className="h6 py-2 fw-500 text-uppercase">
+              notes
+            </label>
+            <textarea
+              className="form-control col-12 col-lg-12"
+              id="notes"
+              rows="3"
+              name="notes"
+              defaultValue={data.notes}
               onChange={handleChange}
             ></textarea>
           </div>

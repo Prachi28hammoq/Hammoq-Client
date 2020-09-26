@@ -36,7 +36,10 @@ class Searchcart extends Component {
       totalPage: "",
       filteredProducts: [],
       message : '',
-      pop_open: false
+      pop_open: false,
+      inventoryCount : '',
+      draftCount : '',
+      submittedCount : ''
     };
   }
 
@@ -49,13 +52,16 @@ class Searchcart extends Component {
         this.setState({ rates: res.data[res.data.length - 1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-    await Axios.get("/product", { params: { page: 1, size: 10 } })
+    await Axios.get(`/product/type/submitted`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-        console.log(data);
+        console.log(data, 'user data, user check');
         this.setState({
           products: data.data,
           totalPage: parseInt(data.pages),
           page: parseInt(data.currPage),
+          inventoryCount : data.count.inventoryCount,
+          draftCount : data.count.draftCount,
+          submittedCount : data.count.submittedCount 
         });
         // if (this.state.products != null) {
         //   this.setState({
@@ -139,26 +145,70 @@ class Searchcart extends Component {
     );
   };
 
-  handleInventory = () => {
-    console.log('handle inventory')
-    const Inventory = this.state.products.filter((product) => product.prodStatus == "inventory");
-    this.setState({ filteredProducts: Inventory });
+  handleInventory = async () => {
+     await Axios.get(`/product/type/inventory`, { params: { page: 1, size: 10 } })
+    .then(({ data }) => {
+      console.log(data);
+      this.setState({
+        products: data.data,
+        totalPage: parseInt(data.pages),
+        page: parseInt(data.currPage),
+      });
+      // if (this.state.products != null) {
+      //   this.setState({
+      //     products: this.state.products.filter((filtered) => {
+      //       return filtered.status == true;
+      //     }),
+      //   });
+      // }
+
+      this.setState({ loading: false });
+    })
+    .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+  }  
+
+  handleDrafts = async () => {
+    await Axios.get(`/product/type/draft`, { params: { page: 1, size: 10 } })
+    .then(({ data }) => {
+      console.log(data);
+      this.setState({
+        products: data.data,
+        totalPage: parseInt(data.pages),
+        page: parseInt(data.currPage),
+      });
+      // if (this.state.products != null) {
+      //   this.setState({
+      //     products: this.state.products.filter((filtered) => {
+      //       return filtered.status == true;
+      //     }),
+      //   });
+      // }
+
+      this.setState({ loading: false });
+    })
+    .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
 
-  handleDrafts = () => {
-    console.log('draft')
-    const Drafts = this.state.products.filter(
-      (product) => product.status == "draft"
-    );
-    this.setState({ filteredProducts: Drafts });
-  };
+  handleSubmitted = async () => {
+    await Axios.get(`/product/type/submitted`, { params: { page: 1, size: 10 } })
+    .then(({ data }) => {
+      console.log(data);
+      this.setState({
+        products: data.data,
+        totalPage: parseInt(data.pages),
+        page: parseInt(data.currPage),
+      });
+      // if (this.state.products != null) {
+      //   this.setState({
+      //     products: this.state.products.filter((filtered) => {
+      //       return filtered.status == true;
+      //     }),
+      //   });
+      // }
 
-  handleSubmitted = () => {
-    console.log(this.state.products, "hello product");
-    const submittedProduct = this.state.products.filter(
-      (product) => product.prodStatus == "submitted"
-    );
-    this.setState({ filteredProducts: submittedProduct });
+      this.setState({ loading: false });
+    })
+    .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
 
   handleDelete = async (itemId) => {
@@ -248,7 +298,7 @@ class Searchcart extends Component {
     const {comment, addComment} = this.props
    // console.log(this.state.products, "products");
   console.log(this.state.products,'state products')
-  console.log(this.state.filteredProducts,'draft')
+  console.log(this.state.filteredProducts,'filterproducts')
     const {
       products,
       rates,
@@ -277,7 +327,8 @@ class Searchcart extends Component {
         : products;
 
     return (
-      <div className="cartIt">
+      <div>
+      <div className="cartIt" style = {{minHeight : "75vh"}}>
         <div className="row">
           <div className="col-6 d-flex">
             <input
@@ -336,8 +387,8 @@ class Searchcart extends Component {
             Rates
           </div>
         </div>
-        <div className="row">
-          {/* <h5 className="ml-4 mt-2">Balance: $ {bal.toFixed(2)}</h5> */}
+        {/* <div className="row">
+        
           <div
             className=" d-flex  ml-auto justify-content-center mr-4 mb-2"
             style={{ position: "absolute", top: "85px", right: "135px" }}
@@ -346,7 +397,7 @@ class Searchcart extends Component {
             {clientdetails.noOfProducts - clientdetails.noOfListings > 0 ? clientdetails.noOfProducts - clientdetails.noOfListings : 0} , Listed
             products: {clientdetails.noOfListings}
           </div>
-        </div>
+        </div> */}
         <div className="product__info">
           {/* <div>
             <button type="text" onClick = {this.handleMessageAlert} className="btn btn-primary d-incline mr-4 mb-3" >Message</button>
@@ -388,7 +439,7 @@ class Searchcart extends Component {
                 this.handleInventory()
               }}
             >
-              Inventory
+              {this.state.inventoryCount}-Inventory
             </button>
             <button
               className="btn btn-primary d-inline mr-4 mb-3"
@@ -396,7 +447,7 @@ class Searchcart extends Component {
                 this.handleDrafts();
               }}
             >
-              Drafts
+              {this.state.draftCount}-Drafts
             </button>
             <button
               className="btn btn-primary d-inline mr-4 mb-3"
@@ -404,7 +455,7 @@ class Searchcart extends Component {
                 this.handleSubmitted();
               }}
             >
-              Submitted
+            {this.state.submittedCount} - Submitted
             </button>
           </div>
         </div>
@@ -762,7 +813,8 @@ class Searchcart extends Component {
             )}
           </tbody>
         </table>
-        <div className="w-50 mx-auto py-2">
+      </div>
+        <div className="w-100 mx-auto py-2">
           <Pagination
             curPage={page}
             totalPage={totalPage}
@@ -772,7 +824,9 @@ class Searchcart extends Component {
             next={this.handleChangePage}
           />
         </div>
-      </div>
+        </div>
+      
+      
     );
   }
 }

@@ -2,13 +2,14 @@ import React from 'react'
 
 function Pagination({curPage, totalPage, rowPerPage, next, previous, onRowNumberChange}) {
     return (
-        <div className="shadow d-flex justify-content-between py-3 px-5">
+        <div className="shadow d-flex justify-content-around py-3 px-1">
             <div className="d-flex align-items-center">Rows per page:  
                 <select value={rowPerPage} style={{width: 70}} class="form-control ml-2" onChange={(e) => onRowNumberChange(e.target.value)}>
                     <option value={5}>5</option>
                     <option value={10}>10</option>
-                    <option value={15}>15</option>
                     <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
                 </select>
             </div>
             <div>
