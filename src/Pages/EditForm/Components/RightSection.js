@@ -28,6 +28,8 @@ export default class extends Component {
       anchorEl: null,
       msgFormTitle : "",
       msgFormDescription : "",
+      field  : '',
+      productMessage : []
     };
   }
 
@@ -45,7 +47,8 @@ export default class extends Component {
   handleMessageSubmit = async () => {
     const formData = {
       msgformTitle : this.state.msgFormTitle,
-      msgFormDescription : this.state.msgFormDescription
+      msgFormDescription : this.state.msgFormDescription,
+      field : this.state.field
     }
     try{
       const response = await Axios.post(`/message/${this.props.productid}`, formData, {
@@ -55,6 +58,7 @@ export default class extends Component {
         },
       })
       console.log(response, 'customer jshdfjkhakl')
+      this.setState({anchorEl: null})
     }catch(error){
       console.log(error)
     }
@@ -104,14 +108,33 @@ export default class extends Component {
     this.setState({anchorEl : null })
   };
   
+  handleMessageData = async (value, event) => {
+    console.log(value,"value")
+    const productId = this.props.productid
+    const msgFormToggle = this.state.msgFormToggle
+    const anchorEl= event.currentTarget
+    console.log(anchorEl)
+    try {
+      const response = await Axios.get(`/message/${productId}/${value}`, {
+        headers : {
+          "content-type": "application/json",
+          headers: localStorage.getItem("token")
+        
+        }
+      })
+      console.log(response, "messsage data value")
+      this.setState({productMessage : response.data, msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${this.props.data[value]}`, field : value ,anchorEl   })
+    }catch(error){
+      console.log(error)
+    }
 
+  }
   render = () => {
     const { selectedWebsites, category, showMoreLines, custom, msgFormToggle, anchorEl } = this.state;
 
-    const { data, handleChange, toggleSelectedWebsite, message } = this.props;
-    console.log(this.props.message,'props value of message')
+    const { data, handleChange, toggleSelectedWebsite } = this.props;
 
-    const { suggestTitles, showOtherTitles, customdesc } = this.state;
+    const { suggestTitles, showOtherTitles, customdesc, productMessage } = this.state;
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -130,7 +153,8 @@ export default class extends Component {
       addDescription,
       handleDescriptionChange,
       handleDescriptionLabel,
-      removeDescription
+      removeDescription,
+      handleUrl
     } = this.props;
 
     if (custom.toString() == "false") {
@@ -375,7 +399,7 @@ export default class extends Component {
             >
               Automated Title
             </button>
-          )}
+          )} 
         </div>
         <div className="form-group row">
           <div className="col-12 col-lg-8">
@@ -561,18 +585,23 @@ export default class extends Component {
 
         {/* Feilds */}
         <div className="row">
-        <div className="py-3 col-8">
+        <div className="py-3 col-11">
           <div className="row">
-          <Input
-            label="BRAND OR MARKER"
-            name="brand"
-            id="brand"
-            defaultValue={data.brand}
-            onChange={handleChange}
+            <div className="col-11">
+              <Input
+                label="BRAND OR MARKER"
+                name="brand"
+                id="brand"
+                defaultValue={data.brand}
+                onChange={handleChange}
+                field = "brand"
           />
+            </div>
+          
             <div className="col-1">
                 <button
-                  onClick={(event) => this.setState({msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.brand}`, anchorEl : event.currentTarget })}
+                 // onClick={(event) => this.setState({msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.brand}`, anchorEl : event.currentTarget, field : "brand" })}
+                  onClick = {(event) => this.handleMessageData('brand', event)}
                   style={{
                     background: "none",
                     border: "none",
@@ -584,7 +613,6 @@ export default class extends Component {
               </div>
           </div>
          
-
           <div className="row">
               <div className="col-11">
               <Input
@@ -597,7 +625,9 @@ export default class extends Component {
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.model}`, anchorEl : event.currentTarget })}
+               // onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.model}`, anchorEl : event.currentTarget,  field : "model" })}
+                onClick = {(event) => this.handleMessageData('model', event)}
+
                 style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
@@ -610,15 +640,16 @@ export default class extends Component {
               <div className="col-11">
               <Input
                 label="Model No."
-                name="model"
-                id="model"
+                name="modelno"
+                id="modelno"
                 defaultValue={data.modelno}
                 onChange={handleChange}
               />
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.modelno}`, anchorEl : event.currentTarget })}
+               //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.modelno}`, anchorEl : event.currentTarget,  field : "modelno" })}
+                onClick = {(event) => this.handleMessageData('modelno', event)}
                 style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
@@ -639,8 +670,9 @@ export default class extends Component {
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.colorShade}`, anchorEl : event.currentTarget })}
-                style={{ background: "none", border: "none", outline: "none" }}
+               // onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.colorShade}`, anchorEl : event.currentTarget,  field : "colorShade" })}
+               onClick = {(event) => this.handleMessageData('colorShade', event)} 
+               style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
               </button>
@@ -660,7 +692,8 @@ export default class extends Component {
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.style}`, anchorEl : event.currentTarget })}
+                //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.style}`, anchorEl : event.currentTarget, field : "style"  })}
+                onClick = {(event) => this.handleMessageData('style', event)} 
                 style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
@@ -701,7 +734,8 @@ export default class extends Component {
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.pattern}`, anchorEl : event.currentTarget })}
+                //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.pattern}`, anchorEl : event.currentTarget, field : "pattern" })}
+                onClick = {(event) => this.handleMessageData('pattern', event)} 
                 style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
@@ -721,7 +755,8 @@ export default class extends Component {
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.size}`, anchorEl : event.currentTarget })}
+              //  onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.size}`, anchorEl : event.currentTarget, field : "size" })}
+                onClick = {(event) => this.handleMessageData('size', event)} 
                 style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
@@ -741,7 +776,8 @@ export default class extends Component {
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.seasonOrWeather}` , anchorEl : event.currentTarget})}
+               // onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.seasonOrWeather}` , anchorEl : event.currentTarget, field : "seasonOrWeather"})}
+                onClick = {(event) => this.handleMessageData('seasonOrWeather', event)} 
                 style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
@@ -761,7 +797,8 @@ export default class extends Component {
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.care}`, anchorEl : event.currentTarget } )}
+                //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.care}`, anchorEl : event.currentTarget , field : "care"} )}
+                onClick = {(event) => this.handleMessageData('care', event)} 
                 style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
@@ -781,7 +818,8 @@ export default class extends Component {
               </div>
               <div className="col-1">
               <button
-                onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.madeIn}, ` , anchorEl : event.currentTarget   })}
+              //  onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.madeIn}, ` , anchorEl : event.currentTarget , field : "madeIn"  })}
+                onClick = {(event) => this.handleMessageData('madeIn', event)} 
                 style={{ background: "none", border: "none", outline: "none" }}
               >
                 +
@@ -805,20 +843,18 @@ export default class extends Component {
              }}
              
            >
-            <div className="col" style = {{width : "20rem"}}>
-            <div className = "">
-            
-            <p>{message && message.map((msg) => {
+            <div className="col" style = {{width : "20rem", paddingBottom : '1rem' , paddingTop : '1rem'}}>
+              <div className="scroll" style = {{overflow : "auto" , width : "18rem" , height : "7rem"}}>
+              <p>{productMessage && productMessage.map((msg) => {
               return (
-                <div style = {{overflow : "auto" , height : "65px" }}>
-                  <p>{msg.msgformTitle}</p>
+                <div >
+                  <p style = {{color : "red"}}>{msg.msgformTitle}</p>
                   <p>{msg.msgFormDescription}</p>
                 </div>
               )
             })}</p>
-            
-            </div>
-            <div className="">
+              </div>
+              <div style = {{paddingBottom : "1rem"}}>
               <form onSubmit = {this.handleMessageSubmit}>
                 <input
                   placeholder="title"
@@ -839,8 +875,8 @@ export default class extends Component {
               </form>
             </div>
             
-          
             </div>
+            
             
             
           </Popover>)}
@@ -1123,6 +1159,43 @@ export default class extends Component {
               rows="3"
               name="bottomDescription"
               defaultValue={data.bottomDescription}
+              onChange={handleChange}
+            ></textarea>
+          </div>
+          <input
+          className="form-control form-control-sm"
+          type="text"
+          name="ebay"
+          placeholder="Ebay url"
+          value={data["ebay"]["url"]}
+          onChange={handleUrl}
+        />
+        <input
+          className="form-control form-control-sm"
+          type="text"
+          name="poshmark"
+          placeholder="Poshmark url"
+          value={data["poshmark"]["url"]}
+          onChange={handleUrl}
+        />
+        <input
+          className="form-control form-control-sm"
+          type="text"
+          name="mercari"
+          placeholder="Mercari url"
+          value={data["mercari"]["url"]}
+          onChange={handleUrl}
+        />
+          <div className="form-group">
+            <label className="h6 py-2 fw-500 text-uppercase">
+              notes
+            </label>
+            <textarea
+              className="form-control col-12 col-lg-12"
+              id="notes"
+              rows="3"
+              name="notes"
+              defaultValue={data.notes}
               onChange={handleChange}
             ></textarea>
           </div>

@@ -362,8 +362,7 @@ class BasicForm extends Component {
       },
     })
       .then((response) => {
-        console.log(response ,'usejrjkjj')
-       // window.open("/products", "_self");
+        window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
@@ -984,7 +983,7 @@ class BasicForm extends Component {
                   value={this.state.input7}
                   rows="4"
                   name="input7"
-                  placeholder="Description"
+                  placeholder="notes"
                   className="form-control"
                 ></textarea>
               </div>

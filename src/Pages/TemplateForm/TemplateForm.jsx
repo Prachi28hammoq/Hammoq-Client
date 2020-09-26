@@ -71,6 +71,7 @@ export default class extends Component {
       rates: {},
       cid: "",
       imglen: 0,
+      templateid : ''
     };
   }
 
@@ -146,6 +147,8 @@ export default class extends Component {
   };
 
   componentDidMount = () => {
+    const tempId = this.props.match.params.id
+    this.setState({templateid : tempId})
     Axios.get("/template")
       .then(({ data }) => this.setState({ templates: data.templates }))
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -503,6 +506,7 @@ export default class extends Component {
     dataform.append("model", data.model || "");
     dataform.append("title", data.title);
     dataform.append("shortDescription", data.shortDescription || "");
+    dataform.append("notes", data.notes)
     dataform.append("condition_name", data.condition_name);
     dataform.append("ebay", data.ebay.title);
     dataform.append("mercari", data.mercari.title);
@@ -848,6 +852,29 @@ export default class extends Component {
     data["category"] = str;
     this.setState({ data });
   };
+
+    handleDelete = async () => {
+     const id = this.props.match.params.templateid
+     
+     Axios.delete(`/template/${id}`, {
+      headers: {
+        "x-access-token": `${localStorage.getItem("token")}`,
+      },
+    }) 
+    .then((response) => {
+      window.open("/templates", "_self");
+    })
+    .catch((err) => {
+      console.log(err) || alert(JSON.stringify({ err: err }));
+    });
+
+  }
+  handleUrl = (e) => {
+    const { name, value } = e.target;
+    const { data } = this.state;
+    data[name]["url"] = value;
+    this.setState({ data });
+  };
   render = () => {
     const {
       website,
@@ -1069,6 +1096,9 @@ export default class extends Component {
               handleImageChange={this.handleImageChange}
               handleOtherTitles={this.handleOtherTitles}
               removeDescription={this.removeDescription}
+              templateid = {this.state.templateid}
+              handleUrl = {this.handleUrl}
+              
             />
           </div>
         </div>
@@ -1103,6 +1133,11 @@ export default class extends Component {
               className="btn btn-danger mb-4 btn-block col-12 mr-auto col-lg-12"
             />
           </div>
+          {templateid ? <button
+                className="btn btn-danger mb-4 btn-block col-3 mr-auto"
+                onClick={this.handleDelete}
+              >Delete</button>: ""}
+
         </div>
       </div>
     );

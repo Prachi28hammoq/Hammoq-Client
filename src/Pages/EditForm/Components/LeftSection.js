@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import { assetsURL } from "../../../services/Axios";
 import ButtonGroup from "./ButtonGroup";
 import LoadingSpinner from "../../utils/loader";
+import Popover from '@material-ui/core/Popover';
+import Axios from '../../../services/Axios'
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa"
 
 const max = 5000;
 const $ = window.$;
@@ -22,13 +25,77 @@ export default class extends Component {
       value: "",
       count: 0,
       fullimg: "",
+      messageFormToggle : false,
+      anchorEl : null,
+      msgFormTitle : '',
+      msgFormDescription : '',
+      productMessage: [],
+      modalImage : "",
+      imageIndex : 0,
     };
+   
+  }
+
+  componentDidMount = () => {
+    const image = assetsURL + this.props.images[0].img
+    console.log(image,'comonet')
+    this.setState({modalImage:image})
   }
 
   handleChanges = (e) => {
     if (e.target.value.length > max) return 0;
     this.setState({ count: e.target.value.length });
   };
+
+  
+  
+
+
+  handleMessage = (e) => {
+    this.setState({[e.target.name] : e.target.value})
+  }
+
+  handleMessageSubmit = async () => {
+    const formData = {
+      msgformTitle : this.state.msgFormTitle,
+      msgFormDescription : this.state.msgFormDescription,
+      field : this.state.field
+    }
+    try{
+      const response = await Axios.post(`/message/${this.props.productid}`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": `${localStorage.getItem("token")}`,
+        },
+      })
+      console.log(response, 'customer jshdfjkhakl')
+      this.setState({anchorEl: null})
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+  handleMessageData = async (value, event) => {
+    console.log(value,"value")
+    const productId = this.props.productid
+    const messageFormToggle = this.state.messageFormToggle
+    const anchorEl= event.currentTarget
+    console.log(anchorEl)
+    try {
+      const response = await Axios.get(`/message/${productId}/${value}`, {
+        headers : {
+          "content-type": "application/json",
+          headers: localStorage.getItem("token")
+        
+        }
+      })
+      console.log(response, "messsage data value")
+      this.setState({productMessage : response.data, messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${this.props.data[value]}`, field : value ,anchorEl   })
+    }catch(error){
+      console.log(error)
+    }
+
+  }
 
   setCategory = (str) => {
     const { data } = this.props;
@@ -42,8 +109,43 @@ export default class extends Component {
       this.setState({ category: str });
     }
   };
+  handleClick = (event) => {
+    this.setState({anchorEl : event.currentTarget});
+  };
+
+  handleClose = () => {
+    this.setState({anchorEl : null })
+  };
+
+  handleImageModal = (idx) => {
+    console.log(idx ,'idx')
+    console.log(this.props.images ,'concoel')
+    if(idx >=  0  && idx < this.props.images.length && this.props.images[idx].img != null ){
+      let image = this.props.images[idx]
+      console.log(image, 'index check')
+      this.setState(
+        {
+          imageIndex : idx,
+          fullimg:
+            typeof image.img === "string"
+              ? image.img.substring(0, 4) != "http" &&
+                image.img.substring(0, 5) != "https"
+                ? assetsURL + image.img
+                : image.img
+              :image.img != null ? URL.createObjectURL(image.img) : '',
+        },
+        () => {
+          $("#addTemplateModal1").modal("show");
+        }
+      );
+    }
+  }
+
+
+
 
   render = () => {
+    console.log(this.state.imageIndex, 'image index')
     const { suggestTitles, showOtherTitles } = this.state;
     const {
       data,
@@ -68,8 +170,11 @@ export default class extends Component {
       showcat,
     } = this.props;
 
-    const { selectedWebsites, category, showMoreLines } = this.state;
+    const { selectedWebsites, category, showMoreLines, messageFormToggle, anchorEl,productMessage } = this.state;
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
     const { toggleSelectedWebsite } = this.props;
+    
 
     return (
       <>
@@ -89,6 +194,7 @@ export default class extends Component {
                   role="dialog"
                   aria-labelledby="addTemplateModalLabel"
                   aria-hidden="true"
+
                 >
                   <div
                     className="modal-dialog modal-lg modal-dialog-centered"
@@ -104,10 +210,16 @@ export default class extends Component {
                         >
                           <span aria-hidden="true">×</span>
                         </button>
+                        
+                        <FaChevronLeft onClick = {() => {this.handleImageModal(this.state.imageIndex - 1)}}/>
+                        <FaChevronRight onClick = {() => {this.handleImageModal(this.state.imageIndex + 1)}}/>
+
                       </div>
+                      
                       <img
                         src={this.state.fullimg}
                         style={{ height: "500px" }}
+                        
                       />
                     </div>
                   </div>
@@ -127,22 +239,23 @@ export default class extends Component {
                               : URL.createObjectURL(image.img)
                           }
                           style={{ width: "100%", height: "90px" }}
-                          onClick={() => {
-                            this.setState(
-                              {
-                                fullimg:
-                                  typeof image.img === "string"
-                                    ? image.img.substring(0, 4) != "http" &&
-                                      image.img.substring(0, 5) != "https"
-                                      ? assetsURL + image.img
-                                      : image.img
-                                    : URL.createObjectURL(image.img),
-                              },
-                              () => {
-                                $("#addTemplateModal1").modal("show");
-                              }
-                            );
-                          }}
+                          // onClick={() => {
+                          //   this.setState(
+                          //     {
+                          //       fullimg:
+                          //         typeof image.img === "string"
+                          //           ? image.img.substring(0, 4) != "http" &&
+                          //             image.img.substring(0, 5) != "https"
+                          //             ? assetsURL + image.img
+                          //             : image.img
+                          //           : URL.createObjectURL(image.img),
+                          //     },
+                          //     () => {
+                          //       $("#addTemplateModal1").modal("show");
+                          //     }
+                          //   );
+                          // }}
+                          onClick={() => {this.handleImageModal(idx)}}
                         ></img>
 
                         <button
@@ -154,6 +267,7 @@ export default class extends Component {
                         >
                           <span aria-hidden="true">×</span>
                         </button>
+                        
                       </div>
                     ) : (
                       <div
@@ -382,6 +496,12 @@ export default class extends Component {
         <div className="measurements pt-3">
           <span className="h4 p-2 pr-3">Measurements :-</span>
           <div className="form-group my-2 my-4 d-flex align-items-center">
+            <button 
+              
+              onClick = {(event) => this.handleMessageData('waist', event)}
+             // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.waist}`, anchorEl : event.currentTarget,  field : "waist" })}
+              style={{ background: "none", border: "none", outline: "none" }}
+            >+</button>
             <label className=" mb-0 mr-3 label">Waist :-</label>
             <input
               className="form-control form-control-sm"
@@ -393,6 +513,11 @@ export default class extends Component {
             />
           </div>
           <div className="form-group my-2 my-4 d-flex align-items-center">
+          <button 
+          onClick = {(event) => this.handleMessageData('inseam', event)}
+         // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.inseam}`, anchorEl : event.currentTarget,  field : "inseam" })}
+          style={{ background: "none", border: "none", outline: "none" }}
+          >+</button>
             <label className=" mb-0 mr-3 label">Inseam :-</label>
             <input
               className="form-control form-control-sm"
@@ -404,6 +529,11 @@ export default class extends Component {
             />
           </div>
           <div className="form-group my-2 my-4 d-flex align-items-center">
+          <button
+              onClick = {(event) => this.handleMessageData('rise', event)}
+          //onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.rise}`, anchorEl : event.currentTarget,  field : "rise" })}
+          style={{ background: "none", border: "none", outline: "none" }}
+          >+</button>
             <label className=" mb-0 mr-3 label">Rise :-</label>
             <input
               className="form-control form-control-sm"
@@ -463,6 +593,10 @@ export default class extends Component {
         <div className="row">
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+              onClick = {(event) => this.handleMessageData('price', event)}
+           // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.price}`, anchorEl : event.currentTarget,  field : "price" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">
                 <text className="text-danger">*</text>Selling Price
               </label>
@@ -479,6 +613,10 @@ export default class extends Component {
           </div>
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+            onClick = {(event) => this.handleMessageData('mrp', event)}
+           // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.mrp}`, anchorEl : event.currentTarget,  field : "mrp" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">MRP</label>
               <input
                 type="number"
@@ -494,6 +632,10 @@ export default class extends Component {
 
           <div className="col-2 col-lg-4">
             <div className="form-group">
+            <button 
+            onClick = {(event) => this.handleMessageData('msrp', event)}
+            //onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.msrp}`, anchorEl : event.currentTarget,  field : "msrp" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">MSRP</label>
               <input
                 type="number"
@@ -511,6 +653,10 @@ export default class extends Component {
         <div className="row">
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+              onClick = {(event) => this.handleMessageData('costOfGoods', event)}
+            //onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.costOfGoods}`, anchorEl : event.currentTarget,  field : "costOfGoods" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">COST OF GOODS</label>
               <input
                 type="number"
@@ -524,6 +670,9 @@ export default class extends Component {
           </div>
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+              onClick = {(event) => this.handleMessageData('shippingFees', event)}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">SHIPPING/OTHER COSTS?</label>
               <input
                 type="number"
@@ -537,6 +686,10 @@ export default class extends Component {
           </div>
           <div className="col-2 col-lg-4">
             <div className="form-group">
+            <button 
+            onClick = {(event) => this.handleMessageData('profit', event)}
+           // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.profit}`, anchorEl : event.currentTarget,  field : "profit" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">Profit</label>
               <input
                 type="number"
@@ -553,6 +706,10 @@ export default class extends Component {
         <div className="row">
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+            onClick = {(event) => this.handleMessageData('sku', event)}
+           //onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.sku}`, anchorEl : event.currentTarget,  field : "sku" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">SKU</label>
               <input
                 type="text"
@@ -566,6 +723,10 @@ export default class extends Component {
           </div>
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+              onClick = {(event) => this.handleMessageData('upc', event)}
+           // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.upc}`, anchorEl : event.currentTarget,  field : "upc" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">UPC</label>
               <input
                 type="text"
@@ -579,6 +740,10 @@ export default class extends Component {
           </div>
           <div className="col-2 col-lg-4">
             <div className="form-group">
+            <button 
+            onClick = {(event) => this.handleMessageData('quantity', event)}
+           // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.quantity}`, anchorEl : event.currentTarget,  field : "quantity" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">
                 <text className="text-danger">*</text>Quantity?
               </label>
@@ -601,6 +766,10 @@ export default class extends Component {
         <div className="row">
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+            onClick = {(event) => this.handleMessageData('weightOZ', event)}
+          // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.weightLB}`, anchorEl : event.currentTarget,  field : "weightLB" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">Shipping weight lb/kg</label>
               <input
                 type="number"
@@ -615,6 +784,10 @@ export default class extends Component {
           </div>
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+            onClick = {(event) => this.handleMessageData('weightOZ', event)}
+           // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.weightOZ}`, anchorEl : event.currentTarget,  field : "weightOZ" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">Shipping weight oz/g</label>
               <input
                 type="number"
@@ -629,6 +802,10 @@ export default class extends Component {
           </div>
           <div className="col-2 col-lg-4">
             <div className="form-group">
+            <button
+              onClick = {(event) => this.handleMessageData('zipCode', event)}
+           // onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.zipCode}`, anchorEl : event.currentTarget,  field : "zipCode" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">Shipping zip or city code</label>
               <input
                 type="text"
@@ -645,6 +822,10 @@ export default class extends Component {
         <div className="row">
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+            onClick = {(event) => this.handleMessageData('packageLength', event)}
+            //onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.packageLength}`, anchorEl : event.currentTarget,  field : "packageLength" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">Shipping package length</label>
               <input
                 type="number"
@@ -658,6 +839,10 @@ export default class extends Component {
           </div>
           <div className="col-3 col-lg-4">
             <div className="form-group">
+            <button 
+              onClick = {(event) => this.handleMessageData('packageWidth', event)}
+            //onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.packageWidth}`, anchorEl : event.currentTarget,  field : "packageWidth" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">Shipping package width</label>
               <input
                 type="number"
@@ -671,6 +856,10 @@ export default class extends Component {
           </div>
           <div className="col-2 col-lg-4">
             <div className="form-group">
+            <button 
+             onClick = {(event) => this.handleMessageData('packageHeight', event)}
+            //onClick={(event) => this.setState({ messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${data.packageHeight}`, anchorEl : event.currentTarget,  field : "packageHeight" })}
+            style={{ background: "none", border: "none", outline: "none" }}>+</button>
               <label className="label mb-3">Shipping package height</label>
               <input
                 type="number"
@@ -683,6 +872,60 @@ export default class extends Component {
             </div>
           </div>
         </div>
+
+        {
+          messageFormToggle && (
+            <Popover
+            className 
+            id={id}
+            open={open}
+            anchorEl={this.state.anchorEl}
+            onClose={this.handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            >
+               <div className="col" style = {{width : "20rem", paddingBottom : '1rem' , paddingTop : '1rem'}}>
+              <div className="scroll" style = {{overflow : "auto" , width : "18rem" , height : "7rem"}}>
+              <p>{productMessage && productMessage.map((msg) => {
+              return (
+                <div >
+                  <p style = {{color : "red"}}>{msg.msgformTitle}</p>
+                  <p>{msg.msgFormDescription}</p>
+                </div>
+              )
+            })}</p>
+              </div>
+              <div style = {{paddingBottom : "1rem"}}>
+              <form onSubmit = {this.handleMessageSubmit}>
+                <input
+                  placeholder="title"
+                  style={{ width: "100%" }}
+                  onChange={this.handleMessage}
+                  value = {this.state.msgFormTitle}
+                  name = "msgformTitle"
+
+                />
+                <textarea
+                  placeholder="explain"
+                  style={{ width: "100%" }}
+                  onChange={this.handleMessage}
+                  value = {`${this.state.msgFormDescription}`}
+                  name = "msgFormDescription"
+                />
+                <button className = "btn btn-primary">Send</button>
+              </form>
+            </div>
+            
+            </div>
+            </Popover>
+          )
+        }
 
         {/*keywords & notes(not displayed in listing)*/}
         <div className="form-group mt-3">

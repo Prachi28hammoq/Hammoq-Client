@@ -72,7 +72,8 @@ export default class extends Component {
       activity_check: true,
       editchange: false,
       message : [],
-      productid : ''
+      productid : '',
+      inventoryCount : 0
     };
   }
 
@@ -223,6 +224,8 @@ export default class extends Component {
         this.setState({message : res.data.products[0].message})
       }
 
+     
+
       this.state.data["ebay"]["title"] = res.data.products[0].ebay.title;
       this.state.data["poshmark"]["title"] =
         res.data.products[0].poshmark.title;
@@ -233,11 +236,29 @@ export default class extends Component {
           image.img = res.data.products[0].images[image.key];
         });
       this.setState({ images });
+     
 
       //balance check
 
       let activity = res.data.products[0].activity;
       this.setState({ activity });
+
+      const message = async () => {
+        const response =  await   Axios.get(
+          `/message/${this.props.match.params.id}`,
+          (Axios.defaults.headers.common["x-access-token"] = localStorage.getItem(
+            "token"
+          )),
+          {
+            headers: {
+              "content-type": "application/json",
+            },
+          }
+        )
+        console.log(response)
+      }
+      console.log(message(),'response message check')
+    
 
       if (localStorage.getItem("token")) {
         Axios.get("/payment/rates")
@@ -504,6 +525,7 @@ export default class extends Component {
     // dataform.append("line5", JSON.stringify(value5));
     dataform.append("madeIn", data.madeIn);
     dataform.append("gender", data.gender || "");
+    dataform.append("notes", data.notes)
     dataform.append("others", JSON.stringify(y));
 
     Axios.put(`/product/${this.props.match.params.id}`, dataform, {
@@ -888,6 +910,12 @@ export default class extends Component {
     data["category"] = str;
     this.setState({ data });
   };
+  handleUrl = (e) => {
+    const { name, value } = e.target;
+    const { data } = this.state;
+    data[name]["url"] = value;
+    this.setState({ data });
+  };
 
   render = () => {
     const {
@@ -912,6 +940,8 @@ export default class extends Component {
       activity_check,
       showcat,
     } = this.state;
+
+    console.log(this.state.images, 'images')
     return (
       <div className="container-fluid px-3 template">
         <Link to="/products">
@@ -978,6 +1008,8 @@ export default class extends Component {
               handleOtherTitles={this.handleOtherTitles}
               toggleSelectedWebsite={this.toggleSelectedWebsite}
               setCategory={this.setCategory}
+              message = {this.state.message}
+              productid = {this.state.productid}
             />
           </div>
           <div className="col-12 col-lg-6 pl-lg-3 order-1 order-lg-2">
@@ -990,6 +1022,7 @@ export default class extends Component {
               extraDescriptions={this.state.extraDescriptions}
               addMeasure={this.addMeasure}
               addDescription={this.addDescription}
+              handleUrl={this.handleUrl}
               handleMeasureChange={this.handleMeasureChange}
               handleDescriptionChange={this.handleDescriptionChange}
               handleMeasureLabel={this.handleMeasureLabel}
