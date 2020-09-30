@@ -306,7 +306,7 @@ class BasicForm extends Component {
     data.append("price", this.state.input4);
     data.append("brand", this.state.input5);
     data.append("model", this.state.input6);
-    data.append("note", this.state.input7);
+    data.append("shortDescription", this.state.input7);
     data.append("condition_name", this.state.input1);
     if (this.state.Ebay) {
       data.append("ebayc", this.state.ebay);
@@ -630,7 +630,7 @@ class BasicForm extends Component {
                     ) : null}
                     <h6 className="mb-3  sub-heading">
                       Please enter the logins for each site you want to list &
-                      crosslist to
+                      list to
                     </h6>
                     <select
                       className="form-control body-text"
@@ -1019,7 +1019,7 @@ class BasicForm extends Component {
                         id="poshmark"
                       />
                       <label className="form-check-label" htmlFor="poshmark">
-                        Crosslist on Poshmark
+                        list on Poshmark
                       </label>
                     </div>
                   </div>
@@ -1037,7 +1037,7 @@ class BasicForm extends Component {
                         id="mercari"
                       />
                       <label className="form-check-label" htmlFor="mercari">
-                        Crosslist on Mercari
+                        list on Mercari
                       </label>
                     </div>
                   </div>
@@ -1062,7 +1062,7 @@ class BasicForm extends Component {
                               className="form-check-label"
                               htmlFor="mercari"
                             >
-                              Crosslist on {o}
+                              list on {o}
                             </label>
                           </div>
                         </div>

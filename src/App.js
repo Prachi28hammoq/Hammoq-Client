@@ -34,8 +34,8 @@ const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
   return (
     <div>
-      {!["/signup", "/signin"].includes(pathname) && <Header />}
-
+      {!["/signup", "/signin"].includes(pathname) && <div className="fixed-top"> <Header /></div>}
+      <div className = "container-fluid px-5 py-5 admin my-5">
       {localStorage.getItem("token") ? (
         localStorage.getItem("paymentadded") === "true" ? (
           <Switch>
@@ -77,6 +77,8 @@ const Routes = withRouter((props) => {
           <Route path="/" component={() => <Redirect to="/signin" />} />
         </Switch>
       )}
+      </div>
+      
     </div>
   );
 });
