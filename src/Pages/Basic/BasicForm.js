@@ -630,7 +630,7 @@ class BasicForm extends Component {
                     ) : null}
                     <h6 className="mb-3  sub-heading">
                       Please enter the logins for each site you want to list &
-                      crosslist to
+                      list to
                     </h6>
                     <select
                       className="form-control body-text"
@@ -1019,7 +1019,7 @@ class BasicForm extends Component {
                         id="poshmark"
                       />
                       <label className="form-check-label" htmlFor="poshmark">
-                        Crosslist on Poshmark
+                        list on Poshmark
                       </label>
                     </div>
                   </div>
@@ -1037,7 +1037,7 @@ class BasicForm extends Component {
                         id="mercari"
                       />
                       <label className="form-check-label" htmlFor="mercari">
-                        Crosslist on Mercari
+                        list on Mercari
                       </label>
                     </div>
                   </div>
@@ -1062,7 +1062,7 @@ class BasicForm extends Component {
                               className="form-check-label"
                               htmlFor="mercari"
                             >
-                              Crosslist on {o}
+                              list on {o}
                             </label>
                           </div>
                         </div>

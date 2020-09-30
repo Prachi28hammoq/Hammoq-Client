@@ -198,29 +198,36 @@ export default class extends Component {
                 >
                   <div
                     className="modal-dialog modal-lg modal-dialog-centered"
-                    //style={{ width: "500px", height: "10px" }}
+                    style={{ width: "50%", maxHeight: "auto" }}
                   >
                     <div className="modal-content">
-                      <div className="modal-header">
-                        <button
-                          type="button"
-                          className="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                        >
-                          <span aria-hidden="true">×</span>
-                        </button>
-                        
-                        <FaChevronLeft onClick = {() => {this.handleImageModal(this.state.imageIndex - 1)}}/>
-                        <FaChevronRight onClick = {() => {this.handleImageModal(this.state.imageIndex + 1)}}/>
+                    <div className="modal-header d-flex justify-content-between">
+                          <div>
+                          <FaChevronLeft onClick = {() => {this.handleImageModal(this.state.imageIndex - 1)}}/>
+                          </div>
+                          <div>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">×</span>
+                          </button>
+                          </div>
+                          <div>
+                          <FaChevronRight onClick = {() => {this.handleImageModal(this.state.imageIndex + 1)}}/>
+                          </div>
 
-                      </div>
+                    
+                        </div>
                       
-                      <img
+                        <div style={{
+                          maxWidth: "100%"}}
+                        >  <img
                         src={this.state.fullimg}
-                        style={{ height: "500px" }}
-                        
-                      />
+                       style={{ maxWidth : "100%" }}
+                      /></div>
                     </div>
                   </div>
                 </div>

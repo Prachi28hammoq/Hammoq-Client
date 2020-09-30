@@ -199,7 +199,7 @@ export default class extends Component {
             ? data.size != ""
               ? data.size + " "
               : ""
-            : "");
+            : "") 
       } else {
         data.title =
           (data.brand != undefined
@@ -240,8 +240,23 @@ export default class extends Component {
           (data.size != undefined
             ? data.size != ""
               ? data.size + " "
-              : ""
-            : "");
+              : "" 
+            : "") + 
+          (data.seasonOrWeather != undefined
+            ? data.seasonOrWeather != ""
+            ? " " + data.seasonOrWeather + "\n"
+            : ""
+            : "") +
+            (data.care != undefined 
+              ? data.care != ""
+              ? " " + data.care + "\n"
+              :""
+              :"") +
+              (data.madeIn != undefined
+                ? data.madeIn != ""
+                ? " " + data.madeIn + "\n"
+                :""
+                :"")  
       }
       console.log(data.title);
     }
@@ -263,6 +278,7 @@ export default class extends Component {
           : "") +
         (data.care != "" ? "Care: " + data.care + "\n" : "") +
         (data.madeIn != "" ? "Made in: " + data.madeIn + "\n" : "") +
+        (data.bottomDescription != "" ? "Bottom Description: " + data.bottomDescription + "\n" : "" ) +
         (data.line1 != undefined? data.line1 != "" ? data.line1 +": " + data.value1 +"\n" : "" : "") +
         (data.line2 != undefined ? data.line2 != ""? data.line2 +": " + data.value2 +"\n": "": "") +
         (data.line3 != undefined ? data.line3 != ""? data.line3 +": " + data.value3 +"\n" : "" : "") +
@@ -1186,19 +1202,6 @@ export default class extends Component {
           value={data["mercari"]["url"]}
           onChange={handleUrl}
         />
-          <div className="form-group">
-            <label className="h6 py-2 fw-500 text-uppercase">
-              notes
-            </label>
-            <textarea
-              className="form-control col-12 col-lg-12"
-              id="notes"
-              rows="3"
-              name="notes"
-              defaultValue={data.notes}
-              onChange={handleChange}
-            ></textarea>
-          </div>
         </div>
       </div>
     );
