@@ -33,6 +33,8 @@ import EditForm from "./Pages/EditForm/EditForm";
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
   return (
+    <head><script>(function(w,r){w._rwq=r;w[r]=w[r]||function(){(w[r].q=w[r].q||[]).push(arguments)}})(window,'rewardful');</script>
+<script async src='https://r.wdfl.co/rw.js' data-rewardful='d8ce50'></script></head>
     <div>
       {!["/signup", "/signin"].includes(pathname) && <div className="fixed-top"> <Header /></div>}
       <div className = "container-fluid px-5 py-5 admin my-5">
