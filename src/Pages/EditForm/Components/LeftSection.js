@@ -948,6 +948,19 @@ export default class extends Component {
             onChange={handleChange}
           ></textarea>
         </div>
+        <div className="form-group mt-3">
+          <label className="h6 py-2 fw-500 text-uppercase">
+            Enter Note (Will not be displayed in listing)
+          </label>
+          <textarea
+            className="form-control"
+            id="note"
+            rows="5"
+            name="note"
+            defaultValue={data.note}
+            onChange={handleChange}
+          ></textarea>
+        </div>
       
       </>
     );

@@ -467,7 +467,7 @@ export default class extends Component {
     dataform.append("brand", data.brand);
     dataform.append("model", data.model);
     dataform.append("title", data.title);
-    dataform.append("shortDescription", data.shortDescription);
+    dataform.append("shortDescription", this.state.input7);
     dataform.append("condition_name", data.condition_name);
     dataform.append("ebay", data.ebay.title);
     dataform.append("mercari", data.mercari.title);

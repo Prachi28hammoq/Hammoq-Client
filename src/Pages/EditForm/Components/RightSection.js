@@ -202,7 +202,7 @@ export default class extends Component {
             : "") 
       } else {
         data.title =
-          (data.brand != undefined
+          (data.bran != undefined
             ? data.brand != ""
               ? data.brand + " "
               : ""
@@ -915,7 +915,7 @@ export default class extends Component {
 
         <div className="form-group mt-3">
           <label className="h6 py-2 fw-500 text-uppercase">
-            <text className="text-danger">*</text>Description
+            <text className="text-danger">*</text>Notes for VA
           </label>
           {/* shortDescription btn */}
 
