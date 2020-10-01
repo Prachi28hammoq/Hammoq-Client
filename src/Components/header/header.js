@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import {Helmet} from "react-helmet";
+//import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
 import PaymentAlert from "../paymentAlert/PaymentAlert";
