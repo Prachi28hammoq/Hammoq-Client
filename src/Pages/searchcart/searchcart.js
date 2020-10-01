@@ -48,14 +48,14 @@ class Searchcart extends Component {
     this.setState({ loading: true });
     await Axios.get("/payment/rates")
       .then((res) => {
-        console.log(res, 'rates value')
+      
         //rates = res.data[res.data.length - 1];
         this.setState({ rates: res.data[res.data.length - 1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-    await Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
+     Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-        console.log(data, 'user data, user check');
+       
         this.setState({
           products: data.data,
           totalPage: parseInt(data.pages),

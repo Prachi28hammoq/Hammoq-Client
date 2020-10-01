@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
 import PaymentAlert from "../paymentAlert/PaymentAlert";
@@ -63,6 +64,7 @@ class header extends Component {
   render() {
     const { basiccheck, advancecheck, rates, bal } = this.state;
     return (
+
       <nav
         className="navbar navbar-expand-lg navbar-dark"
         style={{ backgroundColor: "#4db0cc" }}
@@ -72,6 +74,7 @@ class header extends Component {
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
        />*/}
+  
         <a href="/" className="navbar-brand">
           <img src={Logo} alt="hammock" height="40px" />
         </a>
@@ -122,6 +125,7 @@ class header extends Component {
             </a>
           </ul>
         </div>
+        
       </nav>
     );
   }
