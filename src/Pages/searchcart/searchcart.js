@@ -39,7 +39,8 @@ class Searchcart extends Component {
       pop_open: false,
       inventoryCount : '',
       draftCount : '',
-      submittedCount : ''
+      submittedCount : '',
+      prodStatus:'submitted'
     };
   }
 
@@ -52,7 +53,7 @@ class Searchcart extends Component {
         this.setState({ rates: res.data[res.data.length - 1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-    await Axios.get(`/product/type/submitted`, { params: { page: 1, size: 10 } })
+    await Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
         console.log(data, 'user data, user check');
         this.setState({
@@ -150,6 +151,7 @@ class Searchcart extends Component {
     .then(({ data }) => {
       console.log(data);
       this.setState({
+        prodStatus:'inventory',
         products: data.data,
         totalPage: parseInt(data.pages),
         page: parseInt(data.currPage),
@@ -172,6 +174,7 @@ class Searchcart extends Component {
     .then(({ data }) => {
       console.log(data);
       this.setState({
+        prodStatus:'draft',
         products: data.data,
         totalPage: parseInt(data.pages),
         page: parseInt(data.currPage),
@@ -194,6 +197,7 @@ class Searchcart extends Component {
     .then(({ data }) => {
       console.log(data);
       this.setState({
+        prodStatus:'submitted',
         products: data.data,
         totalPage: parseInt(data.pages),
         page: parseInt(data.currPage),
@@ -238,7 +242,7 @@ class Searchcart extends Component {
   handleChangePage = async (newPage) => {
     if (newPage > 0 && newPage <= this.state.totalPage) {
       this.setState({ page: newPage });
-      await Axios.get("/product", {
+      await Axios.get(`/product/type/${this.state.prodStatus}`, {
         params: { page: newPage, size: this.state.rowsPerPage },
       })
         .then(({ data }) => {
@@ -258,7 +262,7 @@ class Searchcart extends Component {
   };
 
   handleChangeRowsPerPage = async (val) => {
-    await Axios.get("/product", {
+    await Axios.get(`/product/type/${this.state.prodStatus}`, {
       params: { page: this.state.page, size: val },
     })
       .then(({ data }) => {
