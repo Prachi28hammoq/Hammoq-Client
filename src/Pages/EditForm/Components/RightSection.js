@@ -278,6 +278,7 @@ export default class extends Component {
           : "") +
         (data.care != "" ? "Care: " + data.care + "\n" : "") +
         (data.madeIn != "" ? "Made in: " + data.madeIn + "\n" : "") +
+        
         (data.bottomDescription != "" ? "Bottom Description: " + data.bottomDescription + "\n" : "" ) +
         (data.line1 != undefined? data.line1 != "" ? data.line1 +": " + data.value1 +"\n" : "" : "") +
         (data.line2 != undefined ? data.line2 != ""? data.line2 +": " + data.value2 +"\n": "": "") +
