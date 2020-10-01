@@ -850,6 +850,7 @@ class BasicForm extends Component {
                   name="input5"
                   placeholder="Brand"
                   className="form-control"
+                  required = "true"
                 />
               </div>
               <div className="col-sm-12 col-md-6  mb-4 px-1">
