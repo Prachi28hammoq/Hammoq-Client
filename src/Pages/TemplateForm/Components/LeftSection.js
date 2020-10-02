@@ -191,7 +191,7 @@ export default class extends Component {
                           maxWidth: "100%", padding:"auto"}}
                         >  <img
                         src={this.state.fullimg}
-                       style={{ maxWidth : "400px", maxHeight:'500px'}}
+                       style={{ maxWidth : "100%", maxHeight:'500px'}}
                       /></div>
                       </div>
                     </div>
