@@ -6,6 +6,7 @@ import { assetsURL, socketCon } from "../../../services/Axios";
 import io from "socket.io-client";
 import SocketIOFileUpload from "socketio-file-upload";
 import LoadingSpinner from "../../utils/loader";
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa"
 
 // const socket = io(socketCon);
 const max = 5000;
@@ -26,6 +27,8 @@ export default class extends Component {
       fullimg: "",
       img: [],
       showcat: false,
+      modalImage : "",
+      imageIndex : 0
     };
   }
 
@@ -83,6 +86,29 @@ export default class extends Component {
       this.setState({ category: str });
     }
   };
+  handleImageModal = (idx) => {
+    console.log(idx ,'idx')
+    console.log(this.props.images ,'concoel')
+    if(idx >=  0  && idx < this.props.images.length && this.props.images[idx].img != null ){
+      let image = this.props.images[idx]
+      console.log(image, 'index check')
+      this.setState(
+        {
+          imageIndex : idx,
+          fullimg:
+            typeof image.img === "string"
+              ? image.img.substring(0, 4) != "http" &&
+                image.img.substring(0, 5) != "https"
+                ? assetsURL + image.img
+                : image.img
+              :image.img != null ? URL.createObjectURL(image.img) : '',
+        },
+        () => {
+          $("#addTemplateModal1").modal("show");
+        }
+      );
+    }
+  }
 
   render = () => {
     const { suggestTitles, showOtherTitles, fullimg, img } = this.state;
@@ -137,9 +163,14 @@ export default class extends Component {
                     <div
                       className="modal-dialog modal-lg  modal-dialog-centered"
                       role="document"
+                      style={{ width: "50%", maxHeight: "auto" }}
                     >
                       <div className="modal-content">
-                        <div className="modal-header">
+                      <div className="modal-header d-flex justify-content-between">
+                          <div>
+                          <FaChevronLeft onClick = {() => {this.handleImageModal(this.state.imageIndex - 1)}}/>
+                          </div>
+                          <div>
                           <button
                             type="button"
                             className="close"
@@ -148,9 +179,20 @@ export default class extends Component {
                           >
                             <span aria-hidden="true">×</span>
                           </button>
-                        </div>
+                          </div>
+                          <div>
+                          <FaChevronRight onClick = {() => {this.handleImageModal(this.state.imageIndex + 1)}}/>
+                          </div>
 
-                        <img src={fullimg} style={{ height: "500px" }} />
+                    
+                    </div>   
+
+                    <div className="d-flex  justify-content-center" style={{
+                          maxWidth: "100%", padding:"auto"}}
+                        >  <img
+                        src={this.state.fullimg}
+                       style={{ maxWidth : "400px", maxHeight:'500px'}}
+                      /></div>
                       </div>
                     </div>
                   </div>
