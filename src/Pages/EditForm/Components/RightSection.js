@@ -101,7 +101,7 @@ export default class extends Component {
   };
 
   handleClick = (event) => {
-    this.setState({anchorE1 : event.currentTarget});
+    this.setState({anchorEl: event.currentTarget});
   };
 
   handleClose = () => {
@@ -915,7 +915,7 @@ export default class extends Component {
 
         <div className="form-group mt-3">
           <label className="h6 py-2 fw-500 text-uppercase">
-            <text className="text-danger">*</text>Notes for VA
+            <text className="text-danger">*</text>Description
           </label>
           {/* shortDescription btn */}
 
