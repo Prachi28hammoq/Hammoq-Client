@@ -53,45 +53,42 @@ class Searchcart extends Component {
         this.setState({ rates: res.data[res.data.length - 1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-     Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
+    
+      Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-       
-        this.setState({
-          products: data.data,
-          totalPage: parseInt(data.pages),
-          page: parseInt(data.currPage),
-          inventoryCount : data.count.inventoryCount,
-          draftCount : data.count.draftCount,
-          submittedCount : data.count.submittedCount 
-        });
-        // if (this.state.products != null) {
-        //   this.setState({
-        //     products: this.state.products.filter((filtered) => {
-        //       return filtered.status == true;
-        //     }),
-        //   });
-        // }
-
-        this.setState({ loading: false });
+        if(data.err){
+          window.alert('No product, Please add few...')
+          window.open("/basic", "_self");
+        }else{
+          this.setState({
+            products: data.data,
+            totalPage: parseInt(data.pages),
+            page: parseInt(data.currPage),
+            inventoryCount : data.count.inventoryCount,
+            draftCount : data.count.draftCount,
+            submittedCount : data.count.submittedCount 
+          });
+        }
+      this.setState({ loading: false });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
     await Axios.get("/clientdetails")
       .then(({ data }) => {
-        console.log(data);
+        
         this.setState({ bal: data.balance, clientdetails: data });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
     await Axios.get("/password/getstatus").then(({ data }) => {
-      //console.log(data);
+      
       this.setState({ Ebay: data.Ebay });
       this.setState({ Poshmark: data.Poshmark });
       this.setState({ Mercari: data.Mercari });
     });
 
     await Axios.get("/password/getstatus/others").then(({ data }) => {
-      //console.log(data);
+     
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
@@ -102,7 +99,7 @@ class Searchcart extends Component {
           const otherss = [...this.state.othersstate];
           otherss.push(false);
           this.setState({ othersstate: otherss });
-          //console.log(this.state.othersstate)
+          
         });
       }
     });
@@ -149,7 +146,7 @@ class Searchcart extends Component {
   handleInventory = async () => {
      await Axios.get(`/product/type/inventory`, { params: { page: 1, size: 10 } })
     .then(({ data }) => {
-      console.log(data);
+     
       this.setState({
         prodStatus:'inventory',
         products: data.data,
@@ -172,7 +169,7 @@ class Searchcart extends Component {
   handleDrafts = async () => {
     await Axios.get(`/product/type/draft`, { params: { page: 1, size: 10 } })
     .then(({ data }) => {
-      console.log(data);
+      
       this.setState({
         prodStatus:'draft',
         products: data.data,
@@ -195,7 +192,7 @@ class Searchcart extends Component {
   handleSubmitted = async () => {
     await Axios.get(`/product/type/submitted`, { params: { page: 1, size: 10 } })
     .then(({ data }) => {
-      console.log(data);
+      
       this.setState({
         prodStatus:'submitted',
         products: data.data,
@@ -266,7 +263,7 @@ class Searchcart extends Component {
       params: { page: this.state.page, size: val },
     })
       .then(({ data }) => {
-        console.log(data);
+       
         this.setState({
           products: data.data,
           rowsPerPage: val,
@@ -301,8 +298,7 @@ class Searchcart extends Component {
   render() {
     const {comment, addComment} = this.props
    // console.log(this.state.products, "products");
-  console.log(this.state.products,'state products')
-  console.log(this.state.filteredProducts,'filterproducts')
+ 
     const {
       products,
       rates,
