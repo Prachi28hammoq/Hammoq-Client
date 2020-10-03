@@ -60,6 +60,7 @@ class Searchcart extends Component {
           window.alert('No product, Please add few...')
           window.open("/basic", "_self");
         }else{
+         
           this.setState({
             products: data.data,
             totalPage: parseInt(data.pages),
@@ -434,7 +435,7 @@ class Searchcart extends Component {
 
           <div style={{ justifyContent: "space-evenly" }}>
             <button
-              className="btn btn-primary d-inline mr-4 mb-3"
+              className="btn btn-primary d-inline mr-3 mb-3"
               onClick={() => {
                 this.handleInventory()
               }}
@@ -442,7 +443,7 @@ class Searchcart extends Component {
               {this.state.inventoryCount}-Inventory
             </button>
             <button
-              className="btn btn-primary d-inline mr-4 mb-3"
+              className="btn btn-primary d-inline mr-3 mb-3"
               onClick={() => {
                 this.handleDrafts();
               }}
@@ -450,12 +451,12 @@ class Searchcart extends Component {
               {this.state.draftCount}-Drafts
             </button>
             <button
-              className="btn btn-primary d-inline mr-4 mb-3"
+              className="btn btn-primary d-inline mr-3 mb-3"
               onClick={() => {
                 this.handleSubmitted();
               }}
             >
-            {this.state.submittedCount} - Submitted
+            {this.state.submittedCount} -Submitted
             </button>
           </div>
         </div>

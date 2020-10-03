@@ -202,7 +202,7 @@ export default class extends Component {
             : "") 
       } else {
         data.title =
-          (data.bran != undefined
+          (data.brand != undefined
             ? data.brand != ""
               ? data.brand + " "
               : ""
