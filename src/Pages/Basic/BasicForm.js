@@ -850,7 +850,6 @@ class BasicForm extends Component {
                   name="input5"
                   placeholder="Brand"
                   className="form-control"
-                  required = "true"
                 />
               </div>
               <div className="col-sm-12 col-md-6  mb-4 px-1">
@@ -984,7 +983,7 @@ class BasicForm extends Component {
                   value={this.state.input7}
                   rows="4"
                   name="input7"
-                  placeholder="notes"
+                  placeholder="Notes For VA"
                   className="form-control"
                 ></textarea>
               </div>
