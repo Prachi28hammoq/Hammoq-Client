@@ -1019,7 +1019,7 @@ class BasicForm extends Component {
                         id="poshmark"
                       />
                       <label className="form-check-label" htmlFor="poshmark">
-                        list on Poshmark
+                        List on Poshmark
                       </label>
                     </div>
                   </div>
@@ -1037,7 +1037,7 @@ class BasicForm extends Component {
                         id="mercari"
                       />
                       <label className="form-check-label" htmlFor="mercari">
-                        list on Mercari
+                        List on Mercari
                       </label>
                     </div>
                   </div>
@@ -1062,7 +1062,7 @@ class BasicForm extends Component {
                               className="form-check-label"
                               htmlFor="mercari"
                             >
-                              list on {o}
+                              List on {o}
                             </label>
                           </div>
                         </div>
