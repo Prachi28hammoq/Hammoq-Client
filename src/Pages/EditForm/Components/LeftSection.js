@@ -38,7 +38,7 @@ export default class extends Component {
 
   componentDidMount = () => {
     const image = assetsURL + this.props.images[0].img
-    console.log(image,'comonet')
+    
     this.setState({modalImage:image})
   }
 
@@ -46,10 +46,6 @@ export default class extends Component {
     if (e.target.value.length > max) return 0;
     this.setState({ count: e.target.value.length });
   };
-
-  
-  
-
 
   handleMessage = (e) => {
     this.setState({[e.target.name] : e.target.value})

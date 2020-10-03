@@ -60,6 +60,7 @@ class Searchcart extends Component {
           window.alert('No product, Please add few...')
           window.open("/basic", "_self");
         }else{
+         
           this.setState({
             products: data.data,
             totalPage: parseInt(data.pages),
