@@ -536,7 +536,7 @@ export default class extends Component {
     })
       .then((response) => {
         console.log(response, "image");
-        window.open("/searchcart", "_self");
+       window.open("/searchcart", "_self");
       })
       .catch((err) => {
         this.setState({ isSubmitting: false });

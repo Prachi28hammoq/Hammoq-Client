@@ -56,13 +56,13 @@ class Searchcart extends Component {
     
       Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
+        console.log(data, 'data user')
         if(data.err){
           window.alert('No product, Please add few...')
           window.open("/basic", "_self");
         }else{
-         
           this.setState({
-            products: data.data,
+            products: data.data.filter((status) => status.status != false),
             totalPage: parseInt(data.pages),
             page: parseInt(data.currPage),
             inventoryCount : data.count.inventoryCount,
@@ -214,6 +214,7 @@ class Searchcart extends Component {
   };
 
   handleDelete = async (itemId) => {
+    window.alert('Are You Sure')
     const data = {
       status: false,
     };
