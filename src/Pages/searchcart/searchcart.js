@@ -264,20 +264,12 @@ class Searchcart extends Component {
       params: { page: this.state.page, size: val },
     })
       .then(({ data }) => {
-       
+       console.log(data.data);
         this.setState({
           products: data.data,
           rowsPerPage: val,
           totalPage: data.pages,
         });
-
-        // if (this.state.products != null) {
-        //   this.setState({
-        //     products: this.state.products.filter((filtered) => {
-        //       return filtered.status == true;
-        //     }),
-        //   });
-        // }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
