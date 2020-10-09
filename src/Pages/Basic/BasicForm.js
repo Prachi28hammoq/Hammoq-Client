@@ -45,6 +45,7 @@ class BasicForm extends Component {
       mercari: localStorage.getItem("mercari") === "true",
       poshmark: localStorage.getItem("poshmark") === "true",
       delist: localStorage.getItem("delist") === "true",
+      OtherState: localStorage.getItem("otherState" === "true"),
       images: [
         { key: "default_image", label: "Default", img: "" },
         { key: "brand_image", label: "Brand", img: "" },
@@ -78,6 +79,7 @@ class BasicForm extends Component {
 
   componentDidMount = () => {
     const { cid, images } = this.state;
+    console.log(localStorage.getItem('other'), 'fsakdhfjkdshf sdhfsakjdfh')
     Axios.get("/password/getstatus").then(({ data }) => {
       //console.log(data);
       this.setState({ Ebay: data.Ebay });
@@ -85,18 +87,24 @@ class BasicForm extends Component {
       this.setState({ Mercari: data.Mercari });
     });
 
-    Axios.get("/password/getstatus/others").then(({ data }) => {
-      //console.log(data);
+    Axios.get("/password/getstatus/others").then(({ data })  => {
+      console.log(data , 'other data');
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
           const others = [...this.state.others];
           others.push(d);
+
           this.setState({ others });
 
           const otherss = [...this.state.othersstate];
-          otherss.push(false);
+          otherss.push(localStorage.getItem(d) || false);
+
           this.setState({ othersstate: otherss });
+          if(!localStorage.getItem(d)){
+            localStorage.setItem(d, false)
+          }
+          
           //console.log(this.state.othersstate)
         });
       }
@@ -323,6 +331,13 @@ class BasicForm extends Component {
     } else {
       data.append("poshmarkc", false);
     }
+    // if(this.state.others){
+    //     for(let i = 0 ; i < this.state.others.length ; i++){
+    //     data.append(this.state.others[i],false)
+    // }
+    // }
+  
+    
 
     data.append("waist", this.state.input8);
     data.append("inseam", this.state.input9);
@@ -363,7 +378,8 @@ class BasicForm extends Component {
       },
     })
       .then((response) => {
-        window.open("/basic", "_self");
+        console.log(response, 'data append')
+      window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
@@ -566,6 +582,9 @@ class BasicForm extends Component {
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
   render() {
+    console.log(this.state.others, 'othere value')
+    console.log(this.state.Ebay ,'ebay')
+    console.log(this.state.othersstate , 'othres tateeerad')
     const {
       website,
       username,
@@ -1017,7 +1036,7 @@ class BasicForm extends Component {
                         onChange={() =>
                           this.setState({ poshmark: !this.state.poshmark })
                         }
-                        checked
+                        defaultChecked="true" 
                         id="poshmark"
                       />
                       <label className="form-check-label" htmlFor="poshmark">
@@ -1057,6 +1076,7 @@ class BasicForm extends Component {
                                 const ot = [...othersstate];
                                 ot[i] = !ot[i];
                                 this.setState({ othersstate: ot });
+                                localStorage.setItem(o, !this.state.othersstate[i] )
                               }}
                               id="othersstate"
                             />

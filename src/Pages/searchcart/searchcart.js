@@ -56,7 +56,7 @@ class Searchcart extends Component {
     
       Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-        console.log(data, 'data user')
+       // console.log(data, 'data user')
         if(data.err){
           window.alert('No product, Please add few...')
           window.open("/basic", "_self");
@@ -89,7 +89,7 @@ class Searchcart extends Component {
     });
 
     await Axios.get("/password/getstatus/others").then(({ data }) => {
-     
+     console.log(data,'data for chekcbhku')
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
@@ -99,6 +99,7 @@ class Searchcart extends Component {
 
           const otherss = [...this.state.othersstate];
           otherss.push(false);
+
           this.setState({ othersstate: otherss });
           
         });
@@ -106,29 +107,48 @@ class Searchcart extends Component {
     });
   };
 
-  duplicateHandler = async (itemId) => {
-    const tokenvalue = localStorage.getItem("token");
+  // duplicateHandler = async (itemId) => {
+  //   const tokenvalue = localStorage.getItem("token");
 
-    try {
-      const response = await Axios.post(
-        `/product/${itemId}`,
-        (Axios.defaults.headers.common["x-access-token"] = tokenvalue),
-        {
-          headers: {
-            "content-type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
-      this.setState({ products: response.data.products });
-      // this.setState({
-      //   products: this.state.products.filter((filtered) => {
-      //     return filtered.status == true;
-      //   }),
-      // });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //   try {
+  //     const response = await Axios.post(
+  //       `/product/${itemId}`,
+  //       (Axios.defaults.headers.common["x-access-token"] = tokenvalue),
+  //       {
+  //         headers: {
+  //           "content-type": "application/x-www-form-urlencoded",
+  //         },
+  //       }
+  //     );
+  //     this.setState({ products: response.data.products });
+  //     // this.setState({
+  //     //   products: this.state.products.filter((filtered) => {
+  //     //     return filtered.status == true;
+  //     //   }),
+  //     // });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  duplicateHandler = async (itemId) => {
+    const response = await Axios.post(`/product/${itemId}`, {
+      headers : {
+        'x-access-token' : localStorage.getItem('token'),
+        "content-type": "application/x-www-form-urlencoded"
+
+      }
+    })
+    console.log(response, 'duplciate handle click')
+
+    const response1 = await Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
+      console.log(response1, 'after duplicate')
+      this.setState({
+        products : response1.data.data
+      })
+      window.alert("duplicate has been created")
+  }
+
 
   handleSearchChange = (e) => {
     const { value } = e.target;
@@ -214,7 +234,7 @@ class Searchcart extends Component {
   };
 
   handleDelete = async (itemId) => {
-    window.alert('Are You Sure')
+    window.confirm('Are You Sure')
     const data = {
       status: false,
     };
@@ -226,11 +246,13 @@ class Searchcart extends Component {
         },
       });
       this.setState({ products: response.data.products });
-      this.setState({
-        products: this.state.products.filter((filtered) => {
-          return filtered.status == true;
-        }),
-      });
+
+
+      // this.setState({
+      //   products: this.state.products.filter((filtered) => {
+      //     return filtered.status == true;
+      //   }),
+      // });
     } catch (error) {
       console.log(error);
     }
@@ -244,7 +266,8 @@ class Searchcart extends Component {
         params: { page: newPage, size: this.state.rowsPerPage },
       })
         .then(({ data }) => {
-          this.setState({ products: data.data });
+          console.log(data, 'page chanegs dataaaa')
+          this.setState({ products: data.data  });
           // if (this.state.products != null) {
           //   this.setState({
           //     products: this.state.products.filter((filtered) => {
@@ -253,7 +276,7 @@ class Searchcart extends Component {
           //   });
           // }
 
-          this.setState({ loading: false });
+          this.setState({ loading: false })
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
     }
@@ -291,7 +314,6 @@ class Searchcart extends Component {
   render() {
     const {comment, addComment} = this.props
    // console.log(this.state.products, "products");
- 
     const {
       products,
       rates,
@@ -591,16 +613,17 @@ class Searchcart extends Component {
                           {othersbool &&
                             product.others &&
                             JSON.parse(product.others).map((items) => {
-                              if (items.status) {
-                                return (
+                              console.log(items, 'checking values for status')
+                               if (items.status) {
+                                 return (
                                   <div>
-                                    <small>
-                                      {items.name}-
-                                      {items.url == "" ? "false" : "true"}
-                                    </small>
-                                  </div>
-                                );
-                              }
+                                     <small>
+                                       {items.name}-
+                                       {items.url == "" ? "false" : "true"}
+                                     </small>
+                                   </div>
+                                 );
+                               }
                             })}
                         </td>
                         <td>
@@ -746,16 +769,17 @@ class Searchcart extends Component {
                           {othersbool &&
                             product.others &&
                             JSON.parse(product.others).map((items) => {
-                              if (items.status) {
-                                return (
-                                  <div>
-                                    <small>
-                                      {items.name}-
-                                      {items.url == "" ? "false" : "true"}
-                                    </small>
-                                  </div>
-                                );
-                              }
+                              console.log(items, 'item value check')
+                              //  if (items.status) {
+                              //    return (
+                              //      <div>
+                              //        <small>
+                              //          {items.name}-
+                              //          {items.url == "" ? "false" : "true"}
+                              //        </small>
+                              //      </div>
+                              //    );
+                              //  }
                             })}
                         </td>
                         <td>

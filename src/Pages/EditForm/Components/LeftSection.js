@@ -86,7 +86,7 @@ export default class extends Component {
         }
       })
       console.log(response, "messsage data value")
-      this.setState({productMessage : response.data, messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${this.props.data[value]}`, field : value ,anchorEl   })
+      this.setState({productMessage : response.data.message, messageFormToggle: !messageFormToggle, msgFormTitle :`was : ${this.props.data[value]}`, field : value ,anchorEl   })
     }catch(error){
       console.log(error)
     }
