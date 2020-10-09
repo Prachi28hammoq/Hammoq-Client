@@ -657,9 +657,9 @@ export default class extends Component {
               <div className="col-11">
               <Input
                 label="Model No."
-                name="modelno"
-                id="modelno"
-                defaultValue={data.modelno}
+                name="modelNo"
+                id="modelNo"
+                defaultValue={data.modelNo}
                 onChange={handleChange}
               />
               </div>
@@ -1132,14 +1132,14 @@ export default class extends Component {
  
             </div>
           )}
-          <div>
+          {/* <div>
             <div
               className="btn btn-link mb-3 pl-0"
               onClick={() => this.setState({ showMoreLines: !showMoreLines })}
             >
               {showMoreLines ? "Hide" : "Show more"}
             </div>
-          </div>
+          </div> */}
 
           <div className="form-group mb-4 row align-items-center">
             <div className="col-12 col-lg-8">

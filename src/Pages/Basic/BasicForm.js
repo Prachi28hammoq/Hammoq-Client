@@ -355,6 +355,7 @@ class BasicForm extends Component {
     //   this.setState({ isSubmitting: false });
     //   return alert("Please Wait! Images are uploading.....");
     // } else {
+      
     Axios.post("/product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -1016,6 +1017,7 @@ class BasicForm extends Component {
                         onChange={() =>
                           this.setState({ poshmark: !this.state.poshmark })
                         }
+                        checked
                         id="poshmark"
                       />
                       <label className="form-check-label" htmlFor="poshmark">
@@ -1079,6 +1081,7 @@ class BasicForm extends Component {
                         this.setState({ delist: !this.state.delist })
                       }
                       id="delist"
+                      
                     />
                     <label className="form-check-label" htmlFor="delist">
                       Delist once item is sold

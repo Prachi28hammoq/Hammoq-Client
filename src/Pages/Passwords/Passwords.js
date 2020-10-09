@@ -87,6 +87,7 @@ class Passwords extends Component {
   handleeBaySubmit = () => {
     Axios.get("/ebay/consent")
       .then((response) => {
+        console.log(response, 'ebayu responsed dda')
         console.log(response);
         window.open(response.data.url, "_blank");
       })
@@ -95,7 +96,25 @@ class Passwords extends Component {
         console.log(err) || alert(JSON.stringify({ err: err }));
       });
   };
+
+  handleDelete =  async (id) => {
+    try {
+      const response = await Axios.delete(`/password/${id}`, {
+        headers: {
+          "x-access-token": `${localStorage.getItem("token")}`,
+        },
+      })
+      window.alert("Are You Sure")
+      window.open("/passwords", "_self")
+      // this.setState({users: response.data.Passwords})
+      
+    }catch(error){
+      console.log(error)
+    }
+    //this.setState({users : this.state.users.filter((user) => user._id !== id)})
+  } 
   render() {
+    console.log(this.state.users, 'user indoremarnekhrfkjn')
     const {
       website,
       username,
@@ -218,6 +237,11 @@ class Passwords extends Component {
                           <Link to={`/editpasswords/${user.website}`}>
                             <button className="btn btn-success body-text custom-edit-btn mt-3 btn-sm">
                               Edit
+                            </button>
+                          </Link>
+                          <Link>
+                            <button className="btn btn-danger body-text custom-edit-btn mt-3 ml-3 btn-sm" onClick = {() => {this.handleDelete(user._id)}}>
+                              Delete
                             </button>
                           </Link>
                         </div>
