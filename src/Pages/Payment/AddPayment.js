@@ -9,6 +9,10 @@ import LoadingSpinner from "../utils/loader";
 
 const $ = window.$;
 
+
+function getClientReferenceId(in_1HWqISLZqDnjpbwXy9iTCVgO) {
+  return window.Rewardful && window.Rewardful.referral || ('checkout_'+(new Date).getTime());
+}
 class AddPayment extends Component {
   constructor() {
     super();
