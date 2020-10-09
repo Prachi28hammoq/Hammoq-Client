@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./AddPassword.css";
 import Axios from "../../services/Axios";
+import jwt_decode from "jwt-decode";
 
 class Passwords extends Component {
   constructor() {
@@ -88,9 +89,11 @@ class Passwords extends Component {
   handleeBaySubmit = () => {
     Axios.get("/ebay/consent")
       .then((response) => {
-        console.log(response, 'ebayu responsed dda')
-        console.log(response);
-        window.open(response.data.url, "_blank");
+/*        const token = localStorage.getItem("token");
+        var decoded = jwt_decode(token);
+        console.log(decoded._doc.email)*/
+        console.log(response.data.authURL)
+        var authWindow = window.open(response.data.authURL, "_blank");
       })
 
       .catch((err) => {
@@ -201,7 +204,7 @@ class Passwords extends Component {
                       className="btn btn-danger ml-2 mt-3"
                       onClick={this.handleeBaySubmit}
                     >
-                      Add eBay Login
+                      Authorize eBay Access
                     </button>
                     {/* <small className="ml-2">
                       Note: For “Hammoq Lite” only eBay, Poshmark, and Mercari

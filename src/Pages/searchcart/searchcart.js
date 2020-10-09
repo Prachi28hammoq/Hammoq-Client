@@ -622,16 +622,17 @@ class Searchcart extends Component {
                           {othersbool &&
                             product.others &&
                             JSON.parse(product.others).map((items) => {
-                              if (items.status) {
-                                return (
+                              console.log(items, 'checking values for status')
+                               if (items.status) {
+                                 return (
                                   <div>
-                                    <small>
-                                      {items.name}-
-                                      {items.url == "" ? "false" : "true"}
-                                    </small>
-                                  </div>
-                                );
-                              }
+                                     <small>
+                                       {items.name}-
+                                       {items.url == "" ? "false" : "true"}
+                                     </small>
+                                   </div>
+                                 );
+                               }
                             })}
                         </td>
                         <td>
@@ -777,16 +778,17 @@ class Searchcart extends Component {
                           {othersbool &&
                             product.others &&
                             JSON.parse(product.others).map((items) => {
-                              if (items.status) {
-                                return (
-                                  <div>
-                                    <small>
-                                      {items.name}-
-                                      {items.url == "" ? "false" : "true"}
-                                    </small>
-                                  </div>
-                                );
-                              }
+                              console.log(items, 'item value check')
+                              //  if (items.status) {
+                              //    return (
+                              //      <div>
+                              //        <small>
+                              //          {items.name}-
+                              //          {items.url == "" ? "false" : "true"}
+                              //        </small>
+                              //      </div>
+                              //    );
+                              //  }
                             })}
                         </td>
                         <td>
