@@ -17,6 +17,7 @@ class header extends Component {
       advancecheck: true,
       open: false,
       client_id: "",
+      customerName : ''
     };
   }
 
@@ -31,9 +32,9 @@ class header extends Component {
 
       await Axios.get("/clientdetails")
         .then(({ data }) => {
-          console.log(data, "user data checking");
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          this.setState({ bal: data.balance, client_id: data._id });
+          this.setState({ bal: data.balance, client_id: data._id, customerName : data.firstName });
+          localStorage.setItem("customerName" , this.state.customerName)
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -45,9 +46,16 @@ class header extends Component {
       // }
     }
   };
+
+  logoutHandler = () => {
+    localStorage.removeItem("token");
+    window.open("/login", "_self");
+  };
+
   handleClose = () => {
     this.setState({ open: false });
   };
+
   updatePayment = async (amount) => {
     let body = {
       customer_id: this.state.client_id,
@@ -61,6 +69,7 @@ class header extends Component {
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
+
   render() {
     const { basiccheck, advancecheck, rates, bal } = this.state;
     return (
@@ -123,6 +132,12 @@ class header extends Component {
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>
+              <li class="nav-item">
+              <span onClick={this.logoutHandler} className="nav-link c-pointer text-danger">
+              <div className="fas fa-sign-out-alt mr-1"></div> 
+              Logout
+              </span>
+            </li>
           </ul>
         </div>
         

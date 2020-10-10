@@ -45,6 +45,7 @@ class BasicForm extends Component {
       mercari: localStorage.getItem("mercari") === "true",
       poshmark: localStorage.getItem("poshmark") === "true",
       delist: localStorage.getItem("delist") === "true",
+      OtherState: localStorage.getItem("otherState" === "true"),
       images: [
         { key: "default_image", label: "Default", img: "" },
         { key: "brand_image", label: "Brand", img: "" },
@@ -72,12 +73,14 @@ class BasicForm extends Component {
       cid: "",
       open: false,
       client_id: "",
+      templates : []
     };
     this.handleChange.bind(this);
   }
 
   componentDidMount = () => {
     const { cid, images } = this.state;
+    console.log(localStorage.getItem('other'), 'fsakdhfjkdshf sdhfsakjdfh')
     Axios.get("/password/getstatus").then(({ data }) => {
       //console.log(data);
       this.setState({ Ebay: data.Ebay });
@@ -85,18 +88,28 @@ class BasicForm extends Component {
       this.setState({ Mercari: data.Mercari });
     });
 
-    Axios.get("/password/getstatus/others").then(({ data }) => {
-      //console.log(data);
+    Axios.get("/template")
+      .then(({ data }) => this.setState({ templates: data.templates }))
+      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+
+    Axios.get("/password/getstatus/others").then(({ data })  => {
+      console.log(data , 'other data');
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
           const others = [...this.state.others];
           others.push(d);
+
           this.setState({ others });
 
           const otherss = [...this.state.othersstate];
-          otherss.push(false);
+          otherss.push(localStorage.getItem(d) || false);
+
           this.setState({ othersstate: otherss });
+          if(!localStorage.getItem(d)){
+            localStorage.setItem(d, false)
+          }
+          
           //console.log(this.state.othersstate)
         });
       }
@@ -111,6 +124,7 @@ class BasicForm extends Component {
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
+        console.log({data}, 'client user value check')
         if (parseInt(data.balance) < 5) this.setState({ open: true });
         this.setState({ bal: data.balance, client_id: data._id });
         this.setState({ cid: data._id }, () =>
@@ -323,6 +337,13 @@ class BasicForm extends Component {
     } else {
       data.append("poshmarkc", false);
     }
+    // if(this.state.others){
+    //     for(let i = 0 ; i < this.state.others.length ; i++){
+    //     data.append(this.state.others[i],false)
+    // }
+    // }
+  
+    
 
     data.append("waist", this.state.input8);
     data.append("inseam", this.state.input9);
@@ -355,6 +376,7 @@ class BasicForm extends Component {
     //   this.setState({ isSubmitting: false });
     //   return alert("Please Wait! Images are uploading.....");
     // } else {
+      
     Axios.post("/product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -362,7 +384,8 @@ class BasicForm extends Component {
       },
     })
       .then((response) => {
-        window.open("/basic", "_self");
+        console.log(response, 'data append')
+      window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
@@ -565,6 +588,9 @@ class BasicForm extends Component {
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
   render() {
+    console.log(this.state.others, 'othere value')
+    console.log(this.state.Ebay ,'ebay')
+    console.log(this.state.othersstate , 'othres tateeerad')
     const {
       website,
       username,
@@ -582,6 +608,7 @@ class BasicForm extends Component {
       othersstate,
       fullimg,
       img,
+      templates
     } = this.state;
 
     return (
@@ -811,6 +838,37 @@ class BasicForm extends Component {
                     >
                       Bulk Upload Images
                     </label>
+                    <div className="col-12 mt-3">
+            <div className="dropdown">
+              <button
+                className="btn btn-outline-primary dropdown-toggle"
+                type="button"
+                data-toggle="dropdown"
+                style={{ width: "200px" , marginTop : '130px' }}
+              >
+                Choose Template
+                <span className="caret"></span>
+              </button>
+              <ul className="dropdown-menu">
+                {templates &&
+                  templates.map((template) => {
+                    return (
+                      <li>
+                        <button
+                          className="btn colorIt border-0"
+                          style={{ width: "100%", textAlign: "left" }}
+                          id="dropdownMenuOffset"
+                         // onClick={() => this.setTemplate(template._id)}
+                        >
+                          {template.name}
+                        </button>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          </div>
+
                   </div>
                 </div>
               </div>
@@ -1016,6 +1074,7 @@ class BasicForm extends Component {
                         onChange={() =>
                           this.setState({ poshmark: !this.state.poshmark })
                         }
+                        defaultChecked="true" 
                         id="poshmark"
                       />
                       <label className="form-check-label" htmlFor="poshmark">
@@ -1055,6 +1114,7 @@ class BasicForm extends Component {
                                 const ot = [...othersstate];
                                 ot[i] = !ot[i];
                                 this.setState({ othersstate: ot });
+                                localStorage.setItem(o, !this.state.othersstate[i] )
                               }}
                               id="othersstate"
                             />
@@ -1079,6 +1139,7 @@ class BasicForm extends Component {
                         this.setState({ delist: !this.state.delist })
                       }
                       id="delist"
+                      
                     />
                     <label className="form-check-label" htmlFor="delist">
                       Delist once item is sold
