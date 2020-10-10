@@ -73,7 +73,8 @@ export default class extends Component {
       editchange: false,
       message : [],
       productid : '',
-      inventoryCount : 0
+      inventoryCount : 0,
+      messageNotSeen : []
     };
   }
 
@@ -200,6 +201,8 @@ export default class extends Component {
         this.setState({ showcat: true });
       }
 
+      // if(res.data.products[0])
+
       if (res.data.products[0].others) {
         this.state.otherfromdb = JSON.parse(res.data.products[0].others);
         //console.log(this.state.otherfromdb);
@@ -212,7 +215,7 @@ export default class extends Component {
             this.state.othertolist[i] = db;
           }
         });
-        console.log(this.state.othersurl);
+        //console.log(this.state.othersurl);
       }
 
       if(res.data.products[0]._id) {
@@ -220,10 +223,24 @@ export default class extends Component {
       }
 
       if(res.data.products[0].message){
-        console.log( res.data.products[0].message ,'msg value reading')
+       // console.log( res.data.products[0].message ,'msg value reading')
         this.setState({message : res.data.products[0].message})
       }
 
+      var msgSeenTemp = []
+
+      
+        if(res.data.products[0].messageSeen){
+          for(let i = 0 ; i < res.data.products[0].messageSeen.length ; i++){
+            if(res.data.products[0].messageSeen[i].client  == false) {
+              msgSeenTemp.push(res.data.products[0].messageSeen[i].field)
+            }
+          }
+        }
+        this.setState({messageNotSeen : msgSeenTemp})
+      
+
+     // console.log(this.state.messageNotSeen, 'edit mforefh dfkhkjh')
      
 
       this.state.data["ebay"]["title"] = res.data.products[0].ebay.title;
@@ -351,7 +368,7 @@ export default class extends Component {
       }
     });
     this.setState({ extraMeasures });
-    console.log(extraMeasures);
+   // console.log(extraMeasures);
   };
 
   handleDescriptionLabel = (id, e) => {
@@ -363,7 +380,7 @@ export default class extends Component {
       }
     });
     this.setState({ extraDescriptions });
-    console.log(extraDescriptions);
+   // console.log(extraDescriptions);
   };
 
   handleMeasureChange = (id, e) => {
@@ -375,7 +392,7 @@ export default class extends Component {
       }
     });
     this.setState({ extraMeasures });
-    console.log(extraMeasures);
+    //console.log(extraMeasures);
   };
 
   handleDescriptionChange = (id, e) => {
@@ -387,7 +404,7 @@ export default class extends Component {
       }
     });
     this.setState({ extraDescriptions });
-    console.log(extraDescriptions);
+   // console.log(extraDescriptions);
   };
 
   addMeasure = (e) => {
@@ -398,10 +415,10 @@ export default class extends Component {
   };
 
   addDescription = () => {
-    console.log("add description");
+  //  console.log("add description");
     const { extraDescriptions, count1 } = this.state;
     extraDescriptions.push({ key: "", value: "", id: count1 });
-    console.log(extraDescriptions);
+   // console.log(extraDescriptions);
     this.setState({ extraDescriptions });
     this.setState({ count1: count1 + 1 });
   };
@@ -456,7 +473,7 @@ export default class extends Component {
       };
       y.push(obj);
     });
-    console.log(y);
+   // console.log(y);
 
     this.setState({ isSubmitting: true });
 
@@ -535,7 +552,7 @@ export default class extends Component {
       },
     })
       .then((response) => {
-        console.log(response, "image");
+       // console.log(response, "image");
        window.open("/searchcart", "_self");
       })
       .catch((err) => {
@@ -546,12 +563,14 @@ export default class extends Component {
 
   toggleSelectedWebsite = (str) => {
     const { data } = this.state;
+   // console.log(this.state.data,'othr value shdjchkjh')
     data[str]["check"] = !data[str]["check"];
     this.setState({ data });
   };
 
   toggleSelectedOthersWebsite = (i) => {
     const { othersstate } = this.state;
+   // console.log(this.state.othersstate, 'other user websiter')
     othersstate[i] = !othersstate[i];
     this.setState({ othersstate });
   };
@@ -570,7 +589,7 @@ export default class extends Component {
         event.target.files[0],
         options
       );
-      console.log(compressedFile);
+      //console.log(compressedFile);
       images[idx].img = compressedFile;
       this.setState({
         images,
@@ -941,7 +960,7 @@ export default class extends Component {
       showcat,
     } = this.state;
 
-    console.log(this.state.images, 'images')
+   // console.log(this.state.images, 'images')
     return (
       <div className="container-fluid px-3 template">
         <Link to="/products">
@@ -985,6 +1004,7 @@ export default class extends Component {
           <div className="col-12 col-lg-6 pr-4 order-2 order-lg-1">
             {/* <div className="col-12 col-lg-6 pr-4"> */}
             <LeftSection
+              messageNotSeen={this.state.messageNotSeen}
               data={data}
               images={images}
               Ebay={Ebay}
@@ -1014,6 +1034,8 @@ export default class extends Component {
           </div>
           <div className="col-12 col-lg-6 pl-lg-3 order-1 order-lg-2">
             <RightSection
+            
+              messageNotSeen ={this.state.messageNotSeen}
               data={data}
               toggleSelectedWebsite={this.toggleSelectedWebsite}
               handleChange={this.handleChange}

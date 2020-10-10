@@ -17,6 +17,7 @@ class header extends Component {
       advancecheck: true,
       open: false,
       client_id: "",
+      customerName : ''
     };
   }
 
@@ -31,9 +32,9 @@ class header extends Component {
 
       await Axios.get("/clientdetails")
         .then(({ data }) => {
-          console.log(data, "user data checking");
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          this.setState({ bal: data.balance, client_id: data._id });
+          this.setState({ bal: data.balance, client_id: data._id, customerName : data.firstName });
+          localStorage.setItem("customerName" , this.state.customerName)
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 

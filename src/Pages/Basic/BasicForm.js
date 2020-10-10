@@ -73,6 +73,7 @@ class BasicForm extends Component {
       cid: "",
       open: false,
       client_id: "",
+      templates : []
     };
     this.handleChange.bind(this);
   }
@@ -86,6 +87,10 @@ class BasicForm extends Component {
       this.setState({ Poshmark: data.Poshmark });
       this.setState({ Mercari: data.Mercari });
     });
+
+    Axios.get("/template")
+      .then(({ data }) => this.setState({ templates: data.templates }))
+      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
     Axios.get("/password/getstatus/others").then(({ data })  => {
       console.log(data , 'other data');
@@ -119,6 +124,7 @@ class BasicForm extends Component {
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
+        console.log({data}, 'client user value check')
         if (parseInt(data.balance) < 5) this.setState({ open: true });
         this.setState({ bal: data.balance, client_id: data._id });
         this.setState({ cid: data._id }, () =>
@@ -602,6 +608,7 @@ class BasicForm extends Component {
       othersstate,
       fullimg,
       img,
+      templates
     } = this.state;
 
     return (
@@ -831,6 +838,37 @@ class BasicForm extends Component {
                     >
                       Bulk Upload Images
                     </label>
+                    <div className="col-12 mt-3">
+            <div className="dropdown">
+              <button
+                className="btn btn-outline-primary dropdown-toggle"
+                type="button"
+                data-toggle="dropdown"
+                style={{ width: "200px" , marginTop : '130px' }}
+              >
+                Choose Template
+                <span className="caret"></span>
+              </button>
+              <ul className="dropdown-menu">
+                {templates &&
+                  templates.map((template) => {
+                    return (
+                      <li>
+                        <button
+                          className="btn colorIt border-0"
+                          style={{ width: "100%", textAlign: "left" }}
+                          id="dropdownMenuOffset"
+                         // onClick={() => this.setTemplate(template._id)}
+                        >
+                          {template.name}
+                        </button>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          </div>
+
                   </div>
                 </div>
               </div>
