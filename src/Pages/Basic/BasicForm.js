@@ -80,7 +80,6 @@ class BasicForm extends Component {
 
   componentDidMount = () => {
     const { cid, images } = this.state;
-    console.log(localStorage.getItem('other'), 'fsakdhfjkdshf sdhfsakjdfh')
     Axios.get("/password/getstatus").then(({ data }) => {
       //console.log(data);
       this.setState({ Ebay: data.Ebay });
@@ -89,9 +88,13 @@ class BasicForm extends Component {
     });
 
     Axios.get("/template")
-      .then(({ data }) => this.setState({ templates: data.templates }))
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-
+      .then((data) => {
+        console.log(data,'template data')
+        this.setState({templates : data.data.templates})
+      })
+      .catch((err) => {
+        console.log(err) 
+      })
     Axios.get("/password/getstatus/others").then(({ data })  => {
       console.log(data , 'other data');
       if (data.length > 0) {
@@ -125,6 +128,7 @@ class BasicForm extends Component {
     Axios.get("/clientdetails")
       .then(({ data }) => {
         console.log({data}, 'client user value check')
+        console.log(data,'client detail')
         if (parseInt(data.balance) < 5) this.setState({ open: true });
         this.setState({ bal: data.balance, client_id: data._id });
         this.setState({ cid: data._id }, () =>
@@ -588,9 +592,6 @@ class BasicForm extends Component {
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
   render() {
-    console.log(this.state.others, 'othere value')
-    console.log(this.state.Ebay ,'ebay')
-    console.log(this.state.othersstate , 'othres tateeerad')
     const {
       website,
       username,
@@ -610,7 +611,7 @@ class BasicForm extends Component {
       img,
       templates
     } = this.state;
-
+    console.log(this.state.templates, 'state tempalte value')
     return (
       <form className="container mt-5" onSubmit={(e) => this.onSubmit(e)}>
         <PaymentAlert

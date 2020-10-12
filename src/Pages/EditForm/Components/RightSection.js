@@ -676,7 +676,7 @@ export default class extends Component {
               <div className="col-1">
               <button
                //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.modelno}`, anchorEl : event.currentTarget,  field : "modelno" })}
-                onClick = {(event) => this.handleMessageData('modelno', event)}
+                onClick = {(event) => this.handleMessageData('modelNo', event)}
                 style={{ 
                   background: "none", 
                   border: "none", 
