@@ -794,16 +794,16 @@ class Searchcart extends Component {
                             product.others &&
                             JSON.parse(product.others).map((items) => {
                               console.log(items, 'item value check')
-                              //  if (items.status) {
-                              //    return (
-                              //      <div>
-                              //        <small>
-                              //          {items.name}-
-                              //          {items.url == "" ? "false" : "true"}
-                              //        </small>
-                              //      </div>
-                              //    );
-                              //  }
+                               if (items  && items.status) {
+                                 return (
+                                   <div>
+                                     <small>
+                                       {items.name}-
+                                       {items.url == "" ? "false" : "true"}
+                                     </small>
+                                   </div>
+                                 );
+                               }
                             })}
                         </td>
                         <td>
