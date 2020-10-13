@@ -7,6 +7,10 @@ import Axios, { assetsURL } from "../../services/Axios";
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import LoadingSpinner from "../utils/loader";
 import Pagination from "../../Components/pagination/Pagination";
+import Badge from '@material-ui/core/Badge';
+import MailIcon from '@material-ui/icons/Mail'
+import { fireEvent } from "@testing-library/react";
+import { formatMs } from "@material-ui/core";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
 
@@ -20,6 +24,7 @@ class Searchcart extends Component {
       rates: {},
       search: "",
       searchedProducts: [],
+      productMessageSeen:[],
       bal: 0,
       Ebay: false,
       Poshmark: false,
@@ -56,7 +61,7 @@ class Searchcart extends Component {
     
       Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-       // console.log(data, 'data user')
+       console.log(data, 'data userssss')
         if(data.err){
           window.alert('No product, Please add few...')
           window.open("/basic", "_self");
@@ -69,6 +74,18 @@ class Searchcart extends Component {
             draftCount : data.count.draftCount,
             submittedCount : data.count.submittedCount 
           });
+          var prodMsgSeen = true
+          for(var i = 0 ; i < data.data.length ; i++){
+            prodMsgSeen = true;
+            for(var j = 0 ; j < data.data[i].messageSeen.length ; j++){
+              if(data.data[i].messageSeen[j].client == false){
+                prodMsgSeen = false
+              }
+            }
+            var tempProdMsgSeen = this.state.productMessageSeen;
+            tempProdMsgSeen.push(prodMsgSeen);
+            this.setState({productMessageSeen:tempProdMsgSeen});
+          }
         }
       this.setState({ loading: false });
       })
@@ -89,7 +106,6 @@ class Searchcart extends Component {
     });
 
     await Axios.get("/password/getstatus/others").then(({ data }) => {
-     console.log(data,'data for chekcbhku')
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
@@ -332,7 +348,8 @@ class Searchcart extends Component {
       page,
       clientdetails,
       totalPage,
-      filteredProducts
+      filteredProducts,
+      productMessageSeen
     } = this.state;
     const newproducts =
       searchedProducts.length > 0 || search.length > 0
@@ -340,7 +357,6 @@ class Searchcart extends Component {
         : filteredProducts.length
         ? filteredProducts
         : products;
-
     return (
       <div>
       <div className="cartIt" style = {{minHeight : "75vh"}}>
@@ -503,16 +519,20 @@ class Searchcart extends Component {
                 <button
                   className="btn btn-sm"
                   onClick={() => {
-                    this.setState({ datesort: !datesort });
+                    this.setState({ datesort: !datesort , productMessageSeen : productMessageSeen.reverse() });
                   }}
                 >
                   <i class="fa fa-sort" aria-hidden="true"></i>
                   <b>DATE</b>
                 </button>
               </th>
+              <th scope= "col" className = "message">
+                Message
+              </th>
               <th scope="col" className="notes">
                 NOTES
               </th>
+            
             </tr>
           </thead>
           <tbody>
@@ -653,6 +673,10 @@ class Searchcart extends Component {
                           <small>{product.date.split("T")[0]}</small>
                         </td>
                         <td>
+                        {productMessageSeen[idx]?<Badge color="secondary" invisible='true' variant="dot"><MailIcon /></Badge>:<Badge color="secondary" variant="dot"><MailIcon /></Badge>}
+
+                        </td>
+                        <td>
                           <small>{product.note}</small>
                         </td>
                       </tr>
@@ -770,16 +794,16 @@ class Searchcart extends Component {
                             product.others &&
                             JSON.parse(product.others).map((items) => {
                               console.log(items, 'item value check')
-                              //  if (items.status) {
-                              //    return (
-                              //      <div>
-                              //        <small>
-                              //          {items.name}-
-                              //          {items.url == "" ? "false" : "true"}
-                              //        </small>
-                              //      </div>
-                              //    );
-                              //  }
+                               if (items  && items.status) {
+                                 return (
+                                   <div>
+                                     <small>
+                                       {items.name}-
+                                       {items.url == "" ? "false" : "true"}
+                                     </small>
+                                   </div>
+                                 );
+                               }
                             })}
                         </td>
                         <td>
@@ -808,9 +832,12 @@ class Searchcart extends Component {
                         <td>
                           <small>{product.date.split("T")[0]}</small>
                         </td>
+                        <td>{productMessageSeen[idx]?<Badge color="secondary" invisible='true' variant="dot"><MailIcon /></Badge>:<Badge color="secondary" variant="dot"><MailIcon /></Badge>}</td>
+
                         <td>
                           <small>{product.note}</small>
                         </td>
+
                       </tr>
                     );
                   })

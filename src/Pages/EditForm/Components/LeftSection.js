@@ -432,6 +432,7 @@ export default class extends Component {
           <div className="row">
             {othersbool
               ? others.map((o, i) => {
+                if(o)
                   return (
                     <div className="col-6 p-1">
                       <button style = {{width : "100%"}}
