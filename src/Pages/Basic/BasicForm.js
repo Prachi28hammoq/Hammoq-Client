@@ -920,8 +920,8 @@ class BasicForm extends Component {
                           {template.name}
                       </option>
                   );}
-                ) 
-                    }
+                )
+                   }
               </select>
       </div>
     </div>
