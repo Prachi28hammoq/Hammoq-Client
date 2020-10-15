@@ -858,7 +858,7 @@ class BasicForm extends Component {
                           className="btn colorIt border-0"
                           style={{ width: "100%", textAlign: "left" }}
                           id="dropdownMenuOffset"
-                         // onClick={() => this.setTemplate(template._id)}
+                         //onClick={() => this.setTemplate(template._id)}
                         >
                           {template.name}
                         </button>
