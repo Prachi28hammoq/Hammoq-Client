@@ -73,14 +73,15 @@ class BasicForm extends Component {
       cid: "",
       open: false,
       client_id: "",
-      templates : []
+      templates: [],
+      templateId: "",
+      productId: "",
     };
     this.handleChange.bind(this);
   }
 
   componentDidMount = () => {
     const { cid, images } = this.state;
-    console.log(localStorage.getItem('other'), 'fsakdhfjkdshf sdhfsakjdfh')
     Axios.get("/password/getstatus").then(({ data }) => {
       //console.log(data);
       this.setState({ Ebay: data.Ebay });
@@ -89,11 +90,15 @@ class BasicForm extends Component {
     });
 
     Axios.get("/template")
-      .then(({ data }) => this.setState({ templates: data.templates }))
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-
-    Axios.get("/password/getstatus/others").then(({ data })  => {
-      console.log(data , 'other data');
+      .then((data) => {
+        console.log(data, "template data");
+        this.setState({ templates: data.data.templates });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    Axios.get("/password/getstatus/others").then(({ data }) => {
+      console.log(data, "other data");
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
@@ -104,12 +109,13 @@ class BasicForm extends Component {
 
           const otherss = [...this.state.othersstate];
           otherss.push(localStorage.getItem(d) || false);
+          //console.log(otherss, "otherssssssssssssssssssssssss");
 
           this.setState({ othersstate: otherss });
-          if(!localStorage.getItem(d)){
-            localStorage.setItem(d, false)
+          if (!localStorage.getItem(d)) {
+            localStorage.setItem(d, false);
           }
-          
+
           //console.log(this.state.othersstate)
         });
       }
@@ -124,7 +130,8 @@ class BasicForm extends Component {
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        console.log({data}, 'client user value check')
+        console.log({ data }, "client user value check");
+        console.log(data, "client detail");
         if (parseInt(data.balance) < 5) this.setState({ open: true });
         this.setState({ bal: data.balance, client_id: data._id });
         this.setState({ cid: data._id }, () =>
@@ -215,8 +222,8 @@ class BasicForm extends Component {
     }
   };
 
-  onSubmit = (e) => {
-    e.preventDefault();
+  onSubmit = () => {
+    //e.preventDefault();
     const { images, cid } = this.state;
     const data = new FormData();
 
@@ -309,6 +316,7 @@ class BasicForm extends Component {
       return alert("Insufficient balance");
     }
 
+    console.log(y, "chening y value");
     data.append("sku", this.state.input2);
 
     if (this.state.input3 == 0) {
@@ -342,8 +350,6 @@ class BasicForm extends Component {
     //     data.append(this.state.others[i],false)
     // }
     // }
-  
-    
 
     data.append("waist", this.state.input8);
     data.append("inseam", this.state.input9);
@@ -376,16 +382,34 @@ class BasicForm extends Component {
     //   this.setState({ isSubmitting: false });
     //   return alert("Please Wait! Images are uploading.....");
     // } else {
-      
+    //let productId = ''
+
     Axios.post("/product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
         "x-access-token": `${localStorage.getItem("token")}`,
       },
     })
+
       .then((response) => {
-        console.log(response, 'data append')
-      window.open("/basic", "_self");
+        console.log(response, "data append");
+        let productId =
+          response.data.products[response.data.products.length - 1]._id;
+        if (this.state.templateId) {
+          Axios.post(
+            "/producttemplate",
+            { productId: productId, templateId: this.state.templateId },
+            {
+              headers: {
+                "x-access-token": `${localStorage.getItem("token")}`,
+              },
+            }
+          ).then((response) => {
+            console.log(response, "user data user");
+          });
+        }
+        console.log(productId, "user prodcuts");
+        window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
@@ -509,6 +533,7 @@ class BasicForm extends Component {
   };
 
   handleBulkUpload = async (e) => {
+  
     const { images, cid } = this.state;
     var imgobj = [];
     const files = e.target.files;
@@ -566,6 +591,14 @@ class BasicForm extends Component {
     // }, 2000);
   };
 
+  handleChangesTemplate = (e) => {
+    this.setTemplate(e.target.value);
+  };
+
+  setTemplate = (id) => {
+    this.setState({ templateId: id });
+  };
+
   removeImg = (idx) => {
     const { images } = this.state;
     images[idx].img = "";
@@ -588,9 +621,6 @@ class BasicForm extends Component {
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
   render() {
-    console.log(this.state.others, 'othere value')
-    console.log(this.state.Ebay ,'ebay')
-    console.log(this.state.othersstate , 'othres tateeerad')
     const {
       website,
       username,
@@ -608,17 +638,18 @@ class BasicForm extends Component {
       othersstate,
       fullimg,
       img,
-      templates
+      templates,
     } = this.state;
-
+    //console.log(document.getElementById('bulk'),'dgmt')
+    //document.getElementById('bulk').addEventListener( 'click', onMouse, false );
     return (
-      <form className="container mt-5" onSubmit={(e) => this.onSubmit(e)}>
+      <div className="container mt-5">
         <PaymentAlert
           open={this.state.open}
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
         />
-        <Link to="/products">
+        <Link to="/products/submitted">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </Link>
         <div className="row">
@@ -830,46 +861,36 @@ class BasicForm extends Component {
                       accept="image/*"
                       className="custom-file-input"
                       multiple
-                      onChange={this.handleBulkUpload}
-                    />
+                      onChange={(e)=>{this.handleBulkUpload(e)}}
+                      onClick={(e)=>{console.log(e,'onclick')}}
+                    ></input>
                     <label
                       className="custom-file-label"
                       htmlFor="inputGroupFile01"
                     >
                       Bulk Upload Images
                     </label>
-                    <div className="col-12 mt-3">
-            <div className="dropdown">
-              <button
-                className="btn btn-outline-primary dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                style={{ width: "200px" , marginTop : '130px' }}
-              >
-                Choose Template
-                <span className="caret"></span>
-              </button>
-              <ul className="dropdown-menu">
-                {templates &&
-                  templates.map((template) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt border-0"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="dropdownMenuOffset"
-                         //onClick={() => this.setTemplate(template._id)}
-                        >
-                          {template.name}
-                        </button>
-                      </li>
-                    );
-                  })}
-              </ul>
-            </div>
-          </div>
-
+                    
                   </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-12 px-1 ml-3">
+                  <select
+                    value={this.state.templateId}
+                    className="form-control"
+                    id="template"
+                    onChange={this.handleChangesTemplate}
+                  >
+                    <option value="">Choose Template</option>
+                    {templates &&
+                      templates.map((template) => {
+                        return (
+                          <option value={template._id}>{template.name}</option>
+                        );
+                      })}
+                  </select>
                 </div>
               </div>
             </div>
@@ -1074,7 +1095,7 @@ class BasicForm extends Component {
                         onChange={() =>
                           this.setState({ poshmark: !this.state.poshmark })
                         }
-                        defaultChecked="true" 
+                        defaultChecked="true"
                         id="poshmark"
                       />
                       <label className="form-check-label" htmlFor="poshmark">
@@ -1114,7 +1135,10 @@ class BasicForm extends Component {
                                 const ot = [...othersstate];
                                 ot[i] = !ot[i];
                                 this.setState({ othersstate: ot });
-                                localStorage.setItem(o, !this.state.othersstate[i] )
+                                localStorage.setItem(
+                                  o,
+                                  !this.state.othersstate[i]
+                                );
                               }}
                               id="othersstate"
                             />
@@ -1139,7 +1163,6 @@ class BasicForm extends Component {
                         this.setState({ delist: !this.state.delist })
                       }
                       id="delist"
-                      
                     />
                     <label className="form-check-label" htmlFor="delist">
                       Delist once item is sold
@@ -1162,11 +1185,13 @@ class BasicForm extends Component {
                     Submit
                   </button>
                 ) : (
-                  <input
-                    type="submit"
-                    value="Submit"
+                  <button
+                    type="button"
+                    onClick={() => this.onSubmit()}
                     className="btn btn-success mb-4 btn-block"
-                  />
+                  >
+                    Submit
+                  </button>
                 )}
               </div>
               <div className="col-6 px-1 mt-2">
@@ -1182,7 +1207,7 @@ class BasicForm extends Component {
         </div>
         <br />
         <div style={{ marginBottom: "60px" }}></div>
-      </form>
+      </div>
     );
   }
 }

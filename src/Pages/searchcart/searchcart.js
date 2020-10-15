@@ -7,6 +7,10 @@ import Axios, { assetsURL } from "../../services/Axios";
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import LoadingSpinner from "../utils/loader";
 import Pagination from "../../Components/pagination/Pagination";
+import Badge from '@material-ui/core/Badge';
+import MailIcon from '@material-ui/icons/Mail'
+import { fireEvent } from "@testing-library/react";
+import { formatMs } from "@material-ui/core";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
 
@@ -20,6 +24,7 @@ class Searchcart extends Component {
       rates: {},
       search: "",
       searchedProducts: [],
+      productMessageSeen:[],
       bal: 0,
       Ebay: false,
       Poshmark: false,
@@ -40,23 +45,23 @@ class Searchcart extends Component {
       inventoryCount : '',
       draftCount : '',
       submittedCount : '',
-      prodStatus:'submitted'
+      prodStatus:''
     };
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
+    const prodStatus = this.props.match.params.prodStatus
     this.setState({ loading: true });
-    await Axios.get("/payment/rates")
+    Axios.get("/payment/rates")
       .then((res) => {
-      
         //rates = res.data[res.data.length - 1];
         this.setState({ rates: res.data[res.data.length - 1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
     
-      Axios.get(`/product/type/${this.state.prodStatus}`, { params: { page: 1, size: 10 } })
+      Axios.get(`/product/type/${prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-       // console.log(data, 'data user')
+       
         if(data.err){
           window.alert('No product, Please add few...')
           window.open("/basic", "_self");
@@ -69,27 +74,38 @@ class Searchcart extends Component {
             draftCount : data.count.draftCount,
             submittedCount : data.count.submittedCount 
           });
+          var prodMsgSeen = true
+          for(var i = 0 ; i < data.data.length ; i++){
+            prodMsgSeen = true;
+            for(var j = 0 ; j < data.data[i].messageSeen.length ; j++){
+              if(data.data[i].messageSeen[j].client == false){
+                prodMsgSeen = false
+              }
+            }
+            var tempProdMsgSeen = this.state.productMessageSeen;
+            tempProdMsgSeen.push(prodMsgSeen);
+            this.setState({productMessageSeen:tempProdMsgSeen});
+          }
         }
       this.setState({ loading: false });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
-    await Axios.get("/clientdetails")
+  Axios.get("/clientdetails")
       .then(({ data }) => {
         
         this.setState({ bal: data.balance, clientdetails: data });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
-    await Axios.get("/password/getstatus").then(({ data }) => {
+ Axios.get("/password/getstatus").then(({ data }) => {
       
       this.setState({ Ebay: data.Ebay });
       this.setState({ Poshmark: data.Poshmark });
       this.setState({ Mercari: data.Mercari });
     });
 
-    await Axios.get("/password/getstatus/others").then(({ data }) => {
-     console.log(data,'data for chekcbhku')
+ Axios.get("/password/getstatus/others").then(({ data }) => {
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
@@ -164,74 +180,83 @@ class Searchcart extends Component {
     );
   };
 
-  handleInventory = async () => {
-     await Axios.get(`/product/type/inventory`, { params: { page: 1, size: 10 } })
-    .then(({ data }) => {
+  // handleInventory =  () => {
+  //   console.log(this.props.history)
+  //   this.props.history.push('/product/inventory')
+   // Axios.get(`/product/type/inventory`, { params: { page: 1, size: 10 } })
+    // .then(({ data }) => {
      
-      this.setState({
-        prodStatus:'inventory',
-        products: data.data,
-        totalPage: parseInt(data.pages),
-        page: parseInt(data.currPage),
-      });
-      // if (this.state.products != null) {
-      //   this.setState({
-      //     products: this.state.products.filter((filtered) => {
-      //       return filtered.status == true;
-      //     }),
-      //   });
-      // }
-
-      this.setState({ loading: false });
-    })
-    .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  }  
-
-  handleDrafts = async () => {
-    await Axios.get(`/product/type/draft`, { params: { page: 1, size: 10 } })
-    .then(({ data }) => {
+    //   this.setState({
+    //     prodStatus:'inventory',
+    //     products: data.data,
+    //     totalPage: parseInt(data.pages),
+    //     page: parseInt(data.currPage),
+    //   },()=>{
+    //     this.props.history.push('/product/inventory')
+    //   });
       
-      this.setState({
-        prodStatus:'draft',
-        products: data.data,
-        totalPage: parseInt(data.pages),
-        page: parseInt(data.currPage),
-      });
-      // if (this.state.products != null) {
-      //   this.setState({
-      //     products: this.state.products.filter((filtered) => {
-      //       return filtered.status == true;
-      //     }),
-      //   });
-      // }
+    //   // if (this.state.products != null) {
+    //   //   this.setState({
+    //   //     products: this.state.products.filter((filtered) => {
+    //   //       return filtered.status == true;
+    //   //     }),
+    //   //   });
+    //   // }
 
-      this.setState({ loading: false });
-    })
-    .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  };
+    // //   this.setState({ loading: false });
+    // })
+    // .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+  //}  
 
-  handleSubmitted = async () => {
-    await Axios.get(`/product/type/submitted`, { params: { page: 1, size: 10 } })
-    .then(({ data }) => {
+  // handleDrafts = async () => {
+  //   await Axios.get(`/product/type/draft`, { params: { page: 1, size: 10 } })
+  //   .then(({ data }) => {
       
-      this.setState({
-        prodStatus:'submitted',
-        products: data.data,
-        totalPage: parseInt(data.pages),
-        page: parseInt(data.currPage),
-      });
-      // if (this.state.products != null) {
-      //   this.setState({
-      //     products: this.state.products.filter((filtered) => {
-      //       return filtered.status == true;
-      //     }),
-      //   });
-      // }
+  //     this.setState({
+  //       prodStatus:'draft',
+  //       products: data.data,
+  //       totalPage: parseInt(data.pages),
+  //       page: parseInt(data.currPage),
+  //     },()=>{
+  //       this.props.history.push('/draft')
+  //     });
+  //     // if (this.state.products != null) {
+  //     //   this.setState({
+  //     //     products: this.state.products.filter((filtered) => {
+  //     //       return filtered.status == true;
+  //     //     }),
+  //     //   });
+  //     // }
 
-      this.setState({ loading: false });
-    })
-    .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  };
+  //     this.setState({ loading: false });
+  //   })
+  //   .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+  // };
+
+  // handleSubmitted = async () => {
+  //   await Axios.get(`/product/type/submitted`, { params: { page: 1, size: 10 } })
+  //   .then(({ data }) => {
+      
+  //     this.setState({
+  //       prodStatus:'submitted',
+  //       products: data.data,
+  //       totalPage: parseInt(data.pages),
+  //       page: parseInt(data.currPage),
+  //     },()=>{
+  //       this.props.history.push('/submitted')
+  //     });
+  //     // if (this.state.products != null) {
+  //     //   this.setState({
+  //     //     products: this.state.products.filter((filtered) => {
+  //     //       return filtered.status == true;
+  //     //     }),
+  //     //   });
+  //     // }
+
+  //     this.setState({ loading: false });
+  //   })
+  //   .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+  // };
 
   handleDelete = async (itemId) => {
     window.confirm('Are You Sure')
@@ -332,7 +357,8 @@ class Searchcart extends Component {
       page,
       clientdetails,
       totalPage,
-      filteredProducts
+      filteredProducts,
+      productMessageSeen
     } = this.state;
     const newproducts =
       searchedProducts.length > 0 || search.length > 0
@@ -340,7 +366,6 @@ class Searchcart extends Component {
         : filteredProducts.length
         ? filteredProducts
         : products;
-
     return (
       <div>
       <div className="cartIt" style = {{minHeight : "75vh"}}>
@@ -449,9 +474,13 @@ class Searchcart extends Component {
 
           <div style={{ justifyContent: "space-evenly" }}>
             <button
+            type='button'
               className="btn btn-primary d-inline mr-3 mb-3"
               onClick={() => {
-                this.handleInventory()
+                //this.handleInventory()
+                this.props.history.push('/products/inventory')
+                window.location.reload()
+                //console.log(this.props.history)
               }}
             >
               {this.state.inventoryCount}-Inventory
@@ -459,7 +488,10 @@ class Searchcart extends Component {
             <button
               className="btn btn-primary d-inline mr-3 mb-3"
               onClick={() => {
-                this.handleDrafts();
+                // this.handleDrafts();
+              
+                 this.props.history.push('/products/draft')
+                 window.location.reload()
               }}
             >
               {this.state.draftCount}-Drafts
@@ -467,7 +499,9 @@ class Searchcart extends Component {
             <button
               className="btn btn-primary d-inline mr-3 mb-3"
               onClick={() => {
-                this.handleSubmitted();
+                //this.handleSubmitted();
+                 this.props.history.push('/products/submitted')
+                 window.location.reload()
               }}
             >
             {this.state.submittedCount} -Submitted
@@ -503,16 +537,20 @@ class Searchcart extends Component {
                 <button
                   className="btn btn-sm"
                   onClick={() => {
-                    this.setState({ datesort: !datesort });
+                    this.setState({ datesort: !datesort , productMessageSeen : productMessageSeen.reverse() });
                   }}
                 >
                   <i class="fa fa-sort" aria-hidden="true"></i>
                   <b>DATE</b>
                 </button>
               </th>
+              <th scope= "col" className = "message">
+                Message
+              </th>
               <th scope="col" className="notes">
                 NOTES
               </th>
+            
             </tr>
           </thead>
           <tbody>
@@ -653,6 +691,10 @@ class Searchcart extends Component {
                           <small>{product.date.split("T")[0]}</small>
                         </td>
                         <td>
+                        {productMessageSeen[idx]?<Badge color="secondary" invisible='true' variant="dot"><MailIcon /></Badge>:<Badge color="secondary" variant="dot"><MailIcon /></Badge>}
+
+                        </td>
+                        <td>
                           <small>{product.note}</small>
                         </td>
                       </tr>
@@ -769,17 +811,16 @@ class Searchcart extends Component {
                           {othersbool &&
                             product.others &&
                             JSON.parse(product.others).map((items) => {
-                              console.log(items, 'item value check')
-                              //  if (items.status) {
-                              //    return (
-                              //      <div>
-                              //        <small>
-                              //          {items.name}-
-                              //          {items.url == "" ? "false" : "true"}
-                              //        </small>
-                              //      </div>
-                              //    );
-                              //  }
+                               if (items  && items.status) {
+                                 return (
+                                   <div>
+                                     <small>
+                                       {items.name}-
+                                       {items.url == "" ? "false" : "true"}
+                                     </small>
+                                   </div>
+                                 );
+                               }
                             })}
                         </td>
                         <td>
@@ -808,9 +849,12 @@ class Searchcart extends Component {
                         <td>
                           <small>{product.date.split("T")[0]}</small>
                         </td>
+                        <td>{productMessageSeen[idx]?<Badge color="secondary" invisible='true' variant="dot"><MailIcon /></Badge>:<Badge color="secondary" variant="dot"><MailIcon /></Badge>}</td>
+
                         <td>
                           <small>{product.note}</small>
                         </td>
+
                       </tr>
                     );
                   })

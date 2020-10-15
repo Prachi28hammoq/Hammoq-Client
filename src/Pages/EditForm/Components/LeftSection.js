@@ -174,8 +174,6 @@ export default class extends Component {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
     const { toggleSelectedWebsite } = this.props;
-    
-
     return (
       <>
         <div className="mt-3" />
@@ -312,13 +310,14 @@ export default class extends Component {
               ) : null}
               <div className="custom-file">
                 <input
+                  id="bulk"
                   type="file"
                   accept="image/*"
                   className="custom-file-input"
                   multiple
                   onChange={handleBulkUpload}
                 />
-                <label className="custom-file-label" htmlFor="inputGroupFile01">
+                <label  className="custom-file-label" htmlFor="inputGroupFile01">
                   Bulk Upload Images
                 </label>
               </div>
@@ -432,6 +431,7 @@ export default class extends Component {
           <div className="row">
             {othersbool
               ? others.map((o, i) => {
+                if(o)
                   return (
                     <div className="col-6 p-1">
                       <button style = {{width : "100%"}}

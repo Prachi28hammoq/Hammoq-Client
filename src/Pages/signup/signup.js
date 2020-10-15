@@ -124,7 +124,7 @@ class Signup extends Component {
           <div className="d-flex align-items-center justify-content-between mb-5 ml-5 mr-5">
             <img src={Logo} alt="hammoq" className="img" />
           </div>
-          <Link to="/products">
+          <Link to="/products/submitted">
             <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
           </Link>
           <div>
