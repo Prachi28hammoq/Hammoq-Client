@@ -963,7 +963,7 @@ export default class extends Component {
    // console.log(this.state.images, 'images')
     return (
       <div className="container-fluid px-3 template">
-        <Link to="/products">
+        <Link to="/products/submitted">
           <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
         </Link>
         <h2 className="text-dark d-flex justify-content-lg-center pb-4">
@@ -1428,7 +1428,7 @@ export default class extends Component {
             <input
               type="button"
               defaultValue="Cancel"
-              onClick={() => window.open("/products", "_self")}
+              onClick={() => window.open("/products/submitted", "_self")}
               className="btn btn-danger mb-4 btn-block col-12 mr-auto col-lg-12"
             />
           </div>

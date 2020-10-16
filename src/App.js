@@ -60,7 +60,7 @@ const Routes = withRouter((props) => {
             />
             <Route exact path="/basic" component={BasicForm} />
             <Route exact path="/edit/:id" component={EditForm} />
-            <Route exact path="/products" component={Searchcart} />
+            <Route exact path="/products/:prodStatus" component={Searchcart} />
             <Route exact path="/transactions" component={Transactions} />
             <Route exact path="/setting" component={Settings} />
             <Route exact path="/client/ebay/:id" component={AcceptUrl} />

@@ -51,7 +51,7 @@ export default class extends Component {
     return (
       <div>
         <div className="container p-4">
-          <Link to="/products">
+          <Link to="/products/submitted">
             <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
           </Link>
           {/* modal */}
