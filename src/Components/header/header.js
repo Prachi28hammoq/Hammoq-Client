@@ -21,6 +21,7 @@ class header extends Component {
 
   componentDidMount = async () => {
     if (localStorage.getItem("token")) {
+      //api integration to get rates
       await Axios.get("/payment/rates")
         .then((res) => {
           //rates = res.data[res.data.length - 1];
@@ -28,6 +29,7 @@ class header extends Component {
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
+      //api integration to get client details
       await Axios.get("/clientdetails")
         .then(({ data }) => {
           console.log(data, "user data checking");
@@ -61,6 +63,7 @@ class header extends Component {
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
   render() {
+    //destructuring
     const { basiccheck, advancecheck, rates, bal } = this.state;
     return (
       <nav

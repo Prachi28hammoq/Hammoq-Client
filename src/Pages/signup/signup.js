@@ -31,6 +31,7 @@ class Signup extends Component {
     this.setState({ [name]: value });
   };
 
+  //checkbox function in registration form
   handleToggleCheckbox = (e) => {
     const { name } = e.target;
     this.setState({ [name]: !this.state[name] });
@@ -56,6 +57,7 @@ class Signup extends Component {
       phoneno,
     } = this.state;
 
+    // alert messages for validation
     if (!term1) {
       this.setState({ isSubmitting: false });
       return alert("Accept all the terms.");
@@ -82,12 +84,14 @@ class Signup extends Component {
     }
 
     const body = { ...this.state };
+    //api integration to create data
     Axios.post("/signup", body)
       .then((res) => {
         if (res.data.errors) {
           this.setState({ isSubmitting: false });
           return alert(res.data.errors);
         }
+        //set item in local storage
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("paymentadded", false);
         window.open("/addpayment", "_self");

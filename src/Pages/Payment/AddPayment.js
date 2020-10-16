@@ -39,12 +39,14 @@ class AddPayment extends Component {
       alert("Fill up the details");
       this.setState({ loading: false });
     }
+    //api integration to create payment details
     await Axios.post("/payment/firstpayment", {
       email: this.state.email,
       card_details: result,
       price: price,
     })
       .then((res) => {
+        //api integration to update/edit client payment detail
         Axios.put("/payment/addstatus")
           .then((res) => {
             localStorage.setItem("paymentadded", res.data.paymentStatus);
@@ -76,6 +78,7 @@ class AddPayment extends Component {
   };
 
   componentDidMount(prevProps) {
+    //api integration to get client details
     Axios.get("/clientdetails")
       .then(({ data }) => {
         this.setState({ email: data.email });
@@ -184,6 +187,7 @@ class AddPayment extends Component {
                         <div className="">
                           <form style={{ width: "300px", margin: "auto" }}>
                             {this.state.loading ? (
+                              //spin loader to load the page
                               <div className="center">
                                 <LoadingSpinner asOverlay />
                               </div>
@@ -193,6 +197,7 @@ class AddPayment extends Component {
                             <CardElement />
                             <button
                               type="button"
+                              //modal function
                               onClick={() =>
                                 $("#addTemplateModal").modal("show")
                               }
@@ -238,15 +243,17 @@ class AddPayment extends Component {
                         <div className="">
                           <form style={{ width: "300px", margin: "auto" }}>
                             {this.state.loading ? (
+                              //spin loader to load the page
                               <div className="center">
                                 <LoadingSpinner asOverlay />
                               </div>
                             ) : null}
                             <input type="hidden" />
                             <br />
-                            <CardElement />
+                            <CardElement />                            
                             <button
                               type="button"
+                              //modal function
                               onClick={() =>
                                 $("#addTemplateModal").modal("show")
                               }
