@@ -115,6 +115,12 @@ class header extends Component {
               </li>
             </li> */}
             <li class="nav-item">
+              <Link to="/messages" className="nav-link" style={{ color: "white" }}>
+                Messages
+              </Link>
+            </li>
+
+            <li class="nav-item">
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
               </Link>
