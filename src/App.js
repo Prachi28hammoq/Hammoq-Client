@@ -29,6 +29,7 @@ import {
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
+import Message from "./Pages/Messages/message";
 
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
@@ -63,6 +64,7 @@ const Routes = withRouter((props) => {
             <Route exact path="/transactions" component={Transactions} />
             <Route exact path="/setting" component={Settings} />
             <Route exact path="/client/ebay/:id" component={AcceptUrl} />
+            <Route exact path="/messages" component ={Message} />
             <Route path="/" component={() => <Redirect to="/products" />} />
           </Switch>
         ) : (
