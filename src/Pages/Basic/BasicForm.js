@@ -393,8 +393,7 @@ class BasicForm extends Component {
 
       .then((response) => {
         console.log(response, "data append");
-        let productId =
-          response.data.products[response.data.products.length - 1]._id;
+        let productId =response.data.products ?  response.data.products[response.data.products.length - 1]._id : response.data.products
         if (this.state.templateId) {
           Axios.post(
             "/producttemplate",

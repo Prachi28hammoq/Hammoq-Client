@@ -6,11 +6,11 @@ import Axios from "axios";
 // const baseURL = "http://stageapp.avoidpoints.com/api";
 // const assetsURL = "http://stageapp.avoidpoints.com/assets/";
 
-const baseURL = "http://localhost:8000/api";
-const assetsURL = "http://localhost:8000/assets/";
+// const baseURL = "http://localhost:8000/api";
+// const assetsURL = "http://localhost:8000/assets/";
 
-// const baseURL = "https://devcust.avoidpoints.com/api";
-// const assetsURL = "https://devcust.avoidpoints.com/assets/";
+const baseURL = "https://devcust.avoidpoints.com/api";
+const assetsURL = "https://devcust.avoidpoints.com/assets/";
 
 
 //const socketCon = "http://localhost:8000";

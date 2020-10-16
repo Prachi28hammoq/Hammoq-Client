@@ -51,6 +51,7 @@ class Searchcart extends Component {
 
   componentDidMount = () => {
     const prodStatus = this.props.match.params.prodStatus
+    this.setState({prodStatus : this.props.match.params.prodStatus})
     this.setState({ loading: true });
     Axios.get("/payment/rates")
       .then((res) => {
@@ -292,6 +293,7 @@ class Searchcart extends Component {
       })
         .then(({ data }) => {
           console.log(data, 'page chanegs dataaaa')
+          if(data)
           this.setState({ products: data.data  });
           // if (this.state.products != null) {
           //   this.setState({

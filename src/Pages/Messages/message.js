@@ -83,7 +83,7 @@ export default class extends Component {
           }
         </div>
           <div className = "chat col-md-8">
-            <div style = {{maxHeight : '65vh' , overflow : 'auto' , position : 'sticky', bottom  : '0'}} id = "msg_history">
+            <div style = {{maxHeight : '65vh' , overflow : 'auto' }} id = "msg_history">
               {
                 this.state.messages.map((data) => {
                   if(data.tag == "client" ){

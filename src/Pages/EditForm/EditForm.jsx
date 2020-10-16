@@ -74,8 +74,13 @@ export default class extends Component {
       message : [],
       productid : '',
       inventoryCount : 0,
-      messageNotSeen : []
+      messageNotSeen : [],
+      templateIdd : ''
     };
+  }
+  handleChangesTemplate = (e) => {
+    this.setState({templateIdd : e.target.value})
+    this.setTemplate(e.target.value)
   }
 
   setTemplate = (tempid) => {
@@ -1000,7 +1005,16 @@ export default class extends Component {
               </ul>
             </div>
           </div>
-
+          {/* <select value = {this.state.templateIdd} className = "form-control" onChange = {this.handleChangesTemplate}>
+              <option>Choose Template</option>
+              {templates && templates.map((temp) => {
+                return (
+                  <option value = {temp._id}>
+                    {temp.name}
+                  </option>
+                )
+              })}
+          </select> */}
           <div className="col-12 col-lg-6 pr-4 order-2 order-lg-1">
             {/* <div className="col-12 col-lg-6 pr-4"> */}
             <LeftSection
