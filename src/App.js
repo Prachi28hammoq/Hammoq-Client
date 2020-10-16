@@ -24,12 +24,13 @@ import {
   forgotpassword,
   Charts,
   Config,
-  AcceptUrl,
+  AcceptUrl
 } from "./Pages";
+import Message from './Pages/Messages/message'
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
-import Message from "./Pages/Messages/message";
+
 
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
@@ -58,6 +59,7 @@ const Routes = withRouter((props) => {
               path="/template/:templateid"
               component={TemplateForm}
             />
+            
             <Route exact path="/basic" component={BasicForm} />
             <Route exact path="/edit/:id" component={EditForm} />
             <Route exact path="/products/:prodStatus" component={Searchcart} />
@@ -65,7 +67,7 @@ const Routes = withRouter((props) => {
             <Route exact path="/setting" component={Settings} />
             <Route exact path="/client/ebay/:id" component={AcceptUrl} />
             <Route exact path="/messages" component ={Message} />
-            <Route path="/" component={() => <Redirect to="/products" />} />
+            <Route path="/" component={() => <Redirect to="/products/submitted" />} />
           </Switch>
         ) : (
           <Switch>
