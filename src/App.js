@@ -26,11 +26,11 @@ import {
   Config,
   AcceptUrl
 } from "./Pages";
-import message from './Pages/message/message'
+import Message from './Pages/Messages/message'
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
-import { Message } from "@material-ui/icons";
+
 
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
@@ -59,13 +59,14 @@ const Routes = withRouter((props) => {
               path="/template/:templateid"
               component={TemplateForm}
             />
-            <Route exact path="/messages" component={message} />
+            
             <Route exact path="/basic" component={BasicForm} />
             <Route exact path="/edit/:id" component={EditForm} />
             <Route exact path="/products/:prodStatus" component={Searchcart} />
             <Route exact path="/transactions" component={Transactions} />
             <Route exact path="/setting" component={Settings} />
             <Route exact path="/client/ebay/:id" component={AcceptUrl} />
+            <Route exact path="/messages" component ={Message} />
             <Route path="/" component={() => <Redirect to="/products/submitted" />} />
           </Switch>
         ) : (
