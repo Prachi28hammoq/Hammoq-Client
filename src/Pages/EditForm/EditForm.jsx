@@ -74,8 +74,13 @@ export default class extends Component {
       message : [],
       productid : '',
       inventoryCount : 0,
-      messageNotSeen : []
+      messageNotSeen : [],
+      templateIdd : ''
     };
+  }
+  handleChangesTemplate = (e) => {
+    this.setState({templateIdd : e.target.value})
+    this.setTemplate(e.target.value)
   }
 
   setTemplate = (tempid) => {
@@ -963,7 +968,7 @@ export default class extends Component {
    // console.log(this.state.images, 'images')
     return (
       <div className="container-fluid px-3 template">
-        <Link to="/products">
+        <Link to="/products/submitted">
           <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
         </Link>
         <h2 className="text-dark d-flex justify-content-lg-center pb-4">
@@ -1000,7 +1005,16 @@ export default class extends Component {
               </ul>
             </div>
           </div>
-
+          {/* <select value = {this.state.templateIdd} className = "form-control" onChange = {this.handleChangesTemplate}>
+              <option>Choose Template</option>
+              {templates && templates.map((temp) => {
+                return (
+                  <option value = {temp._id}>
+                    {temp.name}
+                  </option>
+                )
+              })}
+          </select> */}
           <div className="col-12 col-lg-6 pr-4 order-2 order-lg-1">
             {/* <div className="col-12 col-lg-6 pr-4"> */}
             <LeftSection
@@ -1428,7 +1442,7 @@ export default class extends Component {
             <input
               type="button"
               defaultValue="Cancel"
-              onClick={() => window.open("/products", "_self")}
+              onClick={() => window.open("/products/submitted", "_self")}
               className="btn btn-danger mb-4 btn-block col-12 mr-auto col-lg-12"
             />
           </div>

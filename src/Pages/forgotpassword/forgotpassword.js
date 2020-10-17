@@ -40,7 +40,7 @@ class Login extends Component {
               //console.log(data);
               alert(data.data);
               this.setState({ passup: true });
-              window.open("/products", "_self");
+              window.open("/products/submitted", "_self");
             } else {
               alert("Password updation failed! Try again");
             }
