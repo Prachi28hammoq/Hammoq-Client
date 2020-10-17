@@ -7,23 +7,21 @@ import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Axios from "../../services/Axios";
 const io = require("socket.io-client");
-const socket = io.connect("http://localhost:8000");
+const socket = io.connect("https://devcust.avoidpoints.com");
 
 
 export default class extends Component {
   constructor(){
     super()
     this.state = {
-      agents : [],
       clientId : localStorage.getItem('cid'),
       messages : [],
       message: '',
       customerName : localStorage.getItem('customerName'),
-      agentId : ''
        
     }
-    socket.on('messages', (data) => this.setState({messages : data.messages}))
-    socket.on('newmessage', (data) => {var messages = this.state.messages
+    socket.on('messages', (data) => {if(data){this.setState({messages : data.messages})}} )
+    socket.on('newmessage', (data) => {var messages = this.state.messages 
      messages.push(data.message)
      this.setState({messages : messages})
    })
@@ -32,70 +30,57 @@ export default class extends Component {
 
   
 
-  componentDidMount = async () => {
-    const response = await Axios.get(`/globalmessage/agent`, {
-        headers : {
-          'x-access-token' : localStorage.getItem('token')
-        }
-    })
-    this.setState({agents : response.data})  
+  // componentDidMount = async () => {
+  //   const response = await Axios.get(`/globalmessage/agent`, {
+  //       headers : {
+  //         'x-access-token' : localStorage.getItem('token')
+  //       }
+  //   })
+  //   this.setState({agents : response.data}) 
+  // }
+  componentDidMount = () => {
+    socket.emit('user-connected', this.state.clientId)
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props !== prevProps) {
+  // componentDidUpdate = () => {
+  //      socket.emit('user-connected', this.state.clientId)
+  // }
+
+  componentDidUpdate() {
       var div = document.getElementById("msg_history");
       div.scrollTop = div.scrollHeight - div.clientHeight;
-    }
   }
 
-  handleRoomJoin = (agentId) => {
-    this.setState({agentId : agentId})
-    let roomId = agentId + this.state.clientId
-    console.log(roomId)
-    socket.emit('user-connected', roomId)
-  }
+
 
   handleChange = (event) => {
     this.setState({ message: event.target.value });
   };
 
   handleMessageSend = () => {
-    let roomId = this.state.agentId + this.state.clientId
+    let roomId = this.state.clientId
     const message = {text : this.state.message, date : moment(), senderName : this.state.customerName, tag: 'client'  }
     socket.emit('newmessage',  message , roomId)
+    this.setState({message : ''})
   }
   render(){
     return(
-      <div className = "row">
-        <div className="side-paneel col-md-4">
-          
-        {
-            this.state.agents.map((agent) => {
-              return (
-                <div className = "card ml-2 p-1 text-success bg-light"
-                key = {agent._id}
-                  onClick = {() => {this.handleRoomJoin(agent._id)}}
-                >
-                  {agent.username}
-                </div>
-              )
-            })
-          }
-        </div>
-          <div className = "chat col-md-8">
-            <div style = {{maxHeight : '65vh' , overflow : 'auto' }} id = "msg_history">
+      <div className="container">
+        <div className = "row">
+          <div className = "chat col-md-12">
+            <div style = {{height : '65vh' , overflow : 'auto' }} id = "msg_history">
               {
                 this.state.messages.map((data) => {
                   if(data.tag == "client" ){
                     return (
                       <div className = 'outgoing_msg'>
                           <div className="sent_msg">
-                            <div>
+                            <div >
                                 {data.senderName}
 
                             </div>
                             <p>{data.text}</p>
-                            <span>{data.date}</span>
+                            <span className = 'time_date'>{moment(data.date).format('ll')}</span>
                           </div>
                         </div>
                     )
@@ -108,7 +93,7 @@ export default class extends Component {
                               {data.senderName}
                               </div>
                                 <p>{data.text}</p>
-                                <span>{data.date}</span>
+                                <span className = 'time_date'>{moment(data.date).format('ll')}</span>
                             </div>
                           </div>
                         </div>
@@ -124,6 +109,7 @@ export default class extends Component {
                 aria-label="maximum height"
                 class="write_msg"
                 placeholder="Type a message"
+                value = {this.state.message}
                 id="msg"
                 style={{ width: "90%" }}
                 onChange={(e) => this.handleChange(e)}
@@ -140,6 +126,8 @@ export default class extends Component {
           </div>
           </div>
       </div>
+      </div>
+      
     )
   }
 }

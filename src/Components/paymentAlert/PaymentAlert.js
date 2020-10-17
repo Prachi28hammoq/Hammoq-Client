@@ -30,8 +30,10 @@ export default function AlertDialog(props) {
 
   // specifying verify callback
   const updatePayment = () => {
-    setOpen(false);
+    setOpen(true);
     props.updatePayment(amount);
+    window.alert('Credit Card is not Added')
+    window .open('/addpayment', '_self')
   };
   React.useEffect(() => {
     setOpen(props.open);
