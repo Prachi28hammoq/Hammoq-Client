@@ -18,6 +18,7 @@ class Passwords extends Component {
     };
   }
 
+  //get password
   componentDidMount = () => {
     Axios.get("/password").then(({ data }) => {
       console.log(data);
@@ -45,6 +46,7 @@ class Passwords extends Component {
   };
 
   handleSubmit = (e) => {
+    //destructure
     const { website, username, password, users } = this.state;
     e.preventDefault();
     if (website != "" && username != "" && password != "") {
@@ -85,7 +87,7 @@ class Passwords extends Component {
     }
   };
   handleeBaySubmit = () => {
-    Axios.get("/ebay/consent")
+    Axios.get("/ebay/consent") //Ebay login
       .then((response) => {
         console.log(response);
         window.open(response.data.url, "_blank");

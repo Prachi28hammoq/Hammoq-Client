@@ -31,7 +31,8 @@ class Editdomain extends Component {
     users[name] = value;
     this.setState({ users });
   };
-
+  
+ //edit login
   handleSubmit = (e) => {
     e.preventDefault();
     const { users } = this.state;

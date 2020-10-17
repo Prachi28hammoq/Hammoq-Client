@@ -41,6 +41,7 @@ class BasicForm extends Component {
       costOfGoods: 0,
       category: "",
       isSubmitting: false,
+      //for selection presence
       ebay: localStorage.getItem("ebay") === "true", //for selection presence
       mercari: localStorage.getItem("mercari") === "true",
       poshmark: localStorage.getItem("poshmark") === "true",
@@ -76,6 +77,7 @@ class BasicForm extends Component {
     this.handleChange.bind(this);
   }
 
+  //api integration to get status, rates, client detail
   componentDidMount = () => {
     const { cid, images } = this.state;
     Axios.get("/password/getstatus").then(({ data }) => {
@@ -184,6 +186,7 @@ class BasicForm extends Component {
     // });
   };
 
+  // change function for input tag
   change = (e) => {
     if (e.target.name === "input1") {
       localStorage.setItem("condition", e.target.value);
@@ -193,6 +196,7 @@ class BasicForm extends Component {
     });
   };
 
+  //select category
   setCategory = (str) => {
     if (this.state.category === str) {
       this.setState({ category: "" });
@@ -355,6 +359,8 @@ class BasicForm extends Component {
     //   this.setState({ isSubmitting: false });
     //   return alert("Please Wait! Images are uploading.....");
     // } else {
+
+    //create product
     Axios.post("/product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -369,6 +375,7 @@ class BasicForm extends Component {
   };
 
   handleSubmit = (e) => {
+    //destructure
     const { website, username, password, users } = this.state;
     e.preventDefault();
     if (website != "" && username != "" && password != "") {
@@ -473,6 +480,7 @@ class BasicForm extends Component {
     // console.log(this.state.images);
   };
 
+  //select site
   handleChangepop = (e) => {
     const { name, value } = e.target;
     if (value == "Others") {
@@ -485,6 +493,7 @@ class BasicForm extends Component {
     }
   };
 
+  //bulk upload images/files
   handleBulkUpload = async (e) => {
     const { images, cid } = this.state;
     var imgobj = [];
@@ -543,14 +552,17 @@ class BasicForm extends Component {
     // }, 2000);
   };
 
+  //remove img 
   removeImg = (idx) => {
     const { images } = this.state;
     images[idx].img = "";
     this.setState({ images });
   };
+  //close payment alert
   handleClose = () => {
     this.setState({ open: false });
   };
+  //update payment
   updatePayment = async (amount) => {
     let body = {
       customer_id: this.state.client_id,
@@ -698,7 +710,7 @@ class BasicForm extends Component {
           </div>
           <div className="col-12 col-md-6">
             <div className="row m-auto">
-              {images.map((image, idx) => {
+              {images.map((image, idx) => { //map function
                 return (
                   <div className="col-4 col-md-3 px-1 ">
                     <div
@@ -1126,6 +1138,7 @@ class BasicForm extends Component {
   }
 }
 
+//style for inputfiles
 const styles = {
   inputFile: {
     position: "absolute",

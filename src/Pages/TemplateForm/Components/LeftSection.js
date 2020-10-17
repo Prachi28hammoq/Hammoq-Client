@@ -29,6 +29,7 @@ export default class extends Component {
     };
   }
 
+
   // componentDidMount() {
   //   var uploader = new SocketIOFileUpload(socket);
   //   uploader.listenOnInput(document.getElementById("bulk"));
@@ -112,6 +113,7 @@ export default class extends Component {
       exthandle,
     } = this.props;
 
+    //destructure
     const { toggleSelectedWebsite } = this.props;
 
     return (

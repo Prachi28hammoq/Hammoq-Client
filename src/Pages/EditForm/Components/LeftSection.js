@@ -55,6 +55,7 @@ export default class extends Component {
     this.setState({[e.target.name] : e.target.value})
   }
 
+  // form submit function
   handleMessageSubmit = async () => {
     const formData = {
       msgformTitle : this.state.msgFormTitle,
@@ -75,6 +76,7 @@ export default class extends Component {
     }
   }
 
+  //measurement 
   handleMessageData = async (value, event) => {
     console.log(value,"value")
     const productId = this.props.productid
@@ -117,6 +119,7 @@ export default class extends Component {
     this.setState({anchorEl : null })
   };
 
+  //modal image handler
   handleImageModal = (idx) => {
     console.log(idx ,'idx')
     console.log(this.props.images ,'concoel')
@@ -170,6 +173,7 @@ export default class extends Component {
       showcat,
     } = this.props;
 
+    //destructure
     const { selectedWebsites, category, showMoreLines, messageFormToggle, anchorEl,productMessage } = this.state;
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;

@@ -13,6 +13,7 @@ class settings extends Component {
     };
   }
 
+  //logout 
   logoutHandler = () => {
     localStorage.removeItem("token");
     window.open("/login", "_self");
@@ -23,6 +24,7 @@ class settings extends Component {
     this.setState({ [name]: value });
   };
 
+  //Edit information in setting
   editinfo = async (e) => {
     e.preventDefault();
     const { username, email } = e.target;

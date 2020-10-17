@@ -2,6 +2,7 @@ import React from "react";
 
 export default (props) => {
   return (
+    //selected category
     <button
       type="button"
       className={`btn btn-${

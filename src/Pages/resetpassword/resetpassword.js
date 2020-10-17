@@ -23,6 +23,7 @@ class resetpassword extends Component {
     this.setState({ [name]: value });
   };
 
+  //reset password
   reset = async (e) => {
     e.preventDefault();
     const agentid = localStorage.getItem("agent");

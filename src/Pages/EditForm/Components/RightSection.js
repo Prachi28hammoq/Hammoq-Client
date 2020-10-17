@@ -34,7 +34,7 @@ export default class extends Component {
   }
 
  
-
+  //on key up 
   handleChanges = (e) => {
     if (e.target.value.length > max) return 0;
     this.setState({ count: e.target.value.length });
@@ -44,6 +44,7 @@ export default class extends Component {
     this.setState({[e.target.name] : e.target.value})
   }
 
+  //form submit
   handleMessageSubmit = async () => {
     const formData = {
       msgformTitle : this.state.msgFormTitle,
@@ -130,6 +131,7 @@ export default class extends Component {
 
   }
   render = () => {
+    //destructuring data
     const { selectedWebsites, category, showMoreLines, custom, msgFormToggle, anchorEl } = this.state;
 
     const { data, handleChange, toggleSelectedWebsite } = this.props;

@@ -19,6 +19,7 @@ class Login extends Component {
     };
   }
 
+  //new password update
   handleSubmit = async (e) => {
     this.setState({ isSubmitting: true });
     e.preventDefault();

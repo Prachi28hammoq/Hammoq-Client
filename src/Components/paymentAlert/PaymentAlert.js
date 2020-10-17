@@ -38,7 +38,7 @@ export default function AlertDialog(props) {
 
   return (
     <div>
-      <Dialog
+      <Dialog //dialog box
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"

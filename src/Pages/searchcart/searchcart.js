@@ -131,6 +131,7 @@ class Searchcart extends Component {
     }
   };
 
+  //search products
   handleSearchChange = (e) => {
     const { value } = e.target;
     const { products } = this.state;
@@ -189,6 +190,7 @@ class Searchcart extends Component {
     .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
 
+  //get selected product
   handleSubmitted = async () => {
     await Axios.get(`/product/type/submitted`, { params: { page: 1, size: 10 } })
     .then(({ data }) => {
@@ -234,7 +236,7 @@ class Searchcart extends Component {
     }
   };
 
-
+  //pagination
   handleChangePage = async (newPage) => {
     if (newPage > 0 && newPage <= this.state.totalPage) {
       this.setState({ page: newPage });
@@ -256,7 +258,7 @@ class Searchcart extends Component {
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
     }
   };
-
+  // change in no. of rows in pagination
   handleChangeRowsPerPage = async (val) => {
     await Axios.get("/product", {
       params: { page: this.state.page, size: val },

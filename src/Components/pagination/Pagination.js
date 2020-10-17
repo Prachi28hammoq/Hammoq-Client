@@ -1,5 +1,5 @@
 import React from 'react'
-
+//pagination
 function Pagination({curPage, totalPage, rowPerPage, next, previous, onRowNumberChange}) {
     return (
         <div className="shadow d-flex justify-content-around py-3 px-1">

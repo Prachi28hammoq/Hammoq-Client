@@ -6,6 +6,7 @@ import { assetsURL } from "../../../services/Axios";
 
 const max = 5000;
 
+
 export default class extends Component {
   constructor() {
     super();
@@ -23,7 +24,8 @@ export default class extends Component {
       desc: "",
     };
   }
-
+  
+  //on key up 
   handleChanges = (e) => {
     if (e.target.value.length > max) return 0;
     this.setState({ count: e.target.value.length });

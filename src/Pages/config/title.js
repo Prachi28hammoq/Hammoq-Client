@@ -19,7 +19,7 @@ class resetpassword extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-
+  //form on submit function
   submit = async (e) => {
     e.preventDefault();
     console.log(this.state.type);

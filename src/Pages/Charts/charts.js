@@ -28,6 +28,7 @@ class Chart extends Component {
     location: "City",
   };
 
+  //Select date of product creation
   handleChange = (e) => {
     const { name, value } = e.target;
     const { date } = this.state;
@@ -108,7 +109,7 @@ class Chart extends Component {
             datasets: [
               {
                 label: "Cycle avg(%) of products",
-                data: misc,//prod
+                data: misc,//products
                 backgroundColor: [
                   "rgba(255, 99, 132, 0.6)",
                   "rgba(54, 162, 235, 0.6)",

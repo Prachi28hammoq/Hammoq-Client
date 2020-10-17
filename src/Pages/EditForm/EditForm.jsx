@@ -137,6 +137,7 @@ export default class extends Component {
   };
 
   componentDidMount = () => {
+    //fetch data
     Axios.get("/template")
       .then(({ data }) => this.setState({ templates: data.templates }))
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -290,6 +291,7 @@ export default class extends Component {
       }
     });
 
+    //fetch status
     Axios.get("/password/getstatus").then(({ data }) => {
       //console.log(data);
       this.setState({ Ebay: data.Ebay });

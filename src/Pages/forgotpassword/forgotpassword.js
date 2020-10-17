@@ -31,7 +31,7 @@ class Login extends Component {
       if (this.state.password == "") {
         alert("Fill in the new password");
       } else {
-        await Axios.post("/forgotpassword/update", {
+        await Axios.post("/forgotpassword/update", { //update password
           email: this.state.email,
           newPassword: this.state.password,
         })
@@ -49,6 +49,7 @@ class Login extends Component {
       }
     }
 
+    //fetch confirm password
     if (this.state.codesent == true && this.state.codecheck == false) {
       if (this.state.code == "") {
         alert("Fill in the Code");
@@ -95,6 +96,7 @@ class Login extends Component {
   };
 
   render() {
+    //destructuring
     const {
       email,
       password,
