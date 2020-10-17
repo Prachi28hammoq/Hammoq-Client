@@ -132,7 +132,7 @@ export default class extends Component {
 
           if (data.templates[0].data.others) {
             this.state.otherfromdb = JSON.parse(data.templates[0].data.others);
-            console.log(this.state.otherfromdb);
+            //console.log(this.state.otherfromdb);
             this.state.otherfromdb.map((db, i) => {
               this.state.othersstate[i] = db.status;
             });
@@ -341,7 +341,19 @@ export default class extends Component {
     localStorage.setItem("actionposhmark", "");
     localStorage.setItem("actionmercari", "");
     localStorage.setItem("actionfb", "");
-    
+
+   Axios.get(`/producttemplate/${this.props.match.params.id}`, {
+      headers : {
+        'x-access-token' : localStorage.getItem('token')
+      }
+    })
+    .then((response) => {
+      console.log(response , 'llllllllllllllllllllllllllllllllllllll')
+      if(response.data.templateId){
+        this.setState({templateIdd : response.data.templateId})
+        this.setTemplate(response.data.templateId)
+      }
+    })
   };
 
   handleChange = (e) => {
@@ -974,8 +986,21 @@ export default class extends Component {
         <h2 className="text-dark d-flex justify-content-lg-center pb-4">
           Create or Edit Listing: {templatename}
         </h2>
+        <div className="col-md-4">
+            <select value = {this.state.templateIdd} className = "form-control" onChange = {this.handleChangesTemplate}>
+              <option>Choose Template</option>
+              {templates && templates.map((temp) => {
+                return (
+                  <option value = {temp._id}>
+                    {temp.name}
+                  </option>
+                )
+              })}
+          </select>
+          </div>
         <div className="row">
-          <div className="col-12 mt-3">
+    
+          {/* <div className="col-12 mt-3">
             <div className="dropdown">
               <button
                 className="btn btn-outline-primary dropdown-toggle"
@@ -1004,17 +1029,10 @@ export default class extends Component {
                   })}
               </ul>
             </div>
-          </div>
-          {/* <select value = {this.state.templateIdd} className = "form-control" onChange = {this.handleChangesTemplate}>
-              <option>Choose Template</option>
-              {templates && templates.map((temp) => {
-                return (
-                  <option value = {temp._id}>
-                    {temp.name}
-                  </option>
-                )
-              })}
-          </select> */}
+          </div> */}
+
+  
+
           <div className="col-12 col-lg-6 pr-4 order-2 order-lg-1">
             {/* <div className="col-12 col-lg-6 pr-4"> */}
             <LeftSection

@@ -62,7 +62,7 @@ class Searchcart extends Component {
     
       Axios.get(`/product/type/${prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-       
+       console.log(data,'ppppppppppppppppppppppppppppppppppppppppppppppppppppppppp')
         if(data.err){
           window.alert('No product, Please add few...')
           window.open("/basic", "_self");
@@ -78,9 +78,11 @@ class Searchcart extends Component {
           var prodMsgSeen = true
           for(var i = 0 ; i < data.data.length ; i++){
             prodMsgSeen = true;
-            for(var j = 0 ; j < data.data[i].messageSeen.length ; j++){
-              if(data.data[i].messageSeen[j].client == false){
-                prodMsgSeen = false
+            if(data.data[i].messageSeen.length != 0){
+              for(var j = 0 ; j < data.data[i].messageSeen.length ; j++){
+                if(data.data[i].messageSeen[j].client == false){
+                  prodMsgSeen = false
+                }
               }
             }
             var tempProdMsgSeen = this.state.productMessageSeen;
