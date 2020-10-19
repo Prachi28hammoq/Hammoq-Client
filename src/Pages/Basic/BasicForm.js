@@ -91,14 +91,14 @@ class BasicForm extends Component {
 
     Axios.get("/template")
       .then((data) => {
-        console.log(data, "template data");
+        //console.log(data, "template data");
         this.setState({ templates: data.data.templates });
       })
       .catch((err) => {
         console.log(err);
       });
     Axios.get("/password/getstatus/others").then(({ data }) => {
-      console.log(data, "other data");
+      //console.log(data, "other data");
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
@@ -614,8 +614,14 @@ class BasicForm extends Component {
     this.setState({ open: false });
     await Axios.post("/payment/payment", body)
       .then(({ data }) => {
-        if (data.success) alert(data.msg);
-        else alert("Error");
+        console.log(data,'update mpadfjafjk')
+        if (data.success) {
+          alert(data.msg)
+          window.open('/basic','_self')
+        } else {
+          alert("Credit Card is Not added") 
+          window.open('/addpayment',"_self")
+        }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };

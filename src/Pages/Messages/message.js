@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from "react";
-//import { socket } from "../../services/socket";
+import { socket } from "../../services/socket";
 import moment from 'moment'
 
 import $ from "jquery";
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Axios from "../../services/Axios";
-const io = require("socket.io-client");
-const socket = io.connect("https://devcust.avoidpoints.com");
+// const io = require("socket.io-client");
+// const socket = io.connect("https://devcust.avoidpoints.com");
 
 
 export default class extends Component {
