@@ -30,7 +30,7 @@ export default function AlertDialog(props) {
 
   // specifying verify callback
   const updatePayment = () => {
-    setOpen(false);
+    setOpen(true);
     props.updatePayment(amount);
   };
   React.useEffect(() => {

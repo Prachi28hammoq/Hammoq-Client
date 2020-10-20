@@ -6,8 +6,8 @@ import $ from "jquery";
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Axios from "../../services/Axios";
-const io = require("socket.io-client");
-// const socket = io.connect("http://localhost:8000");
+// const io = require("socket.io-client");
+// const socket = io.connect("https://devcust.avoidpoints.com");
 
 
 export default class extends Component {
@@ -20,7 +20,7 @@ export default class extends Component {
       customerName : localStorage.getItem('customerName'),
        
     }
-    socket.on('messages', (data) => this.setState({messages : data.messages}))
+    socket.on('messages', (data) => {if(data){this.setState({messages : data.messages})}} )
     socket.on('newmessage', (data) => {var messages = this.state.messages 
      messages.push(data.message)
      this.setState({messages : messages})

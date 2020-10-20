@@ -95,9 +95,11 @@ class AddPayment extends Component {
         (axios.defaults.headers.common["x-access-token"] = tokenvalue)
       );
       if (response.data.success) {
+
         alert(response.data.msg);
         this.props.history.push("/addpassword");
       } else {
+        console.log(respone.data,'bhghjghjggfhghjghjghjghjghjghjghjghjgjgjhgj')
         alert(response.data.msg);
       }
     }
