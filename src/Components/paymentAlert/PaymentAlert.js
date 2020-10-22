@@ -32,8 +32,6 @@ export default function AlertDialog(props) {
   const updatePayment = () => {
     setOpen(true);
     props.updatePayment(amount);
-    window.alert('Credit Card is not Added')
-    window .open('/addpayment', '_self')
   };
   React.useEffect(() => {
     setOpen(props.open);
