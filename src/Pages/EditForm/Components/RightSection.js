@@ -132,12 +132,15 @@ export default class extends Component {
   }
   render = () => {
     const { selectedWebsites, category, showMoreLines, custom, msgFormToggle, anchorEl } = this.state;
+    console.log(this.state.anchorE1,'dfhdkfhjkadhfjkahdjfkdhkjfhadkjfhkjadhfjkhhkjhlkjkhjkhkjlhjkhjkhkj')
 
     const { data, handleChange, toggleSelectedWebsite } = this.props;
 
     const { suggestTitles, showOtherTitles, customdesc, productMessage } = this.state;
 
     const open = Boolean(anchorEl);
+    console.log(this.state.anchorE1,'fffffffffffffffffffffffff')
+
     const id = open ? 'simple-popover' : undefined;
 
     const {

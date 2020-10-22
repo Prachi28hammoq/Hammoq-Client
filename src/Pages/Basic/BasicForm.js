@@ -976,6 +976,8 @@ class BasicForm extends Component {
                   onChange={(e) => this.change(e)}
                   placeholder="Cost of Goods"
                   className="form-control"
+                  step="0.01"
+
                 />
               </div>
 

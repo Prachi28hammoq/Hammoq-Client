@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import message from '../../Pages/Messages/message'
 //import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
 import PaymentAlert from "../paymentAlert/PaymentAlert";
+import Popover from '@material-ui/core/Popover';
 import Axios, { assetsURL } from "../../services/Axios";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
