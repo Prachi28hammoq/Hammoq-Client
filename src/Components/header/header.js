@@ -17,7 +17,8 @@ class header extends Component {
       advancecheck: true,
       open: false,
       client_id: "",
-      customerName : ''
+      customerName : '',
+      clientMessageSeenCount:0
     };
   }
 
@@ -33,7 +34,7 @@ class header extends Component {
       await Axios.get("/clientdetails")
         .then(({ data }) => {
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          this.setState({ bal: data.balance, client_id: data._id, customerName : data.firstName });
+          this.setState({ bal: data.balance, client_id: data._id, customerName : data.firstName,clientMessageSeenCount:data.clientMessageSeenCount});
           localStorage.setItem("customerName" , this.state.customerName)
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -115,15 +116,16 @@ class header extends Component {
               </li>
             </li> */}
             
-            <li class="nav-item">
-              <Link to="/messages" className="nav-link" style={{ color: "white" }}>
-                Messages
-              </Link>
-            </li>
+            
 
             <li class="nav-item">
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
+              </Link>
+            </li>
+            <li class="nav-item">
+              <Link to="/messages" className="nav-link" style={{ color: "white" }}>
+                Messages({this.state.clientMessageSeenCount})
               </Link>
             </li>
 
