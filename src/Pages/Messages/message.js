@@ -41,7 +41,7 @@ export default class extends Component {
   //   this.setState({agents : response.data}) 
   // }
   componentDidMount = () => {
-    socket.emit('user-connected', this.state.clientId)
+    socket.emit('user-connected', {roomId:this.state.clientId,tag:'client'})
   }
 
   // componentDidUpdate = () => {

@@ -99,7 +99,7 @@ class AddPayment extends Component {
         alert(response.data.msg);
         this.props.history.push("/addpassword");
       } else {
-        console.log(respone.data,'bhghjghjggfhghjghjghjghjghjghjghjghjgjgjhgj')
+        //console.log(respone.data,'bhghjghjggfhghjghjghjghjghjghjghjghjgjgjhgj')
         alert(response.data.msg);
       }
     }
