@@ -21,7 +21,6 @@ class Passwords extends Component {
 
   componentDidMount = () => {
     Axios.get("/password").then(({ data }) => {
-      console.log(data);
       if (data.passwords) this.setState({ users: data.passwords });
     });
 
@@ -55,20 +54,21 @@ class Passwords extends Component {
         password: password,
       })
         .then((response) => {
-          console.log(response,'ebay responssse')
-          let user = {
-            website: website,
-            username: username,
-            password: password,
-          };
-         // users.push(user);
+          console.log(response,'ebay response')
+          // let user = {
+          //   website: website,
+          //   username: username,
+          //   password: password,
+          // };
+          //users.push(user);
 
           this.setState({ [website]: false });
 
           this.setState(
             {
-              users,
+              users: response.data.passwords,
             },
+
             () => {
               this.setState({
                 username: "",
@@ -77,6 +77,8 @@ class Passwords extends Component {
               });
             }
           );
+          window.alert('login has added')
+
         })
         .catch((err) => {
           this.setState({ isSubmitting: true });
@@ -108,7 +110,7 @@ class Passwords extends Component {
           "x-access-token": `${localStorage.getItem("token")}`,
         },
       })
-      window.alert("Are You Sure")
+      window.confirm("Are You Sure")
       window.open("/passwords", "_self")
       // this.setState({users: response.data.Passwords})
       
@@ -214,9 +216,10 @@ class Passwords extends Component {
               </div>
               <div className="col-12 col-md-6">
                 {users &&
-                  users.map((user) => {
+                  users.map((user,idx) => {
                     return (
-                      <div className="card  p-4 mb-4">
+
+                      <div className="card  p-4 mb-4" key={idx}>
                         <h6 className="sub-heading">{user.website}</h6>
                         <input
                           type="text"

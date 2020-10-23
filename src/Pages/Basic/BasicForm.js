@@ -407,7 +407,7 @@ class BasicForm extends Component {
             console.log(response, "user data user");
           });
         }
-        //window.open("/basic", "_self");
+        window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}

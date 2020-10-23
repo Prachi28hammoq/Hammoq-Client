@@ -570,7 +570,7 @@ export default class extends Component {
     })
       .then((response) => {
        // console.log(response, "image");
-       window.open("/searchcart", "_self");
+       window.open(`/products/${data.prodStatus}`, "_self")
       })
       .catch((err) => {
         this.setState({ isSubmitting: false });
@@ -1000,36 +1000,7 @@ export default class extends Component {
           </div>
         <div className="row">
     
-          {/* <div className="col-12 mt-3">
-            <div className="dropdown">
-              <button
-                className="btn btn-outline-primary dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                style={{ width: "200px" }}
-              >
-                Choose Template
-                <span className="caret"></span>
-              </button>
-              <ul className="dropdown-menu">
-                {templates &&
-                  templates.map((template) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt border-0"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="dropdownMenuOffset"
-                          onClick={() => this.setTemplate(template._id)}
-                        >
-                          {template.name}
-                        </button>
-                      </li>
-                    );
-                  })}
-              </ul>
-            </div>
-          </div> */}
+          
 
   
 
@@ -1399,7 +1370,7 @@ export default class extends Component {
                           }}
                         >
                           {o.name}
-                        </button>
+              s          </button>
                       </li>
                     );
                   })
@@ -1460,7 +1431,7 @@ export default class extends Component {
             <input
               type="button"
               defaultValue="Cancel"
-              onClick={() => window.open("/products/submitted", "_self")}
+              onClick={() => window.open(`/products/${data.prodStatus}`, "_self")}
               className="btn btn-danger mb-4 btn-block col-12 mr-auto col-lg-12"
             />
           </div>
