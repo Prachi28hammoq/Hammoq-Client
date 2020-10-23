@@ -61,7 +61,7 @@ class Searchcart extends Component {
           page: parseInt(data.currPage),
           inventoryCount : data.count.inventoryCount,
           draftCount : data.count.draftCount,
-          submittedCount : data.count.submittedCount 
+          submittedCount : data.count.submittedCount
         });
         // if (this.state.products != null) {
         //   this.setState({
@@ -165,12 +165,12 @@ class Searchcart extends Component {
       this.setState({ loading: false });
     })
     .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  }  
+  }
 
   handleDrafts = async () => {
     await Axios.get(`/product/type/draft`, { params: { page: 1, size: 10 } })
     .then(({ data }) => {
-      console.log(data);
+      console.log("drafts: ", data);
       this.setState({
         products: data.data,
         totalPage: parseInt(data.pages),
@@ -243,6 +243,7 @@ class Searchcart extends Component {
       })
         .then(({ data }) => {
           this.setState({ products: data.data });
+          console.log("new data", data.data);
           // if (this.state.products != null) {
           //   this.setState({
           //     products: this.state.products.filter((filtered) => {
@@ -388,7 +389,7 @@ class Searchcart extends Component {
           </div>
         </div>
         {/* <div className="row">
-        
+
           <div
             className=" d-flex  ml-auto justify-content-center mr-4 mb-2"
             style={{ position: "absolute", top: "85px", right: "135px" }}
@@ -413,7 +414,7 @@ class Searchcart extends Component {
               vertical: "top",
               horizontal: "left",
               }}
-            ></Popover> 
+            ></Popover>
             <Popover
               id={chatid}
                open={open}
@@ -825,8 +826,8 @@ class Searchcart extends Component {
           />
         </div>
         </div>
-      
-      
+
+
     );
   }
 }
