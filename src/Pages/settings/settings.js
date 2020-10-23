@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./settingsmin.css";
 import imageresponse from "../../Components/images/imagebackgroud.jpg";
 import { Link } from "react-router-dom";
+import acAxios from "../../services/activeCampAxios"
 import Axios from "../../services/Axios";
 
 class settings extends Component {
@@ -49,6 +50,19 @@ class settings extends Component {
         alert("Something went wrong.");
         console.log(err);
       });
+
+    ///// updating contact on active campaign /////
+    let updatedData = JSON.stringify({
+        "contact": {
+            "email": this.state.email
+        }
+    });
+    let id = localStorage.getItem("contactid")
+    acAxios.put(`contacts/${id}`, updatedData)
+    .then((res) => {
+        console.log("Contact Updated: ", res);
+    }).catch((err) => console.log("Error updating contact", err));
+    ///// ***** /////
   };
 
   componentDidMount(prevProps) {
