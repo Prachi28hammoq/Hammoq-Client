@@ -115,12 +115,11 @@ export default class extends Component {
     const productId = this.props.productid
     const msgFormToggle = this.state.msgFormToggle
     const anchorEl= event.currentTarget
-   // console.log(anchorEl)
     try {
       const response = await Axios.get(`/message/${productId}/${value}`, {
         headers : {
           "content-type": "application/json",
-          headers: localStorage.getItem("token")
+          'x-access-token~': localStorage.getItem("token")
         
         }
       })
@@ -132,14 +131,12 @@ export default class extends Component {
   }
   render = () => {
     const { selectedWebsites, category, showMoreLines, custom, msgFormToggle, anchorEl } = this.state;
-    console.log(this.state.anchorE1,'dfhdkfhjkadhfjkahdjfkdhkjfhadkjfhkjadhfjkhhkjhlkjkhjkhkjlhjkhjkhkj')
 
     const { data, handleChange, toggleSelectedWebsite } = this.props;
 
     const { suggestTitles, showOtherTitles, customdesc, productMessage } = this.state;
 
     const open = Boolean(anchorEl);
-    console.log(this.state.anchorE1,'fffffffffffffffffffffffff')
 
     const id = open ? 'simple-popover' : undefined;
 
