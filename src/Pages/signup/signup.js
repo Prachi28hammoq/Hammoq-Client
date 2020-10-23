@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import acAxios from "../../services/activeCampAxios"
 import Axios from "../../services/Axios";
 import "./signupmin.css";
 import Logo from "../../Components/images/hammock.svg";
@@ -90,6 +91,40 @@ class Signup extends Component {
         }
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("paymentadded", false);
+
+        ///// adding contact to active campaign /////
+        let data = JSON.stringify(
+            {
+              "contact": {
+                  "email": email,
+                  "firstName": firstName,
+                  "lastName": lastName,
+                  "phone": phoneno
+              }
+            }
+        );
+        console.log("data: ", data);
+
+        acAxios.post("/contacts", data)
+        .then((res) => {
+            localStorage.setItem("contactid", res.contact.id);
+            console.log("activeCamp: ", res);
+            // add contact to not paid list
+            let subData = JSON.stringify({
+                "contactList": {
+                    "list": 8,
+                    "contact": localStorage.getItem('contactid'),
+                    "status": 1,
+                }
+            })
+            acAxios.post('/contactLists', subData)
+            .then((res) => {
+                console.log("Subscribed: ", res);
+            }).catch((err) => console.log("Subscription error: ", err));
+        }).catch((err) => console.log("OH NO an error: ", err));
+
+        ///// ***** /////
+
         window.open("/addpayment", "_self");
       })
       .catch((err) => {
@@ -100,6 +135,7 @@ class Signup extends Component {
         alert("Something went wrong.");
         console.log(err);
       });
+
   };
 
   render() {
