@@ -76,7 +76,6 @@ class Searchcart extends Component {
 
     Axios.get(`/product/type/${prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-        //console.log(data,'ppppppppppppppppppppppppppppppppppppppppppppppppppppppppp')
         if (data.err) {
           window.alert("No product, Please add few...");
           window.open("/basic", "_self");
@@ -125,29 +124,6 @@ class Searchcart extends Component {
     });
   };
 
-  // duplicateHandler = async (itemId) => {
-  //   const tokenvalue = localStorage.getItem("token");
-
-  //   try {
-  //     const response = await Axios.post(
-  //       `/product/${itemId}`,
-  //       (Axios.defaults.headers.common["x-access-token"] = tokenvalue),
-  //       {
-  //         headers: {
-  //           "content-type": "application/x-www-form-urlencoded",
-  //         },
-  //       }
-  //     );
-  //     this.setState({ products: response.data.products });
-  //     // this.setState({
-  //     //   products: this.state.products.filter((filtered) => {
-  //     //     return filtered.status == true;
-  //     //   }),
-  //     // });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   duplicateHandler = async (itemId) => {
     const response = await Axios.post(`/product/${itemId}`, {
@@ -156,17 +132,15 @@ class Searchcart extends Component {
         "content-type": "application/x-www-form-urlencoded",
       },
     });
-    console.log(response, "duplciate handle click");
-
     const response1 = await Axios.get(
       `/product/type/${this.state.prodStatus}`,
       { params: { page: 1, size: 10 } }
     );
-    console.log(response1, "after duplicate");
     this.setState({
       products: response1.data.data,
     });
     window.alert("duplicate has been created");
+    window.location.reload();
   };
 
   handleSearchChange = (e) => {
@@ -183,83 +157,6 @@ class Searchcart extends Component {
     );
   };
 
-  // handleInventory =  () => {
-  //   console.log(this.props.history)
-  //   this.props.history.push('/product/inventory')
-  // Axios.get(`/product/type/inventory`, { params: { page: 1, size: 10 } })
-  // .then(({ data }) => {
-
-  //   this.setState({
-  //     prodStatus:'inventory',
-  //     products: data.data,
-  //     totalPage: parseInt(data.pages),
-  //     page: parseInt(data.currPage),
-  //   },()=>{
-  //     this.props.history.push('/product/inventory')
-  //   });
-
-  //   // if (this.state.products != null) {
-  //   //   this.setState({
-  //   //     products: this.state.products.filter((filtered) => {
-  //   //       return filtered.status == true;
-  //   //     }),
-  //   //   });
-  //   // }
-
-  // //   this.setState({ loading: false });
-  // })
-  // .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  //}
-
-  // handleDrafts = async () => {
-  //   await Axios.get(`/product/type/draft`, { params: { page: 1, size: 10 } })
-  //   .then(({ data }) => {
-
-  //     this.setState({
-  //       prodStatus:'draft',
-  //       products: data.data,
-  //       totalPage: parseInt(data.pages),
-  //       page: parseInt(data.currPage),
-  //     },()=>{
-  //       this.props.history.push('/draft')
-  //     });
-  //     // if (this.state.products != null) {
-  //     //   this.setState({
-  //     //     products: this.state.products.filter((filtered) => {
-  //     //       return filtered.status == true;
-  //     //     }),
-  //     //   });
-  //     // }
-
-  //     this.setState({ loading: false });
-  //   })
-  //   .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  // };
-
-  // handleSubmitted = async () => {
-  //   await Axios.get(`/product/type/submitted`, { params: { page: 1, size: 10 } })
-  //   .then(({ data }) => {
-
-  //     this.setState({
-  //       prodStatus:'submitted',
-  //       products: data.data,
-  //       totalPage: parseInt(data.pages),
-  //       page: parseInt(data.currPage),
-  //     },()=>{
-  //       this.props.history.push('/submitted')
-  //     });
-  //     // if (this.state.products != null) {
-  //     //   this.setState({
-  //     //     products: this.state.products.filter((filtered) => {
-  //     //       return filtered.status == true;
-  //     //     }),
-  //     //   });
-  //     // }
-
-  //     this.setState({ loading: false });
-  //   })
-  //   .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  // };
 
   handleDelete = async (itemId) => {
     window.confirm("Are You Sure");
@@ -275,12 +172,7 @@ class Searchcart extends Component {
       });
       this.setState({ products: response.data.products });
       this.handelProductMessageSeen();
-
-      // this.setState({
-      //   products: this.state.products.filter((filtered) => {
-      //     return filtered.status == true;
-      //   }),
-      // });
+      window.location.reload()
     } catch (error) {
       console.log(error);
     }
