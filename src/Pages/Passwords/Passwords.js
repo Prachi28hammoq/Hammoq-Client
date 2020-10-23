@@ -21,7 +21,6 @@ class Passwords extends Component {
 
   componentDidMount = () => {
     Axios.get("/password").then(({ data }) => {
-      console.log(data);
       if (data.passwords) this.setState({ users: data.passwords });
     });
 
@@ -56,18 +55,18 @@ class Passwords extends Component {
       })
         .then((response) => {
           console.log(response,'ebay response')
-          let user = {
-            website: website,
-            username: username,
-            password: password,
-          };
-          users.push(user);
+          // let user = {
+          //   website: website,
+          //   username: username,
+          //   password: password,
+          // };
+          //users.push(user);
 
           this.setState({ [website]: false });
 
           this.setState(
             {
-              users: users,
+              users: response.data.passwords,
             },
             () => {
               this.setState({
@@ -118,7 +117,6 @@ class Passwords extends Component {
     //this.setState({users : this.state.users.filter((user) => user._id !== id)})
   } 
   render() {
-    console.log(this.state.users, 'user indoremarnekhrfkjn')
     const {
       website,
       username,
@@ -215,9 +213,10 @@ class Passwords extends Component {
               </div>
               <div className="col-12 col-md-6">
                 {users &&
-                  users.map((user) => {
+                  users.map((user,idx) => {
                     return (
-                      <div className="card  p-4 mb-4">
+
+                      <div className="card  p-4 mb-4" key={idx}>
                         <h6 className="sub-heading">{user.website}</h6>
                         <input
                           type="text"
