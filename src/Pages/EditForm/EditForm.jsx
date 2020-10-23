@@ -33,7 +33,7 @@ export default class extends Component {
       extraMeasures: [],
       extraDescriptions: [],
       count: 1,
-      count1 : 1,
+      count1: 1,
       templates: [],
       images: [
         { key: "default_image", label: "Default", img: "" },
@@ -71,18 +71,31 @@ export default class extends Component {
       activity: "",
       activity_check: true,
       editchange: false,
-      message : [],
-      productid : '',
-      inventoryCount : 0,
-      messageNotSeen : [],
-      templateIdd : ''
+      message: [],
+      productid: "",
+      inventoryCount: 0,
+      messageNotSeen: [],
+      templateIdd: "",
     };
   }
   handleChangesTemplate = (e) => {
-    this.setState({templateIdd : e.target.value})
-    this.setTemplate(e.target.value)
-  }
+    this.setState({ templateIdd: e.target.value });
+    this.setTemplate(e.target.value);
+  };
 
+  handelMessageNotSeen() {
+    var msgSeenTemp = [];
+    var data = this.state.data;
+    console.log(data,'dataaaaaaaaaa')
+    if (data.messageSeen) {
+      for (let i = 0; i < data.messageSeen.length; i++) {
+        if (data.messageSeen[i].client == false) {
+          msgSeenTemp.push(data.messageSeen[i].field);
+        }
+      }
+    }
+    this.setState({ messageNotSeen: msgSeenTemp });
+  }
   setTemplate = (tempid) => {
     const { images } = this.state;
     let { templatename } = this.state;
@@ -159,6 +172,9 @@ export default class extends Component {
     ).then((res) => {
       const { images, data } = this.state;
       this.setState({ data: res.data.products[0] });
+
+      this.handelMessageNotSeen()
+
       if (res.data.products[0].extraMeasures) {
         this.state.extraMeasures = JSON.parse(
           res.data.products[0].extraMeasures
@@ -167,11 +183,11 @@ export default class extends Component {
       }
 
       if (res.data.products[0].line) {
-        this.state.extraDescriptions = JSON.parse(
-          res.data.products[0].line
-        );
-        this.setState({extraDescriptions: this.state.extraDescriptions , count1 : this.state.extraDescriptions.length + 1})
-        
+        this.state.extraDescriptions = JSON.parse(res.data.products[0].line);
+        this.setState({
+          extraDescriptions: this.state.extraDescriptions,
+          count1: this.state.extraDescriptions.length + 1,
+        });
       }
 
       //this.state.templatename = this.state.data.title.substring(0,5)
@@ -223,30 +239,16 @@ export default class extends Component {
         //console.log(this.state.othersurl);
       }
 
-      if(res.data.products[0]._id) {
-        this.setState({productid : res.data.products[0]._id})
+      if (res.data.products[0]._id) {
+        this.setState({ productid: res.data.products[0]._id });
       }
 
-      if(res.data.products[0].message){
-       // console.log( res.data.products[0].message ,'msg value reading')
-        this.setState({message : res.data.products[0].message})
+      if (res.data.products[0].message) {
+        // console.log( res.data.products[0].message ,'msg value reading')
+        this.setState({ message: res.data.products[0].message });
       }
 
-      var msgSeenTemp = []
-
-      
-        if(res.data.products[0].messageSeen){
-          for(let i = 0 ; i < res.data.products[0].messageSeen.length ; i++){
-            if(res.data.products[0].messageSeen[i].client  == false) {
-              msgSeenTemp.push(res.data.products[0].messageSeen[i].field)
-            }
-          }
-        }
-        this.setState({messageNotSeen : msgSeenTemp})
-      
-
-     // console.log(this.state.messageNotSeen, 'edit mforefh dfkhkjh')
-     
+      // console.log(this.state.messageNotSeen, 'edit mforefh dfkhkjh')
 
       this.state.data["ebay"]["title"] = res.data.products[0].ebay.title;
       this.state.data["poshmark"]["title"] =
@@ -258,7 +260,6 @@ export default class extends Component {
           image.img = res.data.products[0].images[image.key];
         });
       this.setState({ images });
-     
 
       //balance check
 
@@ -266,21 +267,20 @@ export default class extends Component {
       this.setState({ activity });
 
       const message = async () => {
-        const response =  await   Axios.get(
+        const response = await Axios.get(
           `/message/${this.props.match.params.id}`,
-          (Axios.defaults.headers.common["x-access-token"] = localStorage.getItem(
-            "token"
-          )),
+          (Axios.defaults.headers.common[
+            "x-access-token"
+          ] = localStorage.getItem("token")),
           {
             headers: {
               "content-type": "application/json",
             },
           }
-        )
-        console.log(response)
-      }
-      console.log(message(),'response message check')
-    
+        );
+        //console.log(response);
+      };
+      //console.log(message(), "response message check");
 
       if (localStorage.getItem("token")) {
         Axios.get("/payment/rates")
@@ -335,25 +335,22 @@ export default class extends Component {
         });
       }
     });
-    
 
     localStorage.setItem("actionebay", "");
     localStorage.setItem("actionposhmark", "");
     localStorage.setItem("actionmercari", "");
     localStorage.setItem("actionfb", "");
 
-   Axios.get(`/producttemplate/${this.props.match.params.id}`, {
-      headers : {
-        'x-access-token' : localStorage.getItem('token')
+    Axios.get(`/producttemplate/${this.props.match.params.id}`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((response) => {
+      if (response.data.templateId) {
+        this.setState({ templateIdd: response.data.templateId });
+        this.setTemplate(response.data.templateId);
       }
-    })
-    .then((response) => {
-      console.log(response , 'llllllllllllllllllllllllllllllllllllll')
-      if(response.data.templateId){
-        this.setState({templateIdd : response.data.templateId})
-        this.setTemplate(response.data.templateId)
-      }
-    })
+    });
   };
 
   handleChange = (e) => {
@@ -385,7 +382,7 @@ export default class extends Component {
       }
     });
     this.setState({ extraMeasures });
-   // console.log(extraMeasures);
+    // console.log(extraMeasures);
   };
 
   handleDescriptionLabel = (id, e) => {
@@ -397,7 +394,7 @@ export default class extends Component {
       }
     });
     this.setState({ extraDescriptions });
-   // console.log(extraDescriptions);
+    // console.log(extraDescriptions);
   };
 
   handleMeasureChange = (id, e) => {
@@ -421,7 +418,7 @@ export default class extends Component {
       }
     });
     this.setState({ extraDescriptions });
-   // console.log(extraDescriptions);
+    // console.log(extraDescriptions);
   };
 
   addMeasure = (e) => {
@@ -432,10 +429,10 @@ export default class extends Component {
   };
 
   addDescription = () => {
-  //  console.log("add description");
+    //  console.log("add description");
     const { extraDescriptions, count1 } = this.state;
     extraDescriptions.push({ key: "", value: "", id: count1 });
-   // console.log(extraDescriptions);
+    // console.log(extraDescriptions);
     this.setState({ extraDescriptions });
     this.setState({ count1: count1 + 1 });
   };
@@ -460,10 +457,9 @@ export default class extends Component {
     });
   };
 
-
   onSubmit = (e) => {
     e.preventDefault();
-    const { data, images, extraMeasures,extraDescriptions } = this.state;
+    const { data, images, extraMeasures, extraDescriptions } = this.state;
     const dataform = new FormData();
     images.forEach((image) => {
       if (!!image.img) dataform.append(image.key, image.img);
@@ -490,7 +486,7 @@ export default class extends Component {
       };
       y.push(obj);
     });
-   // console.log(y);
+    // console.log(y);
 
     this.setState({ isSubmitting: true });
 
@@ -540,7 +536,7 @@ export default class extends Component {
     dataform.append("profit", data.profit);
     dataform.append("status", true);
     dataform.append("activity", "basic");
-    dataform.append("line", JSON.stringify(extraDescriptions))
+    dataform.append("line", JSON.stringify(extraDescriptions));
     // const value1 = { line1: data.line1, value1: data.value1 };
     // const value2 = { line2: data.line2, value2: data.value2 };
     // const value3 = { line3: data.line3, value3: data.value3 };
@@ -559,7 +555,7 @@ export default class extends Component {
     // dataform.append("line5", JSON.stringify(value5));
     dataform.append("madeIn", data.madeIn);
     dataform.append("gender", data.gender || "");
-    dataform.append("notes", data.notes)
+    dataform.append("notes", data.notes);
     dataform.append("others", JSON.stringify(y));
 
     Axios.put(`/product/${this.props.match.params.id}`, dataform, {
@@ -569,8 +565,8 @@ export default class extends Component {
       },
     })
       .then((response) => {
-       // console.log(response, "image");
-       window.open("/searchcart", "_self");
+        // console.log(response, "image");
+        window.open(`/products/${data.prodStatus}`, "_self");
       })
       .catch((err) => {
         this.setState({ isSubmitting: false });
@@ -580,14 +576,14 @@ export default class extends Component {
 
   toggleSelectedWebsite = (str) => {
     const { data } = this.state;
-   // console.log(this.state.data,'othr value shdjchkjh')
+    // console.log(this.state.data,'othr value shdjchkjh')
     data[str]["check"] = !data[str]["check"];
     this.setState({ data });
   };
 
   toggleSelectedOthersWebsite = (i) => {
     const { othersstate } = this.state;
-   // console.log(this.state.othersstate, 'other user websiter')
+    // console.log(this.state.othersstate, 'other user websiter')
     othersstate[i] = !othersstate[i];
     this.setState({ othersstate });
   };
@@ -977,7 +973,7 @@ export default class extends Component {
       showcat,
     } = this.state;
 
-   // console.log(this.state.images, 'images')
+    // console.log(this.state.images, 'images')
     return (
       <div className="container-fluid px-3 template">
         <Link to="/products/submitted">
@@ -987,52 +983,19 @@ export default class extends Component {
           Create or Edit Listing: {templatename}
         </h2>
         <div className="col-md-4">
-            <select value = {this.state.templateIdd} className = "form-control" onChange = {this.handleChangesTemplate}>
-              <option>Choose Template</option>
-              {templates && templates.map((temp) => {
-                return (
-                  <option value = {temp._id}>
-                    {temp.name}
-                  </option>
-                )
+          <select
+            value={this.state.templateIdd}
+            className="form-control"
+            onChange={this.handleChangesTemplate}
+          >
+            <option>Choose Template</option>
+            {templates &&
+              templates.map((temp) => {
+                return <option value={temp._id}>{temp.name}</option>;
               })}
           </select>
-          </div>
+        </div>
         <div className="row">
-    
-          {/* <div className="col-12 mt-3">
-            <div className="dropdown">
-              <button
-                className="btn btn-outline-primary dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                style={{ width: "200px" }}
-              >
-                Choose Template
-                <span className="caret"></span>
-              </button>
-              <ul className="dropdown-menu">
-                {templates &&
-                  templates.map((template) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt border-0"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="dropdownMenuOffset"
-                          onClick={() => this.setTemplate(template._id)}
-                        >
-                          {template.name}
-                        </button>
-                      </li>
-                    );
-                  })}
-              </ul>
-            </div>
-          </div> */}
-
-  
-
           <div className="col-12 col-lg-6 pr-4 order-2 order-lg-1">
             {/* <div className="col-12 col-lg-6 pr-4"> */}
             <LeftSection
@@ -1060,14 +1023,13 @@ export default class extends Component {
               handleOtherTitles={this.handleOtherTitles}
               toggleSelectedWebsite={this.toggleSelectedWebsite}
               setCategory={this.setCategory}
-              message = {this.state.message}
-              productid = {this.state.productid}
+              message={this.state.message}
+              productid={this.state.productid}
             />
           </div>
           <div className="col-12 col-lg-6 pl-lg-3 order-1 order-lg-2">
             <RightSection
-            
-              messageNotSeen ={this.state.messageNotSeen}
+              messageNotSeen={this.state.messageNotSeen}
               data={data}
               toggleSelectedWebsite={this.toggleSelectedWebsite}
               handleChange={this.handleChange}
@@ -1087,8 +1049,8 @@ export default class extends Component {
               handleBulkUpload={this.handleBulkUpload}
               handleImageChange={this.handleImageChange}
               handleOtherTitles={this.handleOtherTitles}
-              message = {this.state.message}
-              productid = {this.state.productid}
+              message={this.state.message}
+              productid={this.state.productid}
             />
           </div>
         </div>
@@ -1398,7 +1360,7 @@ export default class extends Component {
                             this.editHandler(o.name);
                           }}
                         >
-                          {o.name}
+                          {o.name}s{" "}
                         </button>
                       </li>
                     );
@@ -1460,7 +1422,9 @@ export default class extends Component {
             <input
               type="button"
               defaultValue="Cancel"
-              onClick={() => window.open("/products/submitted", "_self")}
+              onClick={() =>
+                window.open(`/products/${data.prodStatus}`, "_self")
+              }
               className="btn btn-danger mb-4 btn-block col-12 mr-auto col-lg-12"
             />
           </div>

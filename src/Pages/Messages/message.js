@@ -2,6 +2,9 @@ import React, { Component, Fragment } from "react";
 import { socket } from "../../services/socket";
 import moment from 'moment'
 
+import { makeStyles } from '@material-ui/core/styles';
+import Popover from '@material-ui/core/Popover';
+
 import $ from "jquery";
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
@@ -25,7 +28,6 @@ export default class extends Component {
      messages.push(data.message)
      this.setState({messages : messages})
    })
-
   }
 
   
