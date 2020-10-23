@@ -4,6 +4,7 @@ import { CardElement } from "@stripe/react-stripe-js";
 import { Link } from "react-router-dom";
 import Header from "../../Components/header/header";
 import hammock from "../../Components/images/hammock.svg";
+import acAxios from "../../services/activeCampAxios"
 import Axios from "../../services/Axios";
 import LoadingSpinner from "../utils/loader";
 
@@ -48,6 +49,22 @@ class AddPayment extends Component {
         Axios.put("/payment/addstatus")
           .then((res) => {
             localStorage.setItem("paymentadded", res.data.paymentStatus);
+
+            ///// unsubscribe contact from list /////
+            let unsubData = JSON.stringify({
+                "contactList": {
+                    "list": 8,
+                    "contact": localStorage.getItem('contactid'),
+                    "status": 0
+                }
+            })
+            acAxios.post('/contactLists', unsubData)
+            .then((res) => {
+                console.log("Contact unsubscribed: ", res);
+            }).catch((err) => console.log("Unsubscription Error: ", err));
+            ///// ***** //////
+
+
             if (price == 1) {
               alert("$1 has been added");
               this.setState({ loading: false });
