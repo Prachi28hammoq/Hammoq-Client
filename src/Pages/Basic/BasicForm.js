@@ -108,13 +108,14 @@ class BasicForm extends Component {
           this.setState({ others });
 
           const otherss = [...this.state.othersstate];
+         
           otherss.push(localStorage.getItem(d) || false);
-          //console.log(otherss, "otherssssssssssssssssssssssss");
+          console.log(otherss, "otherssssssssssssssssssssssss");
 
           this.setState({ othersstate: otherss });
-          if (!localStorage.getItem(d)) {
-            localStorage.setItem(d, false);
-          }
+          // if (!localStorage.getItem(d)) {
+          //   localStorage.setItem(d, false);
+          // }
 
           //console.log(this.state.othersstate)
         });
@@ -407,8 +408,7 @@ class BasicForm extends Component {
             console.log(response, "user data user");
           });
         }
-        console.log(productId, "user prodcuts");
-        window.open("/basic", "_self");
+       window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
@@ -530,6 +530,24 @@ class BasicForm extends Component {
       this.setState({ [name]: value });
     }
   };
+  
+  handleOnClick = (o,i) => {
+    
+      // const ot = [...othersstate];
+      // ot[i] = !ot[i];
+      if(this.state.othersstate[i] == "false"){
+        this.state.othersstate[i] = "true"
+      } else if(this.state.othersstate[i] == "true"){
+        this.state.othersstate[i] = "false"
+      }
+      localStorage.setItem(
+        o,
+        this.state.othersstate[i]
+      );
+      this.setState({ othersstate: this.state.othersstate});
+     
+  
+  }
 
   handleBulkUpload = async (e) => {
   
@@ -1131,24 +1149,23 @@ class BasicForm extends Component {
                 ) : null}
                 {othersbool
                   ? others.map((o, i) => {
+                    console.log(this.state.othersstate[i],i,'othherbadkjfkjb')
                       return (
-                        <div className="col-12 col-lg-6">
-                          <div className="form-check">
-                            <input
+                        <div className="col-12 col-lg-6"  onClick = {() => this.handleOnClick(o,i)}>
+                          <div className="form-check"   >
+                            {this.state.othersstate[i] == "true" ?   <input
                               className="form-check-input"
                               type="checkbox"
-                              checked={this.state.othersstate[i]}
-                              onChange={() => {
-                                const ot = [...othersstate];
-                                ot[i] = !ot[i];
-                                this.setState({ othersstate: ot });
-                                localStorage.setItem(
-                                  o,
-                                  !this.state.othersstate[i]
-                                );
-                              }}
-                              id="othersstate"
-                            />
+                             
+                              checked
+                            
+                            /> :   <input
+                            className="form-check-input"
+                            type="checkbox"
+                       
+                          /> }
+                          
+
                             <label
                               className="form-check-label"
                               htmlFor="mercari"

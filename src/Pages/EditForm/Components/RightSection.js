@@ -119,7 +119,7 @@ export default class extends Component {
       const response = await Axios.get(`/message/${productId}/${value}`, {
         headers : {
           "content-type": "application/json",
-          'x-access-token~': localStorage.getItem("token")
+          "x-access-token": localStorage.getItem("token")
         
         }
       })
