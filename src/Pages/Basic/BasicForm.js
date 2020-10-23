@@ -407,8 +407,7 @@ class BasicForm extends Component {
             console.log(response, "user data user");
           });
         }
-        console.log(productId, "user prodcuts");
-        window.open("/basic", "_self");
+        //window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
@@ -1141,11 +1140,12 @@ class BasicForm extends Component {
                               onChange={() => {
                                 const ot = [...othersstate];
                                 ot[i] = !ot[i];
-                                this.setState({ othersstate: ot });
                                 localStorage.setItem(
                                   o,
                                   !this.state.othersstate[i]
                                 );
+                                this.setState({ othersstate: ot });
+                               
                               }}
                               id="othersstate"
                             />
