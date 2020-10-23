@@ -55,19 +55,19 @@ class Passwords extends Component {
         password: password,
       })
         .then((response) => {
-          console.log(response,'ebay response')
+          console.log(response,'ebay responssse')
           let user = {
             website: website,
             username: username,
             password: password,
           };
-          users.push(user);
+         // users.push(user);
 
           this.setState({ [website]: false });
 
           this.setState(
             {
-              users: users,
+              users,
             },
             () => {
               this.setState({
@@ -118,7 +118,6 @@ class Passwords extends Component {
     //this.setState({users : this.state.users.filter((user) => user._id !== id)})
   } 
   render() {
-    console.log(this.state.users, 'user indoremarnekhrfkjn')
     const {
       website,
       username,
