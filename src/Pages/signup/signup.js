@@ -83,58 +83,36 @@ class Signup extends Component {
     }
 
     const body = { ...this.state };
-    Axios.post("/signup", body)
-      .then((res) => {
-        if (res.data.errors) {
-          this.setState({ isSubmitting: false });
-          return alert(res.data.errors);
-        }
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("paymentadded", false);
-
-        ///// adding contact to active campaign /////
-        let data = JSON.stringify(
-            {
-              "contact": {
-                  "email": email,
-                  "firstName": firstName,
-                  "lastName": lastName,
-                  "phone": phoneno
-              }
+    ///// adding contact to active campaign /////
+    Axios.post("/ac/create-contact", body)
+    .then((res) => {
+        console.log("activeCamp-- Contact created: ", res);
+        // Add account to MongoDB
+        Axios.post("/signup", {...body, contactid: res.contact.id})
+          .then((resp) => {
+            if (resp.data.errors) {
+              this.setState({ isSubmitting: false });
+              return alert(resp.data.errors);
             }
-        );
-        console.log("data: ", data);
+            localStorage.setItem("token", resp.data.token);
+            localStorage.setItem("paymentadded", false);
+            window.open("/addpayment", "_self");
+          })
+          .catch((err) => {
+            // delete contact from activecampaign
+            Axios.delete(`/ac/delete-contact/${res.contact.id}`)
+            .then((delRes) => {
+                console.log("activeCamp-- Contact Deleted: ", delRes);
+            }).catch((err) => console.log("activeCamp-- Error deleting contact: ", err));
 
-        acAxios.post("/contacts", data)
-        .then((res) => {
-            localStorage.setItem("contactid", res.contact.id);
-            console.log("activeCamp: ", res);
-            // add contact to not paid list
-            let subData = JSON.stringify({
-                "contactList": {
-                    "list": 8,
-                    "contact": localStorage.getItem('contactid'),
-                    "status": 1,
-                }
-            })
-            acAxios.post('/contactLists', subData)
-            .then((res) => {
-                console.log("Subscribed: ", res);
-            }).catch((err) => console.log("Subscription error: ", err));
-        }).catch((err) => console.log("OH NO an error: ", err));
-
-        ///// ***** /////
-
-        window.open("/addpayment", "_self");
-      })
-      .catch((err) => {
-        this.setState({ isSubmitting: false });
-        if (err.response.data.err) {
-          return alert(err.response.data.err);
-        }
-        alert("Something went wrong.");
-        console.log(err);
-      });
+            this.setState({ isSubmitting: false });
+            if (err.response.data.err) {
+              return alert(err.response.data.err);
+            }
+            alert("Something went wrong.");
+            console.log(err);
+          });
+    }).catch((err) => console.log("activeCamp-- Error creating contact: ", err));
 
   };
 
