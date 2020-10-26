@@ -4,7 +4,6 @@ import { CardElement } from "@stripe/react-stripe-js";
 import { Link } from "react-router-dom";
 import Header from "../../Components/header/header";
 import hammock from "../../Components/images/hammock.svg";
-import acAxios from "../../services/activeCampAxios"
 import Axios from "../../services/Axios";
 import LoadingSpinner from "../utils/loader";
 
@@ -51,19 +50,16 @@ class AddPayment extends Component {
             localStorage.setItem("paymentadded", res.data.paymentStatus);
 
             ///// unsubscribe contact from list /////
-            let unsubData = JSON.stringify({
-                "contactList": {
-                    "list": 8,
-                    "contact": localStorage.getItem('contactid'),
-                    "status": 0
-                }
-            })
-            acAxios.post('/contactLists', unsubData)
-            .then((res) => {
-                console.log("Contact unsubscribed: ", res);
-            }).catch((err) => console.log("Unsubscription Error: ", err));
+            // get contactid from user
+            Axios.get("/clientdetails").then(clientRes => {
+                console.log("Client Res: ", clientRes);
+                // unsubscribe contact from list
+                Axios.post(`/ac/unsubscribe-contact/${clientRes.data.contactid}`)
+                .then((unSubRes) => {
+                    console.log("Contact Unsubscribed: ", unSubRes.data);
+                }).catch((err) => console.log("Error unsubscribing contact: ", err));
+            }).catch(err => console.log("Error getting client details: ", err))
             ///// ***** //////
-
 
             if (price == 1) {
               alert("$1 has been added");

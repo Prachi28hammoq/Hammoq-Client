@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./settingsmin.css";
 import imageresponse from "../../Components/images/imagebackgroud.jpg";
 import { Link } from "react-router-dom";
-import acAxios from "../../services/activeCampAxios"
 import Axios from "../../services/Axios";
 
 class settings extends Component {
@@ -41,6 +40,15 @@ class settings extends Component {
         }
         console.log(res);
         alert("Success,changes saved");
+
+        ///// Updating contact on activeCampaign /////
+        Axios.post('/ac/update-contact', {
+            name: this.state.username,
+            email: this.state.email
+        }).then((resp) => {
+            console.log("Contact updated: ", resp.data);
+        }).catch(err => console.log("Error updating contact: ",err));
+        ///// ***** /////
       })
       .catch((err) => {
         window.open("/setting", "_self");
@@ -50,20 +58,7 @@ class settings extends Component {
         alert("Something went wrong.");
         console.log(err);
       });
-
-    ///// updating contact on active campaign /////
-    let updatedData = JSON.stringify({
-        "contact": {
-            "email": this.state.email
-        }
-    });
-    let id = localStorage.getItem("contactid")
-    acAxios.put(`contacts/${id}`, updatedData)
-    .then((res) => {
-        console.log("Contact Updated: ", res);
-    }).catch((err) => console.log("Error updating contact", err));
-    ///// ***** /////
-  };
+};
 
   componentDidMount(prevProps) {
     Axios.get("/clientdetails")

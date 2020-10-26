@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import acAxios from "../../services/activeCampAxios"
 import Axios from "../../services/Axios";
 import "./signupmin.css";
 import Logo from "../../Components/images/hammock.svg";
@@ -86,9 +85,10 @@ class Signup extends Component {
     ///// adding contact to active campaign /////
     Axios.post("/ac/create-contact", body)
     .then((res) => {
-        console.log("activeCamp-- Contact created: ", res);
+        console.log("ClientSide: ");
+        console.log("activeCamp-- Contact created: ", res.data);
         // Add account to MongoDB
-        Axios.post("/signup", {...body, contactid: res.contact.id})
+        Axios.post("/signup", {...body, contactid: res.data.contact.id})
           .then((resp) => {
             if (resp.data.errors) {
               this.setState({ isSubmitting: false });
@@ -96,11 +96,19 @@ class Signup extends Component {
             }
             localStorage.setItem("token", resp.data.token);
             localStorage.setItem("paymentadded", false);
+
+            // subscribe user to "Not Paid" list
+            Axios.post(`/ac/subscribe-contact/${res.data.contact.id}`)
+            .then((subRes) => {
+                console.log("activeCampaign -- Contact Subscribed: ", subRes.data);
+
+            }).catch((err) => console.log("Error subscribing contact: ", err));
+
             window.open("/addpayment", "_self");
           })
           .catch((err) => {
             // delete contact from activecampaign
-            Axios.delete(`/ac/delete-contact/${res.contact.id}`)
+            Axios.delete(`/ac/delete-contact/${res.data.contact.id}`)
             .then((delRes) => {
                 console.log("activeCamp-- Contact Deleted: ", delRes);
             }).catch((err) => console.log("activeCamp-- Error deleting contact: ", err));
