@@ -1,11 +1,12 @@
 import React from "react";
-import Button from '@material-ui/core/Button'
-import Dialog from "@material-ui/core/Dialog"
-import DialogActions from "@material-ui/core/DialogActions"
-import DialogContent from "@material-ui/core/DialogContent"
-import DialogContentText from "@material-ui/core/DialogContentText"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import ReCAPTCHA from "react-google-recaptcha"
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import Input from "@material-ui/core/Input";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function AlertDialog(props) {
   const [open, setOpen] = React.useState(false);
@@ -29,7 +30,7 @@ export default function AlertDialog(props) {
 
   // specifying verify callback
   const updatePayment = () => {
-    setOpen(false);
+    setOpen(true);
     props.updatePayment(amount);
   };
   React.useEffect(() => {
@@ -63,20 +64,19 @@ export default function AlertDialog(props) {
               <div className="col">
                 <Button
                   variant="outlined"
-                  color={amount == 200 ? "secondary" : "primary"}
-                  onClick={() => setAmount(200)}
-                >
-                  $ 200.00
-                </Button>
-              </div>
-              <div className="col">
-                <Button
-                  variant="outlined"
                   color={amount == 500 ? "secondary" : "primary"}
-                  onClick={() => setAmount(200)}
+                  onClick={() => setAmount(500)}
                 >
                   $ 500.00
                 </Button>
+              </div>
+              <div className="col">
+                <Input
+                  variant="outlined"
+                  onChange={event=>(setAmount(event.target.value))}
+                  type="number"
+                  placeholder="Enter Amount"
+                ></Input>
               </div>
             </div>
             {amount != null && (

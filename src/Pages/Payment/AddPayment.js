@@ -16,6 +16,7 @@ class AddPayment extends Component {
       email: "",
       name: "",
       loading: false,
+      
     };
   }
 
@@ -74,6 +75,7 @@ class AddPayment extends Component {
   componentDidMount(prevProps) {
     Axios.get("/clientdetails")
       .then(({ data }) => {
+        console.log(data,'client detail')
         this.setState({ email: data.email });
         this.setState({ name: data.firstName });
 
@@ -162,6 +164,8 @@ class AddPayment extends Component {
               <div className="card-wrapper">
                 <div className="card fat custom-card-margin">
                   <div className="card-body">
+                    <div>
+                    </div>
                     {localStorage.getItem("paymentadded") == "true" ? (
                       <>
                         <div className="text-center ">
@@ -187,6 +191,7 @@ class AddPayment extends Component {
                             <input type="hidden" />
                             <br />
                             <CardElement />
+                            
                             <button
                               type="button"
                               onClick={() =>

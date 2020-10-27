@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import message from '../../Pages/Messages/message'
 //import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
 import PaymentAlert from "../paymentAlert/PaymentAlert";
+import Popover from '@material-ui/core/Popover';
 import Axios, { assetsURL } from "../../services/Axios";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
@@ -17,6 +19,8 @@ class header extends Component {
       advancecheck: true,
       open: false,
       client_id: "",
+      customerName : '',
+      clientMessageSeenCount:0
     };
   }
 
@@ -31,9 +35,9 @@ class header extends Component {
 
       await Axios.get("/clientdetails")
         .then(({ data }) => {
-          console.log(data, "user data checking");
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          this.setState({ bal: data.balance, client_id: data._id });
+          this.setState({ bal: data.balance, client_id: data._id, customerName : data.firstName,clientMessageSeenCount:data.clientMessageSeenCount});
+          localStorage.setItem("customerName" , this.state.customerName)
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -45,9 +49,16 @@ class header extends Component {
       // }
     }
   };
+
+  logoutHandler = () => {
+    localStorage.removeItem("token");
+    window.open("/login", "_self");
+  };
+
   handleClose = () => {
     this.setState({ open: false });
   };
+
   updatePayment = async (amount) => {
     let body = {
       customer_id: this.state.client_id,
@@ -61,6 +72,7 @@ class header extends Component {
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
+
   render() {
     const { basiccheck, advancecheck, rates, bal } = this.state;
     return (
@@ -105,9 +117,17 @@ class header extends Component {
                 </a>
               </li>
             </li> */}
+            
+            
+
             <li class="nav-item">
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
+              </Link>
+            </li>
+            <li class="nav-item">
+              <Link to="/messages" className="nav-link" style={{ color: "white" }}>
+                Messages({this.state.clientMessageSeenCount})
               </Link>
             </li>
 
@@ -123,6 +143,12 @@ class header extends Component {
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>
+              <li class="nav-item">
+              <span onClick={this.logoutHandler} className="nav-link c-pointer text-danger">
+              <div className="fas fa-sign-out-alt mr-1"></div> 
+              Logout
+              </span>
+            </li>
           </ul>
         </div>
         
