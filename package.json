@@ -26,6 +26,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
     "react-scrollbar": "^0.5.6",
+    "recharts": "^1.8.5",
     "socket.io-client": "^2.3.0",
     "socketio-file-upload": "^0.7.2",
     "uuid": "^8.0.0"

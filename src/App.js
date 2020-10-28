@@ -29,6 +29,8 @@ import {
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
+import Accounting from "./Pages/Accounting/Accounting";
+import Dashboard from "./Pages/Accounting/Dashboard";
 
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
@@ -55,6 +57,8 @@ const Routes = withRouter((props) => {
               path="/template/:templateid"
               component={TemplateForm}
             />
+            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/accounting/dashboard" component={Accounting} />
             <Route exact path="/basic" component={BasicForm} />
             <Route exact path="/edit/:id" component={EditForm} />
             <Route exact path="/products" component={Searchcart} />
