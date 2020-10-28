@@ -13,6 +13,7 @@ import ResetPassword from "./resetpassword/resetpassword";
 import Charts from "./Charts/charts";
 import Config from "./config/title";
 import AcceptUrl from "./AcceptUrl/AcceptUrl";
+import OnBoarding from "./OnBoarding/OnBoarding";
 
 export {
   Signup,
@@ -30,4 +31,5 @@ export {
   Charts,
   Config,
   AcceptUrl,
+  OnBoarding
 };

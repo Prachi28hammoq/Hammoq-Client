@@ -36,6 +36,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "startdevlocal": "REACT_APP_STAGE=devlocal PORT=3001 react-scripts start",
+    "startdevhost": "react-scripts build && REACT_APP_STAGE=devhost",
+    "startstage": "react-scripts build && REACT_APP_STAGE=staging",
+    "startproduction": "react-scripts build && REACT_APP_STAGE=production",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
