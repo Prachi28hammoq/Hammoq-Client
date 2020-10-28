@@ -110,7 +110,7 @@ class BasicForm extends Component {
           const otherss = [...this.state.othersstate];
          
           otherss.push(localStorage.getItem(d) || false);
-          console.log(otherss, "otherssssssssssssssssssssssss");
+          //console.log(otherss, "otherssssssssssssssssssssssss");
 
           this.setState({ othersstate: otherss });
           // if (!localStorage.getItem(d)) {
@@ -131,8 +131,8 @@ class BasicForm extends Component {
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        console.log({ data }, "client user value check");
-        console.log(data, "client detail");
+        //console.log({ data }, "client user value check");
+        //console.log(data, "client detail");
         if (parseInt(data.balance) < 5) this.setState({ open: true });
         this.setState({ bal: data.balance, client_id: data._id });
         this.setState({ cid: data._id }, () =>
@@ -781,7 +781,7 @@ class BasicForm extends Component {
             <div className="row m-auto">
               {images.map((image, idx) => {
                 return (
-                  <div className="col-4 col-md-3 px-1 ">
+                  <div className="col-4 col-md-3 px-1 " key = {idx}>
                     <div
                       className="modal fade bd-example-modal-sm"
                       id="addTemplateModal1"
@@ -908,9 +908,9 @@ class BasicForm extends Component {
                   >
                     <option value="">Choose Template</option>
                     {templates &&
-                      templates.map((template) => {
+                      templates.map((template, i) => {
                         return (
-                          <option value={template._id}>{template.name}</option>
+                          <option value={template._id} key = {i}>{template.name}</option>
                         );
                       })}
                   </select>
@@ -1149,9 +1149,9 @@ class BasicForm extends Component {
                 ) : null}
                 {othersbool
                   ? others.map((o, i) => {
-                    console.log(this.state.othersstate[i],i,'othherbadkjfkjb')
+                    //console.log(this.state.othersstate[i],i,'othherbadkjfkjb')
                       return (
-                        <div className="col-12 col-lg-6"  onClick = {() => this.handleOnClick(o,i)}>
+                        <div className="col-12 col-lg-6"  key = {i} onClick = {() => this.handleOnClick(o,i)}>
                           <div className="form-check"   >
                             {this.state.othersstate[i] == "true" ?   <input
                               className="form-check-input"
