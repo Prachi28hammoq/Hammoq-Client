@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { socket } from "../../services/socket";
 import moment from 'moment'
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +11,7 @@ import Axios from "../../services/Axios";
 // const io = require("socket.io-client");
 // const socket = io.connect("https://devcust.avoidpoints.com");
 
+let socket = require.main.exports.socket;
 
 export default class extends Component {
   constructor(){

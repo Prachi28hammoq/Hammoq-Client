@@ -105,9 +105,9 @@ class header extends Component {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-            {/* <li class="nav-item dropdown">
-              <li class="nav-item">
+          <ul className="navbar-nav ml-auto">
+            {/* <li className="nav-item dropdown">
+              <li className="nav-item">
                 <a
                   href="/basic"
                   className="nav-link"
@@ -119,23 +119,23 @@ class header extends Component {
             </li> */}
             
             
-             <li class="nav-item">
+             <li className="nav-item">
               <Link to="/onboarding" className="nav-link" style={{ color: "white" }}>
                 OnBoarding
               </Link>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
               </Link>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <Link to="/messages" className="nav-link" style={{ color: "white" }}>
                 Messages({this.state.clientMessageSeenCount})
               </Link>
             </li>
 
-            <li class="nav-item">
+            <li className="nav-item">
               <a
                 href="/templates"
                 className="nav-link"
@@ -147,7 +147,7 @@ class header extends Component {
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>
-              <li class="nav-item">
+              <li className="nav-item">
               <span onClick={this.logoutHandler} className="nav-link c-pointer text-danger">
               <div className="fas fa-sign-out-alt mr-1"></div> 
               Logout

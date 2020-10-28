@@ -39,7 +39,8 @@ class OnBoarding extends Component {
       shopify: "",
       otherAcc: ""
     };
-   this.handleChange = this.handleChange.bind(this)
+   this.handleChangeText = this.handleChangeText.bind(this)
+   this.handleChangeCheckBox = this.handleChangeCheckBox.bind(this)
    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -70,7 +71,7 @@ class OnBoarding extends Component {
       otherAcc
     } = this.state;
 
-    const body = {
+    let body = {
       firstName: firstName,
       lastName: lastName,
       email: emailAddress,
@@ -96,7 +97,7 @@ class OnBoarding extends Component {
       otherAccountInfo: otherAcc,
     };
 
-    Axios.post("https://devcust.avoidpoints.com/api/client/signup", body)
+    Axios.post("/signup", body)
       .then((res) => {
         if (res.data.errors) {
           return alert(res.data.errors);
@@ -116,8 +117,13 @@ class OnBoarding extends Component {
       });
   };
 
-  handleChange = (variable, event) => {
-    this.setState({variable:event.target.value});
+  handleChangeText = (variable, event) => {
+    let newValue = event.target.value;
+    this.setState({variable:newValue});
+  };
+
+  handleChangeCheckBox = (variable, newValue) => {
+    this.setState({variable:newValue});
   };
 
   render = () => {
@@ -161,7 +167,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={firstName}
-              onChange={(event) => this.handleChange(firstName, event.target.value)}
+              onChange={(event) => this.handleChangeText(firstName, event)}
             />
             <TextField
               style={{ margin: "10px" }}
@@ -170,7 +176,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={lastName}
-              onChange={(event) => this.handleChange(lastName, event.target.value)}
+              onChange={(event) => this.handleChangeText(lastName, event)}
             />
             <TextField
               style={{ margin: "10px" }}
@@ -179,7 +185,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={emailAddress}
-              onChange={(event) => this.handleChange(emailAddress, event.target.value)}
+              onChange={(event) => this.handleChangeText(emailAddress, event)}
             />
             <TextField
               style={{ margin: "10px" }}
@@ -188,7 +194,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={phoneNum}
-              onChange={(event) => this.handleChange(phoneNum, event.target.value)}
+              onChange={(event) => this.handleChangeText(phoneNum, event)}
             />
           </div>
           <div className='group__two'>
@@ -199,16 +205,16 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={storeLink}
-              onChange={(event) => this.handleChange(storeLink, event.target.value)}
+              onChange={(event) => this.handleChangeText(storeLink, event)}
             />
             <TextField
               className='group__two_two'
               id='findUsInput'
-              label='How did you find about us ?'
+              label='How did you find about us?'
               type='search'
               variant='outlined'
               value={findUs}
-              onChange={(event) => this.handleChange(findUs, event.target.value)}
+              onChange={(event) => this.handleChangeText(findUs, event)}
             />
           </div>
           <div className='group__three'>
@@ -218,21 +224,20 @@ class OnBoarding extends Component {
               </FormLabel>
               <RadioGroup
                 row
-                aria-label='position'
-                name='position'
-                value={listOnEbay}
+                aria-label='ebayRadio'
+                name='ebayRadio'
                 defaultValue=''
-                onChange={(event) => this.handleChange(listOnEbay, event.target.value)}
+                onChange={(event) => this.handleChangeText(listOnEbay, event)}
               >
                 <FormControlLabel
-                  value='yes'
-                  control={<Radio color='primary' />}
+                  value='Yes'
+                  control={<Radio />}
                   label='Yes'
                   labelPlacement='end'
                 />
                 <FormControlLabel
-                  value='no'
-                  control={<Radio color='primary' />}
+                  value='No'
+                  control={<Radio />}
                   label='No, I only want crosslistings'
                   labelPlacement='end'
                 />
@@ -250,10 +255,9 @@ class OnBoarding extends Component {
                   value={serviceWant}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(serviceWant["Listings"], 1)
-                        : this.handleChange(serviceWant["Listings"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(serviceWant["Listings"], 1)
+                        : this.handleChangeCheckBox(serviceWant["Listings"], 0)
                   }}
                 />
               }
@@ -266,10 +270,9 @@ class OnBoarding extends Component {
                   value={serviceWant}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(serviceWant["Crosslistings"], 1)
-                        : this.handleChange(serviceWant["Crosslistings"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(serviceWant["Crosslistings"], 1)
+                        : this.handleChangeCheckBox(serviceWant["Crosslistings"], 0)
                   }}
                 />
               }
@@ -282,10 +285,9 @@ class OnBoarding extends Component {
                   value={serviceWant}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(serviceWant["Delistings"], 1)
-                        : this.handleChange(serviceWant["Delistings"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(serviceWant["Delistings"], 1)
+                        : this.handleChangeCheckBox(serviceWant["Delistings"], 0)
                   }}
                 />
               }
@@ -298,10 +300,9 @@ class OnBoarding extends Component {
                   value={serviceWant}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(serviceWant["Accounting"], 1)
-                        : this.handleChange(serviceWant["Accounting"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(serviceWant["Accounting"], 1)
+                        : this.handleChangeCheckBox(serviceWant["Accounting"], 0)
                   }}
                 />
               }
@@ -321,10 +322,9 @@ class OnBoarding extends Component {
                   value={crosslisting}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(crosslisting["Ebay"], 1)
-                        : this.handleChange(crosslisting["Ebay"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Ebay"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Ebay"], 0)
                   }}
                 />
               }
@@ -337,10 +337,9 @@ class OnBoarding extends Component {
                   value={crosslisting}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(crosslisting["Mercari"], 1)
-                        : this.handleChange(crosslisting["Mercari"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Mercari"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Mercari"], 0)
                   }}
                 />
               }
@@ -353,10 +352,9 @@ class OnBoarding extends Component {
                   value={crosslisting}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(crosslisting["Poshmark"], 1)
-                        : this.handleChange(crosslisting["Poshmark"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Poshmark"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Poshmark"], 0)
                   }}
                 />
               }
@@ -368,10 +366,9 @@ class OnBoarding extends Component {
                   color='primary'
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(crosslisting["Shopify"], 1)
-                        : this.handleChange(crosslisting["Shopify"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Shopify"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Shopify"], 0)
                   }}
                 />
               }
@@ -383,10 +380,9 @@ class OnBoarding extends Component {
                   color='primary'
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(crosslisting["Offerup"], 1)
-                        : this.handleChange(crosslisting["Offerup"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Offerup"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Offerup"], 0)
                   }}
                 />
               }
@@ -398,10 +394,9 @@ class OnBoarding extends Component {
                   color='primary'
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(crosslisting["Depop"], 1)
-                        : this.handleChange(crosslisting["Depop"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Depop"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Depop"], 0)
                   }}
                 />
               }
@@ -413,10 +408,9 @@ class OnBoarding extends Component {
                   color='primary'
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(crosslisting["Craigslist"], 1)
-                        : this.handleChange(crosslisting["Craigslist"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Craigslist"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Craigslist"], 0)
                   }}
                 />
               }
@@ -428,10 +422,9 @@ class OnBoarding extends Component {
                   color='primary'
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a =
-                      event.target.value == true
-                        ? this.handleChange(crosslisting["Letgo"], 1)
-                        : this.handleChange(crosslisting["Letgo"], 0)
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Letgo"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Letgo"], 0)
                   }}
                 />
               }
@@ -442,7 +435,11 @@ class OnBoarding extends Component {
                 <Checkbox
                   color='primary'
                   inputProps={{ "aria-label": "secondary checkbox" }}
-                  s
+                  onChange={(event) => {
+                    const a = event.target.checked == true
+                        ? this.handleChangeCheckBox(crosslisting["Tradsy"], 1)
+                        : this.handleChangeCheckBox(crosslisting["Tradsy"], 0)
+                  }}
                 />
               }
               label='Tradsy'
@@ -459,7 +456,7 @@ class OnBoarding extends Component {
                 aria-label='position'
                 name='position'
                 defaultValue=''
-                onChange={(event) => this.handleChange(howPrice, event.target.value)}
+                onChange={(event) => this.handleChangeText(howPrice, event)}
               >
                 <FormControlLabel
                   value='LongHold'
@@ -490,7 +487,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={increaseCompPrice}
-              onChange={(event) => this.handleChange(increaseCompPrice, event.target.value)}
+              onChange={(event) => this.handleChangeText(increaseCompPrice, event)}
             />
           </div>
           <div className='group__eight'>
@@ -501,7 +498,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={zipCode}
-              onChange={(event) => this.handleChange(zipCode, event.target.value)}
+              onChange={(event) => this.handleChangeText(zipCode, event)}
             />
           </div>
           <div className='group__nine'>
@@ -516,7 +513,7 @@ class OnBoarding extends Component {
                 aria-label='position'
                 name='position'
                 defaultValue='top'
-                onChange={(event) => this.handleChange(howShipping, event.target.value)}
+                onChange={(event) => this.handleChangeText(howShipping, event)}
               >
                 <FormControlLabel
                   value='freeShipping'
@@ -546,10 +543,9 @@ class OnBoarding extends Component {
               label='Do you have a company blurb you want at the end of each product description? If so, please put it below'
               multiline
               rows={4}
-              defaultValue='Default Value'
               variant='outlined'
               value={blurb}
-              onChange={(event) => this.handleChange(blurb, event.target.value)}
+              onChange={(event) => this.handleChangeText(blurb, event)}
             />
           </div>
           {/* ----------------------------------------------------------------------------------------- */}
@@ -561,7 +557,7 @@ class OnBoarding extends Component {
                 aria-label='position'
                 name='position'
                 defaultValue=''
-                onChange={(event) => this.handleChange(bestOffer, event.target.value)}
+                onChange={(event) => this.handleChangeText(bestOffer, event)}
               >
                 <FormControlLabel
                   value='bestYes'
@@ -586,7 +582,7 @@ class OnBoarding extends Component {
                 aria-label='position'
                 name='position'
                 defaultValue=''
-                onChange={(event) => this.handleChange(mercari, event.target.value)}
+                onChange={(event) => this.handleChangeText(mercari, event)}
               >
                 <FormControlLabel
                   value='mYes'
@@ -611,7 +607,7 @@ class OnBoarding extends Component {
                 aria-label='position'
                 name='position'
                 defaultValue=''
-                onChange={(event) => this.handleChange(handleTime, event.target.value)}
+                onChange={(event) => this.handleChangeText(handleTime, event)}
               >
                 <FormControlLabel
                   value='Sameday'
@@ -654,7 +650,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={permitJay}
-              onChange={(event) => this.handleChange(permitJay, event.target.value)}
+              onChange={(event) => this.handleChangeText(permitJay, event)}
             />
           </div>
           <div className='group__fivtn'>
@@ -665,7 +661,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={ebayAcc}
-              onChange={(event) => this.handleChange(ebayAcc, event.target.value)}
+              onChange={(event) => this.handleChangeText(ebayAcc, event)}
             />
           </div>
           <div className='group__sxtn'>
@@ -676,19 +672,18 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={mercariAcc}
-              onChange={(event) => this.handleChange(mercariAcc, event.target.value)}
+              onChange={(event) => this.handleChangeText(mercariAcc, event)}
             />
           </div>
           <div className='group__svntn'>
             <TextField
               style={{ margin: "10px", width: "80%" }}
               id='poshAccInput'
-              label='
-              Poshmark account info'
+              label='Poshmark account info'
               type='search'
               variant='outlined'
               value={poshAcc}
-              onChange={(event) => this.handleChange(poshAcc, event.target.value)}
+              onChange={(event) => this.handleChangeText(poshAcc, event)}
             />
           </div>
           <div className='group__eitn'>
@@ -699,7 +694,7 @@ class OnBoarding extends Component {
               type='search'
               variant='outlined'
               value={shopify}
-              onChange={(event) => this.handleChange(shopify, event.target.value)}
+              onChange={(event) => this.handleChangeText(shopify, event)}
             />
           </div>
           <div className='group__ntn'>
@@ -709,10 +704,9 @@ class OnBoarding extends Component {
               label='Other account info for all other boxes check on where you want to list/ crosslist'
               multiline
               rows={4}
-              defaultValue='Default Value'
               variant='outlined'
               value={otherAcc}
-              onChange={(event) => this.handleChange(otherAcc, event.target.value)}
+              onChange={(event) => this.handleChangeText(otherAcc, event)}
             />
           </div>
           <div className='button'>
