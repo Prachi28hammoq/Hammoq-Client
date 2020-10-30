@@ -109,13 +109,14 @@ class BasicForm extends Component {
           this.setState({ others });
 
           const otherss = [...this.state.othersstate];
+         
           otherss.push(localStorage.getItem(d) || false);
           //console.log(otherss, "otherssssssssssssssssssssssss");
 
           this.setState({ othersstate: otherss });
-          if (!localStorage.getItem(d)) {
-            localStorage.setItem(d, false);
-          }
+          // if (!localStorage.getItem(d)) {
+          //   localStorage.setItem(d, false);
+          // }
 
           //console.log(this.state.othersstate)
         });
@@ -131,8 +132,8 @@ class BasicForm extends Component {
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        console.log({ data }, "client user value check");
-        // console.log(data, "client detail");
+        //console.log({ data }, "client user value check");
+        //console.log(data, "client detail");
         if (parseInt(data.balance) < 5) this.setState({ open: true });
         this.setState(
           {
@@ -412,7 +413,7 @@ class BasicForm extends Component {
             console.log(response, "user data user");
           });
         }
-        //window.open("/basic", "_self");
+       window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
@@ -534,6 +535,24 @@ class BasicForm extends Component {
       this.setState({ [name]: value });
     }
   };
+  
+  handleOnClick = (o,i) => {
+    
+      // const ot = [...othersstate];
+      // ot[i] = !ot[i];
+      if(this.state.othersstate[i] == "false"){
+        this.state.othersstate[i] = "true"
+      } else if(this.state.othersstate[i] == "true"){
+        this.state.othersstate[i] = "false"
+      }
+      localStorage.setItem(
+        o,
+        this.state.othersstate[i]
+      );
+      this.setState({ othersstate: this.state.othersstate});
+     
+  
+  }
 
   handleBulkUpload = async (e) => {
     const { images, cid } = this.state;
@@ -768,7 +787,7 @@ class BasicForm extends Component {
             <div className="row m-auto">
               {images.map((image, idx) => {
                 return (
-                  <div className="col-4 col-md-3 px-1 ">
+                  <div className="col-4 col-md-3 px-1 " key = {idx}>
                     <div
                       className="modal fade bd-example-modal-sm"
                       id="addTemplateModal1"
@@ -898,9 +917,9 @@ class BasicForm extends Component {
                   >
                     <option value="">Choose Template</option>
                     {templates &&
-                      templates.map((template) => {
+                      templates.map((template, i) => {
                         return (
-                          <option value={template._id}>{template.name}</option>
+                          <option value={template._id} key = {i}>{template.name}</option>
                         );
                       })}
                   </select>
@@ -1138,24 +1157,23 @@ class BasicForm extends Component {
                 ) : null}
                 {othersbool
                   ? others.map((o, i) => {
+                    //console.log(this.state.othersstate[i],i,'othherbadkjfkjb')
                       return (
-                        <div className="col-12 col-lg-6">
-                          <div className="form-check">
-                            <input
+                        <div className="col-12 col-lg-6"  key = {i} onClick = {() => this.handleOnClick(o,i)}>
+                          <div className="form-check"   >
+                            {this.state.othersstate[i] == "true" ?   <input
                               className="form-check-input"
                               type="checkbox"
-                              checked={this.state.othersstate[i]}
-                              onChange={() => {
-                                const ot = [...othersstate];
-                                ot[i] = !ot[i];
-                                localStorage.setItem(
-                                  o,
-                                  !this.state.othersstate[i]
-                                );
-                                this.setState({ othersstate: ot });
-                              }}
-                              id="othersstate"
-                            />
+                             
+                              checked
+                            
+                            /> :   <input
+                            className="form-check-input"
+                            type="checkbox"
+                       
+                          /> }
+                          
+
                             <label
                               className="form-check-label"
                               htmlFor="mercari"

@@ -68,6 +68,7 @@ class Passwords extends Component {
             {
               users: response.data.passwords,
             },
+
             () => {
               this.setState({
                 username: "",
@@ -76,6 +77,8 @@ class Passwords extends Component {
               });
             }
           );
+          window.alert('login has added')
+
         })
         .catch((err) => {
           this.setState({ isSubmitting: true });
@@ -107,7 +110,7 @@ class Passwords extends Component {
           "x-access-token": `${localStorage.getItem("token")}`,
         },
       })
-      window.alert("Are You Sure")
+      window.confirm("Are You Sure")
       window.open("/passwords", "_self")
       // this.setState({users: response.data.Passwords})
       
