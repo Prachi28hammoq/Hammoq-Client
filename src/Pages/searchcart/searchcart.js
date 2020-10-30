@@ -50,7 +50,7 @@ class Searchcart extends Component {
 
   handelProductMessageSeen() {
     var data = this.state.products.filter((status) => status.status != false);
-    console.log(data,'dataaaaaaa')
+    //console.log(data,'dataaaaaaa')
     var prodMsgSeen = true
     var tempProdMsgSeen = []
     for (var i = 0; i < data.length; i++) {
@@ -63,7 +63,7 @@ class Searchcart extends Component {
         tempProdMsgSeen.push(prodMsgSeen);
     }
     this.setState({ productMessageSeen: tempProdMsgSeen });
-    console.log(this.state.productMessageSeen,'prodmsgseennnnnnnnnnnnnnn')
+    //console.log(this.state.productMessageSeen,'prodmsgseennnnnnnnnnnnnnn')
   }
   componentDidMount = () => {
     const prodStatus = this.props.match.params.prodStatus;

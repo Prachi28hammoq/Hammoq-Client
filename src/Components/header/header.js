@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import message from '../../Pages/Messages/message'
+import message from "../../Pages/Messages/message";
 //import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
 import PaymentAlert from "../paymentAlert/PaymentAlert";
-import Popover from '@material-ui/core/Popover';
+import Popover from "@material-ui/core/Popover";
 import Axios, { assetsURL } from "../../services/Axios";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
@@ -19,8 +19,8 @@ class header extends Component {
       advancecheck: true,
       open: false,
       client_id: "",
-      customerName : '',
-      clientMessageSeenCount:0
+      customerName: "",
+      clientMessageSeenCount: 0,
     };
   }
 
@@ -36,8 +36,13 @@ class header extends Component {
       await Axios.get("/clientdetails")
         .then(({ data }) => {
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          this.setState({ bal: data.balance, client_id: data._id, customerName : data.firstName,clientMessageSeenCount:data.clientMessageSeenCount});
-          localStorage.setItem("customerName" , this.state.customerName)
+          this.setState({
+            bal: data.balance,
+            client_id: data._id,
+            customerName: data.firstName,
+            clientMessageSeenCount: data.clientMessageSeenCount,
+          });
+          localStorage.setItem("customerName", this.state.customerName);
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -76,7 +81,6 @@ class header extends Component {
   render() {
     const { basiccheck, advancecheck, rates, bal } = this.state;
     return (
-
       <nav
         className="navbar navbar-expand-lg navbar-dark"
         style={{ backgroundColor: "#4db0cc" }}
@@ -86,7 +90,7 @@ class header extends Component {
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
        />*/}
-  
+
         <a href="/" className="navbar-brand">
           <img src={Logo} alt="hammock" height="40px" />
         </a>
@@ -106,27 +110,17 @@ class header extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
-            {/* <li class="nav-item dropdown">
-              <li class="nav-item">
-                <a
-                  href="/basic"
-                  className="nav-link"
-                  style={{ color: "white" }}
-                >
-                  Listing
-                </a>
-              </li>
-            </li> */}
-            
-            
-
             <li class="nav-item">
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
               </Link>
             </li>
             <li class="nav-item">
-              <Link to="/messages" className="nav-link" style={{ color: "white" }}>
+              <Link
+                to="/messages"
+                className="nav-link"
+                style={{ color: "white" }}
+              >
                 Messages({this.state.clientMessageSeenCount})
               </Link>
             </li>
@@ -143,15 +137,17 @@ class header extends Component {
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>
-              <li class="nav-item">
-              <span onClick={this.logoutHandler} className="nav-link c-pointer text-danger">
-              <div className="fas fa-sign-out-alt mr-1"></div> 
-              Logout
+            <li class="nav-item">
+              <span
+                onClick={this.logoutHandler}
+                className="nav-link c-pointer text-danger"
+              >
+                <div className="fas fa-sign-out-alt mr-1"></div>
+                Logout
               </span>
             </li>
           </ul>
         </div>
-        
       </nav>
     );
   }

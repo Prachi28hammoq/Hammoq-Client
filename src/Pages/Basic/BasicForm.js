@@ -19,6 +19,7 @@ class BasicForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      savedCards: [],
       username: "",
       password: "",
       users: [],
@@ -131,15 +132,17 @@ class BasicForm extends Component {
     Axios.get("/clientdetails")
       .then(({ data }) => {
         console.log({ data }, "client user value check");
-        console.log(data, "client detail");
+        // console.log(data, "client detail");
         if (parseInt(data.balance) < 5) this.setState({ open: true });
-        this.setState({ bal: data.balance, client_id: data._id });
-        this.setState({ cid: data._id }, () =>
-          localStorage.setItem("cid", this.state.cid)
+        this.setState(
+          {
+            bal: data.balance,
+            client_id: data._id,
+            savedCards: data.savedCards,
+            cid: data._id,
+          },
+          () => localStorage.setItem("cid", this.state.cid)
         );
-
-        // socket.emit("cidinit", { cid: this.state.cid });
-        // console.log(this.state.cid);
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -393,7 +396,9 @@ class BasicForm extends Component {
 
       .then((response) => {
         console.log(response, "data append");
-        let productId =response.data.products ?  response.data.products[response.data.products.length - 1]._id : response.data.products
+        let productId = response.data.products
+          ? response.data.products[response.data.products.length - 1]._id
+          : response.data.products;
         if (this.state.templateId) {
           Axios.post(
             "/producttemplate",
@@ -531,7 +536,6 @@ class BasicForm extends Component {
   };
 
   handleBulkUpload = async (e) => {
-  
     const { images, cid } = this.state;
     var imgobj = [];
     const files = e.target.files;
@@ -605,21 +609,22 @@ class BasicForm extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  updatePayment = async (amount) => {
+  updatePayment = async (amount, stripeId) => {
     let body = {
       customer_id: this.state.client_id,
       amount: amount,
+      stripeId: stripeId,
     };
     this.setState({ open: false });
     await Axios.post("/payment/payment", body)
       .then(({ data }) => {
-        console.log(data,'update mpadfjafjk')
+        console.log(data, "update mpadfjafjk");
         if (data.success) {
-          alert(data.msg)
-          window.open('/basic','_self')
+          alert(data.msg);
+          window.open("/basic", "_self");
         } else {
-          alert("Credit Card is Not added") 
-          window.open('/addpayment',"_self")
+          alert("Credit Card is Not added");
+          window.open("/addpayment", "_self");
         }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -652,6 +657,7 @@ class BasicForm extends Component {
           open={this.state.open}
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
+          savedCards={this.state.savedCards}
         />
         <Link to="/products/submitted">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -865,8 +871,12 @@ class BasicForm extends Component {
                       accept="image/*"
                       className="custom-file-input"
                       multiple
-                      onChange={(e)=>{this.handleBulkUpload(e)}}
-                      onClick={(e)=>{console.log(e,'onclick')}}
+                      onChange={(e) => {
+                        this.handleBulkUpload(e);
+                      }}
+                      onClick={(e) => {
+                        console.log(e, "onclick");
+                      }}
                     ></input>
                     <label
                       className="custom-file-label"
@@ -874,7 +884,6 @@ class BasicForm extends Component {
                     >
                       Bulk Upload Images
                     </label>
-                    
                   </div>
                 </div>
               </div>
@@ -976,7 +985,6 @@ class BasicForm extends Component {
                   placeholder="Cost of Goods"
                   className="form-control"
                   step="0.01"
-
                 />
               </div>
 
@@ -1145,7 +1153,6 @@ class BasicForm extends Component {
                                   !this.state.othersstate[i]
                                 );
                                 this.setState({ othersstate: ot });
-                               
                               }}
                               id="othersstate"
                             />

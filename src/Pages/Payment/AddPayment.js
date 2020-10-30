@@ -201,23 +201,7 @@ class AddPayment extends Component {
                             >
                               Pay
                             </button>
-                            {/* <div className="py-2">
-                              <div className="sub-heading">
-                                What we can automate for you
-                              </div>
-                              <p className="body-text mb-0 mt-2">
-                                1. Listing on eBay
-                              </p>
-                              <p className="body-text mb-0 mt-2">
-                                2. Crosslist on Mercari
-                              </p>
-                              <p className="body-text mb-0 mt-2">
-                                3. Crosslist on Poshmark
-                              </p>
-                              <p className="body-text mb-0 mt-2">
-                                4. Delist once item is sold
-                              </p>
-                            </div> */}
+                           
                           </form>
                         </div>
                       </>
