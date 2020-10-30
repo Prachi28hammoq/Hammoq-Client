@@ -34,6 +34,7 @@ class AddPayment extends Component {
           },
         }
       );
+      console.log(response,'dddddddddddddddddd')
       if (response.data.success) {
         this.setState(
           {
