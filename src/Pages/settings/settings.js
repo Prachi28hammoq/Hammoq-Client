@@ -10,6 +10,7 @@ class settings extends Component {
     this.state = {
       username: "",
       email: "",
+      myRefCode: "",
     };
   }
 
@@ -25,6 +26,7 @@ class settings extends Component {
 
   editinfo = async (e) => {
     e.preventDefault();
+
     const { username, email } = e.target;
     if (username == "" || email == "") {
       return alert("Please fill all fields");
@@ -65,12 +67,31 @@ class settings extends Component {
       .then(({ data }) => {
         this.setState({ username: data.firstName });
         this.setState({ email: data.email });
+
+        // if referral code is null
+        if(data.referralCode === null) {
+            console.log("it is null");
+          Axios.post("/clientdetails/giveRef")
+          .then(res => {
+              console.log("Reference Code Given: ", res);
+              this.setState({myRefCode: res.data.refCode});
+          }).catch(err => console.log("Error giving refCode: ", err));
+      } else {
+          console.log("it is not null");
+
+          this.setState({ myRefCode: data.referralCode})
+      }
+        console.log("Client Data: ", data);
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+
+      //Axios.post("/clientdetails/emptyRef")
+
   }
 
   render() {
     const { username, email } = this.state;
+    const refLink =`http://localhost:3000/signup?refCode=${this.state.myRefCode}`;
     return (
       <div className="settingsIt2">
         <div className="row" id="profilephoto2">
@@ -112,6 +133,10 @@ class settings extends Component {
                 </div>
               </div>
             </form>
+          </div>
+          <div>
+              Referral Code -->
+              <a href={refLink}>{this.state.myRefCode}</a>
           </div>
         </div>
 

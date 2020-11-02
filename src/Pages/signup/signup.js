@@ -81,14 +81,20 @@ class Signup extends Component {
       return alert("Password don't match.");
     }
 
+    var urlParams = new URLSearchParams(window.location.search);
+    const usedRefCode = urlParams.get('refCode');
+    console.log("using ref code: ", usedRefCode);
+
     const body = { ...this.state };
-    ///// adding contact to active campaign /////
+
+    /// adding contact to active campaign /////
     Axios.post("/ac/create-contact", body)
     .then((res) => {
         console.log("ClientSide: ");
         console.log("activeCamp-- Contact created: ", res.data);
         // Add account to MongoDB
-        Axios.post("/signup", {...body, contactid: res.data.contact.id})
+        Axios.post("/signup", {...body,
+            contactid: res.data.contact.id, givenRefCode: usedRefCode})
           .then((resp) => {
             if (resp.data.errors) {
               this.setState({ isSubmitting: false });

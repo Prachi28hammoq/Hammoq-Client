@@ -32,6 +32,7 @@ import EditForm from "./Pages/EditForm/EditForm";
 
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
+  console.log(pathname);
   return (
     <div>
       {!["/signup", "/signin"].includes(pathname) && <div className="fixed-top"> <Header /></div>}
@@ -78,7 +79,7 @@ const Routes = withRouter((props) => {
         </Switch>
       )}
       </div>
-      
+
     </div>
   );
 });
@@ -94,5 +95,3 @@ function App() {
 }
 
 export default App;
-
-
