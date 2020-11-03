@@ -67,25 +67,9 @@ class settings extends Component {
       .then(({ data }) => {
         this.setState({ username: data.firstName });
         this.setState({ email: data.email });
-
-        // if referral code is null
-        if(data.referralCode === null) {
-            console.log("it is null");
-          Axios.post("/clientdetails/giveRef")
-          .then(res => {
-              console.log("Reference Code Given: ", res);
-              this.setState({myRefCode: res.data.refCode});
-          }).catch(err => console.log("Error giving refCode: ", err));
-      } else {
-          console.log("it is not null");
-
-          this.setState({ myRefCode: data.referralCode})
-      }
-        console.log("Client Data: ", data);
+        this.setState({ myRefCode: data.referralCode})
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-
-      //Axios.post("/clientdetails/emptyRef")
 
   }
 
