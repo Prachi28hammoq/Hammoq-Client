@@ -27,7 +27,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import axios from "axios";
+
 class Dashboard extends Component {
+  componentDidMount() {
+    axios.get("https://google.com").then((data) => console.log(data));
+  }
+
   createData(
     date,
     marketplace,
