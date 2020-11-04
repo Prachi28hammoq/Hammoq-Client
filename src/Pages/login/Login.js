@@ -16,8 +16,10 @@ class Login extends Component {
   handleSubmit = async (e) => {
     this.setState({ isSubmitting: true });
     e.preventDefault();
+    console.log('hell')
     await Axios.get("/signin", { params: this.state })
       .then(({ data }) => {
+        console.log(data)
         if (data.err) {
           this.setState({ isSubmitting: false });
           this.setState({ loginError: true });

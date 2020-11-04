@@ -26,7 +26,7 @@ class BasicForm extends Component {
       website: "",
       otherssignal: false,
       loading: false,
-
+      offeredRate:{},
       input1: localStorage.getItem("condition") || "",
       input2: "",
       input3: 0,
@@ -125,14 +125,13 @@ class BasicForm extends Component {
 
     Axios.get("/payment/rates")
       .then((res) => {
-        //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length - 1] });
+        this.setState({ rates: res.data });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        //console.log({ data }, "client user value check");
+        console.log({ data }, "client user value check");
         //console.log(data, "client detail");
         if (parseInt(data.balance) < 5) this.setState({ open: true });
         this.setState(
@@ -141,72 +140,21 @@ class BasicForm extends Component {
             client_id: data._id,
             savedCards: data.savedCards,
             cid: data._id,
+            offeredRate:data.offeredRate || {}
           },
           () => localStorage.setItem("cid", this.state.cid)
         );
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
-    // var uploader = new SocketIOFileUpload(socket);
-    // uploader.listenOnInput(document.getElementById("bulk"));
-    // uploader.addEventListener("start", function (event) {
-    //   event.file.meta.cid = localStorage.getItem("cid");
-    // });
-    // socket.on("server2clientimg", (i) => {
-    //   //console.log(i);
-    //   i.img.map((imgi) => {
-    //     if (imgi.cid == localStorage.getItem("cid"))
-    //       images[imgi.index].img = imgi.name;
-    //   });
-
-    //   this.setState({
-    //     images,
-    //   });
-    // });
   };
 
-  // imgStatusHandler = () => {
-  //   const { cid } = this.state;
-  //   console.log("called imgStatusHandler");
-  //   socket.emit("getuploadstatus", { cid: cid });
-  //   socket.on("imgupload", (i) => {
-  //     console.log("imgcnt:" + i.imgcnt);
-  //     var imglen = this.state.images.filter((i) => {
-  //       if (i.img != "") {
-  //         return true;
-  //       }
-  //     });
-  //     console.log(imglen.length);
-  //     if (i.cid == cid && imglen.length == i.imgcnt) {
-  //       return false;
-  //     } else {
-  //       return true;
-  //     }
-  //   });
-  // };
 
   fetchimg = (src) => {
     const { cid } = this.state;
     this.setState({ fullimg: src }, () => {
       $("#addTemplateModal1").modal("show");
     });
-    // socket.emit("getimg", { cid: cid });
-    // socket.on("reimg", (re) => {
-    //   //this.setState({ img: "" });
-    //   console.log(re.id);
-    //   console.log("this");
-    //   console.log(re);
-    //   this.setState({ img: re.img }, () => {
-    //     this.state.img.forEach((i) => {
-    //       if (i.key == this.state.fullimg) {
-    //         // this.setState({ fullimg: src }, () => {
-    //         //   $("#addTemplateModal1").modal("show");
-    //         // });
-    //       }
-    //     });
-    //   });
-    //   console.log(this.state.img);
-    // });
   };
 
   change = (e) => {
@@ -288,7 +236,6 @@ class BasicForm extends Component {
 
     //bal check routine
     var cnt = 0;
-
     if (this.state.Ebay && this.state.ebay == true) {
       cnt++;
     }
@@ -298,29 +245,31 @@ class BasicForm extends Component {
     if (this.state.Mercari && this.state.mercari == true) {
       cnt++;
     }
+    
     this.state.othersstate.forEach((os) => {
-      if (os == true) {
+      if (os == "true") {
         cnt++;
-        console.log(os);
+        //console.log(os);
       }
     });
     var rate1 = 0,
       rate2 = 0,
       rate3 = 0;
     var total = 0;
-    rate1 = (this.state.rates.basic / 100) * 1;
-    rate2 = (this.state.rates.advance / 100) * (cnt - 1);
+    console.log(this.state.rates)
+    rate1 = (this.state.rates.list / 100) * 1;
+    rate2 = (this.state.rates.crosslist / 100) * (cnt - 1);
     if (this.state.delist == true) {
-      rate3 = (this.state.rates.list / 100) * (cnt - 1);
+      rate3 = (this.state.rates.delist / 100) * (cnt - 1);
     }
     total = rate1 + rate2 + rate3;
-    console.log(this.state.bal);
-
+    //console.log(this.state.bal);
+    // console.log(total,'total')
     if (this.state.bal - total < 0) {
       return alert("Insufficient balance");
     }
 
-    console.log(y, "chening y value");
+    //console.log(y, "chening y value");
     data.append("sku", this.state.input2);
 
     if (this.state.input3 == 0) {
@@ -393,9 +342,7 @@ class BasicForm extends Component {
         "Content-Type": "multipart/form-data",
         "x-access-token": `${localStorage.getItem("token")}`,
       },
-    })
-
-      .then((response) => {
+    }).then((response) => {
         console.log(response, "data append");
         let productId = response.data.products
           ? response.data.products[response.data.products.length - 1]._id
@@ -416,7 +363,6 @@ class BasicForm extends Component {
        window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
-    //}
   };
 
   handleSubmit = (e) => {
@@ -668,9 +614,11 @@ class BasicForm extends Component {
       img,
       templates,
     } = this.state;
+    //console.log(this.state.othersstate)
     //console.log(document.getElementById('bulk'),'dgmt')
     //document.getElementById('bulk').addEventListener( 'click', onMouse, false );
     return (
+      
       <div className="container mt-5">
         <PaymentAlert
           open={this.state.open}
