@@ -286,15 +286,17 @@ export default class extends Component {
         Axios.get("/payment/rates")
           .then((res) => {
             //rates = res.data[res.data.length - 1];
-            this.setState({ rates: res.data[res.data.length - 1] });
+            console.log(res,'user res')
+            this.setState({ rates: res.data });
 
             Axios.get("/clientdetails")
               .then(({ data }) => {
+                console.log(data,'user data')
                 this.setState({ bal: data.balance });
-                if (this.state.rates.basic / 100 > this.state.bal) {
+                if (this.state.rates.list / 100 > this.state.bal) {
                   this.setState({ basiccheck: false });
                 }
-                if (this.state.rates.advance / 100 > this.state.bal) {
+                if (this.state.rates.crosslist / 100 > this.state.bal) {
                   this.setState({ advancecheck: false });
                 }
 
