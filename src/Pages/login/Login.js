@@ -13,11 +13,9 @@ class Login extends Component {
     };
   }
 
-  //submit function
   handleSubmit = async (e) => {
     this.setState({ isSubmitting: true });
     e.preventDefault();
-    //api integration to get data
     await Axios.get("/signin", { params: this.state })
       .then(({ data }) => {
         if (data.err) {
@@ -25,7 +23,6 @@ class Login extends Component {
           this.setState({ loginError: true });
           return;
         }
-        //set item in local storage
         localStorage.setItem("token", data.token);
         window.open("/basic", "_self");
       })
@@ -41,7 +38,6 @@ class Login extends Component {
   };
 
   render() {
-    //destructuring
     const { email, password, isSubmitting, loginError } = this.state;
     return (
       <div>

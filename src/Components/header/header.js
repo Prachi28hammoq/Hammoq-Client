@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import message from "../../Pages/Messages/message";
+import MessageBox from "../../Pages/Messages/MessageBox";
+//import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
 import PaymentAlert from "../paymentAlert/PaymentAlert";
+import Popover from "@material-ui/core/Popover";
 import Axios, { assetsURL } from "../../services/Axios";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
@@ -16,12 +20,14 @@ class header extends Component {
       advancecheck: true,
       open: false,
       client_id: "",
+      customerName: "",
+      clientMessageSeenCount: 0,
+      modalOpen: false
     };
   }
 
   componentDidMount = async () => {
     if (localStorage.getItem("token")) {
-      //api integration to get rates
       await Axios.get("/payment/rates")
         .then((res) => {
           //rates = res.data[res.data.length - 1];
@@ -29,12 +35,16 @@ class header extends Component {
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
-      //api integration to get client details
       await Axios.get("/clientdetails")
         .then(({ data }) => {
-          console.log(data, "user data checking");
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          this.setState({ bal: data.balance, client_id: data._id });
+          this.setState({
+            bal: data.balance,
+            client_id: data._id,
+            customerName: data.firstName,
+            clientMessageSeenCount: data.clientMessageSeenCount,
+          });
+          localStorage.setItem("customerName", this.state.customerName);
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -46,9 +56,16 @@ class header extends Component {
       // }
     }
   };
+
+  logoutHandler = () => {
+    localStorage.removeItem("token");
+    window.open("/login", "_self");
+  };
+
   handleClose = () => {
     this.setState({ open: false });
   };
+
   updatePayment = async (amount) => {
     let body = {
       customer_id: this.state.client_id,
@@ -62,10 +79,19 @@ class header extends Component {
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
+
+  handleModalOpen = () => {
+    this.setState((prevState) => {
+       return{
+          modalOpen: !prevState.modalOpen
+       }
+    })
+ }
+
   render() {
-    //destructuring
     const { basiccheck, advancecheck, rates, bal } = this.state;
     return (
+      <div>
       <nav
         className="navbar navbar-expand-lg navbar-dark"
         style={{ backgroundColor: "#4db0cc" }}
@@ -94,21 +120,19 @@ class header extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
-            {/* <li class="nav-item dropdown">
-              <li class="nav-item">
-                <a
-                  href="/basic"
-                  className="nav-link"
-                  style={{ color: "white" }}
-                >
-                  Listing
-                </a>
-              </li>
-            </li> */}
             <li class="nav-item">
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
               </Link>
+            </li>
+            <li class="nav-item">
+                <button
+                className="nav-link"
+                style={{ color: "white", backgroundColor:"#4db0cc", border:"none", outline:"none" }}
+                onClick={this.handleModalOpen}
+              >
+                Messages({this.state.clientMessageSeenCount})
+                </button>
             </li>
 
             <li class="nav-item">
@@ -123,9 +147,25 @@ class header extends Component {
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>
+            <li class="nav-item">
+              <span
+                onClick={this.logoutHandler}
+                className="nav-link c-pointer text-danger"
+              >
+                <div className="fas fa-sign-out-alt mr-1"></div>
+                Logout
+              </span>
+            </li>
           </ul>
         </div>
+        
       </nav>
+      <MessageBox
+          //  style={{top: "50%"}}
+           modalOpen={this.state.modalOpen}
+           handleModalOpen={this.handleModalOpen}
+        />
+      </div>
     );
   }
 }

@@ -2,7 +2,6 @@ import React from "react";
 
 export default (props) => {
   return (
-    //select category
     <button
       className={`btn btn-${
         props.category === props.selectedCategory ? "dark" : "outline-primary"

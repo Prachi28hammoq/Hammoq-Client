@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./AddPassword.css";
 import Axios from "../../services/Axios";
+import jwt_decode from "jwt-decode";
 
 class Passwords extends Component {
   constructor() {
@@ -18,10 +19,8 @@ class Passwords extends Component {
     };
   }
 
-  //get password
   componentDidMount = () => {
     Axios.get("/password").then(({ data }) => {
-      console.log(data);
       if (data.passwords) this.setState({ users: data.passwords });
     });
 
@@ -46,7 +45,6 @@ class Passwords extends Component {
   };
 
   handleSubmit = (e) => {
-    //destructure
     const { website, username, password, users } = this.state;
     e.preventDefault();
     if (website != "" && username != "" && password != "") {
@@ -56,19 +54,21 @@ class Passwords extends Component {
         password: password,
       })
         .then((response) => {
-          let user = {
-            website: website,
-            username: username,
-            password: password,
-          };
-          users.push(user);
+          console.log(response,'ebay response')
+          // let user = {
+          //   website: website,
+          //   username: username,
+          //   password: password,
+          // };
+          //users.push(user);
 
           this.setState({ [website]: false });
 
           this.setState(
             {
-              users: users,
+              users: response.data.passwords,
             },
+
             () => {
               this.setState({
                 username: "",
@@ -77,6 +77,8 @@ class Passwords extends Component {
               });
             }
           );
+          window.alert('login has added')
+
         })
         .catch((err) => {
           this.setState({ isSubmitting: true });
@@ -87,16 +89,36 @@ class Passwords extends Component {
     }
   };
   handleeBaySubmit = () => {
-    Axios.get("/ebay/consent") //Ebay login
+    Axios.get("/ebay/consent")
       .then((response) => {
-        console.log(response);
-        window.open(response.data.url, "_blank");
+/*        const token = localStorage.getItem("token");
+        var decoded = jwt_decode(token);
+        console.log(decoded._doc.email)*/
+        console.log(response.data.authURL)
+        var authWindow = window.open(response.data.authURL, "_blank");
       })
 
       .catch((err) => {
         console.log(err) || alert(JSON.stringify({ err: err }));
       });
   };
+
+  handleDelete =  async (id) => {
+    try {
+      const response = await Axios.delete(`/password/${id}`, {
+        headers: {
+          "x-access-token": `${localStorage.getItem("token")}`,
+        },
+      })
+      window.confirm("Are You Sure")
+      window.open("/passwords", "_self")
+      // this.setState({users: response.data.Passwords})
+      
+    }catch(error){
+      console.log(error)
+    }
+    //this.setState({users : this.state.users.filter((user) => user._id !== id)})
+  } 
   render() {
     const {
       website,
@@ -183,7 +205,7 @@ class Passwords extends Component {
                       className="btn btn-danger ml-2 mt-3"
                       onClick={this.handleeBaySubmit}
                     >
-                      Add eBay Login
+                      Authorize eBay Access
                     </button>
                     {/* <small className="ml-2">
                       Note: For “Hammoq Lite” only eBay, Poshmark, and Mercari
@@ -194,9 +216,10 @@ class Passwords extends Component {
               </div>
               <div className="col-12 col-md-6">
                 {users &&
-                  users.map((user) => {
+                  users.map((user,idx) => {
                     return (
-                      <div className="card  p-4 mb-4">
+
+                      <div className="card  p-4 mb-4" key={idx}>
                         <h6 className="sub-heading">{user.website}</h6>
                         <input
                           type="text"
@@ -220,6 +243,11 @@ class Passwords extends Component {
                           <Link to={`/editpasswords/${user.website}`}>
                             <button className="btn btn-success body-text custom-edit-btn mt-3 btn-sm">
                               Edit
+                            </button>
+                          </Link>
+                          <Link>
+                            <button className="btn btn-danger body-text custom-edit-btn mt-3 ml-3 btn-sm" onClick = {() => {this.handleDelete(user._id)}}>
+                              Delete
                             </button>
                           </Link>
                         </div>

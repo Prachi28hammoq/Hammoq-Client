@@ -22,7 +22,6 @@ class AddPayment extends Component {
     };
   }
 
-  //get payment detail, user detail on success
   async componentDidMount() {
     const tokenvalue = localStorage.getItem("usertoken");
     try {
@@ -35,6 +34,7 @@ class AddPayment extends Component {
           },
         }
       );
+      console.log(response,'dddddddddddddddddd')
       if (response.data.success) {
         this.setState(
           {
@@ -90,15 +90,17 @@ class AddPayment extends Component {
       console.log(result.error.message);
       return alert(result.error.message);
     } else {
-      let response = await axios.post( //add payment
+      let response = await axios.post(
         `${API_URL}user/payment/addpayment`,
         body,
         (axios.defaults.headers.common["x-access-token"] = tokenvalue)
       );
       if (response.data.success) {
+
         alert(response.data.msg);
-        this.props.history.push("/addpassword"); //verify by password
+        this.props.history.push("/addpassword");
       } else {
+        //console.log(respone.data,'bhghjghjggfhghjghjghjghjghjghjghjghjgjgjhgj')
         alert(response.data.msg);
       }
     }

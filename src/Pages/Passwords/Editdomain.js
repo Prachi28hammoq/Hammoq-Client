@@ -31,13 +31,12 @@ class Editdomain extends Component {
     users[name] = value;
     this.setState({ users });
   };
-  
- //edit login
   handleSubmit = (e) => {
     e.preventDefault();
     const { users } = this.state;
     Axios.put("/password", users)
-      .then((response) => window.open("/passwords", "_self"))
+      .then((response) => 
+      window.open("/passwords", "_self"))
       .catch((err) => {
         this.setState({ isSubmitting: true });
         console.log(err) || alert(JSON.stringify({ err: err }));
@@ -45,6 +44,7 @@ class Editdomain extends Component {
   };
 
   render() {
+    console.log(this.state.users, 'user datat ')
     const { users } = this.state;
     return (
       <div>

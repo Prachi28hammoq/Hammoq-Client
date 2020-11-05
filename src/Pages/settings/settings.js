@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import "./settingsmin.css";
 import imageresponse from "../../Components/images/imagebackgroud.jpg";
+import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
+
 import { Link } from "react-router-dom";
 import Axios from "../../services/Axios";
+import { Button } from "@material-ui/core";
 
 class settings extends Component {
   constructor() {
@@ -10,10 +13,12 @@ class settings extends Component {
     this.state = {
       username: "",
       email: "",
+      open: false,
+      client_id: "",
+      savedCards:[]
     };
   }
 
-  //logout 
   logoutHandler = () => {
     localStorage.removeItem("token");
     window.open("/login", "_self");
@@ -24,7 +29,6 @@ class settings extends Component {
     this.setState({ [name]: value });
   };
 
-  //Edit information in setting
   editinfo = async (e) => {
     e.preventDefault();
     const { username, email } = e.target;
@@ -56,16 +60,53 @@ class settings extends Component {
   componentDidMount(prevProps) {
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        this.setState({ username: data.firstName });
-        this.setState({ email: data.email });
+        console.log(data)
+        this.setState({
+          username: data.firstName,
+          client_id: data._id,
+          email: data.email,
+          savedCards:data.savedCards
+        });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   }
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+  updatePayment = async (amount,stripeId) => {
+    let body = {
+      customer_id: this.state.client_id,
+      amount: amount,
+      stripeId:stripeId
+    };
+    this.setState({ open: false });
+    await Axios.post("/payment/payment", body)
+      .then(({ data }) => {
+        if (data.success) {
+          alert(data.msg);
+          window.open("/basic", "_self");
+        } else {
+          alert("Credit Card is Not added");
+          window.open("/addpayment", "_self");
+        }
+      })
+      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+  };
+  handlePaymentAdd = () => {
+    return this.setState({ open: true });
+  };
 
   render() {
     const { username, email } = this.state;
+
     return (
       <div className="settingsIt2">
+        <PaymentAlert
+          open={this.state.open}
+          handleClose={this.handleClose}
+          updatePayment={this.updatePayment}
+          savedCards={this.state.savedCards}
+        />
         <div className="row" id="profilephoto2">
           <div className="col-12 d-flex justify-content-center align-items-center">
             <form onSubmit={this.editinfo} className="modal-body">
@@ -132,6 +173,22 @@ class settings extends Component {
           </div>
           <div className="col-6">
             <h6 className="paddingfornames">Change Payment</h6>
+          </div>
+          <div className="col-3">
+            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+          </div>
+        </Link>
+        <Link className="row" id="settingsBackground2">
+          <div className="col-3">
+            <i
+              className="fa fa-credit-card fa-2x colorIt"
+              id="backgroundIt"
+            ></i>
+          </div>
+          <div className="col-6">
+            <h6 className="paddingfornames" onClick={this.handlePaymentAdd}>
+              Add Payment
+            </h6>
           </div>
           <div className="col-3">
             <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>

@@ -31,7 +31,6 @@ class Signup extends Component {
     this.setState({ [name]: value });
   };
 
-  //checkbox function in registration form
   handleToggleCheckbox = (e) => {
     const { name } = e.target;
     this.setState({ [name]: !this.state[name] });
@@ -57,7 +56,6 @@ class Signup extends Component {
       phoneno,
     } = this.state;
 
-    // alert messages for validation
     if (!term1) {
       this.setState({ isSubmitting: false });
       return alert("Accept all the terms.");
@@ -84,14 +82,12 @@ class Signup extends Component {
     }
 
     const body = { ...this.state };
-    //api integration to create data
     Axios.post("/signup", body)
       .then((res) => {
         if (res.data.errors) {
           this.setState({ isSubmitting: false });
           return alert(res.data.errors);
         }
-        //set item in local storage
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("paymentadded", false);
         window.open("/addpayment", "_self");
@@ -128,7 +124,7 @@ class Signup extends Component {
           <div className="d-flex align-items-center justify-content-between mb-5 ml-5 mr-5">
             <img src={Logo} alt="hammoq" className="img" />
           </div>
-          <Link to="/products">
+          <Link to="/products/submitted">
             <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
           </Link>
           <div>

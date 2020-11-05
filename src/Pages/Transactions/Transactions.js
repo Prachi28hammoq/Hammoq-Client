@@ -26,7 +26,6 @@ class previoustransaction extends React.Component {
     }
   }
 
-  //get transaction detail
   componentDidMount(prevProps) {
     Axios.get("/clientdetails/trans")
       .then(({ data }) => {

@@ -34,7 +34,6 @@ export default class extends Component {
   }
 
  
-  //on key up 
   handleChanges = (e) => {
     if (e.target.value.length > max) return 0;
     this.setState({ count: e.target.value.length });
@@ -44,13 +43,14 @@ export default class extends Component {
     this.setState({[e.target.name] : e.target.value})
   }
 
-  //form submit
   handleMessageSubmit = async () => {
     const formData = {
       msgformTitle : this.state.msgFormTitle,
+      senderName :  `customer : ${localStorage.getItem("customerName")}`,
       msgFormDescription : this.state.msgFormDescription,
       field : this.state.field
     }
+   // window.alert(formData.clientName ,' form data data dhfjkasdhfjkha')
     try{
       const response = await Axios.post(`/message/${this.props.productid}`, formData, {
         headers: {
@@ -102,7 +102,7 @@ export default class extends Component {
   };
 
   handleClick = (event) => {
-    this.setState({anchorE1 : event.currentTarget});
+    this.setState({anchorEl: event.currentTarget});
   };
 
   handleClose = () => {
@@ -110,28 +110,26 @@ export default class extends Component {
   };
   
   handleMessageData = async (value, event) => {
-    console.log(value,"value")
+    //console.log(value,"value")
     const productId = this.props.productid
     const msgFormToggle = this.state.msgFormToggle
     const anchorEl= event.currentTarget
-    console.log(anchorEl)
+   // console.log(anchorEl)
     try {
       const response = await Axios.get(`/message/${productId}/${value}`, {
         headers : {
           "content-type": "application/json",
-          headers: localStorage.getItem("token")
+          "x-access-token": localStorage.getItem("token")
         
         }
       })
-      console.log(response, "messsage data value")
-      this.setState({productMessage : response.data, msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${this.props.data[value]}`, field : value ,anchorEl   })
+      this.setState({productMessage : response.data.message, msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${this.props.data[value]}`,  field : value ,anchorEl   })
     }catch(error){
       console.log(error)
     }
 
   }
   render = () => {
-    //destructuring data
     const { selectedWebsites, category, showMoreLines, custom, msgFormToggle, anchorEl } = this.state;
 
     const { data, handleChange, toggleSelectedWebsite } = this.props;
@@ -156,8 +154,10 @@ export default class extends Component {
       handleDescriptionChange,
       handleDescriptionLabel,
       removeDescription,
-      handleUrl
+      handleUrl,
+      messageNotSeen
     } = this.props;
+   // console.log(messageNotSeen , 'message not seeen')
 
     if (custom.toString() == "false") {
       if (localStorage.getItem("titletype") == "type2") {
@@ -260,7 +260,7 @@ export default class extends Component {
                 :""
                 :"")  
       }
-      console.log(data.title);
+     // console.log(data.title);
     }
 
     if (customdesc == false) {
@@ -280,6 +280,7 @@ export default class extends Component {
           : "") +
         (data.care != "" ? "Care: " + data.care + "\n" : "") +
         (data.madeIn != "" ? "Made in: " + data.madeIn + "\n" : "") +
+        
         (data.bottomDescription != "" ? "Bottom Description: " + data.bottomDescription + "\n" : "" ) +
         (data.line1 != undefined? data.line1 != "" ? data.line1 +": " + data.value1 +"\n" : "" : "") +
         (data.line2 != undefined ? data.line2 != ""? data.line2 +": " + data.value2 +"\n": "": "") +
@@ -624,6 +625,8 @@ export default class extends Component {
                     background: "none",
                     border: "none",
                     outline: "none",
+                    color:messageNotSeen.includes('brand')?'red':''
+
                   }}
                 >
                   +
@@ -646,7 +649,12 @@ export default class extends Component {
                // onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.model}`, anchorEl : event.currentTarget,  field : "model" })}
                 onClick = {(event) => this.handleMessageData('model', event)}
 
-                style={{ background: "none", border: "none", outline: "none" }}
+                style={{
+                   background: "none", 
+                   border: "none",
+                   outline: "none",
+                   color:messageNotSeen.includes('model')?'red':''
+                  }}
               >
                 +
               </button>
@@ -658,17 +666,22 @@ export default class extends Component {
               <div className="col-11">
               <Input
                 label="Model No."
-                name="modelno"
-                id="modelno"
-                defaultValue={data.modelno}
+                name="modelNo"
+                id="modelNo"
+                defaultValue={data.modelNo}
                 onChange={handleChange}
               />
               </div>
               <div className="col-1">
               <button
                //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.modelno}`, anchorEl : event.currentTarget,  field : "modelno" })}
-                onClick = {(event) => this.handleMessageData('modelno', event)}
-                style={{ background: "none", border: "none", outline: "none" }}
+                onClick = {(event) => this.handleMessageData('modelNo', event)}
+                style={{ 
+                  background: "none", 
+                  border: "none", 
+                  outline: "none" ,
+                  color:messageNotSeen.includes('modelNo')?'red':''
+                }}
               >
                 +
               </button>
@@ -690,7 +703,12 @@ export default class extends Component {
               <button
                // onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.colorShade}`, anchorEl : event.currentTarget,  field : "colorShade" })}
                onClick = {(event) => this.handleMessageData('colorShade', event)} 
-               style={{ background: "none", border: "none", outline: "none" }}
+               style={{ background: "none", 
+               border: "none", 
+               outline: "none" ,
+               color:messageNotSeen.includes('colorShade')?'red':''
+
+              }}
               >
                 +
               </button>
@@ -712,7 +730,11 @@ export default class extends Component {
               <button
                 //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.style}`, anchorEl : event.currentTarget, field : "style"  })}
                 onClick = {(event) => this.handleMessageData('style', event)} 
-                style={{ background: "none", border: "none", outline: "none" }}
+                style={{ background: "none", 
+                border: "none", 
+                outline: "none" ,
+                color:messageNotSeen.includes('colorShade')?'red':''
+              }}
               >
                 +
               </button>
@@ -754,7 +776,13 @@ export default class extends Component {
               <button
                 //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.pattern}`, anchorEl : event.currentTarget, field : "pattern" })}
                 onClick = {(event) => this.handleMessageData('pattern', event)} 
-                style={{ background: "none", border: "none", outline: "none" }}
+                style={{ 
+                  background: "none", 
+                  border: "none", 
+                  outline: "none", 
+                  color:messageNotSeen.includes('pattern')?'red':''
+
+                }}
               >
                 +
               </button>
@@ -775,7 +803,13 @@ export default class extends Component {
               <button
               //  onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.size}`, anchorEl : event.currentTarget, field : "size" })}
                 onClick = {(event) => this.handleMessageData('size', event)} 
-                style={{ background: "none", border: "none", outline: "none" }}
+                style={{ 
+                  background: "none", 
+                  border: "none", 
+                  outline: "none" ,
+                  color:messageNotSeen.includes('size')?'red':''
+
+                }}
               >
                 +
               </button>
@@ -796,7 +830,13 @@ export default class extends Component {
               <button
                // onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.seasonOrWeather}` , anchorEl : event.currentTarget, field : "seasonOrWeather"})}
                 onClick = {(event) => this.handleMessageData('seasonOrWeather', event)} 
-                style={{ background: "none", border: "none", outline: "none" }}
+                style={{ 
+                  background: "none", 
+                   border: "none", 
+                   outline: "none",
+                   color:messageNotSeen.includes('seasonOrWeather')?'red':''
+
+                  }}
               >
                 +
               </button>
@@ -817,7 +857,12 @@ export default class extends Component {
               <button
                 //onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.care}`, anchorEl : event.currentTarget , field : "care"} )}
                 onClick = {(event) => this.handleMessageData('care', event)} 
-                style={{ background: "none", border: "none", outline: "none" }}
+                style={{ 
+                  background: "none", 
+                  border: "none", 
+                  outline: "none" ,
+                  color:messageNotSeen.includes('care')?'red':''
+                }}
               >
                 +
               </button>
@@ -838,7 +883,12 @@ export default class extends Component {
               <button
               //  onClick={(event) => this.setState({ msgFormToggle: !msgFormToggle, msgFormTitle :`was : ${data.madeIn}, ` , anchorEl : event.currentTarget , field : "madeIn"  })}
                 onClick = {(event) => this.handleMessageData('madeIn', event)} 
-                style={{ background: "none", border: "none", outline: "none" }}
+                style={{ 
+                  background: "none", 
+                  border: "none", 
+                  outline: "none" ,
+                  color:messageNotSeen.includes('madeIn')?'red':''
+                }}
               >
                 +
               </button>
@@ -862,12 +912,13 @@ export default class extends Component {
              
            >
             <div className="col" style = {{width : "20rem", paddingBottom : '1rem' , paddingTop : '1rem'}}>
-              <div className="scroll" style = {{overflow : "auto" , width : "18rem" , height : "7rem"}}>
+              <div className="scroll" style = {{overflow : "auto" , width : "18rem" , height : "15rem"}}>
               <p>{productMessage && productMessage.map((msg) => {
               return (
-                <div >
-                  <p style = {{color : "red"}}>{msg.msgformTitle}</p>
-                  <p>{msg.msgFormDescription}</p>
+                <div>
+                  <small>{msg.senderName ? msg.senderName : ''}</small>
+                  <p style = {{color : "red" , marginTop: "2px", marginBottom : "2px"}}>{msg.msgformTitle}</p>
+                  <p style = {{marginTop : "2px" , marginBottom : "2px"}}>{msg.msgFormDescription}</p> <hr />
                 </div>
               )
             })}</p>
@@ -1133,14 +1184,14 @@ export default class extends Component {
  
             </div>
           )}
-          <div>
+          {/* <div>
             <div
               className="btn btn-link mb-3 pl-0"
               onClick={() => this.setState({ showMoreLines: !showMoreLines })}
             >
               {showMoreLines ? "Hide" : "Show more"}
             </div>
-          </div>
+          </div> */}
 
           <div className="form-group mb-4 row align-items-center">
             <div className="col-12 col-lg-8">

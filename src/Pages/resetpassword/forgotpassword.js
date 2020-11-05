@@ -19,7 +19,6 @@ class Login extends Component {
     };
   }
 
-  //new password update
   handleSubmit = async (e) => {
     this.setState({ isSubmitting: true });
     e.preventDefault();
@@ -37,7 +36,7 @@ class Login extends Component {
           console.log(data);
           alert(data);
           this.setState({ passup: true });
-          window.open("/products", "_self");
+          window.open("/products/submitted", "_self");
         })
         .catch((err) => {});
     }

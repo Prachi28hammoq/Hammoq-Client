@@ -9,10 +9,6 @@ import LoadingSpinner from "../utils/loader";
 
 const $ = window.$;
 
-
-function getClientReferenceId(in_1HWqISLZqDnjpbwXy9iTCVgO) {
-  return window.Rewardful && window.Rewardful.referral || ('checkout_'+(new Date).getTime());
-}
 class AddPayment extends Component {
   constructor() {
     super();
@@ -20,6 +16,7 @@ class AddPayment extends Component {
       email: "",
       name: "",
       loading: false,
+      
     };
   }
 
@@ -39,14 +36,12 @@ class AddPayment extends Component {
       alert("Fill up the details");
       this.setState({ loading: false });
     }
-    //api integration to create payment details
     await Axios.post("/payment/firstpayment", {
       email: this.state.email,
       card_details: result,
       price: price,
     })
       .then((res) => {
-        //api integration to update/edit client payment detail
         Axios.put("/payment/addstatus")
           .then((res) => {
             localStorage.setItem("paymentadded", res.data.paymentStatus);
@@ -78,9 +73,9 @@ class AddPayment extends Component {
   };
 
   componentDidMount(prevProps) {
-    //api integration to get client details
     Axios.get("/clientdetails")
       .then(({ data }) => {
+        console.log(data,'client detail')
         this.setState({ email: data.email });
         this.setState({ name: data.firstName });
 
@@ -169,6 +164,8 @@ class AddPayment extends Component {
               <div className="card-wrapper">
                 <div className="card fat custom-card-margin">
                   <div className="card-body">
+                    <div>
+                    </div>
                     {localStorage.getItem("paymentadded") == "true" ? (
                       <>
                         <div className="text-center ">
@@ -187,7 +184,6 @@ class AddPayment extends Component {
                         <div className="">
                           <form style={{ width: "300px", margin: "auto" }}>
                             {this.state.loading ? (
-                              //spin loader to load the page
                               <div className="center">
                                 <LoadingSpinner asOverlay />
                               </div>
@@ -195,9 +191,9 @@ class AddPayment extends Component {
                             <input type="hidden" />
                             <br />
                             <CardElement />
+                            
                             <button
                               type="button"
-                              //modal function
                               onClick={() =>
                                 $("#addTemplateModal").modal("show")
                               }
@@ -205,23 +201,7 @@ class AddPayment extends Component {
                             >
                               Pay
                             </button>
-                            {/* <div className="py-2">
-                              <div className="sub-heading">
-                                What we can automate for you
-                              </div>
-                              <p className="body-text mb-0 mt-2">
-                                1. Listing on eBay
-                              </p>
-                              <p className="body-text mb-0 mt-2">
-                                2. Crosslist on Mercari
-                              </p>
-                              <p className="body-text mb-0 mt-2">
-                                3. Crosslist on Poshmark
-                              </p>
-                              <p className="body-text mb-0 mt-2">
-                                4. Delist once item is sold
-                              </p>
-                            </div> */}
+                           
                           </form>
                         </div>
                       </>
@@ -243,17 +223,15 @@ class AddPayment extends Component {
                         <div className="">
                           <form style={{ width: "300px", margin: "auto" }}>
                             {this.state.loading ? (
-                              //spin loader to load the page
                               <div className="center">
                                 <LoadingSpinner asOverlay />
                               </div>
                             ) : null}
                             <input type="hidden" />
                             <br />
-                            <CardElement />                            
+                            <CardElement />
                             <button
                               type="button"
-                              //modal function
                               onClick={() =>
                                 $("#addTemplateModal").modal("show")
                               }

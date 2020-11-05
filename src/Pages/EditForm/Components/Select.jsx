@@ -8,7 +8,7 @@ export default (props) => (
         className="custom-select border border-dark  custom-select-sm"
         {...props}
       >
-        {props.selectOptions.map((option) => ( //map function
+        {props.selectOptions.map((option) => (
           <option value={option} key={uuid()}>
             {option}
           </option>

@@ -31,7 +31,7 @@ class Login extends Component {
       if (this.state.password == "") {
         alert("Fill in the new password");
       } else {
-        await Axios.post("/forgotpassword/update", { //update password
+        await Axios.post("/forgotpassword/update", {
           email: this.state.email,
           newPassword: this.state.password,
         })
@@ -40,7 +40,7 @@ class Login extends Component {
               //console.log(data);
               alert(data.data);
               this.setState({ passup: true });
-              window.open("/products", "_self");
+              window.open("/products/submitted", "_self");
             } else {
               alert("Password updation failed! Try again");
             }
@@ -49,7 +49,6 @@ class Login extends Component {
       }
     }
 
-    //fetch confirm password
     if (this.state.codesent == true && this.state.codecheck == false) {
       if (this.state.code == "") {
         alert("Fill in the Code");
@@ -96,7 +95,6 @@ class Login extends Component {
   };
 
   render() {
-    //destructuring
     const {
       email,
       password,

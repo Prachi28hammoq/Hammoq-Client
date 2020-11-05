@@ -17,8 +17,6 @@ export default class extends Component {
   handleChange = (event) => {
     this.setState({ message: event.target.value });
   };
-  
-  //add comment
   handleNewUserMessage = () => {
     // $("#comment").val("");
     const { message } = this.state;
