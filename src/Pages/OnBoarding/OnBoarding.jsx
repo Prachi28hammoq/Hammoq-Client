@@ -155,8 +155,6 @@ class OnBoarding extends Component {
       if(entry[0] === variable)
       {
         entry[1] = newValue;
-        console.log(entry[0])
-        console.log(entry[1])
       }
     });
     this.setState({serviceWant:newServiceWant});
@@ -290,7 +288,7 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={serviceWant['Listings']}
+                  checked={serviceWant['Listings'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
@@ -305,7 +303,7 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={serviceWant["Crosslistings"]}
+                  checked={serviceWant['Listings'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
@@ -320,7 +318,7 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={serviceWant["Delistings"]}
+                  checked={serviceWant['Listings'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
@@ -335,7 +333,7 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={serviceWant["Accounting"]}
+                  checked={serviceWant['Listings'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
@@ -357,12 +355,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Ebay"]}
+                  checked={serviceWant['Ebay'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Ebay"]', true)
-                        : this.handleChangeCheckBox('["Ebay"]', false)
+                        ? this.handleChangeCheckBox('Ebay', true)
+                        : this.handleChangeCheckBox('Ebay', false)
                   }}
                 />
               }
@@ -372,12 +370,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Mercari"]}
+                  checked={serviceWant['Mercari'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Mercari"]', true)
-                        : this.handleChangeCheckBox('["Mercari"]', false)
+                        ? this.handleChangeCheckBox('Mercari', true)
+                        : this.handleChangeCheckBox('Mercari', false)
                   }}
                 />
               }
@@ -387,12 +385,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Poshmark"]}
+                  checked={serviceWant['Poshmark'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Poshmark"]', true)
-                        : this.handleChangeCheckBox('["Poshmark"]', false)
+                        ? this.handleChangeCheckBox('Poshmark', true)
+                        : this.handleChangeCheckBox('Poshmark', false)
                   }}
                 />
               }
@@ -402,12 +400,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Shopify"]}
+                  checked={serviceWant['Shopify'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Shopify"]', true)
-                        : this.handleChangeCheckBox('["Shopify"]', false)
+                        ? this.handleChangeCheckBox('Shopify', true)
+                        : this.handleChangeCheckBox('Shopify', false)
                   }}
                 />
               }
@@ -417,12 +415,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Offerup"]}
+                  checked={serviceWant['Offerup'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Offerup"]', true)
-                        : this.handleChangeCheckBox('["Offerup"]', false)
+                        ? this.handleChangeCheckBox('Offerup', true)
+                        : this.handleChangeCheckBox('Offerup', false)
                   }}
                 />
               }
@@ -432,12 +430,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Depop"]}
+                  checked={serviceWant['Depop'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Depop"]', true)
-                        : this.handleChangeCheckBox('["Depop"]', false)
+                        ? this.handleChangeCheckBox('Depop', true)
+                        : this.handleChangeCheckBox('Depop', false)
                   }}
                 />
               }
@@ -447,12 +445,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Craigslist"]}
+                  checked={serviceWant['Craigslist'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Craigslist"]', true)
-                        : this.handleChangeCheckBox('["Craigslist"]', false)
+                        ? this.handleChangeCheckBox('Craigslist', true)
+                        : this.handleChangeCheckBox('Craigslist', false)
                   }}
                 />
               }
@@ -462,12 +460,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Letgo"]}
+                  checked={serviceWant['Letgo'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Letgo"]', true)
-                        : this.handleChangeCheckBox('["Letgo"]', false)
+                        ? this.handleChangeCheckBox('Letgo', true)
+                        : this.handleChangeCheckBox('Letgo', false)
                   }}
                 />
               }
@@ -477,12 +475,12 @@ class OnBoarding extends Component {
               control={
                 <Checkbox
                   color='primary'
-                  checked={crosslisting["Tradsy"]}
+                  checked={serviceWant['Tradsy'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
                     const a = event.target.selected == true
-                        ? this.handleChangeCheckBox('["Tradsy"]', true)
-                        : this.handleChangeCheckBox('["Tradsy"]', false)
+                        ? this.handleChangeCheckBox('Tradsy', true)
+                        : this.handleChangeCheckBox('Tradsy', false)
                   }}
                 />
               }
