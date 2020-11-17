@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import TextField from "@material-ui/core/TextField";
 import Axios from "../../services/Axios";
 import "./ListingSettings.css";
 
@@ -21,7 +22,7 @@ const ListingSettings = () => {
   const [location, setLocation] = useState("");
   const [mercariTags, setMercariTags] = useState([]);
 
-  // Shipping and Return se ttings
+  // Shipping and Return settings
   const [shipping, setShipping] = useState([]);
   const [flatShipRules, setFlatShipRules] = useState(false);
   const [itemType1, setItemType1] = useState("");
@@ -35,7 +36,7 @@ const ListingSettings = () => {
   const [refundAs, setRefundAs] = useState("");
   const [returnShipBy, setReturnShipBy] = useState("");
 
-  // International Shipping se ttings
+  // International Shipping settings
   const [incrByDomestic, setIncrByDomestic] = useState("");
   const [shipService, setShipService] = useState("");
   const [intlReturnAccepted, setIntlReturnAccepted] = useState(false);
@@ -53,15 +54,31 @@ const ListingSettings = () => {
   const [paymentInstr, setPaymentInstr] = useState("");
   const [buyerReqs, setBuyerReqs] = useState("");
 
+  //Basic Settings -> Signup Info
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName]= useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+  const [storeLink, setStoreLink] = useState("");
+  const [findUs, setFindUs] = useState("");
+
   //Client ID
   //const [clientID, setClientID] = useState("");
 
   useEffect(() => {
     Axios.get("/clientDetails")
       .then((res) => {
+        let savedData = res.data;
+
+        setFirstName(savedData.firstName);
+        setLastName(savedData.lastName);
+        setEmailAddress(savedData.email);
+        setPhoneNum(savedData.phoneno);
+        setStoreLink(savedData.storeName);
+        setFindUs(savedData.findOutAboutUs);
 
         //console.log("Client's saved data: ", res.data.configSettings[0]);
-        let savedData = res.data.configSettings[0].listing[0];
+        savedData = res.data.configSettings[0].listing[0];
         //console.log("listing data: ", savedData);
         var compPriceSign = "" 
         if(savedData.incrCompPrice[0].by !== undefined && savedData.incrCompPrice[0].by === 'percent')
@@ -223,11 +240,25 @@ const ListingSettings = () => {
       paymentInstr: paymentInstr,
     };
 
-    var finalObj = {
+    var configObj = {
       listing: ListSettingsObj,
       shipping: shippingSettingsObj,
       intlShipping: intlShippingObj,
       payment: paymentProfObj,
+    };
+
+    var basicObj = {
+      firstName: firstName,
+      lastName: lastName,
+      email: emailAddress,
+      phoneno: phoneNum,
+      storeName: storeLink,
+      findOutAboutUs: findUs,
+    };
+
+    var finalObj = {
+      basicSettings: basicObj,
+      configSettings: configObj,
     };
 
     //var _id = clientID;
@@ -245,6 +276,65 @@ const ListingSettings = () => {
   return (
     <div className='main'>
       <div className='body'>
+      <div className='bold'>Basic Info</div>
+            <div className='group__one'>
+              <TextField
+                style={{ margin: "10px" }}
+                id='firstNameInput'
+                label='First Name'
+                type='search'
+                variant='outlined'
+                value={firstName}
+                onChange={(event) => this.handleChangeText('firstName', event)}
+              />
+              <TextField
+                style={{ margin: "10px" }}
+                id='lastNameInput'
+                label='Last name'
+                type='search'
+                variant='outlined'
+                value={lastName}
+                onChange={(event) => this.handleChangeText('lastName', event)}
+              />
+              <TextField
+                style={{ margin: "10px" }}
+                id='emailAddressInput'
+                label='Email Address'
+                type='search'
+                variant='outlined'
+                value={emailAddress}
+                onChange={(event) => this.handleChangeText('emailAddress', event)}
+              />
+              <TextField
+                style={{ margin: "10px" }}
+                id='phoneNumInput'
+                label='Phone Number'
+                type='search'
+                variant='outlined'
+                value={phoneNum}
+                onChange={(event) => this.handleChangeText('phoneNum', event)}
+              />
+            </div>
+            <div className='group__two'>
+              <TextField
+                className='group__two_one'
+                id='storeLinkInput'
+                label='Store Name / Store Link'
+                type='search'
+                variant='outlined'
+                value={storeLink}
+                onChange={(event) => this.handleChangeText('storeLink', event)}
+              />
+              <TextField
+                className='group__two_two'
+                id='findUsInput'
+                label='How did you find about us?'
+                type='search'
+                variant='outlined'
+                value={findUs}
+                onChange={(event) => this.handleChangeText('findUs', event)}
+              />
+            </div>
         <div className='col_one_scroll'>
           <div className='bold'>Listing Settings</div>
           <div className='body__one__q1'>
