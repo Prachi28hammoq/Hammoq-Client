@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import Axios from "../../services/Axios";
 import { Button } from "@material-ui/core";
 
+import ListingSettings from "../ListingSettings/ListingSettings";
+
 class settings extends Component {
   constructor() {
     super();
@@ -222,6 +224,22 @@ class settings extends Component {
           </div>
           <div className="col-6">
             <h6 className="paddingfornames">Config</h6>
+          </div>
+          <div className="col-3">
+            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+          </div>
+        </Link>
+
+        <Link to="/listingsettings" className="row" id="settingsBackground2">
+          <div className="col-3">
+            <i
+              class="fa fa-envelope-o  fa-2x colorIt"
+              id="backgroundIt"
+              aria-hidden="true"
+            ></i>
+          </div>
+          <div className="col-6">
+            <h6 className="paddingfornames">Listing Settings</h6>
           </div>
           <div className="col-3">
             <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>

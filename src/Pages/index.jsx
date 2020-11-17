@@ -14,6 +14,7 @@ import Charts from "./Charts/charts";
 import Config from "./config/title";
 import AcceptUrl from "./AcceptUrl/AcceptUrl";
 import OnBoarding from "./OnBoarding/OnBoarding";
+import ListingSettings from "./ListingSettings/ListingSettings";
 
 export {
   Signup,
@@ -31,5 +32,6 @@ export {
   Charts,
   Config,
   AcceptUrl,
-  OnBoarding
+  OnBoarding,
+  ListingSettings
 };

@@ -7,14 +7,17 @@ import Logo from "../images/hammock.svg";
 import PaymentAlert from "../paymentAlert/PaymentAlert";
 import Popover from '@material-ui/core/Popover';
 import Axios, { assetsURL } from "../../services/Axios";
-Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
+if('token' in localStorage)
+{
+	Axios.defaults.headers.common["x-access-token"] = localStorage.getItem("token");
+}
 class header extends Component {
   constructor() {
     super();
     this.state = {
       rates: {},
-      bal: 0,
+      bal: 0.000,
       basiccheck: true,
       advancecheck: true,
       open: false,
@@ -33,10 +36,17 @@ class header extends Component {
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
-      await Axios.get("/clientdetails")
+      await Axios.get("/clientDetails")
         .then(({ data }) => {
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          this.setState({ bal: data.balance, client_id: data._id, customerName : data.firstName,clientMessageSeenCount:data.clientMessageSeenCount});
+          if (data.balance == undefined)
+          {
+            this.setState({bal: 0.000, client_id: data._id, customerName : data.firstName,clientMessageSeenCount:data.clientMessageSeenCount});
+          }
+          else
+          {
+            this.setState({ bal: data.balance, client_id: data._id, customerName : data.firstName,clientMessageSeenCount:data.clientMessageSeenCount});
+          }
           localStorage.setItem("customerName" , this.state.customerName)
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -58,7 +68,6 @@ class header extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-
   updatePayment = async (amount) => {
     let body = {
       customer_id: this.state.client_id,
