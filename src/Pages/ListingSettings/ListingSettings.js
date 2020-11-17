@@ -454,7 +454,7 @@ const ListingSettings = () => {
                   checked={isOfferAccept}
                   onChange={(e) => {
                     setIsOfferAccept(e.target.checked);
-                    if (!e.target.checked) setOfferAccept("");
+                    if (!e.target.checked) setOfferAccept(true);
                   }}
                 ></input>{" "}
                 Automatically accept offers of atleast
@@ -470,7 +470,7 @@ const ListingSettings = () => {
                     if (isOfferAccept && bestOffer) {
                         if(Math.sign(e.target.value) === 1) {
                             setOfferAccept(e.target.value);
-                        } else setOfferAccept("");
+                        } else setOfferAccept(false);
                       //console.log("offer accept: ", e.target.value);
                     }
                   }}
