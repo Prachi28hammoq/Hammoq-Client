@@ -79,7 +79,9 @@ const ListingSettings = () => {
         setCompanyBlob(savedData.companyBlob);
         setBestOffer(savedData.bestOffer[0].enabled);
         setOfferAccept(savedData.bestOffer[0].acceptOfferOf);
+        setIsOfferAccept(savedData.bestOffer[0].isOfferAccepted);
         setOfferDecline(savedData.bestOffer[0].declineOfferOf);
+        setIsOfferDecline(savedData.bestOffer[0].isOfferDeclined);
         setEbaySmartPricing(savedData.ebay_smart);
         setMercariSmartPricing(savedData.mercari_smart);
         setCountry(savedData.country);
@@ -161,7 +163,9 @@ const ListingSettings = () => {
       bestOffer: {
         enabled: bestOffer,
         acceptOfferOf: offerAccept,
+        isOfferAccepted: isOfferAccept,
         declineOfferOf: offerDecline,
+        isOfferDeclined: isOfferDecline,
       },
       ebay_smart: ebaySmartPricing,
       mercari_smart: mercariSmartPricing,
@@ -450,12 +454,10 @@ const ListingSettings = () => {
               <label className='automatic_label_arrange'>
                 <input
                   type='checkbox'
-                  value='option1'
                   checked={isOfferAccept}
-                  onChange={(e) => {
-                    setIsOfferAccept(e.target.checked);
-                    if (!e.target.checked) setOfferAccept(true);
-                  }}
+                  onChange={(e) => {setIsOfferAccept(e.target.checked); 
+                                    if (!e.target.checked) setOfferAccept(" ");
+                                  }}
                 ></input>{" "}
                 Automatically accept offers of atleast
               </label>
@@ -470,7 +472,7 @@ const ListingSettings = () => {
                     if (isOfferAccept && bestOffer) {
                         if(Math.sign(e.target.value) === 1) {
                             setOfferAccept(e.target.value);
-                        } else setOfferAccept(false);
+                        } else setOfferAccept(" ");
                       //console.log("offer accept: ", e.target.value);
                     }
                   }}
@@ -481,7 +483,6 @@ const ListingSettings = () => {
               <label className='automatic_label_arrange'>
                 <input
                   type='checkbox'
-                  value='option1'
                   checked={isOfferDecline}
                   onChange={(e) => {
                     setIsOfferDecline(e.target.checked);
