@@ -54,14 +54,14 @@ const ListingSettings = () => {
   const [buyerReqs, setBuyerReqs] = useState("");
 
   //Client ID
-  const [clientID, setClientID] = useState("");
+  //const [clientID, setClientID] = useState("");
 
   useEffect(() => {
     Axios.get("/clientDetails")
       .then((res) => {
 
         //console.log("Client's saved data: ", res.data.configSettings[0]);
-        var savedData = res.data.configSettings[0].listing[0];
+        let savedData = res.data.configSettings[0].listing[0];
         //console.log("listing data: ", savedData);
         var compPriceSign = "" 
         if(savedData.incrCompPrice[0].by !== undefined && savedData.incrCompPrice[0].by === 'percent')
@@ -77,9 +77,9 @@ const ListingSettings = () => {
         setOtherPriceOptions(savedData.otherPriceOptions);
         setIncrCompPrice(savedData.incrCompPrice[0].value + compPriceSign);
         setCompanyBlob(savedData.companyBlob);
-        setBestOffer(savedData.bestOffer.enabled);
-        setOfferAccept(savedData.bestOffer.acceptOfferOf);
-        setOfferDecline(savedData.bestOffer.declineOfferOf);
+        setBestOffer(savedData.bestOffer[0].enabled);
+        setOfferAccept(savedData.bestOffer[0].acceptOfferOf);
+        setOfferDecline(savedData.bestOffer[0].declineOfferOf);
         setEbaySmartPricing(savedData.ebay_smart);
         setMercariSmartPricing(savedData.mercari_smart);
         setCountry(savedData.country);
@@ -88,7 +88,7 @@ const ListingSettings = () => {
         setMercariTags(savedData.mercariTags);
         setBuyerReqs(savedData.buyerReqs);
 
-        var savedData = res.data.configSettings[0].shipping[0];
+        savedData = res.data.configSettings[0].shipping[0];
         //console.log("shipping data: ", savedData);
         setShipping(savedData.shippingType);
         setFlatShipRules(savedData.flatShippingRules[0].enabled);
@@ -103,7 +103,7 @@ const ListingSettings = () => {
         setRefundAs(savedData.returns[0].refundGivenAs);
         setReturnShipBy(savedData.returns[0].ReturnShipPaidBy);
 
-        var savedData = res.data.configSettings[0].intlShipping[0];
+        savedData = res.data.configSettings[0].intlShipping[0];
         //console.log("intlShipping data: ", savedData);
         setIncrByDomestic(savedData.incrFromDomestic);
         setShipService(savedData.shippingService);
@@ -117,7 +117,7 @@ const ListingSettings = () => {
         setWorldwideShip(savedData.globalShipping[0].isWorldwide);
         setShipCountries(savedData.globalShipping[0].shipCountries);
 
-        var savedData = res.data.configSettings[0].payment[0];
+        savedData = res.data.configSettings[0].payment[0];
         //console.log("payment data: ", savedData);
         setAllowPaypal(savedData.allowPaypal);
         setPaypalEmail(savedData.paypalEmail);
@@ -150,7 +150,7 @@ const ListingSettings = () => {
     let mercari_tags = mercariTags.map((e) => e.trim());
     var ListSettingsObj = {
       services: services,
-      priceOptions: priceOptions,
+      priceOptions: priceOpt,
       otherPriceOptions: otherPriceOptions,
       incrCompPrice: {
         by: sign,
@@ -226,7 +226,7 @@ const ListingSettings = () => {
       payment: paymentProfObj,
     };
 
-    var _id = clientID;
+    //var _id = clientID;
 
     //console.log("Client ID: " + clientID);
     //console.log("Posted Object: " + finalObj);
@@ -250,7 +250,7 @@ const ListingSettings = () => {
                 type='checkbox'
                 name='service'
                 value='Listing'
-                checked={services.find((i) => i == "Listing")}
+                checked={services.find((i) => i === "Listing")}
                 onChange={(e) => {
                   let list = services;
                   if (e.target.checked) {
@@ -258,7 +258,7 @@ const ListingSettings = () => {
                     setServices(list);
                     //console.log("services: ", list);
                   } else {
-                    let newList = list.filter((i) => i != e.target.value);
+                    let newList = list.filter((i) => i !== e.target.value);
                     setServices(newList);
                     //console.log("services: ", newList);
                   }
@@ -271,7 +271,7 @@ const ListingSettings = () => {
                 type='checkbox'
                 name='service'
                 value='Crosslisting'
-                checked={services.find((i) => i == "Crosslisting")}
+                checked={services.find((i) => i === "Crosslisting")}
                 onChange={(e) => {
                   let list = services;
                   if (e.target.checked) {
@@ -279,7 +279,7 @@ const ListingSettings = () => {
                     setServices(list);
                     //console.log("services: ", list);
                   } else {
-                    let newList = list.filter((i) => i != e.target.value);
+                    let newList = list.filter((i) => i !== e.target.value);
                     setServices(newList);
                     //console.log("services: ", newList);
                   }
@@ -292,7 +292,7 @@ const ListingSettings = () => {
                 type='checkbox'
                 name='service'
                 value='Delisting'
-                checked={services.find((i) => i == "Delisting")}
+                checked={services.find((i) => i === "Delisting")}
                 onChange={(e) => {
                   let list = services;
                   if (e.target.checked) {
@@ -300,7 +300,7 @@ const ListingSettings = () => {
                     setServices(list);
                     //console.log("services: ", list);
                   } else {
-                    let newList = list.filter((i) => i != e.target.value);
+                    let newList = list.filter((i) => i !== e.target.value);
                     setServices(newList);
                     //console.log("services: ", newList);
                   }
@@ -313,7 +313,7 @@ const ListingSettings = () => {
                 type='checkbox'
                 name='service'
                 value='Accounting'
-                checked={services.find((i) => i == "Accounting")}
+                checked={services.find((i) => i === "Accounting")}
                 onChange={(e) => {
                   let list = services;
                   if (e.target.checked) {
@@ -321,7 +321,7 @@ const ListingSettings = () => {
                     setServices(list);
                     //console.log("services: ", list);
                   } else {
-                    let newList = list.filter((i) => i != e.target.value);
+                    let newList = list.filter((i) => i !== e.target.value);
                     setServices(newList);
                     //console.log("services: ", newList);
                   }
@@ -342,7 +342,7 @@ const ListingSettings = () => {
                 type='radio'
                 name='pricing'
                 value='High'
-                checked={priceOptions == "High"}
+                checked={priceOptions === "High"}
                 onChange={(e) => {
                   setPriceOptions(e.target.value);
                   //console.log("Price Options: ", e.target.value);
@@ -355,7 +355,7 @@ const ListingSettings = () => {
                 type='radio'
                 name='pricing'
                 value='Mid'
-                checked={priceOptions == "Mid"}
+                checked={priceOptions === "Mid"}
                 onChange={(e) => {
                   setPriceOptions(e.target.value);
                   //console.log("Price Options: ", e.target.value);
@@ -368,7 +368,7 @@ const ListingSettings = () => {
                 type='radio'
                 name='pricing'
                 value='Cheap'
-                checked={priceOptions == "Cheap"}
+                checked={priceOptions === "Cheap"}
                 onChange={(e) => {
                   setPriceOptions(e.target.value);
                   //console.log("Price Options: ", e.target.value);
