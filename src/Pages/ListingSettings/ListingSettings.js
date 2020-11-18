@@ -149,7 +149,8 @@ const ListingSettings = () => {
 
   const handleSubmit = () => {
     let priceOpt = priceOptions;
-    if (otherPriceOptions.toLowerCase() === "i'll price") {
+    if (otherPriceOptions.toLowerCase() === "i'll price") 
+    {
       priceOpt = null;
     }
 
@@ -157,16 +158,20 @@ const ListingSettings = () => {
     let compPriceVal = incrCompPrice;
     if(incrCompPrice !== undefined || "")
     {
-      if (incrCompPrice[0] === "$") {
+      if (incrCompPrice[0] === "$") 
+      {
         sign = "dollar";
         compPriceVal = incrCompPrice.slice(1);
-      } else if (incrCompPrice[incrCompPrice.length - 1] === "%") {
+      } 
+      else if (incrCompPrice[incrCompPrice.length - 1] === "%") 
+      {
         sign = "percent";
         compPriceVal = incrCompPrice.slice(0, -1);
       }
     }
 
     let mercari_tags = mercariTags.map((e) => e.trim());
+
     var ListSettingsObj = {
       services: services,
       priceOptions: priceOpt,
