@@ -30,7 +30,7 @@ class header extends Component {
       await Axios.get("/payment/rates")
         .then((res) => {
           //rates = res.data[res.data.length - 1];
-          this.setState({ rates: res.data[res.data.length - 1] });
+          this.setState({ rates: res.data });
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 

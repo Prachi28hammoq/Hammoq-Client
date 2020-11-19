@@ -86,7 +86,7 @@ export default class extends Component {
   handelMessageNotSeen() {
     var msgSeenTemp = [];
     var data = this.state.data;
-    console.log(data,'dataaaaaaaaaa')
+    console.log(data, "dataaaaaaaaaa");
     if (data.messageSeen) {
       for (let i = 0; i < data.messageSeen.length; i++) {
         if (data.messageSeen[i].client == false) {
@@ -154,8 +154,12 @@ export default class extends Component {
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
-
+  
+  componentWillUnmount() {
+    localStorage.setItem("prodMsgId", "");
+  }
   componentDidMount = () => {
+    localStorage.setItem("prodMsgId", this.props.match.params.id);
     Axios.get("/template")
       .then(({ data }) => this.setState({ templates: data.templates }))
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -173,7 +177,7 @@ export default class extends Component {
       const { images, data } = this.state;
       this.setState({ data: res.data.products[0] });
 
-      this.handelMessageNotSeen()
+      this.handelMessageNotSeen();
 
       if (res.data.products[0].extraMeasures) {
         this.state.extraMeasures = JSON.parse(
@@ -286,15 +290,15 @@ export default class extends Component {
         Axios.get("/payment/rates")
           .then((res) => {
             //rates = res.data[res.data.length - 1];
-            this.setState({ rates: res.data[res.data.length - 1] });
+            this.setState({ rates: res.data });
 
             Axios.get("/clientdetails")
               .then(({ data }) => {
                 this.setState({ bal: data.balance });
-                if (this.state.rates.basic / 100 > this.state.bal) {
+                if (this.state.rates.list / 100 > this.state.bal) {
                   this.setState({ basiccheck: false });
                 }
-                if (this.state.rates.advance / 100 > this.state.bal) {
+                if (this.state.rates.crosslist / 100 > this.state.bal) {
                   this.setState({ advancecheck: false });
                 }
 
