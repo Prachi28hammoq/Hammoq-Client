@@ -27,6 +27,9 @@ else if(process.env.REACT_APP_STAGE === 'production')
 	assetsURL = "https://app.hammoq.com/assets/";
 }
 
+baseURL = "https://devcust.avoidpoints.com/api";
+assetsURL = "https://devcust.avoidpoints.com/assets/";
+
 Axios.defaults.baseURL = baseURL + "/client";
 
 export default Axios;

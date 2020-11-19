@@ -1,0 +1,62 @@
+#mypopover{
+    /* float: right; */
+    right: 0;
+    position: fixed;
+    /* border-radius: 20px; */
+    bottom: 0;
+    /* margin-right: 15%;  */
+    /* margin-bottom: 2%; */
+    /* width: 8%; */
+  }
+  /* Button .fa{
+      font-size: 100px;
+      align-items: center;
+  } */
+/* Button .user-img{
+  float: left;
+  margin: 5px;
+  border-radius: 3px;
+  background-color: grey;
+  padding: 20px;
+  
+} */
+#mypopover .fa{
+    text-align: center;
+    vertical-align: center;
+    align-items: center;
+    align-content: center;
+float: center;
+  font-size: 25px;
+  line-height: 50px;
+  padding-top: 10px;
+}
+.usertop .fa{
+  float: right;  
+  font-size: 25px;
+  line-height: 50px;
+  padding-top: 10px;
+}
+#mypopover{
+  background-color: #edf4fb;
+  outline: none !important;
+  text-decoration: none;
+  color: black;
+  border: none;
+  display: inline-block;
+  text-align: left;
+  font-size: 15px;
+  line-height: 50px; 
+}
+.search-text{
+  outline: none;
+  border: none;
+  padding: 10px;
+}
+#chatpopover{
+  overflow: hidden;
+  max-height: 20%;
+}
+
+/* ChatList{
+
+} */

@@ -26,11 +26,13 @@ import {
   Config,
   AcceptUrl
 } from "./Pages";
-import Message from './Pages/Messages/message'
+// import Message from './Pages/Messages/message'
+import ChatMessages from './Pages/Messages/ChatMessages';
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
 import OnBoarding from "./Pages/OnBoarding/OnBoarding";
+import PopUpMessage from "./Pages/Messages/PopUpMessage";
 
 
 const Routes = withRouter((props) => {
@@ -67,7 +69,11 @@ const Routes = withRouter((props) => {
             <Route exact path="/transactions" component={Transactions} />
             <Route exact path="/setting" component={Settings} />
             <Route exact path="/client/ebay/:id" component={AcceptUrl} />
-            <Route exact path="/messages" component ={Message} />
+            {/* <Route exact path="/messages" component ={Message} /> */}
+            {/* <Route exact path="/messages" component ={ChatMessages} /> */}
+            <Route exact path="/messages" component ={PopUpMessage} />
+
+
             <Route path="/" component={() => <Redirect to="/products/submitted" />} />
           </Switch>
         ) : (
@@ -95,6 +101,7 @@ function App() {
     <div>
       <Router>
         <Routes />
+        <PopUpMessage/>
       </Router>
     </div>
   );

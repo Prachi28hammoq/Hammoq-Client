@@ -34,4 +34,5 @@ else if(process.env.REACT_APP_STAGE === 'production')
 	});
 }
 
-module.exports.socket = socket
+// module.exports.socket = socket;
+export default socket;

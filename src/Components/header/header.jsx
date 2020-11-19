@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import message from '../../Pages/Messages/message'
+// import message from '../../Pages/Messages/message'
+import ChatMessages from '../../Pages/Messages/ChatMessages';
 //import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
