@@ -140,7 +140,7 @@ class ChatMessages extends React.Component {
                 // className="form-control"
                 placeholder="write a message"
                 value={this.state.message}
-                style={{ marginBottom: "0" }}
+                style={{ marginBottom: "0", color:"black"}}
               />
               <button
                 className="msg_send_btn"
