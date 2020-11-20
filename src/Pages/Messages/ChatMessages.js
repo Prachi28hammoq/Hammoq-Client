@@ -6,6 +6,7 @@ import socket from "../../services/socket";
 import Axios from "../../services/Axios";
 //modal
 import Modal from "react-bootstrap/Modal";
+import { Link } from "react-router-dom";
 // import SendMsg from "./SendMsg";
 class ChatMessages extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class ChatMessages extends React.Component {
       }
     });
     socket.on("newmessage", (data) => {
-      console.log(data, "message__btn");
+      //console.log(data, "message__btn");
       var messages = this.state.messages; ///
       messages.push(data.message);
       this.setState({ messages: messages });
@@ -40,14 +41,19 @@ class ChatMessages extends React.Component {
     this.setState({ roomId: this.props.roomId, canMessageSend: true });
   };
   handleMessageSend = () => {
-    let roomId = this.props.roomId;
-    const message = {
-      text: this.state.message,
-      date: moment(),
-      senderName: this.props.agentName,
-      tag: "client"
-    };
-    socket.emit("newmessage", message, roomId);
+    //console.log(this.props.match.params.id,'idddddddddddd')
+    if (this.state.message.trim() != "") {
+      const productId = localStorage.getItem("prodMsgId");
+      let roomId = this.props.roomId;
+      const message = {
+        text: this.state.message.trim(),
+        date: moment(),
+        senderName: this.props.agentName,
+        tag: "client",
+        productId,
+      };
+      socket.emit("newmessage", message, roomId);
+    }
     this.setState({ message: "" });
   };
   handleChange = (event) => {
@@ -56,7 +62,7 @@ class ChatMessages extends React.Component {
   };
 
   render() {
-    console.log(this.state.messages, this.props, "render messages");
+    //console.log(this.state.messages, this.props, "render messages");
     return (
       <Modal
         show={this.props.modalOpen}
@@ -87,6 +93,13 @@ class ChatMessages extends React.Component {
                       <span className="time">
                         {moment(data.date).format("lll")}
                       </span>
+                      {data.productId && (
+                        <small>
+                          <Link to={`/edit/${data.productId}`}>
+                            for Product
+                          </Link>
+                        </small>
+                      )}
                     </div>
                   </div>
                 );
@@ -98,6 +111,13 @@ class ChatMessages extends React.Component {
                       <span className="time">
                         {moment(data.date).format("ll")}
                       </span>
+                      {data.productId && (
+                        <small>
+                          <Link to={`/edit/${data.productId}`}>
+                            for Product
+                          </Link>
+                        </small>
+                      )}
                     </div>
                   </div>
                 );
@@ -113,7 +133,7 @@ class ChatMessages extends React.Component {
                   // className="form-control"
                   placeholder="write a message"
                   value={this.state.message}
-                  style={{ marginBottom: "0" }}
+                  style={{ marginBottom: "0", bottom: "0", padding: "5" }}
                 />
                 <button
                   className="msg_send_btn"
@@ -122,13 +142,14 @@ class ChatMessages extends React.Component {
                   style={{
                     position: "absolute",
                     border: "0",
-                    top: "19px",
+                    //top: "19px",
                     right: "17px",
                     cursor: "pointer",
                     outline: "0",
                     bottom: "0",
-                    paddingBottom: "2px",
-                    top: "330px",
+                    padding: "5px",
+
+                    // top: "330px",
                   }}
                   // style={{marginBottom: "0", padding:"12px", outline:"none", border:"none", backgroundColor:"#007bff"}}
                 >

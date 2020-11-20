@@ -171,7 +171,7 @@ img{
   left: 5%;
   position: absolute;
   border: 0;
-  top: 330px;
+  /* //top: 330px; */
   background: #F9FBFF;
   color: black;
   /* height: 10px; */

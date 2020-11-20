@@ -157,7 +157,7 @@ class Chart extends Component {
         datas.push(data[data.length - 1].list);
         this.setState({
           chartData: {
-            labels: ["Basic", "Advanced", "Listing"],
+            labels: ["Basic", "d", "Listing"],
             datasets: [
               {
                 label: "Rates",

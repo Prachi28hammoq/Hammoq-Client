@@ -125,7 +125,7 @@ class BasicForm extends Component {
     Axios.get("/payment/rates")
       .then((res) => {
         //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length - 1] });
+        this.setState({ rates: res.data});
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -252,7 +252,7 @@ class BasicForm extends Component {
     //console.log(y);
 
     var mplace = true;
-
+//console.log( this.state.others,'othersss')
     if (
       this.state.Ebay == true ||
       this.state.Poshmark == true ||
@@ -268,7 +268,7 @@ class BasicForm extends Component {
 
     var flag = 0;
     this.state.othersstate.forEach((os) => {
-      if (os == true) {
+      if (os == 'true') {
         flag = 1;
       }
     });
@@ -279,7 +279,8 @@ class BasicForm extends Component {
     ) {
       flag = 1;
     }
-    if (mplace == true && flag == 0) {
+    
+    if (mplace == 'true' && flag == 0) {
       return alert("Please choose any marketplace to list the product");
     }
 
@@ -296,19 +297,18 @@ class BasicForm extends Component {
       cnt++;
     }
     this.state.othersstate.forEach((os) => {
-      if (os == true) {
+      if (os == 'true') {
         cnt++;
-        console.log(os);
       }
     });
     var rate1 = 0,
       rate2 = 0,
       rate3 = 0;
     var total = 0;
-    rate1 = (this.state.rates.basic / 100) * 1;
-    rate2 = (this.state.rates.advance / 100) * (cnt - 1);
+    rate1 = (this.state.rates.list / 100) * 1;
+    rate2 = (this.state.rates.crossdelist / 100) * (cnt - 1);
     if (this.state.delist == true) {
-      rate3 = (this.state.rates.list / 100) * (cnt - 1);
+      rate3 = (this.state.rates.delist / 100) * (cnt - 1);
     }
     total = rate1 + rate2 + rate3;
     console.log(this.state.bal);
