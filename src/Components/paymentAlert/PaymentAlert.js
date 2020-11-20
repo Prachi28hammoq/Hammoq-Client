@@ -7,7 +7,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import ReCAPTCHA from "react-google-recaptcha";
-
+import { BsFillTrashFill } from "react-icons/bs";
+import Axios from "../../services/Axios";
 export default function AlertDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [amount, setAmount] = React.useState(null);
@@ -28,6 +29,20 @@ export default function AlertDialog(props) {
     setCaptchaValue(value);
   };
 
+  const handelCardDelete = async (cardId) => {
+    const confirm = window.confirm(
+      "Are you sure, you want to remove this card?"
+    );
+    if (confirm) {
+      const response = await Axios.delete(`/payment/card/${cardId}`);
+      if (response.data.success == true) {
+        window.alert("Deleted");
+        window.location.reload();
+      } else {
+        window.alert("Something went wrong");
+      }
+    }
+  };
   // specifying verify callback
   const updatePayment = () => {
     setOpen(true);
@@ -54,32 +69,34 @@ export default function AlertDialog(props) {
         </DialogTitle>
         <DialogContent>
           <div>
-            {props.savedCards && props.savedCards.map((card) => (
-              <div className="row">
-                <div className="col-2">
-                  <input
-                    type="radio"
-                    name="stripeCard"
-                    value={card.stripe_customer_id}
-                    onChange={(e) => {
-                      setStripeIdValue(e.target.value);
-                    }}
-                  />
+            {props.savedCards &&
+              props.savedCards.map((card) => (
+                <div className="row">
+                  <div className="col-2">
+                    <input
+                      type="radio"
+                      name="stripeCard"
+                      value={card.stripe_customer_id}
+                      onChange={(e) => {
+                        setStripeIdValue(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="col-8">
+                    <p>
+                      {card.card_brand} **** **** **** {card.last_four_digit}{" "}
+                      {card.exp_month}/{card.exp_year[2]}
+                      {card.exp_year[3]}
+                    </p>
+                  </div>
+                  <div
+                    className="col-2"
+                    onClick={() => handelCardDelete(card._id)}
+                  >
+                    <BsFillTrashFill />
+                  </div>
                 </div>
-                <div className="col-8">
-                  <p>
-                    {card.card_brand} **** **** **** {card.last_four_digit}{" "}
-                    {card.exp_month}/{card.exp_year[2]}
-                    {card.exp_year[3]}
-                  </p>
-                </div>
-                <div className='col-2'>
-                    <button>
-                      ...
-                    </button>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
           <DialogContentText id="alert-dialog-description">
             Please choose an amount to continue:
