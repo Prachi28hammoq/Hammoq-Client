@@ -245,7 +245,7 @@ export default class extends Component {
     Axios.get("/payment/rates")
       .then((res) => {
         //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length - 1] });
+        this.setState({ rates: res.data});
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
@@ -482,10 +482,10 @@ export default class extends Component {
       rate2 = 0,
       rate3 = 0;
     var total = 0;
-    rate1 = (this.state.rates.basic / 100) * 1;
-    rate2 = (this.state.rates.advance / 100) * (cnt - 1);
+    rate1 = (this.state.rates.list / 100) * 1;
+    rate2 = (this.state.rates.delist / 100) * (cnt - 1);
     if (this.state.data.delist.check == true) {
-      rate3 = (this.state.rates.list / 100) * (cnt - 1);
+      rate3 = (this.state.rates.crosslist / 100) * (cnt - 1);
     }
     total = rate1 + rate2 + rate3;
     console.log(rate1);
