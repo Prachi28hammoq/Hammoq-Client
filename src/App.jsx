@@ -101,7 +101,7 @@ function App() {
     <div>
       <Router>
         <Routes />
-        <PopUpMessage/>
+        {localStorage.getItem("token") && <PopUpMessage/>}
       </Router>
     </div>
   );

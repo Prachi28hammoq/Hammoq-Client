@@ -13,11 +13,9 @@ class PopUpMessage extends React.Component {
   constructor() {
     super();
     this.state = {
-      clients: [],
       messages: [],
       message: "",
       roomId: "",
-      agentName: "",
       canMessageSend: false,
       //anchorEl: null,
       popoverOpen: false,
@@ -26,32 +24,14 @@ class PopUpMessage extends React.Component {
       modalOpen: false,
       search:"",
     };
-    // socket.on("messages", (data) => {
-    //   if (data) {
-    //     this.setState({ messages: data.messages });
-    //   }
-    // });
-    // socket.on("newmessage", (data) => {
-    //   var messages = this.state.messages; ///
-    //   messages.push(data.message);
-    //   this.setState({ messages: messages });
-    // });
   }
 
   componentDidMount = async () => {
     const token = localStorage.getItem("token");
     const decoded = jwt_decode(token);
-    const agentid = decoded._doc._id;
-    //const response = await Axios.get(`/client/allocated/${agentid}`);
-    //this.setState({ clients: response.data });
-    ///////////////////
-    const response1 = await Axios.get(`/agentdetail/${agentid}`);
-    this.setState({ agentName: response1.data.username });
+    var id = decoded._doc._id;
+    this.setState({ roomId:id });
   };
-  // componentDidUpdate() {
-  //   var div = document.getElementById("msg_history");
-  //   div.scrollTop = div.scrollHeight - div.clientHeight;
-  // }
 
   handleRoomJoin = (id) => {
     this.setState({
@@ -105,15 +85,7 @@ class PopUpMessage extends React.Component {
     });
   };
 
-  handleUserList = async () => {
-    console.log("user list");
-    const token = localStorage.getItem("token");
-    const decoded = jwt_decode(token);
-    const agentid = decoded._doc._id;
-    const response = await Axios.get(`/client/allocated/${agentid}`);
-    this.setState({ clients: response.data });
-    //////////////////////////////////////////////
-  };
+
 
   render() {
     const { popoverOpen } = this.state;
@@ -140,7 +112,6 @@ class PopUpMessage extends React.Component {
           modalOpen={this.state.modalOpen}
           handleModalOpen={this.handleModalOpen}
           roomId={this.state.roomId}
-          agentName={this.state.agentName}
         >
           <div
             id="chatpopover"
