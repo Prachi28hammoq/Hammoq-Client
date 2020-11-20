@@ -98,7 +98,7 @@ class settings extends Component {
     if(this.state.savedCards.length>0){
       return this.setState({ open: true });
     }else{
-      window.open('/addpayment','self')
+      window.open('/addpayment','_self')
     }
   };
 

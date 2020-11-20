@@ -54,7 +54,7 @@ export default function AlertDialog(props) {
         </DialogTitle>
         <DialogContent>
           <div>
-            {props.savedCards.map((card) => (
+            {props.savedCards && props.savedCards.map((card) => (
               <div className="row">
                 <div className="col-2">
                   <input
@@ -66,12 +66,17 @@ export default function AlertDialog(props) {
                     }}
                   />
                 </div>
-                <div className="col-10">
+                <div className="col-8">
                   <p>
                     {card.card_brand} **** **** **** {card.last_four_digit}{" "}
                     {card.exp_month}/{card.exp_year[2]}
                     {card.exp_year[3]}
                   </p>
+                </div>
+                <div className='col-2'>
+                    <button>
+                      ...
+                    </button>
                 </div>
               </div>
             ))}
