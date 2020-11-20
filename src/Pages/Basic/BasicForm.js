@@ -19,13 +19,14 @@ class BasicForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      savedCards: [],
       username: "",
       password: "",
       users: [],
       website: "",
       otherssignal: false,
       loading: false,
-
+      offeredRate: {},
       input1: localStorage.getItem("condition") || "",
       input2: "",
       input3: 0,
@@ -108,7 +109,7 @@ class BasicForm extends Component {
           this.setState({ others });
 
           const otherss = [...this.state.othersstate];
-         
+
           otherss.push(localStorage.getItem(d) || false);
           console.log(otherss, "otherssssssssssssssssssssssss");
 
@@ -134,7 +135,13 @@ class BasicForm extends Component {
         console.log({ data }, "client user value check");
         console.log(data, "client detail");
         if (parseInt(data.balance) < 5) this.setState({ open: true });
-        this.setState({ bal: data.balance, client_id: data._id });
+        this.setState({
+          bal: data.balance,
+          client_id: data._id,
+          savedCards: data.savedCards,
+          cid: data._id,
+          offeredRate: data.offeredRate || {},
+        });
         this.setState({ cid: data._id }, () =>
           localStorage.setItem("cid", this.state.cid)
         );
@@ -268,7 +275,7 @@ class BasicForm extends Component {
 
     var flag = 0;
     this.state.othersstate.forEach((os) => {
-      if (os == 'true') {
+      if (os == "true") {
         flag = 1;
       }
     });
@@ -279,7 +286,7 @@ class BasicForm extends Component {
     ) {
       flag = 1;
     }
-    if (mplace == 'true' && flag == 0) {
+    if (mplace == "true" && flag == 0) {
       return alert("Please choose any marketplace to list the product");
     }
 
@@ -296,7 +303,7 @@ class BasicForm extends Component {
       cnt++;
     }
     this.state.othersstate.forEach((os) => {
-      if (os == 'true') {
+      if (os == "true") {
         cnt++;
         console.log(os);
       }
@@ -394,7 +401,9 @@ class BasicForm extends Component {
 
       .then((response) => {
         console.log(response, "data append");
-        let productId =response.data.products ?  response.data.products[response.data.products.length - 1]._id : response.data.products
+        let productId = response.data.products
+          ? response.data.products[response.data.products.length - 1]._id
+          : response.data.products;
         if (this.state.templateId) {
           Axios.post(
             "/producttemplate",
@@ -408,7 +417,7 @@ class BasicForm extends Component {
             console.log(response, "user data user");
           });
         }
-       window.open("/basic", "_self");
+        window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
@@ -530,27 +539,20 @@ class BasicForm extends Component {
       this.setState({ [name]: value });
     }
   };
-  
-  handleOnClick = (o,i) => {
-    
-      // const ot = [...othersstate];
-      // ot[i] = !ot[i];
-      if(this.state.othersstate[i] == "false"){
-        this.state.othersstate[i] = "true"
-      } else if(this.state.othersstate[i] == "true"){
-        this.state.othersstate[i] = "false"
-      }
-      localStorage.setItem(
-        o,
-        this.state.othersstate[i]
-      );
-      this.setState({ othersstate: this.state.othersstate});
-     
-  
-  }
+
+  handleOnClick = (o, i) => {
+    // const ot = [...othersstate];
+    // ot[i] = !ot[i];
+    if (this.state.othersstate[i] == "false") {
+      this.state.othersstate[i] = "true";
+    } else if (this.state.othersstate[i] == "true") {
+      this.state.othersstate[i] = "false";
+    }
+    localStorage.setItem(o, this.state.othersstate[i]);
+    this.setState({ othersstate: this.state.othersstate });
+  };
 
   handleBulkUpload = async (e) => {
-  
     const { images, cid } = this.state;
     var imgobj = [];
     const files = e.target.files;
@@ -624,21 +626,22 @@ class BasicForm extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  updatePayment = async (amount) => {
+  updatePayment = async (amount,stripeId) => {
     let body = {
       customer_id: this.state.client_id,
       amount: amount,
+      stripeId:stripeId
     };
     this.setState({ open: false });
     await Axios.post("/payment/payment", body)
       .then(({ data }) => {
-        console.log(data,'update mpadfjafjk')
+        console.log(data, "update mpadfjafjk");
         if (data.success) {
-          alert(data.msg)
-          window.open('/basic','_self')
+          alert(data.msg);
+          window.open("/basic", "_self");
         } else {
-          alert("Credit Card is Not added") 
-          window.open('/addpayment',"_self")
+          alert("Credit Card is Not added");
+          window.open("/addpayment", "_self");
         }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -671,6 +674,7 @@ class BasicForm extends Component {
           open={this.state.open}
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
+          savedCards={this.state.savedCards}
         />
         <Link to="/products/submitted">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -884,8 +888,12 @@ class BasicForm extends Component {
                       accept="image/*"
                       className="custom-file-input"
                       multiple
-                      onChange={(e)=>{this.handleBulkUpload(e)}}
-                      onClick={(e)=>{console.log(e,'onclick')}}
+                      onChange={(e) => {
+                        this.handleBulkUpload(e);
+                      }}
+                      onClick={(e) => {
+                        console.log(e, "onclick");
+                      }}
                     ></input>
                     <label
                       className="custom-file-label"
@@ -893,7 +901,6 @@ class BasicForm extends Component {
                     >
                       Bulk Upload Images
                     </label>
-                    
                   </div>
                 </div>
               </div>
@@ -995,7 +1002,6 @@ class BasicForm extends Component {
                   placeholder="Cost of Goods"
                   className="form-control"
                   step="0.01"
-
                 />
               </div>
 
@@ -1149,22 +1155,29 @@ class BasicForm extends Component {
                 ) : null}
                 {othersbool
                   ? others.map((o, i) => {
-                    console.log(this.state.othersstate[i],i,'othherbadkjfkjb')
+                      console.log(
+                        this.state.othersstate[i],
+                        i,
+                        "othherbadkjfkjb"
+                      );
                       return (
-                        <div className="col-12 col-lg-6"  onClick = {() => this.handleOnClick(o,i)}>
-                          <div className="form-check"   >
-                            {this.state.othersstate[i] == "true" ?   <input
-                              className="form-check-input"
-                              type="checkbox"
-                             
-                              checked
-                            
-                            /> :   <input
-                            className="form-check-input"
-                            type="checkbox"
-                       
-                          /> }
-                          
+                        <div
+                          className="col-12 col-lg-6"
+                          onClick={() => this.handleOnClick(o, i)}
+                        >
+                          <div className="form-check">
+                            {this.state.othersstate[i] == "true" ? (
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                checked
+                              />
+                            ) : (
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                              />
+                            )}
 
                             <label
                               className="form-check-label"
