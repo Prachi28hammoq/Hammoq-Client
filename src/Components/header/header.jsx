@@ -86,7 +86,7 @@ class header extends Component {
           open={this.state.open}
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
-       />*/}
+       /> */}
   
         <a href="/" className="navbar-brand">
           <img src={Logo} alt="hammock" height="40px" />
