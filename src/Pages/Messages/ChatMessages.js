@@ -7,7 +7,6 @@ import Axios from "../../services/Axios";
 //modal
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-// import SendMsg from "./SendMsg";
 class ChatMessages extends React.Component {
   constructor(props) {
     super(props);
@@ -65,19 +64,20 @@ class ChatMessages extends React.Component {
     //console.log(this.state.messages, this.props, "render messages");
     return (
       <Modal
-        show={this.props.modalOpen}
-        onHide={this.props.handleModalOpen}
-        style={{
-          top: "100px",
-          left: "1050px",
-          width: "22%",
-          borderRadius: "10px",
-        }}
+      className="modal-side modal-bottom-right modal-fade-right"
+      size="sm"
+      show={this.props.modalOpen}
+      onHide={this.props.handleModalOpen}
+      style={{
+        right:"0",
+        borderRadius: "10px",
+        top: "38%",
+        bottom:"0",
+        left: "38%",
+        transform: "translate(-38%, 38%) !important",
+      }}
       >
-        <div
-          className="main-container"
-          style={{ height: "60vh", borderRadius: "10px" }}
-        >
+        <div className="main-container">
           <div className="msg-header">
             <div className="header-icon">
               <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
@@ -89,6 +89,7 @@ class ChatMessages extends React.Component {
                 return (
                   <div className="outgoing-chats">
                     <div className="outgoing-chats-msg">
+                      <p>hello</p>
                       <p>{data.text}</p>
                       <span className="time">
                         {moment(data.date).format("lll")}
@@ -105,9 +106,10 @@ class ChatMessages extends React.Component {
                 );
               } else {
                 return (
-                  <div className="received-img">
-                    <div class="received-img-inbox">
-                      {data.text}
+                  <div className="received-chat">
+                    <div class="received-chat-inbox">
+                      <p>Hello</p>
+                      <p>{data.text}</p>
                       <span className="time">
                         {moment(data.date).format("ll")}
                       </span>
@@ -130,10 +132,13 @@ class ChatMessages extends React.Component {
                   type="text"
                   id="text"
                   onChange={(e) => this.handleChange(e)}
-                  // className="form-control"
                   placeholder="write a message"
                   value={this.state.message}
-                  style={{ marginBottom: "0", bottom: "0", padding: "5" }}
+                  style={{ 
+                    marginBottom: "5px", 
+                    bottom: "0", 
+                    // padding: "5" 
+                  }}
                 />
                 <button
                   className="msg_send_btn"
@@ -142,19 +147,16 @@ class ChatMessages extends React.Component {
                   style={{
                     position: "absolute",
                     border: "0",
-                    //top: "19px",
-                    right: "17px",
+                    right: "13px",
                     cursor: "pointer",
                     outline: "0",
                     bottom: "0",
-                    padding: "5px",
-
-                    // top: "330px",
+                    margin:"2px",
+                    padding: "15px 10px 10px 10px",
+                    background:"none",
                   }}
-                  // style={{marginBottom: "0", padding:"12px", outline:"none", border:"none", backgroundColor:"#007bff"}}
                 >
                   <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-                  {/* <i class="fa fa-paper-plane-o" aria-hidden="true"></i> */}
                 </button>
               </div>
             </div>

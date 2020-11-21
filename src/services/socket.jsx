@@ -21,8 +21,10 @@ if (process.env.REACT_APP_STAGE === "devlocal") {
     transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
   });
 }
-const socket = socketIOClient("http://localhost:8000/", {
-  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
+// const socket = socketIOClient("http://localhost:8000/", {
+//   transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
+const socket = socketIOClient("https://devcust.avoidpoints.com", {
+    transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
 });
 // module.exports.socket = socket;
 export default socket;
