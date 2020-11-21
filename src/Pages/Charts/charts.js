@@ -152,9 +152,9 @@ class Chart extends Component {
     Axios.get("/payment/rates")
       .then(({ data }) => {
         var datas = [];
-        datas.push(data.list);
-        datas.push(data.crosslist);
-        datas.push(data.delist);
+        datas.push(data[data.length - 1].basic);
+        datas.push(data[data.length - 1].advance);
+        datas.push(data[data.length - 1].list);
         this.setState({
           chartData: {
             labels: ["Basic", "Advanced", "Listing"],

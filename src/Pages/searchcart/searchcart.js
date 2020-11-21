@@ -72,7 +72,7 @@ class Searchcart extends Component {
     Axios.get("/payment/rates")
       .then((res) => {
         //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data });
+        this.setState({ rates: res.data[res.data.length-1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -298,10 +298,10 @@ class Searchcart extends Component {
                 </div>
                 <div className="col">
                   <br />
-                  First site Listing: ${rates.list / 100}
+                  First site Listing: ${rates.basic / 100}
                   <br /> <br />
-                  Other site Listing: ${rates.crosslist / 100} <br /> <br />
-                  Delisting Listing: ${rates.delist / 100} <br /> <br />
+                  Other site Listing: ${rates.advance / 100} <br /> <br />
+                  Delisting Listing: ${rates.list / 100} <br /> <br />
                 </div>
               </div>
             </div>
