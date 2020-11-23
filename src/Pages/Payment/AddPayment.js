@@ -174,7 +174,7 @@ class AddPayment extends Component {
                             Payment & Actions
                           </h4>
                           <label>
-                            To change payment card please add a credit card,
+                            To add/change payment card please add a credit card,
                             <br />{" "}
                             {localStorage.getItem("paymentadded") == "true"
                               ? "$1 will be deducted"

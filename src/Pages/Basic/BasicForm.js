@@ -328,7 +328,15 @@ class BasicForm extends Component {
     console.log(this.state.bal);
 
     if (this.state.bal - total < 0) {
-      return alert("Insufficient balance");
+      if (this.state.savedCards.length > 0) {
+        this.setState({ open: true });
+        window.alert('Insufficient balance')
+      }else{
+        window.alert(
+          "Low Payment and No card added, Please add a card and then add payment.."
+        );
+        window.open("/addpayment", "_self");
+      }
     }
 
     console.log(y, "chening y value");

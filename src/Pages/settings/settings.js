@@ -177,7 +177,7 @@ class settings extends Component {
             ></i>
           </div>
           <div className="col-6">
-            <h6 className="paddingfornames">Change Payment</h6>
+            <h6 className="paddingfornames">Add Credit Card</h6>
           </div>
           <div className="col-3">
             <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
@@ -186,7 +186,7 @@ class settings extends Component {
         <Link className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              className="fa fa-credit-card fa-2x colorIt"
+              className="fa fa-money fa-2x colorIt"
               id="backgroundIt"
             ></i>
           </div>
