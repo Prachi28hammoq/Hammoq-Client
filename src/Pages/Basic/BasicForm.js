@@ -134,7 +134,10 @@ class BasicForm extends Component {
       .then(({ data }) => {
         console.log({ data }, "client user value check");
         console.log(data, "client detail");
-        if (parseInt(data.balance) < 5) this.setState({ open: true });
+        if (parseInt(data.balance) < 5 && data.savedCards.length>0){ this.setState({ open: true })}else{
+          window.alert('Low Payment and No card added, Please add a card and then add payment..')
+          window.open('/addpayment','_self')
+        }
         this.setState({
           bal: data.balance,
           client_id: data._id,
