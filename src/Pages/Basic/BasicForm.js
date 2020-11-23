@@ -126,7 +126,7 @@ class BasicForm extends Component {
     Axios.get("/payment/rates")
       .then((res) => {
         //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length-1] });
+        this.setState({ rates: res.data[res.data.length - 1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -134,9 +134,13 @@ class BasicForm extends Component {
       .then(({ data }) => {
         console.log({ data }, "client user value check");
         console.log(data, "client detail");
-        if (parseInt(data.balance) < 5 && data.savedCards.length>0){ this.setState({ open: true })}else{
-          window.alert('Low Payment and No card added, Please add a card and then add payment..')
-          window.open('/addpayment','_self')
+        if (parseInt(data.balance) < 5 && data.savedCards.length > 0) {
+          this.setState({ open: true });
+        }else if(parseInt(data.balance) < 5 && data.savedCards.length == 0) {
+          window.alert(
+            "Low Payment and No card added, Please add a card and then add payment.."
+          );
+          window.open("/addpayment", "_self");
         }
         this.setState({
           bal: data.balance,
@@ -629,11 +633,11 @@ class BasicForm extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  updatePayment = async (amount,stripeId) => {
+  updatePayment = async (amount, stripeId) => {
     let body = {
       customer_id: this.state.client_id,
       amount: amount,
-      stripeId:stripeId
+      stripeId: stripeId,
     };
     this.setState({ open: false });
     await Axios.post("/payment/payment", body)
