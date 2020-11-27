@@ -92,6 +92,7 @@ export default class extends Component {
                       onChange={this.handleChange}
                       className="form-control"
                       placeholder="Enter template name  "
+                      maxLength="12"
                     />
                   </div>
                   <button type="submit" className="btn btn-primary btn-block">
@@ -122,8 +123,8 @@ export default class extends Component {
                       className="card template-card bg-light"
                     >
                       <div className="card-body d-flex align-items-center c-pointer text-center py-4 ">
-                        <h5 className="card-text text-center p-3">
-                          {template.name}
+                        <h5 className="card-text text-center p-1">
+                          {template.name.length>8?template.name.substring(0,8)+'...':template.name}
                         </h5>
                       </div>
                     </Link>
