@@ -19,10 +19,7 @@ class PopUpMessage extends React.Component {
       canMessageSend: false,
       //anchorEl: null,
       popoverOpen: false,
-      // chatpopOpen: false,
-      // modal
       modalOpen: false,
-      search:"",
     };
   }
 
@@ -46,36 +43,8 @@ class PopUpMessage extends React.Component {
     this.setState({ message: event.target.value });
   };
 
-  // handleMessageSend = () => {
-  //   let roomId = this.state.roomId;
-  //   const message = {
-  //     text: this.state.message,
-  //     date: moment(),
-  //     senderName: this.state.agentName,
-  //     tag: "agent",
-  //   };
-  //   socket.emit("newmessage", message, roomId);
-  //   this.setState({ message: "" });
-  // };
-
-  // handleClick = () => {
-
-  // }
-
-  updateSearch= event =>{
-    this.setState({search:event.target.value});
-}
 
 
-  togglePopover = () => {
-    this.setState({ popoverOpen: !this.state.popoverOpen });
-  };
-  toggleChatPopover = () => {
-    //var clinetId = ""
-    // let id = this.state.clients.map((client) => client._id)
-    // console.log(id)
-    this.setState({ chatpopOpen: !this.state.chatpopOpen });
-  };
   //modal
   handleModalOpen = () => {
     this.setState((prevState) => {
@@ -88,35 +57,16 @@ class PopUpMessage extends React.Component {
 
 
   render() {
-    const { popoverOpen } = this.state;
-    const { chatpopOpen } = this.state;
-    // console.log(this.state.clients, "hello");
-    // let clients = this.state.clients.filter((client)=> {
-    //   return (
-    //     client.firstName
-    //       .toLowerCase()
-    //       .indexOf(this.state.search.toLowerCase())!== -1
-    //   );
-    // });
-
     return (
-      <div 
-      // style={{overflowY:"Hidden", margin:"0", padding:"65px"}}
-      >
-        <Button id="mypopover" type="button" onClick={this.handleModalOpen} style={{borderRadius:"50px", margin:"20px", width:"10%"}}>
-          {/* <div className="user-img"></div> */}
-          {/* Msg Popup */}
-          <i class="fa fa-comments" aria-hidden="true" style={{fontSize:"50px", alignContent:"center", alignItems:"center", textAlign:"center"}}></i>
+      <div>
+        <Button id="mypopover" type="button" onClick={this.handleModalOpen}>
+          <i class="fa fa-comments" aria-hidden="true"></i>
         </Button>
         <ChatMessages
           modalOpen={this.state.modalOpen}
           handleModalOpen={this.handleModalOpen}
           roomId={this.state.roomId}
         >
-          <div
-            id="chatpopover"
-            style={{ border: "none", outline: "none", textDecoration: "none" }}
-          ></div>
         </ChatMessages>
       </div>
     );

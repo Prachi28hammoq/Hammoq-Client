@@ -29,6 +29,11 @@ else if(process.env.REACT_APP_STAGE === 'production')
 baseURL = "http://localhost:8000/api";
 assetsURL = "http://localhost:8000/assets/";
 
+
+
+// baseURL = "https://devcust.avoidpoints.com/api";
+// assetsURL = "https://devcust.avoidpoints.com/assets/";
+
 Axios.defaults.baseURL = baseURL + "/client";
 
 export default Axios;

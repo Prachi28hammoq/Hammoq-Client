@@ -7,7 +7,6 @@ import Axios from "../../services/Axios";
 //modal
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-// import SendMsg from "./SendMsg";
 class ChatMessages extends React.Component {
   constructor(props) {
     super(props);
@@ -33,6 +32,10 @@ class ChatMessages extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props != prevProps) {
       this.handleRoomJoin();
+    }
+    var div = document.getElementById("msg_history");
+    if (div) {
+      div.scrollTop = div.scrollHeight - div.clientHeight;
     }
   }
   handleRoomJoin = () => {
@@ -65,32 +68,33 @@ class ChatMessages extends React.Component {
     //console.log(this.state.messages, this.props, "render messages");
     return (
       <Modal
+        className="modal-side modal-bottom-right modal-fade-right"
+        size="sm"
         show={this.props.modalOpen}
         onHide={this.props.handleModalOpen}
         style={{
-          top: "100px",
-          left: "1050px",
-          width: "22%",
+          right: "0",
           borderRadius: "10px",
+          top: "38%",
+          bottom: "0",
+          left: "38%",
+          transform: "translate(-38%, 38%) !important",
         }}
       >
-        <div
-          className="main-container"
-          style={{ height: "60vh", borderRadius: "10px" }}
-        >
+        <div className="main-container">
           <div className="msg-header">
             <div className="header-icon">
               <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
             </div>
           </div>
-          <div className="chat-page">
+          <div className="msg_history" id="msg_history">
             {this.state.messages.map((data) => {
               if (data.tag == "client") {
                 return (
-                  <div className="outgoing-chats">
-                    <div className="outgoing-chats-msg">
+                  <div className="outgoing_msg">
+                    <div className="sent_msg">
                       <p>{data.text}</p>
-                      <span className="time">
+                      <span className="time_date">
                         {moment(data.date).format("lll")}
                       </span>
                       {data.productId && (
@@ -105,11 +109,14 @@ class ChatMessages extends React.Component {
                 );
               } else {
                 return (
-                  <div className="received-img">
-                    <div class="received-img-inbox">
-                      {data.text}
-                      <span className="time">
-                        {moment(data.date).format("ll")}
+                  <div className="incoming_msg">
+                    <div class="received_msg received_withd_msg">
+                      <div>
+                        <p>{data.text}</p>
+                      </div>
+
+                      <span className="time_date">
+                        {moment(data.date).format("lll")}
                       </span>
                       {data.productId && (
                         <small>
@@ -123,41 +130,25 @@ class ChatMessages extends React.Component {
                 );
               }
             })}
-
-            <div className="msg-btm">
-              <div className="chat-btm">
-                <input
-                  type="text"
-                  id="text"
-                  onChange={(e) => this.handleChange(e)}
-                  // className="form-control"
-                  placeholder="write a message"
-                  value={this.state.message}
-                  style={{ marginBottom: "0", bottom: "0", padding: "5" }}
-                />
-                <button
-                  className="msg_send_btn"
-                  type="button"
-                  onClick={this.handleMessageSend}
-                  style={{
-                    position: "absolute",
-                    border: "0",
-                    //top: "19px",
-                    right: "17px",
-                    cursor: "pointer",
-                    outline: "0",
-                    bottom: "0",
-                    padding: "5px",
-
-                    // top: "330px",
-                  }}
-                  // style={{marginBottom: "0", padding:"12px", outline:"none", border:"none", backgroundColor:"#007bff"}}
-                >
-                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-                  {/* <i class="fa fa-paper-plane-o" aria-hidden="true"></i> */}
-                </button>
-              </div>
+          </div>
+          <div className="type_msg">
+            <div className="input_msg_write">
+              <input
+                type="text"
+                id="text"
+                onChange={(e) => this.handleChange(e)}
+                placeholder="write a message"
+                value={this.state.message}
+              />
             </div>
+
+            <button
+              className="msg_send_btn"
+              type="button"
+              onClick={this.handleMessageSend}
+            >
+              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </Modal>
