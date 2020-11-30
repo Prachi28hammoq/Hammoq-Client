@@ -168,8 +168,8 @@
   cursor: pointer;
   font-size: 17px;
   position: absolute;
-  top:5px;
-  right:5px
+  top: 5px;
+  right: 5px;
 }
 .messaging {
   padding: 0 0 50px 0;
@@ -181,7 +181,6 @@
 .msg-header {
   height: 50px;
   background: #007df0;
-  border-radius: 5px 5px 7px 7px;
   border: none;
   outline: none;
 }
