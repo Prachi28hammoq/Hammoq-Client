@@ -73,12 +73,13 @@ class ChatMessages extends React.Component {
         show={this.props.modalOpen}
         onHide={this.props.handleModalOpen}
         style={{
-          // right: "20px",
           borderRadius: "10px",
           top: "45%",
-          // bottom: "0",
           left: "35%",
           transform: "translate(-35%, 45%) !important",
+          backdrop: "none",
+          keyboard: false,
+          pointerEvents: 'none'
         }}
       >
         <div className="main-container">

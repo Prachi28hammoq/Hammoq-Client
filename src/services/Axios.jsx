@@ -26,6 +26,7 @@ else if(process.env.REACT_APP_STAGE === 'production')
 	baseURL = "https://app.hammoq.com/api";
 	assetsURL = "https://app.hammoq.com/assets/";
 }
+
 baseURL = "http://localhost:8000/api";
 assetsURL = "http://localhost:8000/assets/";
 
