@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./title.css";
-import Axios from "../../services/Axios";
+//import Axios from "../../services/Axios";
 
 class resetpassword extends Component {
   constructor() {

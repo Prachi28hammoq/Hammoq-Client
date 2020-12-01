@@ -1,7 +1,7 @@
 import React from "react";
 import { v4 as uuid } from "uuid";
 
-export default (props) => (
+const Select = (props) => (
   <div className="form-group mb-4 row align-items-center">
     <div className="col-sm-8">
       <select
@@ -23,3 +23,4 @@ export default (props) => (
     </label>
   </div>
 );
+export default Select;

@@ -29,8 +29,11 @@ class Chart extends Component {
   };
 
   handleChange = (e) => {
-    const { name, value } = e.target;
-    const { date } = this.state;
+    const { 
+      //name, 
+      value 
+    } = e.target;
+    //const { date } = this.state;
     this.setState({date:value});
   };
 
@@ -50,7 +53,7 @@ class Chart extends Component {
         var misc1 = [];
         
 
-        if (data[0][0] == 0) {
+        if (data[0][0] === 0) {
           return alert("No products fount on the selected date");
         }
 
@@ -279,11 +282,11 @@ class Chart extends Component {
         var datas4 = [];
         var label = [];
 
-        if (data.profits[0] == undefined) {
+        if (data.profits[0] === undefined) {
           return alert("Less data some analysis unable to be displayed");
         }
 
-        data.profits.map((d) => {
+        data.profits.forEach((d) => {
           datas4.push(d.profit);
           label.push(d.id);
         });
@@ -293,7 +296,7 @@ class Chart extends Component {
             labels: label,
             datasets: [
               {
-                label: "Profits :: " + "Average product profit: " + data.avg,
+                label: ("Profits :: Average product profit: " + data.avg),
                 data: datas4,
                 backgroundColor: [
                   "rgba(255, 99, 132, 0.6)",
@@ -319,11 +322,11 @@ class Chart extends Component {
         var sold = [];
         var ids = [];
 
-        if (data[0] == undefined) {
+        if (data[0] === undefined) {
           return alert("Less data some analysis unable to be displayed");
         }
 
-        data.map((d) => {
+        data.forEach((d) => {
           created.push(d.created);
           sold.push(d.sold);
           ids.push(d.id);
@@ -370,7 +373,7 @@ class Chart extends Component {
       .then(({ data }) => {
         //console.log(data.avgprofit);
 
-        if (data == undefined) {
+        if (data === undefined) {
           return alert("Less data some analysis unable to be displayed");
         }
         

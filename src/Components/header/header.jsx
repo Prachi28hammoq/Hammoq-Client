@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import message from '../../Pages/Messages/message'
+//import message from '../../Pages/Messages/message'
 //import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
-import PaymentAlert from "../paymentAlert/PaymentAlert";
-import Popover from '@material-ui/core/Popover';
-import Axios, { assetsURL } from "../../services/Axios";
+//import PaymentAlert from "../paymentAlert/PaymentAlert";
+//import Popover from '@material-ui/core/Popover';
+import Axios from "../../services/Axios";
 
 if('token' in localStorage)
 {
@@ -39,7 +39,7 @@ class header extends Component {
       await Axios.get("/clientDetails")
         .then(({ data }) => {
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          if (data.balance == undefined)
+          if (data.balance === undefined)
           {
             this.setState({bal: 0.000, client_id: data._id, customerName : data.firstName,clientMessageSeenCount:data.clientMessageSeenCount});
           }
@@ -83,7 +83,12 @@ class header extends Component {
   };
 
   render() {
-    const { basiccheck, advancecheck, rates, bal } = this.state;
+    const { 
+      //basiccheck, 
+      //advancecheck, 
+      //rates, 
+      bal 
+    } = this.state;
     return (
 
       <nav

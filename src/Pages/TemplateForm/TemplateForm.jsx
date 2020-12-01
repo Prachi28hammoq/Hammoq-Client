@@ -3,10 +3,10 @@ import LeftSection from "./Components/LeftSection";
 import RightSection from "./Components/RightSection";
 import "./Template.css";
 import Axios from "../../services/Axios";
-import { socketCon } from "../../services/Axios";
+//import { socketCon } from "../../services/Axios";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
-import io from "socket.io-client";
+//import io from "socket.io-client";
 import imageCompression from "browser-image-compression";
 
 // const socket = io(socketCon);
@@ -76,7 +76,7 @@ export default class extends Component {
   }
 
   setTemplate = (tempid) => {
-    const { images } = this.state;
+    //const { images } = this.state;
     let { templatename } = this.state;
     // images.forEach((i) => {
     //   i.img = "";
@@ -90,11 +90,11 @@ export default class extends Component {
           this.state.data["mercari"]["check"] = false;
           this.state.data["delist"]["check"] = false;
         } else {
-          Object.entries(data.templates[0].data).map((item) => {
+          Object.entries(data.templates[0].data).forEach((item) => {
             if (
-              this.state.data[`${item[0]}`] == "" ||
-              this.state.data[`${item[0]}`] == undefined ||
-              this.state.data[`${item[0]}`] == null
+              this.state.data[`${item[0]}`] === "" ||
+              this.state.data[`${item[0]}`] === undefined ||
+              this.state.data[`${item[0]}`] === null
             ) {
               this.state.data[`${item[0]}`] =
                 data.templates[0].data[`${item[0]}`];
@@ -136,7 +136,7 @@ export default class extends Component {
 
           if (data.templates[0].data.others) {
             this.state.otherfromdb = JSON.parse(data.templates[0].data.others);
-            this.state.otherfromdb.map((db, i) => {
+            this.state.otherfromdb.forEach((db, i) => {
               this.state.othersstate[i] = db.status;
             });
           }
@@ -153,7 +153,7 @@ export default class extends Component {
       .then(({ data }) => this.setState({ templates: data.templates }))
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
     const { templateid } = this.props.match.params;
-    let { templatename, images, cid } = this.state;
+    let { templatename, images, /*cid*/ } = this.state;
     templateid &&
       Axios.get(`/template/${templateid}`)
         .then(({ data }) => {
@@ -190,7 +190,7 @@ export default class extends Component {
               this.state.otherfromdb = JSON.parse(
                 data.templates[0].data.others
               );
-              this.state.otherfromdb.map((db, i) => {
+              this.state.otherfromdb.forEach((db, i) => {
                 this.state.othersstate[i] = db.status;
               });
             }
@@ -218,7 +218,7 @@ export default class extends Component {
     Axios.get("/password/getstatus/others").then(({ data }) => {
       if (data.length > 0) {
         this.setState({ othersbool: true });
-        data.map((d, i) => {
+        data.forEach((d, i) => {
           const others = [...this.state.others];
           others.push(d);
           this.setState({ others });
@@ -251,7 +251,7 @@ export default class extends Component {
   };
   // setImage = (i) => {
   //   const { images } = this.state;
-  //   i.img.map((imgi) => {
+  //   i.img.forEach((imgi) => {
   //     if (imgi.cid == localStorage.getItem("cid"))
   //       images[imgi.index].img = imgi.name;
   //   });
@@ -267,7 +267,7 @@ export default class extends Component {
   //   socket.on("imgupload", (i) => {
   //     console.log("imgcnt:" + i.imgcnt);
   //     var imglen = this.state.images.filter((i) => {
-  //       if (i.img != "") {
+  //       if (i.img !== "") {
   //         return true;
   //       }
   //     });
@@ -283,7 +283,7 @@ export default class extends Component {
   handleChange = (e) => {
     const { name, value } = e.target;
     const { data } = this.state;
-    if (name == "title") {
+    if (name === "title") {
       data[name] = e.target.value.replace(/[^\w\s]/gi, "");
     } else {
       data[name] = value;
@@ -293,10 +293,10 @@ export default class extends Component {
 
   handleChangepop = (e) => {
     const { name, value } = e.target;
-    if (value == "Others") {
+    if (value === "Others") {
       this.setState({ otherssignal: true });
     } else {
-      if (value == "Ebay" || value == "Poshmark" || value == "Mercari") {
+      if (value === "Ebay" || value === "Poshmark" || value === "Mercari") {
         this.setState({ otherssignal: false });
       }
       this.setState({ [name]: value });
@@ -313,8 +313,8 @@ export default class extends Component {
   handleDescriptionLabel = (id, e) => {
     const { value } = e.target;
     const { extraDescriptions } = this.state;
-    extraDescriptions.map((description) => {
-      if (description.id == id) {
+    extraDescriptions.forEach((description) => {
+      if (description.id === id) {
         description.key = value;
       }
     });
@@ -325,8 +325,8 @@ export default class extends Component {
   handleMeasureLabel = (id, e) => {
     const { value } = e.target;
     const { extraMeasures } = this.state;
-    extraMeasures.map((measure) => {
-      if (measure.id == id) {
+    extraMeasures.forEach((measure) => {
+      if (measure.id === id) {
         measure.label = value;
       }
     });
@@ -337,8 +337,8 @@ export default class extends Component {
   handleDescriptionChange = (id, e) => {
     const { value } = e.target;
     const { extraDescriptions } = this.state;
-    extraDescriptions.map((description) => {
-      if (description.id == id) {
+    extraDescriptions.forEach((description) => {
+      if (description.id === id) {
         description.value = value;
       }
     });
@@ -349,8 +349,8 @@ export default class extends Component {
   handleMeasureChange = (id, e) => {
     const { value } = e.target;
     const { extraMeasures } = this.state;
-    extraMeasures.map((measure) => {
-      if (measure.id == id) {
+    extraMeasures.forEach((measure) => {
+      if (measure.id === id) {
         measure.val = value;
       }
     });
@@ -379,16 +379,16 @@ export default class extends Component {
 
     this.setState({
       extraMeasures: extraMeasures.filter((measure) => {
-        return measure.id != id;
+        return measure.id !== id;
       }),
     });
     this.setState({ count: count - 1 });
   };
   removeDescription = (id, e) => {
-    const { extraDescriptions, count1 } = this.state;
+    const { extraDescriptions, /*count1*/ } = this.state;
     this.setState({
       extraDescriptions: extraDescriptions.filter((description) => {
-        return description.id != id;
+        return description.id !== id;
       }),
     });
   };
@@ -400,11 +400,11 @@ export default class extends Component {
     const { templateid } = this.props.match.params;
     const dataform = new FormData();
 
-    if (images[0].img == "" && !templateid) {
+    if (images[0].img === "" && !templateid) {
       return alert("Atleast First Image is required");
     }
 
-    if (data.condition_name == undefined && !templateid) {
+    if (data.condition_name === undefined && !templateid) {
       return alert("Condition is required");
     }
 
@@ -413,7 +413,7 @@ export default class extends Component {
     // }
 
     var y = [];
-    this.state.others.map((o, i) => {
+    this.state.others.forEach((o, i) => {
       let obj = {
         name: o,
         status: this.state.othersstate[i],
@@ -426,10 +426,10 @@ export default class extends Component {
     var mplace = true;
 
     if (
-      this.state.Ebay == true ||
-      this.state.Poshmark == true ||
-      this.state.Mercari == true ||
-      this.state.others.length != 0
+      this.state.Ebay === true ||
+      this.state.Poshmark === true ||
+      this.state.Mercari === true ||
+      this.state.others.length !== 0
     ) {
       mplace = true;
     } else {
@@ -442,37 +442,37 @@ export default class extends Component {
 
     var flag = 0;
     this.state.othersstate.forEach((os) => {
-      if (os == true) {
+      if (os === true) {
         flag = 1;
       }
     });
 
     if (
-      (this.state.Ebay && this.state.data.ebay.check == true) ||
-      (this.state.Poshmark && this.state.data.poshmark.check == true) ||
-      (this.state.Mercari && this.state.data.mercari.check == true)
+      (this.state.Ebay && this.state.data.ebay.check === true) ||
+      (this.state.Poshmark && this.state.data.poshmark.check === true) ||
+      (this.state.Mercari && this.state.data.mercari.check === true)
     ) {
       if (!templateid) flag = 1;
     }
 
-    if (mplace == true && flag == 0 && !templateid) {
+    if (mplace === true && flag === 0 && !templateid) {
       return alert("Please choose any marketplace to list the product");
     }
 
     //bal check routine
     var cnt = 0;
 
-    if (this.state.data.ebay.check == true) {
+    if (this.state.data.ebay.check === true) {
       cnt++;
     }
-    if (this.state.data.poshmark.check == true) {
+    if (this.state.data.poshmark.check === true) {
       cnt++;
     }
-    if (this.state.data.mercari.check == true) {
+    if (this.state.data.mercari.check === true) {
       cnt++;
     }
     this.state.othersstate.forEach((os) => {
-      if (os == true) {
+      if (os === true) {
         cnt++;
         console.log(os);
       }
@@ -484,7 +484,7 @@ export default class extends Component {
     var total = 0;
     rate1 = (this.state.rates.basic / 100) * 1;
     rate2 = (this.state.rates.advance / 100) * (cnt - 1);
-    if (this.state.data.delist.check == true) {
+    if (this.state.data.delist.check === true) {
       rate3 = (this.state.rates.list / 100) * (cnt - 1);
     }
     total = rate1 + rate2 + rate3;
@@ -565,11 +565,11 @@ export default class extends Component {
       if (
         document
           .getElementById(i)
-          .src.substring(0, document.getElementById(i).src.indexOf(":")) ==
+          .src.substring(0, document.getElementById(i).src.indexOf(":")) ===
           "http" ||
         document
           .getElementById(i)
-          .src.substring(0, document.getElementById(i).src.indexOf(":")) ==
+          .src.substring(0, document.getElementById(i).src.indexOf(":")) ===
           "https"
       ) {
         let obj = {};
@@ -627,9 +627,9 @@ export default class extends Component {
   };
 
   handleSubmit = (e) => {
-    const { website, username, password, users } = this.state;
+    const { website, username, password, /*users*/ } = this.state;
     e.preventDefault();
-    if (website != "" && username != "" && password != "") {
+    if (website !== "" && username !== "" && password !== "") {
       this.setState({ loading: true });
       Axios.post("/password", {
         website: website,
@@ -650,7 +650,7 @@ export default class extends Component {
             //console.log(data);
             if (data.length > 0) {
               this.setState({ othersbool: true });
-              data.map((d, i) => {
+              data.forEach((d, i) => {
                 const others = [...this.state.others];
                 others.push(d);
                 this.setState({ others });
@@ -706,7 +706,7 @@ export default class extends Component {
   };
 
   handleImageChange = async (event) => {
-    const { images, cid } = this.state;
+    const { images, /*cid*/ } = this.state;
     const options = {
       maxSizeMB: 0.3,
       maxWidthOrHeight: 1920,
@@ -745,8 +745,8 @@ export default class extends Component {
   };
 
   handleBulkUpload = async (e) => {
-    const { images, cid } = this.state;
-    var imgobj = [];
+    const { images, /*cid*/ } = this.state;
+    //var imgobj = [];
     const files = e.target.files;
     const count = files.length;
     console.log("bulk image change");
@@ -774,9 +774,9 @@ export default class extends Component {
 
     //this.setState({ images }, () => console.log(this.state.images));
 
-    // images.map((i) => {
+    // images.forEach((i) => {
     //   var reader = new FileReader();
-    //   if (i.img != "") {
+    //   if (i.img !== "") {
     //     reader.readAsDataURL(i.img);
     //     reader.onload = function () {
     //       //console.log(reader.result);
@@ -797,7 +797,7 @@ export default class extends Component {
 
     // setTimeout(() => {
     //   // var imglen = this.state.images.filter((i) => {
-    //   //   if (i.img != "") {
+    //   //   if (i.img !== "") {
     //   //     return true;
     //   //   }
     //   // });
@@ -807,7 +807,7 @@ export default class extends Component {
     //   // console.log(img1);
     //   // let img2 = imgobj.slice(6, 12);
     //   // console.log(img2);
-    //   //if (img1 != null) {
+    //   //if (img1 !== null) {
     //   socket.emit("bimg", {
     //     bimg: imgobj,
     //     cid: cid,
@@ -815,7 +815,7 @@ export default class extends Component {
     //   //}
 
     //   // setTimeout(() => {
-    //   //   if (img2 != null) {
+    //   //   if (img2 !== null) {
     //   //     socket.emit("bimg2", {
     //   //       bimg: img2,
     //   //       cid: cid,
@@ -833,7 +833,7 @@ export default class extends Component {
   };
 
   exthandle = (e) => {
-    const { images, imglen } = this.state;
+    const { images, /*imglen*/ } = this.state;
     console.log("detected");
     images.forEach((i, idx) => {
       if (e.target.value > idx) i.img = "true";
@@ -880,9 +880,8 @@ export default class extends Component {
       website,
       username,
       password,
-      users,
+      //users,
       otherssignal,
-
       data,
       images,
       isSubmitting,
@@ -1027,8 +1026,8 @@ export default class extends Component {
                 <span className="caret"></span>
               </button>
               <ul className="dropdown-menu">
-                {templates && templates.length != 0 ? (
-                  templates.map((template) => {
+                {templates && templates.length !== 0 ? (
+                  templates.forEach((template) => {
                     return (
                       <li>
                         <button

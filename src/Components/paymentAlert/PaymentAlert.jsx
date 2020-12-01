@@ -13,9 +13,9 @@ export default function AlertDialog(props) {
   const [amount, setAmount] = React.useState(null);
   const [captchaValue, setCaptchaValue] = React.useState(null);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  //const handleClickOpen = () => {
+  //  setOpen(true);
+  //};
 
   const handleClose = () => {
     setAmount(null);
@@ -55,7 +55,7 @@ export default function AlertDialog(props) {
               <div className="col">
                 <Button
                   variant="outlined"
-                  color={amount == 100 ? "secondary" : "primary"}
+                  color={amount === 100 ? "secondary" : "primary"}
                   onClick={() => setAmount(100)}
                 >
                   $ 100.00
@@ -64,7 +64,7 @@ export default function AlertDialog(props) {
               <div className="col">
                 <Button
                   variant="outlined"
-                  color={amount == 500 ? "secondary" : "primary"}
+                  color={amount === 500 ? "secondary" : "primary"}
                   onClick={() => setAmount(500)}
                 >
                   $ 500.00

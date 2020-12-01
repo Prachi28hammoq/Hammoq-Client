@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./AddPassword.css";
 import Axios from "../../services/Axios";
-import jwt_decode from "jwt-decode";
+//import jwt_decode from "jwt-decode";
 
 class Passwords extends Component {
   constructor() {
@@ -34,10 +34,10 @@ class Passwords extends Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    if (value == "Others") {
+    if (value === "Others") {
       this.setState({ others: true });
     } else {
-      if (value == "Ebay" || value == "Poshmark" || value == "Mercari") {
+      if (value === "Ebay" || value === "Poshmark" || value === "Mercari") {
         this.setState({ others: false });
       }
       this.setState({ [name]: value });
@@ -45,9 +45,14 @@ class Passwords extends Component {
   };
 
   handleSubmit = (e) => {
-    const { website, username, password, users } = this.state;
+    const { 
+      website, 
+      username, 
+      password, 
+      //users 
+    } = this.state;
     e.preventDefault();
-    if (website != "" && username != "" && password != "") {
+    if (website !== "" && username !== "" && password !== "") {
       Axios.post("/password", {
         website: website,
         username: username,
@@ -91,11 +96,11 @@ class Passwords extends Component {
   handleeBaySubmit = () => {
     Axios.get("/ebay/consent")
       .then((response) => {
-/*        const token = localStorage.getItem("token");
+/*      const token = localStorage.getItem("token");
         var decoded = jwt_decode(token);
         console.log(decoded._doc.email)*/
         console.log(response.data.authURL)
-        var authWindow = window.open(response.data.authURL, "_blank");
+        //var authWindow = window.open(response.data.authURL, "_blank");
       })
 
       .catch((err) => {
@@ -105,11 +110,11 @@ class Passwords extends Component {
 
   handleDelete =  async (id) => {
     try {
-      const response = await Axios.delete(`/password/${id}`, {
-        headers: {
-          "x-access-token": `${localStorage.getItem("token")}`,
-        },
-      })
+      //const response = await Axios.delete(`/password/${id}`, {
+      //  headers: {
+      //    "x-access-token": `${localStorage.getItem("token")}`,
+      //  },
+      //})
       window.confirm("Are You Sure")
       window.open("/passwords", "_self")
       // this.setState({users: response.data.Passwords})
@@ -117,7 +122,7 @@ class Passwords extends Component {
     }catch(error){
       console.log(error)
     }
-    //this.setState({users : this.state.users.filter((user) => user._id !== id)})
+    //this.setState({users : this.state.users.filter((user) => user._id !=== id)})
   } 
   render() {
     const {

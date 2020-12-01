@@ -11,8 +11,8 @@ if(process.env.REACT_APP_STAGE === 'devlocal')
 
 else if(process.env.REACT_APP_STAGE === 'devhost')
 {
-	baseURL = "https://devcust.avoidpoints.com/api";
-	assetsURL = "https://devcust.avoidpoints.com/assets/";
+	baseURL = "http://devcust.avoidpoints.com/api";
+	assetsURL = "http://devcust.avoidpoints.com/assets/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'staging')

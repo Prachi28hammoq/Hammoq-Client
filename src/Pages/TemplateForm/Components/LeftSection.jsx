@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Input from "./Input";
-import { Link } from "react-router-dom";
+//import Input from "./Input";
+//import { Link } from "react-router-dom";
 import ButtonGroup from "./ButtonGroup";
-import { assetsURL, socketCon } from "../../../services/Axios";
-import io from "socket.io-client";
-import SocketIOFileUpload from "socketio-file-upload";
+import { assetsURL, /*socketCon*/ } from "../../../services/Axios";
+//import io from "socket.io-client";
+//import SocketIOFileUpload from "socketio-file-upload";
 import LoadingSpinner from "../../utils/loader";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa"
 
@@ -12,7 +12,7 @@ import { FaChevronRight, FaChevronLeft } from "react-icons/fa"
 const max = 5000;
 const $ = window.$;
 
-export default class extends Component {
+class LeftSection extends Component {
   constructor() {
     super();
     this.state = {
@@ -97,11 +97,11 @@ export default class extends Component {
           imageIndex : idx,
           fullimg:
             typeof image.img === "string"
-              ? image.img.substring(0, 4) != "http" &&
-                image.img.substring(0, 5) != "https"
+              ? image.img.substring(0, 4) !== "http" &&
+                image.img.substring(0, 5) !== "https"
                 ? assetsURL + image.img
                 : image.img
-              :image.img != null ? URL.createObjectURL(image.img) : '',
+              :image.img !== null ? URL.createObjectURL(image.img) : '',
         },
         () => {
           $("#addTemplateModal1").modal("show");
@@ -111,9 +111,19 @@ export default class extends Component {
   }
 
   render = () => {
-    const { suggestTitles, showOtherTitles, fullimg, img } = this.state;
+    const { 
+      //suggestTitles, 
+      //showOtherTitles, 
+      //fullimg, 
+      img 
+    } = this.state;
 
-    const { selectedWebsites, category, showMoreLines, showcat } = this.state;
+    const { 
+      selectedWebsites, 
+      //category, 
+      //showMoreLines, 
+      showcat 
+    } = this.state;
 
     const {
       data,
@@ -133,7 +143,7 @@ export default class extends Component {
       removeMeasure,
       handleMeasureChange,
       handleMeasureLabel,
-      handleOtherTitles,
+      //handleOtherTitles,
       toggleSelectedOthersWebsite,
       exthandle,
     } = this.props;
@@ -191,6 +201,7 @@ export default class extends Component {
                           maxWidth: "100%", padding:"auto"}}
                         >  <img
                         src={this.state.fullimg}
+                        alt="Alt PlaceHolder"
                        style={{ maxWidth : "100%", maxHeight:'500px'}}
                       /></div>
                       </div>
@@ -209,13 +220,14 @@ export default class extends Component {
                                 ? assetsURL + image.img
                                 : URL.createObjectURL(image.img)
                             }
+                            alt="Alt PlaceHolder"
                             style={{ width: "100%", height: "90px" }}
                             onClick={() => {
                               this.setState({ fullimg: image.key }, () => {
                                 this.fetchimg(
                                   typeof image.img === "string"
-                                    ? image.img.substring(0, 4) != "http" &&
-                                      image.img.substring(0, 5) != "https"
+                                    ? image.img.substring(0, 4) !== "http" &&
+                                      image.img.substring(0, 5) !== "https"
                                       ? assetsURL + image.img
                                       : image.img
                                     : URL.createObjectURL(image.img)
@@ -830,3 +842,4 @@ const styles = {
     opacity: 0,
   },
 };
+export default LeftSection;

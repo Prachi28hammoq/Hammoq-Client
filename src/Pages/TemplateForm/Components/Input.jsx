@@ -1,6 +1,6 @@
 import React from "react";
 
-export default (props) => (
+const Input = (props) => (
   <div className="form-group mb-4 row">
     <div className="col-12 col-lg-8">
       <input className="form-control form-control-sm" {...props} />
@@ -14,3 +14,4 @@ export default (props) => (
     </label>
   </div>
 );
+export default Input;

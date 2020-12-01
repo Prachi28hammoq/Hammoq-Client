@@ -6,7 +6,7 @@ import Axios from "../../services/Axios";
 
 const $ = window.$;
 
-export default class extends Component {
+class Templates extends Component {
   constructor() {
     super();
     this.state = {
@@ -136,3 +136,4 @@ export default class extends Component {
     );
   };
 }
+export default Templates;

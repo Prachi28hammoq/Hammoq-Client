@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import AddPayment from "./AddPayment";
 import {
-  CardElement,
+  //CardElement,
   Elements,
   ElementsConsumer,
 } from "@stripe/react-stripe-js";
@@ -13,9 +13,9 @@ import {
 
 const stripePromise = loadStripe("pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w");
 class PaymentComponent extends Component {
-  constructor(props) {
-    super(props);
-  }
+  //constructor(props) {
+  //  super(props);
+  //}
   render() {
     return (
       <Elements stripe={stripePromise}>

@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import "./OnBoarding.css";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
@@ -96,7 +96,7 @@ class OnBoarding extends Component {
       permitJay,
       ebayAcc, 
       mercariAcc,
-      poshAcc,
+      //poshAcc,
       shopify,
       otherAcc
     } = this.state;
@@ -128,7 +128,7 @@ class OnBoarding extends Component {
 
     Axios.post("/clientDetails/onBoarding", body)
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           alert(
             "Successfully Updated,click on basic Listing to list your products"
           );
@@ -151,7 +151,7 @@ class OnBoarding extends Component {
     console.log(newValue)
     console.log(serviceWant)
     console.log(newServiceWant)
-    Object.entries(newServiceWant).map((entry) => {
+    Object.entries(newServiceWant).forEach((entry) => {
       if(entry[0] === variable)
       {
         entry[1] = newValue;
@@ -170,7 +170,7 @@ class OnBoarding extends Component {
       findUs,
       listOnEbay,
       serviceWant,
-      crosslisting,
+      //crosslisting,
       howPrice,
       increaseCompPrice,
       zipCode,
@@ -291,7 +291,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Listings'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox("Listings", false)
                         : this.handleChangeCheckBox("Listings", true)
                   }}
@@ -306,7 +306,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Listings'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Crosslistings', false)
                         : this.handleChangeCheckBox('Crosslistings', true)
                   }}
@@ -321,7 +321,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Listings'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Delistings', true)
                         : this.handleChangeCheckBox('Delistings', false)
                   }}
@@ -336,7 +336,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Listings'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Accounting', true)
                         : this.handleChangeCheckBox('Accounting', false)
                   }}
@@ -358,7 +358,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Ebay'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Ebay', true)
                         : this.handleChangeCheckBox('Ebay', false)
                   }}
@@ -373,7 +373,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Mercari'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Mercari', true)
                         : this.handleChangeCheckBox('Mercari', false)
                   }}
@@ -388,7 +388,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Poshmark'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Poshmark', true)
                         : this.handleChangeCheckBox('Poshmark', false)
                   }}
@@ -403,7 +403,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Shopify'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Shopify', true)
                         : this.handleChangeCheckBox('Shopify', false)
                   }}
@@ -418,7 +418,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Offerup'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Offerup', true)
                         : this.handleChangeCheckBox('Offerup', false)
                   }}
@@ -433,7 +433,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Depop'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Depop', true)
                         : this.handleChangeCheckBox('Depop', false)
                   }}
@@ -448,7 +448,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Craigslist'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Craigslist', true)
                         : this.handleChangeCheckBox('Craigslist', false)
                   }}
@@ -463,7 +463,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Letgo'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Letgo', true)
                         : this.handleChangeCheckBox('Letgo', false)
                   }}
@@ -478,7 +478,7 @@ class OnBoarding extends Component {
                   checked={serviceWant['Tradsy'] !== undefined && serviceWant['Listings'] === true}
                   inputProps={{ "aria-label": "secondary checkbox" }}
                   onChange={(event) => {
-                    const a = event.target.selected == true
+                    event.target.selected === true
                         ? this.handleChangeCheckBox('Tradsy', true)
                         : this.handleChangeCheckBox('Tradsy', false)
                   }}

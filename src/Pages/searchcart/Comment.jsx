@@ -5,7 +5,7 @@ import { Divider, Avatar, Grid, Paper } from "@material-ui/core";
 // import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 
-export default class extends Component {
+class Comment extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,3 +88,4 @@ export default class extends Component {
     );
   }
 }
+export default Comment;

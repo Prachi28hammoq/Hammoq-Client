@@ -48,6 +48,7 @@ class Login extends Component {
                 src={hammock}
                 className="m-auto col-8"
                 style={{ width: "170px", height: "120px" }}
+                alt="Alt PlaceHolder"
               ></img>
             </div>
             <div className="d-flex justify-content-center">

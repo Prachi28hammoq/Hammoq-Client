@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./forgotpassword.css";
-import hammock from "../../Components/images/hammock.svg";
+//import hammock from "../../Components/images/hammock.svg";
 import Axios from "../../services/Axios";
 class Login extends Component {
   constructor() {
@@ -24,9 +24,9 @@ class Login extends Component {
     e.preventDefault();
 
     if (
-      this.state.codesent == true &&
-      this.state.codecheck == true &&
-      this.state.passup == false
+      this.state.codesent === true &&
+      this.state.codecheck === true &&
+      this.state.passup === false
     ) {
       await Axios.post("/forgotpassword/update", {
         email: this.state.email,
@@ -41,7 +41,7 @@ class Login extends Component {
         .catch((err) => {});
     }
 
-    if (this.state.codesent == true && this.state.codecheck == false) {
+    if (this.state.codesent === true && this.state.codecheck === false) {
       await Axios.get(
         `/forgotpassword/confirmCode/${this.state.code}/${this.state.email}`
       )
@@ -56,7 +56,7 @@ class Login extends Component {
         .catch((err) => {});
     }
 
-    if (this.state.codesent == false) {
+    if (this.state.codesent === false) {
       await Axios.get(`/forgotpassword/${this.state.email}`)
         .then(({ data }) => {
           console.log(data);
@@ -77,7 +77,7 @@ class Login extends Component {
     const {
       email,
       password,
-      isSubmitting,
+      //isSubmitting,
       loginError,
       code,
       displaycode,
@@ -140,8 +140,8 @@ class Login extends Component {
                       id="u"
                       className={
                         displaycode
-                          ? "input-group input-group-lg mt-3" + " show"
-                          : "input-group input-group-lg mt-3" + " hide"
+                          ? "input-group input-group-lg mt-3 show"
+                          : "input-group input-group-lg mt-3 hide"
                       }
                     >
                       <div class="input-group-prepend">
@@ -170,8 +170,8 @@ class Login extends Component {
                     <div
                       className={
                         displaypass
-                          ? "input-group input-group-lg mt-3" + " show"
-                          : "input-group input-group-lg mt-3" + " hide"
+                          ? "input-group input-group-lg mt-3 show"
+                          : "input-group input-group-lg mt-3 hide"
                       }
                     >
                       <div class="input-group-prepend mb-2">

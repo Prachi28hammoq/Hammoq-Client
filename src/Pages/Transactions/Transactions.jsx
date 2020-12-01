@@ -1,8 +1,8 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Transactions.css";
-import Header from "../../Components/header/header";
-import imageresponse from "../../Components/images/hammock.svg";
+//import Header from "../../Components/header/header";
+//import imageresponse from "../../Components/images/hammock.svg";
 import Axios from "../../services/Axios";
 
 class previoustransaction extends React.Component {
@@ -60,8 +60,8 @@ class previoustransaction extends React.Component {
                   <td>{data.date.split("T")[0]}</td>
                   <td>{data.date.split("T")[1]}</td>
                   <td>
-                    {data.receipt_url[0] == "h" ? (
-                      <a href={data.receipt_url} target="_blank">
+                    {data.receipt_url[0] === "h" ? (
+                      <a href={data.receipt_url} target="_blank" rel="noreferrer">
                         Receipt
                       </a>
                     ) : (

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default (props) => {
+const ButtonGroup = (props) => {
   return (
     <button
       className={`btn btn-${
@@ -13,3 +13,4 @@ export default (props) => {
     </button>
   );
 };
+export default ButtonGroup;

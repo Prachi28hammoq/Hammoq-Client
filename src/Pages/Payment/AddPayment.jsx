@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import "./addpayment.css";
 import { CardElement } from "@stripe/react-stripe-js";
-import { Link } from "react-router-dom";
-import Header from "../../Components/header/header";
-import hammock from "../../Components/images/hammock.svg";
+//import { Link } from "react-router-dom";
+//import Header from "../../Components/header/header";
+//import hammock from "../../Components/images/hammock.svg";
 import Axios from "../../services/Axios";
 import LoadingSpinner from "../utils/loader";
 
@@ -29,7 +29,7 @@ class AddPayment extends Component {
 
     console.log(result);
     this.setState({ loading: true });
-    if (localStorage.getItem("paymentadded") == "true") {
+    if (localStorage.getItem("paymentadded") === "true") {
       price = 1; //dollars
     }
     if (result.error) {
@@ -45,7 +45,7 @@ class AddPayment extends Component {
         Axios.put("/payment/addstatus")
           .then((res) => {
             localStorage.setItem("paymentadded", res.data.paymentStatus);
-            if (price == 1) {
+            if (price === 1) {
               alert("$1 has been added");
               this.setState({ loading: false });
               window.open("/setting", "_self");
@@ -80,7 +80,7 @@ class AddPayment extends Component {
         this.setState({ name: data.firstName });
 
         if (
-          data.paymentStatus == true &&
+          data.paymentStatus === true &&
           !localStorage.getItem("paymentadded")
         ) {
           console.log(data);
@@ -166,7 +166,7 @@ class AddPayment extends Component {
                   <div className="card-body">
                     <div>
                     </div>
-                    {localStorage.getItem("paymentadded") == "true" ? (
+                    {localStorage.getItem("paymentadded") === "true" ? (
                       <>
                         <div className="text-center ">
                           <h4 className="mt-4 mb-4 heading">
@@ -175,7 +175,7 @@ class AddPayment extends Component {
                           <label>
                             To change payment card please add a credit card,
                             <br />{" "}
-                            {localStorage.getItem("paymentadded") == "true"
+                            {localStorage.getItem("paymentadded") === "true"
                               ? "$1 will be deducted"
                               : "$100 for your initial listing."}
                           </label>

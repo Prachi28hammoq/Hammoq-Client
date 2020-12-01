@@ -25,8 +25,8 @@ class resetpassword extends Component {
 
   reset = async (e) => {
     e.preventDefault();
-    const agentid = localStorage.getItem("agent");
-    if (this.state.newp == this.state.cnewp) {
+    //const agentid = localStorage.getItem("agent");
+    if (this.state.newp === this.state.cnewp) {
       alert("Press ok to confirm password change");
        Axios.post("/resetpassword", {
         oldPassword: this.state.oldp,
@@ -47,7 +47,7 @@ class resetpassword extends Component {
   };
 
   render() {
-    const { oldp, newp } = this.state;
+    //const { oldp, newp } = this.state;
     return (
       <div className="settingsIt">
         <div className="row" id="profilephoto">

@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import Input from "./Input";
 import { Link } from "react-router-dom";
-import { assetsURL } from "../../../services/Axios";
-import ButtonGroup from "./ButtonGroup";
+//import { assetsURL } from "../../../services/Axios";
+//import ButtonGroup from "./ButtonGroup";
 import Popover from '@material-ui/core/Popover';
 import Axios from '../../../services/Axios'
-import ScrollArea  from 'react-scrollbar';
+//import ScrollArea  from 'react-scrollbar';
 
 
 const max = 5000;
 
-export default class extends Component {
+class RightSection extends Component {
   constructor() {
     super();
     this.state = {
@@ -45,21 +45,21 @@ export default class extends Component {
   }
 
   handleMessageSubmit = async () => {
-    const formData = {
-      msgformTitle : this.state.msgFormTitle,
-      senderName :  `customer : ${localStorage.getItem("customerName")}`,
-      msgFormDescription : this.state.msgFormDescription,
-      field : this.state.field
-    }
+    //const formData = {
+    //  msgformTitle : this.state.msgFormTitle,
+    //  senderName :  `customer : ${localStorage.getItem("customerName")}`,
+    //  msgFormDescription : this.state.msgFormDescription,
+    //  field : this.state.field
+    //}
    // window.alert(formData.clientName ,' form data data dhfjkasdhfjkha')
     try{
-      const response = await Axios.post(`/message/${this.props.productid}`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": `${localStorage.getItem("token")}`,
-        },
-      })
-      console.log(response, 'customer jshdfjkhakl')
+      //const response = await Axios.post(`/message/${this.props.productid}`, formData, {
+      //  headers: {
+      //    "Content-Type": "application/json",
+      //    "x-access-token": `${localStorage.getItem("token")}`,
+      //  },
+      //})
+      //console.log(response, 'customer jshdfjkhakl')
       this.setState({anchorEl: null})
     }catch(error){
       console.log(error)
@@ -130,25 +130,41 @@ export default class extends Component {
 
   }
   render = () => {
-    const { selectedWebsites, category, showMoreLines, custom, msgFormToggle, anchorEl } = this.state;
+    const { 
+      //selectedWebsites, 
+      //category, 
+      showMoreLines, 
+      custom, 
+      msgFormToggle, 
+      anchorEl 
+    } = this.state;
 
-    const { data, handleChange, toggleSelectedWebsite } = this.props;
+    const { 
+      data, 
+      handleChange, 
+      //toggleSelectedWebsite 
+    } = this.props;
 
-    const { suggestTitles, showOtherTitles, customdesc, productMessage } = this.state;
+    const { 
+      //suggestTitles, 
+      showOtherTitles, 
+      customdesc, 
+      productMessage 
+    } = this.state;
 
     const open = Boolean(anchorEl);
 
     const id = open ? 'simple-popover' : undefined;
 
     const {
-      images,
-      handleBulkUpload,
-      handleImageChange,
-      removeImg,
-      extraMeasures,
-      addMeasure,
-      handleMeasureChange,
-      handleMeasureLabel,
+      //images,
+      //handleBulkUpload,
+      //handleImageChange,
+      //removeImg,
+      //extraMeasures,
+      //addMeasure,
+      //handleMeasureChange,
+      //handleMeasureLabel,
       extraDescriptions,
       handleOtherTitles,
       addDescription,
@@ -160,103 +176,103 @@ export default class extends Component {
     } = this.props;
    // console.log(messageNotSeen , 'message not seeen')
 
-    if (custom.toString() == "false") {
-      if (localStorage.getItem("titletype") == "type2") {
+    if (custom.toString() === "false") {
+      if (localStorage.getItem("titletype") === "type2") {
         data.title =
-          (data.brand != undefined
-            ? data.brand != ""
+          (data.brand !== undefined
+            ? data.brand !== ""
               ? data.brand + " "
               : ""
             : "") +
-          (data.model != undefined
-            ? data.model != ""
+          (data.model !== undefined
+            ? data.model !== ""
               ? data.model + " "
               : ""
             : "") +
-          (data.modelNo != undefined
-            ? data.modelNo != ""
+          (data.modelNo !== undefined
+            ? data.modelNo !== ""
               ? data.modelNo + " "
               : ""
             : "") +
-          (data.category != undefined
-            ? data.category != ""
+          (data.category !== undefined
+            ? data.category !== ""
               ? data.category + " "
               : ""
             : "") +
-          (data.colorShade != undefined
-            ? data.colorShade != ""
+          (data.colorShade !== undefined
+            ? data.colorShade !== ""
               ? data.colorShade + " "
               : ""
             : "") +
-          (data.style != undefined
-            ? data.style != ""
+          (data.style !== undefined
+            ? data.style !== ""
               ? data.style + " "
               : ""
             : "") +
-          (data.pattern != undefined
-            ? data.pattern != ""
+          (data.pattern !== undefined
+            ? data.pattern !== ""
               ? data.pattern + " "
               : ""
             : "") +
-          (data.size != undefined
-            ? data.size != ""
+          (data.size !== undefined
+            ? data.size !== ""
               ? data.size + " "
               : ""
             : "") 
       } else {
         data.title =
-          (data.brand != undefined
-            ? data.brand != ""
+          (data.brand !== undefined
+            ? data.brand !== ""
               ? data.brand + " "
               : ""
             : "") +
-          (data.category != undefined
-            ? data.category != ""
+          (data.category !== undefined
+            ? data.category !== ""
               ? data.category + " "
               : ""
             : "") +
-          (data.model != undefined
-            ? data.model != ""
+          (data.model !== undefined
+            ? data.model !== ""
               ? data.model + " "
               : ""
             : "") +
-          (data.modelNo != undefined
-            ? data.modelNo != ""
+          (data.modelNo !== undefined
+            ? data.modelNo !== ""
               ? data.modelNo + " "
               : ""
             : "") +
-          (data.colorShade != undefined
-            ? data.colorShade != ""
+          (data.colorShade !== undefined
+            ? data.colorShade !== ""
               ? data.colorShade + " "
               : ""
             : "") +
-          (data.style != undefined
-            ? data.style != ""
+          (data.style !== undefined
+            ? data.style !== ""
               ? data.style + " "
               : ""
             : "") +
-          (data.pattern != undefined
-            ? data.pattern != ""
+          (data.pattern !== undefined
+            ? data.pattern !== ""
               ? data.pattern + " "
               : ""
             : "") +
-          (data.size != undefined
-            ? data.size != ""
+          (data.size !== undefined
+            ? data.size !== ""
               ? data.size + " "
               : "" 
             : "") + 
-          (data.seasonOrWeather != undefined
-            ? data.seasonOrWeather != ""
+          (data.seasonOrWeather !== undefined
+            ? data.seasonOrWeather !== ""
             ? " " + data.seasonOrWeather + "\n"
             : ""
             : "") +
-            (data.care != undefined 
-              ? data.care != ""
+            (data.care !== undefined 
+              ? data.care !== ""
               ? " " + data.care + "\n"
               :""
               :"") +
-              (data.madeIn != undefined
-                ? data.madeIn != ""
+              (data.madeIn !== undefined
+                ? data.madeIn !== ""
                 ? " " + data.madeIn + "\n"
                 :""
                 :"")  
@@ -264,33 +280,33 @@ export default class extends Component {
      // console.log(data.title);
     }
 
-    if (customdesc == false) {
+    if (customdesc === false) {
       data.shortDescription =
-        (data.title != "" ? data.title + "\n" : "") +
-        (data.brand != "" ? "Brand: " + data.brand + "\n" : "") +
-        (data.model != "" ? "Model: " + data.model + "\n" : "") +
-        (data.modelNo != "" ? "Model No.: " + data.modelNo + "\n" : "") +
-        (data.category != "" ? "Gender: " + data.category + "\n" : "") +
-        (data.colorShade != "" ? "Color: " + data.colorShade + "\n" : "") +
-        (data.material != "" ? "Material: " + data.material + "\n" : "") +
-        (data.style != "" ? "Style: " + data.style + "\n" : "") +
-        (data.pattern != "" ? "Pattern: " + data.pattern + "\n" : "") +
-        (data.size != "" ? "Size: " + data.size + "\n" : "") +
-        (data.seasonOrWeather != ""
+        (data.title !== "" ? data.title + "\n" : "") +
+        (data.brand !== "" ? "Brand: " + data.brand + "\n" : "") +
+        (data.model !== "" ? "Model: " + data.model + "\n" : "") +
+        (data.modelNo !== "" ? "Model No.: " + data.modelNo + "\n" : "") +
+        (data.category !== "" ? "Gender: " + data.category + "\n" : "") +
+        (data.colorShade !== "" ? "Color: " + data.colorShade + "\n" : "") +
+        (data.material !== "" ? "Material: " + data.material + "\n" : "") +
+        (data.style !== "" ? "Style: " + data.style + "\n" : "") +
+        (data.pattern !== "" ? "Pattern: " + data.pattern + "\n" : "") +
+        (data.size !== "" ? "Size: " + data.size + "\n" : "") +
+        (data.seasonOrWeather !== ""
           ? "seasonOrWeather: " + data.seasonOrWeather + "\n"
           : "") +
-        (data.care != "" ? "Care: " + data.care + "\n" : "") +
-        (data.madeIn != "" ? "Made in: " + data.madeIn + "\n" : "") +
+        (data.care !== "" ? "Care: " + data.care + "\n" : "") +
+        (data.madeIn !== "" ? "Made in: " + data.madeIn + "\n" : "") +
         
-        (data.bottomDescription != "" ? "Bottom Description: " + data.bottomDescription + "\n" : "" ) +
-        (data.line1 != undefined? data.line1 != "" ? data.line1 +": " + data.value1 +"\n" : "" : "") +
-        (data.line2 != undefined ? data.line2 != ""? data.line2 +": " + data.value2 +"\n": "": "") +
-        (data.line3 != undefined ? data.line3 != ""? data.line3 +": " + data.value3 +"\n" : "" : "") +
-        (data.line4 != undefined ? data.line4 != "" ?data.line4 +": " + data.value4 +"\n" : "" : "") +
-        (data.line5 != undefined ? data.line5 != "" ? data.line5 +": " + data.value5 +"\n" : "" : "") +
-        (data.line6 != undefined ? data.line6 != "" ? data.line6 +": " + data.value6 +"\n" : "": "") +
-        (data.line7 != undefined ? data.line7 != "" ? data.line7 +": " + data.value7 +"\n" : "" : "") +
-        (data.line8 != undefined ? data.line8 != "" ? data.line8 +": " + data.value8 +"\n" : "" : "");
+        (data.bottomDescription !== "" ? "Bottom Description: " + data.bottomDescription + "\n" : "" ) +
+        (data.line1 !== undefined? data.line1 !== "" ? data.line1 +": " + data.value1 +"\n" : "" : "") +
+        (data.line2 !== undefined ? data.line2 !== ""? data.line2 +": " + data.value2 +"\n": "": "") +
+        (data.line3 !== undefined ? data.line3 !== ""? data.line3 +": " + data.value3 +"\n" : "" : "") +
+        (data.line4 !== undefined ? data.line4 !== "" ?data.line4 +": " + data.value4 +"\n" : "" : "") +
+        (data.line5 !== undefined ? data.line5 !== "" ? data.line5 +": " + data.value5 +"\n" : "" : "") +
+        (data.line6 !== undefined ? data.line6 !== "" ? data.line6 +": " + data.value6 +"\n" : "": "") +
+        (data.line7 !== undefined ? data.line7 !== "" ? data.line7 +": " + data.value7 +"\n" : "" : "") +
+        (data.line8 !== undefined ? data.line8 !== "" ? data.line8 +": " + data.value8 +"\n" : "" : "");
         for(let i = 0 ; i < extraDescriptions.length ; i++){
           data.shortDescription += extraDescriptions[i].key + ": " + extraDescriptions[i].value + "\n"
           
@@ -298,98 +314,98 @@ export default class extends Component {
     }
     if (data.title) {
       //advance listing & data.title is not undefined
-      let title = data.title.trim();
+      //let title = data.title.trim();
       data.ebay.title =
-        (data.brand != undefined
-          ? data.brand != ""
+        (data.brand !== undefined
+          ? data.brand !== ""
             ? data.brand + " "
             : ""
           : "") +
-        (data.category != undefined
-          ? data.category != ""
+        (data.category !== undefined
+          ? data.category !== ""
             ? data.category + " "
             : ""
           : "") +
-        (data.model != undefined
-          ? data.model != ""
+        (data.model !== undefined
+          ? data.model !== ""
             ? data.model + " "
             : ""
           : "") +
-        (data.modelNo != undefined
-          ? data.modelNo != ""
+        (data.modelNo !== undefined
+          ? data.modelNo !== ""
             ? data.modelNo + " "
             : ""
           : "") +
-        (data.colorShade != undefined
-          ? data.colorShade != ""
+        (data.colorShade !== undefined
+          ? data.colorShade !== ""
             ? data.colorShade + " "
             : ""
           : "") +
-        (data.style != undefined
-          ? data.style != ""
+        (data.style !== undefined
+          ? data.style !== ""
             ? data.style + " "
             : ""
           : "") +
-        (data.pattern != undefined
-          ? data.pattern != ""
+        (data.pattern !== undefined
+          ? data.pattern !== ""
             ? data.pattern + " "
             : ""
           : "") +
-        (data.size != undefined
-          ? data.size != ""
+        (data.size !== undefined
+          ? data.size !== ""
             ? data.size + " "
             : ""
           : "");
 
       data.poshmark.title =
-        (data.brand != undefined
-          ? data.brand != ""
+        (data.brand !== undefined
+          ? data.brand !== ""
             ? data.brand + " "
             : ""
           : "") +
-        (data.category != undefined
-          ? data.category != ""
+        (data.category !== undefined
+          ? data.category !== ""
             ? data.category + " "
             : ""
           : "") +
-        (data.model != undefined
-          ? data.model != ""
+        (data.model !== undefined
+          ? data.model !== ""
             ? data.model + " "
             : ""
           : "") +
-        (data.colorShade != undefined
-          ? data.colorShade != ""
+        (data.colorShade !== undefined
+          ? data.colorShade !== ""
             ? data.colorShade + " "
             : ""
           : "") +
-        (data.size != undefined
-          ? data.size != ""
+        (data.size !== undefined
+          ? data.size !== ""
             ? data.size + " "
             : ""
           : "");
       data.mercari.title =
-        (data.brand != undefined
-          ? data.brand != ""
+        (data.brand !== undefined
+          ? data.brand !== ""
             ? data.brand + " "
             : ""
           : "") +
-        (data.category != undefined
-          ? data.category != ""
+        (data.category !== undefined
+          ? data.category !== ""
             ? data.category + " "
             : ""
           : "") +
-        (data.model != undefined
-          ? data.model != ""
+        (data.model !== undefined
+          ? data.model !== ""
             ? data.model + " "
             : ""
           : "") +
-        (data.colorShade != undefined
-          ? data.colorShade != ""
+        (data.colorShade !== undefined
+          ? data.colorShade !== ""
             ? data.colorShade + " "
             : ""
           : "") +
-        (data.size != undefined
-          ? data.size != ""
+        (data.size !== undefined
+          ? data.size !== ""
             ? data.size + " "
             : ""
           : "");
@@ -405,7 +421,7 @@ export default class extends Component {
             <text className="text-danger">*</text>Product Title{" "}
           </div>
           <i className="fas fa-question-circle c-pointer text-secondary ml-2 mt-2"></i>
-          {custom.toString() == "true" ? (
+          {custom.toString() === "true" ? (
             <button
               className={"btn btn-success ml-2 btn-sm"}
               onClick={(e) => this.customtitle(e)}
@@ -450,54 +466,54 @@ export default class extends Component {
                 data.ebay.title = title;
 
                 data.poshmark.title =
-                  (data.brand != undefined
-                    ? data.brand != ""
+                  (data.brand !== undefined
+                    ? data.brand !== ""
                       ? data.brand + " "
                       : ""
                     : "") +
-                  (data.category != undefined
-                    ? data.category != ""
+                  (data.category !== undefined
+                    ? data.category !== ""
                       ? data.category + " "
                       : ""
                     : "") +
-                  (data.model != undefined
-                    ? data.model != ""
+                  (data.model !== undefined
+                    ? data.model !== ""
                       ? data.model + " "
                       : ""
                     : "") +
-                  (data.colorShade != undefined
-                    ? data.colorShade != ""
+                  (data.colorShade !== undefined
+                    ? data.colorShade !== ""
                       ? data.colorShade + " "
                       : ""
                     : "") +
-                  (data.size != undefined
-                    ? data.size != ""
+                  (data.size !== undefined
+                    ? data.size !== ""
                       ? data.size + " "
                       : ""
                     : "");
                 data.mercari.title =
-                  (data.brand != undefined
-                    ? data.brand != ""
+                  (data.brand !== undefined
+                    ? data.brand !== ""
                       ? data.brand + " "
                       : ""
                     : "") +
-                  (data.category != undefined
-                    ? data.category != ""
+                  (data.category !== undefined
+                    ? data.category !== ""
                       ? data.category + " "
                       : ""
                     : "") +
-                  (data.model != undefined
-                    ? data.model != ""
+                  (data.model !== undefined
+                    ? data.model !== ""
                       ? data.model + " "
                       : ""
                     : "") +
-                  (data.colorShade != undefined
-                    ? data.colorShade != ""
+                  (data.colorShade !== undefined
+                    ? data.colorShade !== ""
                       ? data.colorShade + " "
                       : ""
                     : "") +
-                  (data.size != undefined
-                    ? data.size != ""
+                  (data.size !== undefined
+                    ? data.size !== ""
                       ? data.size + " "
                       : ""
                     : "");
@@ -518,7 +534,7 @@ export default class extends Component {
                   name="ebay"
                   id="ebay"
                   value={
-                    data["ebay"]["title"].toString() != "undefined"
+                    data["ebay"]["title"].toString() !== "undefined"
                       ? data["ebay"]["title"]
                       : ""
                   }
@@ -548,7 +564,7 @@ export default class extends Component {
                   name="poshmark"
                   id="poshmark"
                   value={
-                    data["poshmark"]["title"].toString() != "undefined"
+                    data["poshmark"]["title"].toString() !== "undefined"
                       ? data["poshmark"]["title"]
                       : ""
                   }
@@ -578,7 +594,7 @@ export default class extends Component {
                   name="mercari"
                   id="mercari"
                   value={
-                    data["mercari"]["title"].toString() != "undefined"
+                    data["mercari"]["title"].toString() !== "undefined"
                       ? data["mercari"]["title"]
                       : ""
                   }
@@ -972,7 +988,7 @@ export default class extends Component {
           </label>
           {/* shortDescription btn */}
 
-          {customdesc.toString() == "true" ? (
+          {customdesc.toString() === "true" ? (
             <button
               className={"btn btn-success ml-2 btn-sm"}
               onClick={this.customdescription}
@@ -1261,3 +1277,4 @@ export default class extends Component {
     );
   };
 }
+export default RightSection;

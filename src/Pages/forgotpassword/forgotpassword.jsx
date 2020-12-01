@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./forgotpassword.css";
-import hammock from "../../Components/images/hammock.svg";
+//import hammock from "../../Components/images/hammock.svg";
 import Axios from "../../services/Axios";
 class Login extends Component {
   constructor() {
@@ -24,11 +24,11 @@ class Login extends Component {
     e.preventDefault();
 
     if (
-      this.state.codesent == true &&
-      this.state.codecheck == true &&
-      this.state.passup == false
+      this.state.codesent === true &&
+      this.state.codecheck === true &&
+      this.state.passup === false
     ) {
-      if (this.state.password == "") {
+      if (this.state.password === "") {
         alert("Fill in the new password");
       } else {
         await Axios.post("/forgotpassword/update", {
@@ -36,7 +36,7 @@ class Login extends Component {
           newPassword: this.state.password,
         })
           .then(({ data }) => {
-            if (data.assert == true) {
+            if (data.assert === true) {
               //console.log(data);
               alert(data.data);
               this.setState({ passup: true });
@@ -49,15 +49,15 @@ class Login extends Component {
       }
     }
 
-    if (this.state.codesent == true && this.state.codecheck == false) {
-      if (this.state.code == "") {
+    if (this.state.codesent === true && this.state.codecheck === false) {
+      if (this.state.code === "") {
         alert("Fill in the Code");
       } else {
         await Axios.get(
           `/forgotpassword/confirmCode/${this.state.code}/${this.state.email}`
         )
           .then(({ data }) => {
-            if (data.assert == true) {
+            if (data.assert === true) {
               //console.log(data);
               localStorage.setItem("token", data.token);
               alert(
@@ -73,11 +73,11 @@ class Login extends Component {
       }
     }
 
-    if (this.state.codesent == false) {
+    if (this.state.codesent === false) {
       await Axios.get(`/forgotpassword/${this.state.email}`)
         .then(({ data }) => {
           console.log(data,'sdfhkjsdhfj');
-          if (data.assert == true) {
+          if (data.assert === true) {
             alert(data.data);
             this.setState({ codesent: true });
             this.setState({ displaycode: true });
@@ -98,7 +98,7 @@ class Login extends Component {
     const {
       email,
       password,
-      isSubmitting,
+      //isSubmitting,
       loginError,
       code,
       displaycode,
@@ -160,9 +160,9 @@ class Login extends Component {
                     <div
                       id="u"
                       className={
-                        displaycode
-                          ? "input-group input-group-lg mt-3" + " show"
-                          : "input-group input-group-lg mt-3" + " hide"
+                        displaycode 
+                        ? "input-group input-group-lg mt-3 show" 
+                        : "input-group input-group-lg mt-3 hide"
                       }
                     >
                       <div class="input-group-prepend">
@@ -191,8 +191,8 @@ class Login extends Component {
                     <div
                       className={
                         displaypass
-                          ? "input-group input-group-lg mt-3" + " show"
-                          : "input-group input-group-lg mt-3" + " hide"
+                          ? "input-group input-group-lg mt-3 show"
+                          : "input-group input-group-lg mt-3 hide"
                       }
                     >
                       <div class="input-group-prepend mb-2">

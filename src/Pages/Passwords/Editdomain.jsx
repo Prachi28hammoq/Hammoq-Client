@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import Axios from "../../services/Axios";
 
 class Editdomain extends Component {
@@ -14,7 +14,7 @@ class Editdomain extends Component {
     const { website } = this.props.match.params;
     Axios.get("/password")
       .then((response) => {
-        response.data.passwords.map((user) => {
+        response.data.passwords.forEach((user) => {
           if (user.website === website) {
             this.setState({ users: user });
           }

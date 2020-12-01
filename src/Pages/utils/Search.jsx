@@ -15,7 +15,8 @@ const doesInclueds = (obj, string) => {
   return false;
 };
 
-export default (arr, string) => {
+const Search = (arr, string) => {
   const newArr = arr.filter((a) => doesInclueds(a, string));
   return newArr;
 };
+export default Search;

@@ -5,7 +5,7 @@ import { API_URL } from "../../services/url";
 import authService from "../../services/auth-service";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import { loadStripe } from "@stripe/stripe-js";
+//import { loadStripe } from "@stripe/stripe-js";
 import { CardElement } from "@stripe/react-stripe-js";
 
 class AddPayment extends Component {
@@ -172,7 +172,7 @@ class AddPayment extends Component {
                 <td>${user.amount / 100}</td>
                 <td>{date}</td>
                 <td>
-                  <a href={user.receipt_url} target="_blank">
+                  <a href={user.receipt_url} target="_blank" rel="noreferrer">
                     Receipt
                   </a>
                 </td>

@@ -1,7 +1,77 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, createRef } from "react";
 import TextField from "@material-ui/core/TextField";
 import Axios from "../../services/Axios";
 import "./ListingSettings.css";
+
+const Rules = (props) => {
+  const [childItemType, setChildItemType] = useState(props.item.itemType);
+  const [childItemPrice, setChildItemPrice] = useState(props.item.itemPrice);
+  const [childItemShipService, setChildItemShipService] = useState(props.item.itemShipServ);
+
+  useEffect(() => {
+    setChildItemType(props.item.itemType);
+    setChildItemPrice(props.item.itemPrice);
+    setChildItemShipService(props.item.itemShipServ);
+  }, []);
+
+  const handleChange = (e) => 
+  {
+    props.onChange(e)
+  }
+
+  return(
+        <>
+        <div className='r2_q4_sub_align'>
+        <div className='items__align_col'>
+          <div className='text_allign'>Item Type</div>
+          <div className='rules_align'>
+            <div>If</div>
+            <label>
+              <input
+                name='itemType'
+                type='text'
+                value={childItemType}
+                className='r2_q4_inner_align_input'
+                onInput={handleChange}
+                onChange={(e) => setChildItemType(e.target.value)}
+              ></input>
+            </label>
+          </div>
+        </div>
+        <div className='items__align_col'>
+          <div className='text_allign'>Price</div>
+          <div className='rules_align'>
+            <div>Then</div>
+            <label>
+              <input
+                name='itemPrice'
+                type='number'
+                min={0}
+                value={childItemPrice}
+                className='r2_q4_inner_align_input'
+                onInput={handleChange}
+                onChange={(e) => setChildItemPrice(e.target.value)}
+              ></input>
+            </label>
+          </div>
+        </div>
+        <div className='items__align_col'>
+          <div className='text_allign'>Shipping service</div>
+          <label className='rules_align'>
+            <input
+              name='itemShipServ'
+              type='text'
+              value={childItemShipService}
+              className='r2_q4_inner_align_input'
+              onInput={handleChange}
+              onChange={(e) => setChildItemShipService(e.target.value)}
+            ></input>
+          </label>
+        </div>
+      </div>
+      </>
+    );
+}
 
 const ListingSettings = () => {
   // Listing settings
@@ -9,7 +79,7 @@ const ListingSettings = () => {
   const [priceOptions, setPriceOptions] = useState("");
   const [otherPriceOptions, setOtherPriceOptions] = useState("");
   const [incrCompPrice, setIncrCompPrice] = useState("");
-  const [companyBlob, setCompanyBlob] = useState("");
+  const [companyBlurb, setCompanyBlurb] = useState("");
   const [bestOffer, setBestOffer] = useState(true);
   const [isOfferAccept, setIsOfferAccept] = useState(false);
   const [offerAccept, setOfferAccept] = useState("");
@@ -18,19 +88,16 @@ const ListingSettings = () => {
   const [ebaySmartPricing, setEbaySmartPricing] = useState(false);
   const [mercariSmartPricing, setMercariSmartPricing] = useState(false);
   const [country, setCountry] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [zipCode, setZipCode] = useState(0);
   const [location, setLocation] = useState("");
   const [mercariTags, setMercariTags] = useState([]);
 
   // Shipping and Return settings
-  const [shipping, setShipping] = useState([]);
-  const [flatShipRules, setFlatShipRules] = useState(false);
-  const [itemType1, setItemType1] = useState("");
-  const [itemType2, setItemType2] = useState("");
-  const [itemPrice1, setItemPrice1] = useState("");
-  const [itemPrice2, setItemPrice2] = useState("");
-  const [itemShipServ1, setItemShipServ1] = useState("");
-  const [itemShipServ2, setItemShipServ2] = useState("");
+  const [freeShipping, setFreeShipping] = useState(false);
+  const [flatShippingRulesStatus, setFlatShippingRulesStatus] = useState(false);
+  const [flatShippingRules, setFlatShippingRules] = useState([]);
+  const [testIdea, setTestIdea] = useState([]);
+  const [calculatedShipping, setCalculatedShipping] = useState(false);
   const [isReturnAccept, setIsReturnAccept] = useState(false);
   const [returnedWithin, setReturnedWithin] = useState("");
   const [refundAs, setRefundAs] = useState("");
@@ -93,7 +160,7 @@ const ListingSettings = () => {
         setPriceOptions(savedData.priceOptions);
         setOtherPriceOptions(savedData.otherPriceOptions);
         setIncrCompPrice(savedData.incrCompPrice[0].value + compPriceSign);
-        setCompanyBlob(savedData.companyBlob);
+        setCompanyBlurb(savedData.companyBlurb);
         setBestOffer(savedData.bestOffer[0].enabled);
         setOfferAccept(savedData.bestOffer[0].acceptOfferOf);
         setIsOfferAccept(savedData.bestOffer[0].isOfferAccepted);
@@ -109,14 +176,9 @@ const ListingSettings = () => {
 
         savedData = res.data.configSettings[0].shipping[0];
         //console.log("shipping data: ", savedData);
-        setShipping(savedData.shippingType);
-        setFlatShipRules(savedData.flatShippingRules[0].enabled);
-        setItemType1(savedData.flatShippingRules[0].rule1[0].itemType);
-        setItemType2(savedData.flatShippingRules[0].rule2[0].itemType);
-        setItemPrice1(savedData.flatShippingRules[0].rule1[0].itemPrice);
-        setItemPrice2(savedData.flatShippingRules[0].rule2[0].itemPrice);
-        setItemShipServ1(savedData.flatShippingRules[0].rule1[0].itemShipServ);
-        setItemShipServ2(savedData.flatShippingRules[0].rule2[0].itemShipServ);
+        setFreeShipping(savedData.freeShipping);
+        setFlatShippingRulesStatus(savedData.flatShippingRules[0].flatShippingRulesStatus);
+        setFlatShippingRules(savedData.flatShippingRules)
         setIsReturnAccept(savedData.returns[0].accepted);
         setReturnedWithin(savedData.returns[0].returnWithin);
         setRefundAs(savedData.returns[0].refundGivenAs);
@@ -147,6 +209,17 @@ const ListingSettings = () => {
       .catch((err) => console.log("error fetching client: ", err));
   }, []);
 
+  const addRule = () => setFlatShippingRules(flatShippingRules => [...flatShippingRules, {itemType: flatShippingRules.itemType, itemPrice: flatShippingRules.itemPrice, itemShipService: flatShippingRules.itemShipService}])
+
+  const handleRulesChange = (e, index) =>
+  {
+    let ruleSetCopy = [...flatShippingRules];
+    let item = ruleSetCopy[index];
+    let updatedItem = {...item, [e.target.name]:e.target.value};
+    ruleSetCopy[index] = updatedItem;
+    setFlatShippingRules(ruleSetCopy);
+  }
+
   const handleSubmit = () => {
     let priceOpt = priceOptions;
     if (otherPriceOptions.toLowerCase() === "i'll price") 
@@ -161,6 +234,16 @@ const ListingSettings = () => {
       if (incrCompPrice[0] === "$") 
       {
         sign = "dollar";
+        compPriceVal = incrCompPrice.slice(1);
+      } 
+      else if (incrCompPrice[incrCompPrice.length - 1] === "$") 
+      {
+        sign = "dollar";
+        compPriceVal = incrCompPrice.slice(0, -1);
+      }
+      else if (incrCompPrice[0] === "%") 
+      {
+        sign = "percent";
         compPriceVal = incrCompPrice.slice(1);
       } 
       else if (incrCompPrice[incrCompPrice.length - 1] === "%") 
@@ -181,7 +264,7 @@ const ListingSettings = () => {
         value: compPriceVal,
       },
       buyerReqs: buyerReqs,
-      companyBlob: companyBlob,
+      companyBlurb: companyBlurb,
       bestOffer: {
         enabled: bestOffer,
         acceptOfferOf: offerAccept,
@@ -198,20 +281,9 @@ const ListingSettings = () => {
     };
 
     var shippingSettingsObj = {
-      shippingType: shipping,
-      flatShippingRules: {
-        enabled: flatShipRules,
-        rule1: {
-          itemType: itemType1,
-          itemPrice: itemPrice1,
-          itemShipServ: itemShipServ1,
-        },
-        rule2: {
-          itemType: itemType2,
-          itemPrice: itemPrice2,
-          itemShipServ: itemShipServ2,
-        },
-      },
+      freeShipping: freeShipping,
+      flatShippingRulesStatus: flatShippingRulesStatus,
+      flatShippingRules: flatShippingRules,
       returns: {
         accepted: isReturnAccept,
         returnWithin: returnedWithin,
@@ -219,6 +291,8 @@ const ListingSettings = () => {
         ReturnShipPaidBy: returnShipBy,
       },
     };
+
+    console.log(flatShippingRules)
 
     var intlShippingObj = {
       incrFromDomestic: incrByDomestic,
@@ -290,7 +364,7 @@ const ListingSettings = () => {
                 type='search'
                 variant='outlined'
                 value={firstName}
-                onChange={(event) => this.handleChangeText('firstName', event)}
+                onChange={(e) => setFirstName(e.target.value)}
               />
               <TextField
                 style={{ margin: "10px" }}
@@ -299,7 +373,7 @@ const ListingSettings = () => {
                 type='search'
                 variant='outlined'
                 value={lastName}
-                onChange={(event) => this.handleChangeText('lastName', event)}
+                onChange={(e) => setLastName(e.target.value)}
               />
               <TextField
                 style={{ margin: "10px" }}
@@ -308,7 +382,7 @@ const ListingSettings = () => {
                 type='search'
                 variant='outlined'
                 value={emailAddress}
-                onChange={(event) => this.handleChangeText('emailAddress', event)}
+                onChange={(e) => setEmailAddress(e.target.value)}
               />
               <TextField
                 style={{ margin: "10px" }}
@@ -317,7 +391,7 @@ const ListingSettings = () => {
                 type='search'
                 variant='outlined'
                 value={phoneNum}
-                onChange={(event) => this.handleChangeText('phoneNum', event)}
+                onChange={(e) => setPhoneNum(e.target.value)}
               />
             </div>
             <div className='group__two'>
@@ -328,7 +402,7 @@ const ListingSettings = () => {
                 type='search'
                 variant='outlined'
                 value={storeLink}
-                onChange={(event) => this.handleChangeText('storeLink', event)}
+                onChange={(e) => setStoreLink(e.target.value)}
               />
               <TextField
                 className='group__two_two'
@@ -337,7 +411,7 @@ const ListingSettings = () => {
                 type='search'
                 variant='outlined'
                 value={findUs}
-                onChange={(event) => this.handleChangeText('findUs', event)}
+                onChange={(e) => setFindUs(e.target.value)}
               />
             </div>
         <div className='col_one_scroll'>
@@ -513,11 +587,11 @@ const ListingSettings = () => {
             <label>
               <input
                 type='text'
-                value={companyBlob}
+                value={companyBlurb}
                 className='body__one__q4_input'
                 placeholder=''
                 onChange={(e) => {
-                  setCompanyBlob(e.target.value);
+                  setCompanyBlurb(e.target.value);
                   //console.log("Comp Blob: ", e.target.value);
                 }}
               ></input>
@@ -700,7 +774,7 @@ const ListingSettings = () => {
             <label>
               <input
                 type='number'
-                min='0'
+                min={0}
                 value={zipCode}
                 className='automatic__input'
                 onChange={(e) => {
@@ -757,20 +831,9 @@ const ListingSettings = () => {
                 <input
                   type='checkbox'
                   value='Free'
-                  checked={shipping.find((i) => i === "Free")}
-                  onChange={(e) => {
-                    let list = shipping;
-                    if (e.target.checked) {
-                      list.push(e.target.value);
-                      setShipping(list);
-                      //console.log("shipping: ", list);
-                    } else {
-                      let newList = list.filter((i) => i !== e.target.value);
-                      setShipping(newList);
-                      //console.log("shipping: ", newList);
-                    }
-                  }}
-                ></input>{" "}
+                  checked={freeShipping}
+                  onChange={(e) => {setFreeShipping(e.target.checked)}}
+                ></input>
                 Free Shipping
               </label>
               <div>
@@ -778,190 +841,35 @@ const ListingSettings = () => {
                   <input
                     type='checkbox'
                     value='Flat'
-                    checked={flatShipRules}
-                    onChange={(e) => {
-                      setFlatShipRules(e.target.checked);
-                      //console.log("Flat shipping? : ", e.target.checked);
-                      let list = shipping;
-                      if (e.target.checked) {
-                        list.push(e.target.value);
-                        setShipping(list);
-                        //console.log("shipping: ", list);
-                      } else {
-                        let newList = list.filter((i) => i !== e.target.value);
-                        setShipping(newList);
-                        //console.log("shipping: ", newList);
-                        setItemType1("");
-                        setItemPrice1("");
-                        setItemShipServ1("");
-                        setItemType2("");
-                        setItemPrice2("");
-                        setItemShipServ2("");
-                      }
-                    }}
-                  ></input>{" "}
+                    checked={flatShippingRulesStatus}
+                    onChange={(e) => {setFlatShippingRulesStatus(e.target.checked)}}
+                  ></input>
                   Flat Shipping
                 </label>
-                <div className='r2_q4_inner_align'>
-                  <div className='rules__arrange'> Rules</div>
-                  <div className='r2_q4_sub_align'>
-                    <div className='items__align_col'>
-                      <div className='text_allign'>Item Type</div>
-                      <div className='rules_align'>
-                        <div>If</div>
-                        <label>
-                          <input
-                            type='text'
-                            value={itemType1}
-                            className='r2_q4_inner_align_input'
-                            onChange={(e) => {
-                              if (flatShipRules) {
-                                let type = itemType1;
-                                type = e.target.value;
-                                setItemType1(type);
-                                //console.log("ItemType 1", itemType1);
-                              }
-                            }}
-                          ></input>{" "}
-                        </label>
-                      </div>
-                    </div>
-                    <div className='items__align_col'>
-                      <div className='text_allign'>Price</div>
-                      <div className='rules_align'>
-                        {" "}
-                        <div>Then</div>
-                        <label>
-                          <input
-                            type='number'
-                            min='0'
-                            value={itemPrice1}
-                            className='r2_q4_inner_align_input'
-                            onChange={(e) => {
-                              if (flatShipRules) {
-                                let type = setItemPrice1;
-                                type = e.target.value;
-                                if(Math.sign(type) === 1){
-                                    setItemPrice1(type);
-                                } else setItemPrice1("")
-                                //console.log("ItemPrice 1", itemPrice1);
-                              }
-                            }}
-                          ></input>{" "}
-                        </label>
-                      </div>
-                    </div>
-                    <div className='items__align_col'>
-                      <div className='text_allign'>Shipping service</div>{" "}
-                      <label className='rules_align'>
-                        <input
-                          type='text'
-                          value={itemShipServ1}
-                          className='r2_q4_inner_align_input'
-                          onChange={(e) => {
-                            if (flatShipRules) {
-                              let type = itemShipServ1;
-                              type = e.target.value;
-                              setItemShipServ1(type);
-                              //console.log("ItemShipServ 1", itemShipServ1);
-                            }
-                          }}
-                        ></input>{" "}
-                      </label>
-                    </div>
-                  </div>
-                  {/* --------------------- */}
 
-                  <div className='r2_q4_sub_align'>
-                    <div>
-                      <div className='text_allign'>Item Type</div>
-                      <div className='rules_align'>
-                        <div> If</div>
-                        <label>
-                          <input
-                            type='text'
-                            value={itemType2}
-                            className='r2_q4_inner_align_input'
-                            onChange={(e) => {
-                              if (flatShipRules) {
-                                let type = itemType2;
-                                type = e.target.value;
-                                setItemType2(type);
-                                //console.log("ItemType 2", itemType2);
-                              }
-                            }}
-                          ></input>{" "}
-                        </label>
-                      </div>
-                    </div>
-                    <div>
-                      <div className='text_allign'>Price</div>
-                      <div className='rules_align'>
-                        {" "}
-                        <div>Then</div>
-                        <label>
-                          <input
-                            type='number'
-                            min='0'
-                            value={itemPrice2}
-                            className='r2_q4_inner_align_input'
-                            onChange={(e) => {
-                              if (flatShipRules) {
-                                let type = itemPrice2;
-                                type = e.target.value;
-                                if(Math.sign(type) === 1){
-                                    setItemPrice2(type);
-                                } else setItemPrice2("")
-                                //console.log("ItemPrice 2", itemPrice2);
-                              }
-                            }}
-                          ></input>{" "}
-                        </label>
-                      </div>
-                    </div>
-                    <div>
-                      <div className='text_allign'>Shipping service</div>
-                      <div className='rules_align'>
-                        {" "}
-                        <label>
-                          <input
-                            type='text'
-                            value={itemShipServ2}
-                            className='r2_q4_inner_align_input'
-                            onChange={(e) => {
-                              if (flatShipRules) {
-                                let type = itemShipServ2;
-                                type = e.target.value;
-                                setItemShipServ2(type);
-                                //console.log("ItemShipServ 2", itemShipServ2);
-                              }
-                            }}
-                          ></input>{" "}
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+                <div className='r2_q4_inner_align'>
+                  <div className='rules__arrange'> Rules </div>
+                   {flatShippingRules &&
+                    flatShippingRules.map((item, index) => 
+                      <Rules onChange={e => handleRulesChange(e, index)} item={flatShippingRules[index]}/>
+                      )}
+                <label className='save_btn_align'>
+                <input
+                  type='button'
+                  value='Add Rule'
+                  onClick={(e) => addRule()}
+                  className='save_button'
+                ></input>
+                </label>
                 </div>
               </div>
-
               <label>
                 <input
                   type='checkbox'
                   value='Calculated'
-                  checked={shipping.find((i) => i === "Calculated")}
-                  onChange={(e) => {
-                    let list = shipping;
-                    if (e.target.checked) {
-                      list.push(e.target.value);
-                      setShipping(list);
-                      //console.log("shipping: ", list);
-                    } else {
-                      let newList = list.filter((i) => i !== e.target.value);
-                      setShipping(newList);
-                      //console.log("shipping: ", newList);
-                    }
-                  }}
-                ></input>{" "}
+                  checked={calculatedShipping}
+                  onChange={(e) => {setCalculatedShipping(e.target.checked)}}
+                ></input>
                 Calculated Shipping
               </label>
               <label>
@@ -978,7 +886,7 @@ const ListingSettings = () => {
                         setReturnShipBy("");
                     }
                   }}
-                ></input>{" "}
+                ></input>
                 Returns Accepted
               </label>
 

@@ -1,19 +1,19 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import moment from 'moment'
 
-import { makeStyles } from '@material-ui/core/styles';
-import Popover from '@material-ui/core/Popover';
+//import { makeStyles } from '@material-ui/core/styles';
+//import Popover from '@material-ui/core/Popover';
 
-import $ from "jquery";
+//import $ from "jquery";
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import Axios from "../../services/Axios";
+//import Axios from "../../services/Axios";
 // const io = require("socket.io-client");
 // const socket = io.connect("https://devcust.avoidpoints.com");
 
 let socket = require.main.exports.socket;
 
-export default class extends Component {
+class message extends Component {
   constructor(){
     super()
     this.state = {
@@ -73,7 +73,7 @@ export default class extends Component {
             <div style = {{height : '65vh' , overflow : 'auto' }} id = "msg_history">
               {
                 this.state.messages.map((data) => {
-                  if(data.tag == "client" ){
+                  if(data.tag === "client" ){
                     return (
                       <div className = 'outgoing_msg'>
                           <div className="sent_msg">
@@ -133,3 +133,4 @@ export default class extends Component {
     )
   }
 }
+export default message;

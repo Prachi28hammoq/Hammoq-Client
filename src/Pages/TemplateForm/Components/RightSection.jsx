@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import Input from "./Input";
 import { Link } from "react-router-dom";
-import ButtonGroup from "./ButtonGroup";
-import { assetsURL } from "../../../services/Axios";
+//import ButtonGroup from "./ButtonGroup";
+//import { assetsURL } from "../../../services/Axios";
 
 const max = 5000;
 
-export default class extends Component {
+class RightSection extends Component {
   constructor() {
     super();
     this.state = {
@@ -69,8 +69,8 @@ export default class extends Component {
   render = () => {
     const {
       showOtherTitles,
-      suggestTitles,
-      showMoreLines,
+      //suggestTitles,
+      //showMoreLines,
       custom,
       customdesc,
     } = this.state;
@@ -84,203 +84,203 @@ export default class extends Component {
       addDescription,
       handleDescriptionChange,
       handleDescriptionLabel,
-      templatename,
-      tempcheck,
+      //templatename,
+      //tempcheck,
       handleUrl
     } = this.props;
 
-    if (custom.toString() == "false") {
-      if (localStorage.getItem("titletype") == "type2") {
+    if (custom.toString() === "false") {
+      if (localStorage.getItem("titletype") === "type2") {
         data.title =
-          (data.brand != undefined
-            ? data.brand != ""
+          (data.brand !== undefined
+            ? data.brand !== ""
               ? data.brand + " "
               : ""
             : "") +
-          (data.model != undefined
-            ? data.model != ""
+          (data.model !== undefined
+            ? data.model !== ""
               ? data.model + " "
               : ""
             : "") +
-          (data.modelNo != undefined
-            ? data.modelNo != ""
+          (data.modelNo !== undefined
+            ? data.modelNo !== ""
               ? data.modelNo + " "
               : ""
             : "") +
-          (data.category != undefined
-            ? data.category != ""
+          (data.category !== undefined
+            ? data.category !== ""
               ? data.category + " "
               : ""
             : "") +
-          (data.colorShade != undefined
-            ? data.colorShade != ""
+          (data.colorShade !== undefined
+            ? data.colorShade !== ""
               ? data.colorShade + " "
               : ""
             : "") +
-          (data.style != undefined
-            ? data.style != ""
+          (data.style !== undefined
+            ? data.style !== ""
               ? data.style + " "
               : ""
             : "") +
-          (data.pattern != undefined
-            ? data.pattern != ""
+          (data.pattern !== undefined
+            ? data.pattern !== ""
               ? data.pattern + " "
               : ""
             : "") +
-          (data.size != undefined
-            ? data.size != ""
+          (data.size !== undefined
+            ? data.size !== ""
               ? data.size + " "
               : ""
             : "");
       } else {
         data.title =
-          (data.brand != undefined
-            ? data.brand != ""
+          (data.brand !== undefined
+            ? data.brand !== ""
               ? data.brand + " "
               : ""
             : "") +
-          (data.category != undefined
-            ? data.category != ""
+          (data.category !== undefined
+            ? data.category !== ""
               ? data.category + " "
               : ""
             : "") +
-          (data.model != undefined
-            ? data.model != ""
+          (data.model !== undefined
+            ? data.model !== ""
               ? data.model + " "
               : ""
             : "") +
-          (data.modelNo != undefined
-            ? data.modelNo != ""
+          (data.modelNo !== undefined
+            ? data.modelNo !== ""
               ? data.modelNo + " "
               : ""
             : "") +
-          (data.colorShade != undefined
-            ? data.colorShade != ""
+          (data.colorShade !== undefined
+            ? data.colorShade !== ""
               ? data.colorShade + " "
               : ""
             : "") +
-          (data.style != undefined
-            ? data.style != ""
+          (data.style !== undefined
+            ? data.style !== ""
               ? data.style + " "
               : ""
             : "") +
-          (data.pattern != undefined
-            ? data.pattern != ""
+          (data.pattern !== undefined
+            ? data.pattern !== ""
               ? data.pattern + " "
               : ""
             : "") +
-          (data.size != undefined
-            ? data.size != ""
+          (data.size !== undefined
+            ? data.size !== ""
               ? data.size + " "
               : ""
             : "");
       }
     }
 
-    if (customdesc.toString() == "false") {
+    if (customdesc.toString() === "false") {
       data.shortDescription =
-        (data.title != undefined
-          ? data.title != ""
+        (data.title !== undefined
+          ? data.title !== ""
             ? data.title + "\n"
             : ""
           : "") +
-        (data.brand != undefined
-          ? data.brand != ""
+        (data.brand !== undefined
+          ? data.brand !== ""
             ? "Brand: " + data.brand + "\n"
             : ""
           : "") +
-        (data.model != undefined
-          ? data.model != ""
+        (data.model !== undefined
+          ? data.model !== ""
             ? "Model: " + data.model + "\n"
             : ""
           : "") +
-        (data.modelNo != undefined
-          ? data.modelNo != ""
+        (data.modelNo !== undefined
+          ? data.modelNo !== ""
             ? "Model No.: " + data.modelNo + "\n"
             : ""
           : "") +
-        (data.category != undefined
-          ? data.category != ""
+        (data.category !== undefined
+          ? data.category !== ""
             ? "Category: " + data.category + "\n"
             : ""
           : "") +
-        (data.colorShade != undefined
-          ? data.colorShade != ""
+        (data.colorShade !== undefined
+          ? data.colorShade !== ""
             ? "Color: " + data.colorShade + "\n"
             : ""
           : "") +
-        (data.material != undefined
-          ? data.material != ""
+        (data.material !== undefined
+          ? data.material !== ""
             ? "Material: " + data.material + "\n"
             : ""
           : "") +
-        (data.style != undefined
-          ? data.style != ""
+        (data.style !== undefined
+          ? data.style !== ""
             ? "Style: " + data.style + "\n"
             : ""
           : "") +
-        (data.pattern != undefined
-          ? data.pattern != ""
+        (data.pattern !== undefined
+          ? data.pattern !== ""
             ? "Pattern: " + data.pattern + "\n"
             : ""
           : "") +
-        (data.size != undefined
-          ? data.size != ""
+        (data.size !== undefined
+          ? data.size !== ""
             ? "Size: " + data.size + "\n"
             : ""
           : "") +
-        (data.seasonOrWeather != undefined
-          ? data.seasonOrWeather != ""
+        (data.seasonOrWeather !== undefined
+          ? data.seasonOrWeather !== ""
             ? "Season/Weather: " + data.seasonOrWeather + "\n"
             : ""
           : "") +
-        (data.care != undefined
-          ? data.care != ""
+        (data.care !== undefined
+          ? data.care !== ""
             ? "Care: " + data.care + "\n"
             : ""
           : "") +
-        (data.madeIn != undefined
-          ? data.madeIn != ""
+        (data.madeIn !== undefined
+          ? data.madeIn !== ""
             ? "Made in: " + data.madeIn + "\n"
             : ""
           : "") +
-        (data.line1 != undefined
-          ? data.line1 != ""
+        (data.line1 !== undefined
+          ? data.line1 !== ""
             ? data.line1 + "\n"
             : ""
           : "") +
-        (data.line2 != undefined
-          ? data.line2 != ""
+        (data.line2 !== undefined
+          ? data.line2 !== ""
             ? data.line2 + "\n"
             : ""
           : "") +
-        (data.line3 != undefined
-          ? data.line3 != ""
+        (data.line3 !== undefined
+          ? data.line3 !== ""
             ? data.line3 + "\n"
             : ""
           : "") +
-        (data.line4 != undefined
-          ? data.line4 != ""
+        (data.line4 !== undefined
+          ? data.line4 !== ""
             ? data.line4 + "\n"
             : ""
           : "") +
-        (data.line5 != undefined
-          ? data.line5 != ""
+        (data.line5 !== undefined
+          ? data.line5 !== ""
             ? data.line5 + "\n"
             : ""
           : "") +
-        (data.line6 != undefined
-          ? data.line6 != ""
+        (data.line6 !== undefined
+          ? data.line6 !== ""
             ? data.line6 + "\n"
             : ""
           : "") +
-        (data.line7 != undefined
-          ? data.line7 != ""
+        (data.line7 !== undefined
+          ? data.line7 !== ""
             ? data.line7 + "\n"
             : ""
           : "") +
-        (data.line8 != undefined
-          ? data.line8 != ""
+        (data.line8 !== undefined
+          ? data.line8 !== ""
             ? data.line8 + "\n"
             : ""
           : "");
@@ -291,98 +291,98 @@ export default class extends Component {
     }
     if (data.title) {
       //advance listing & data.title is not undefined
-      let title = data.title.trim();
+      //let title = data.title.trim();
       data.ebay.title =
-        (data.brand != undefined
-          ? data.brand != ""
+        (data.brand !== undefined
+          ? data.brand !== ""
             ? data.brand + " "
             : ""
           : "") +
-        (data.category != undefined
-          ? data.category != ""
+        (data.category !== undefined
+          ? data.category !== ""
             ? data.category + " "
             : ""
           : "") +
-        (data.model != undefined
-          ? data.model != ""
+        (data.model !== undefined
+          ? data.model !== ""
             ? data.model + " "
             : ""
           : "") +
-        (data.modelNo != undefined
-          ? data.modelNo != ""
+        (data.modelNo !== undefined
+          ? data.modelNo !== ""
             ? data.modelNo + " "
             : ""
           : "") +
-        (data.colorShade != undefined
-          ? data.colorShade != ""
+        (data.colorShade !== undefined
+          ? data.colorShade !== ""
             ? data.colorShade + " "
             : ""
           : "") +
-        (data.style != undefined
-          ? data.style != ""
+        (data.style !== undefined
+          ? data.style !== ""
             ? data.style + " "
             : ""
           : "") +
-        (data.pattern != undefined
-          ? data.pattern != ""
+        (data.pattern !== undefined
+          ? data.pattern !== ""
             ? data.pattern + " "
             : ""
           : "") +
-        (data.size != undefined
-          ? data.size != ""
+        (data.size !== undefined
+          ? data.size !== ""
             ? data.size + " "
             : ""
           : "");
 
       data.poshmark.title =
-        (data.brand != undefined
-          ? data.brand != ""
+        (data.brand !== undefined
+          ? data.brand !== ""
             ? data.brand + " "
             : ""
           : "") +
-        (data.category != undefined
-          ? data.category != ""
+        (data.category !== undefined
+          ? data.category !== ""
             ? data.category + " "
             : ""
           : "") +
-        (data.model != undefined
-          ? data.model != ""
+        (data.model !== undefined
+          ? data.model !== ""
             ? data.model + " "
             : ""
           : "") +
-        (data.colorShade != undefined
-          ? data.colorShade != ""
+        (data.colorShade !== undefined
+          ? data.colorShade !== ""
             ? data.colorShade + " "
             : ""
           : "") +
-        (data.size != undefined
-          ? data.size != ""
+        (data.size !== undefined
+          ? data.size !== ""
             ? data.size + " "
             : ""
           : "");
       data.mercari.title =
-        (data.brand != undefined
-          ? data.brand != ""
+        (data.brand !== undefined
+          ? data.brand !== ""
             ? data.brand + " "
             : ""
           : "") +
-        (data.category != undefined
-          ? data.category != ""
+        (data.category !== undefined
+          ? data.category !== ""
             ? data.category + " "
             : ""
           : "") +
-        (data.model != undefined
-          ? data.model != ""
+        (data.model !== undefined
+          ? data.model !== ""
             ? data.model + " "
             : ""
           : "") +
-        (data.colorShade != undefined
-          ? data.colorShade != ""
+        (data.colorShade !== undefined
+          ? data.colorShade !== ""
             ? data.colorShade + " "
             : ""
           : "") +
-        (data.size != undefined
-          ? data.size != ""
+        (data.size !== undefined
+          ? data.size !== ""
             ? data.size + " "
             : ""
           : "");
@@ -396,7 +396,7 @@ export default class extends Component {
             <text className="text-danger">*</text>Product Title{" "}
           </div>
           <i className="fas fa-question-circle c-pointer text-secondary ml-2 mt-2"></i>
-          {custom.toString() == "true" ? (
+          {custom.toString() === "true" ? (
             <button
               className={"btn btn-success ml-2 btn-sm"}
               onClick={(e) => this.customtitle(e)}
@@ -441,98 +441,98 @@ export default class extends Component {
               this.setState({ showOtherTitles: !showOtherTitles });
               if (data.title) {
                 //advance listing & data.title is not undefined
-                let title = data.title.trim();
+                //let title = data.title.trim();
                 data.ebay.title =
-                  (data.brand != undefined
-                    ? data.brand != ""
+                  (data.brand !== undefined
+                    ? data.brand !== ""
                       ? data.brand + " "
                       : ""
                     : "") +
-                  (data.category != undefined
-                    ? data.category != ""
+                  (data.category !== undefined
+                    ? data.category !== ""
                       ? data.category + " "
                       : ""
                     : "") +
-                  (data.model != undefined
-                    ? data.model != ""
+                  (data.model !== undefined
+                    ? data.model !== ""
                       ? data.model + " "
                       : ""
                     : "") +
-                  (data.modelNo != undefined
-                    ? data.modelNo != ""
+                  (data.modelNo !== undefined
+                    ? data.modelNo !== ""
                       ? data.modelNo + " "
                       : ""
                     : "") +
-                  (data.colorShade != undefined
-                    ? data.colorShade != ""
+                  (data.colorShade !== undefined
+                    ? data.colorShade !== ""
                       ? data.colorShade + " "
                       : ""
                     : "") +
-                  (data.style != undefined
-                    ? data.style != ""
+                  (data.style !== undefined
+                    ? data.style !== ""
                       ? data.style + " "
                       : ""
                     : "") +
-                  (data.pattern != undefined
-                    ? data.pattern != ""
+                  (data.pattern !== undefined
+                    ? data.pattern !== ""
                       ? data.pattern + " "
                       : ""
                     : "") +
-                  (data.size != undefined
-                    ? data.size != ""
+                  (data.size !== undefined
+                    ? data.size !== ""
                       ? data.size + " "
                       : ""
                     : "");
 
                 data.poshmark.title =
-                  (data.brand != undefined
-                    ? data.brand != ""
+                  (data.brand !== undefined
+                    ? data.brand !== ""
                       ? data.brand + " "
                       : ""
                     : "") +
-                  (data.category != undefined
-                    ? data.category != ""
+                  (data.category !== undefined
+                    ? data.category !== ""
                       ? data.category + " "
                       : ""
                     : "") +
-                  (data.model != undefined
-                    ? data.model != ""
+                  (data.model !== undefined
+                    ? data.model !== ""
                       ? data.model + " "
                       : ""
                     : "") +
-                  (data.colorShade != undefined
-                    ? data.colorShade != ""
+                  (data.colorShade !== undefined
+                    ? data.colorShade !== ""
                       ? data.colorShade + " "
                       : ""
                     : "") +
-                  (data.size != undefined
-                    ? data.size != ""
+                  (data.size !== undefined
+                    ? data.size !== ""
                       ? data.size + " "
                       : ""
                     : "");
                 data.mercari.title =
-                  (data.brand != undefined
-                    ? data.brand != ""
+                  (data.brand !== undefined
+                    ? data.brand !== ""
                       ? data.brand + " "
                       : ""
                     : "") +
-                  (data.category != undefined
-                    ? data.category != ""
+                  (data.category !== undefined
+                    ? data.category !== ""
                       ? data.category + " "
                       : ""
                     : "") +
-                  (data.model != undefined
-                    ? data.model != ""
+                  (data.model !== undefined
+                    ? data.model !== ""
                       ? data.model + " "
                       : ""
                     : "") +
-                  (data.colorShade != undefined
-                    ? data.colorShade != ""
+                  (data.colorShade !== undefined
+                    ? data.colorShade !== ""
                       ? data.colorShade + " "
                       : ""
                     : "") +
-                  (data.size != undefined
-                    ? data.size != ""
+                  (data.size !== undefined
+                    ? data.size !== ""
                       ? data.size + " "
                       : ""
                     : "");
@@ -553,7 +553,7 @@ export default class extends Component {
                   name="ebay"
                   id="ebay"
                   value={
-                    data["ebay"]["title"] != undefined
+                    data["ebay"]["title"] !== undefined
                       ? data["ebay"]["title"]
                       : ""
                   }
@@ -583,7 +583,7 @@ export default class extends Component {
                   name="poshmark"
                   id="poshmark"
                   value={
-                    data["poshmark"]["title"] != undefined
+                    data["poshmark"]["title"] !== undefined
                       ? data["poshmark"]["title"]
                       : ""
                   }
@@ -613,7 +613,7 @@ export default class extends Component {
                   name="mercari"
                   id="mercari"
                   value={
-                    data["mercari"]["title"] != undefined
+                    data["mercari"]["title"] !== undefined
                       ? data["mercari"]["title"]
                       : ""
                   }
@@ -740,7 +740,7 @@ export default class extends Component {
           </label>
           {/* shortDescription btn */}
 
-          {customdesc.toString() == "true" ? (
+          {customdesc.toString() === "true" ? (
             <button
               className={"btn btn-success ml-2 btn-sm"}
               onClick={this.customdescription}
@@ -912,3 +912,4 @@ export default class extends Component {
     );
   };
 }
+export default RightSection;

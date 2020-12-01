@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Input from "./Input";
+//import Input from "./Input";
 import "./style.css";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import { assetsURL } from "../../../services/Axios";
 import ButtonGroup from "./ButtonGroup";
 import LoadingSpinner from "../../utils/loader";
@@ -12,7 +12,7 @@ import { FaChevronRight, FaChevronLeft } from "react-icons/fa"
 const max = 5000;
 const $ = window.$;
 
-export default class extends Component {
+class LeftSection extends Component {
   constructor() {
     super();
     this.state = {
@@ -52,20 +52,20 @@ export default class extends Component {
   }
 
   handleMessageSubmit = async () => {
-    const formData = {
-      msgformTitle : this.state.msgFormTitle,
-      senderName :  `customer : ${localStorage.getItem("customerName")}`,
-      msgFormDescription : this.state.msgFormDescription,
-      field : this.state.field
-    }
+    //const formData = {
+    //  msgformTitle : this.state.msgFormTitle,
+    //  senderName :  `customer : ${localStorage.getItem("customerName")}`,
+    //  msgFormDescription : this.state.msgFormDescription,
+    //  field : this.state.field
+    //}
     //window.alert(formData.senderName)
     try{
-      const response = await Axios.post(`/message/${this.props.productid}`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": `${localStorage.getItem("token")}`,
-        },
-      })
+      //const response = await Axios.post(`/message/${this.props.productid}`, formData, {
+      //  headers: {
+      //    "Content-Type": "application/json",
+      //    "x-access-token": `${localStorage.getItem("token")}`,
+      //  },
+      //})
      // console.log(response, 'customer jshdfjkhakl')
       this.setState({anchorEl: null})
     }catch(error){
@@ -118,7 +118,7 @@ export default class extends Component {
   handleImageModal = (idx) => {
     //console.log(idx ,'idx')
     console.log(this.props.images ,'concoel')
-    if(idx >=  0  && idx < this.props.images.length && this.props.images[idx].img != null ){
+    if(idx >=  0  && idx < this.props.images.length && this.props.images[idx].img !== null ){
       let image = this.props.images[idx]
      // console.log(image, 'index check')
       this.setState(
@@ -126,11 +126,11 @@ export default class extends Component {
           imageIndex : idx,
           fullimg:
             typeof image.img === "string"
-              ? image.img.substring(0, 4) != "http" &&
-                image.img.substring(0, 5) != "https"
+              ? image.img.substring(0, 4) !== "http" &&
+                image.img.substring(0, 5) !== "https"
                 ? assetsURL + image.img
                 : image.img
-              :image.img != null ? URL.createObjectURL(image.img) : '',
+              :image.img !== null ? URL.createObjectURL(image.img) : '',
         },
         () => {
           $("#addTemplateModal1").modal("show");
@@ -144,8 +144,8 @@ export default class extends Component {
 
 
   render = () => {
-  //  console.log(this.state.imageIndex, 'image index')
-    const { suggestTitles, showOtherTitles } = this.state;
+    //console.log(this.state.imageIndex, 'image index')
+    //const { suggestTitles, showOtherTitles } = this.state;
     const {
       data,
       handleChange,
@@ -164,13 +164,20 @@ export default class extends Component {
       removeMeasure,
       handleMeasureChange,
       handleMeasureLabel,
-      handleOtherTitles,
+      //handleOtherTitles,
       toggleSelectedOthersWebsite,
       showcat,
       messageNotSeen,
     } = this.props;
 
-    const { selectedWebsites, category, showMoreLines, messageFormToggle, anchorEl,productMessage } = this.state;
+    const { 
+      selectedWebsites, 
+      //category, 
+      //showMoreLines, 
+      messageFormToggle, 
+      anchorEl,
+      productMessage 
+    } = this.state;
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
     const { toggleSelectedWebsite } = this.props;
@@ -182,7 +189,7 @@ export default class extends Component {
           <u>Upload Images:</u>
         </h4>
         <div className="row">
-          {images.map((image, idx) => {
+          {images.forEach((image, idx) => {
             return (
               <div className="col-12 col-lg-4 px-2">
                 <div
@@ -224,7 +231,8 @@ export default class extends Component {
                           maxWidth: "100%", padding:"auto"}}
                         >  <img
                         src={this.state.fullimg}
-                       style={{ maxWidth : "100%", maxHeight:'500px'}}
+                        style={{ maxWidth : "100%", maxHeight:'500px'}}
+                        alt="Alt Placeholder"
                       /></div>
                     </div>
                   </div>
@@ -237,20 +245,21 @@ export default class extends Component {
                         <img
                           src={
                             typeof image.img === "string"
-                              ? image.img.substring(0, 4) != "http" &&
-                                image.img.substring(0, 5) != "https"
+                              ? image.img.substring(0, 4) !== "http" &&
+                                image.img.substring(0, 5) !== "https"
                                 ? assetsURL + image.img
                                 : image.img
                               : URL.createObjectURL(image.img)
                           }
+                          alt="Alt Placeholder"
                           style={{ width: "100%", height: "90px" }}
                           // onClick={() => {
                           //   this.setState(
                           //     {
                           //       fullimg:
                           //         typeof image.img === "string"
-                          //           ? image.img.substring(0, 4) != "http" &&
-                          //             image.img.substring(0, 5) != "https"
+                          //           ? image.img.substring(0, 4) !== "http" &&
+                          //             image.img.substring(0, 5) !== "https"
                           //             ? assetsURL + image.img
                           //             : image.img
                           //           : URL.createObjectURL(image.img),
@@ -430,7 +439,7 @@ export default class extends Component {
         <div className="button-group">
           <div className="row">
             {othersbool
-              ? others.map((o, i) => {
+              ? others.forEach((o, i) => {
                 if(o)
                   return (
                     <div className="col-6 p-1">
@@ -552,7 +561,7 @@ export default class extends Component {
             />
           </div>
           {extraMeasures &&
-            extraMeasures.map((measure) => {
+            extraMeasures.forEach((measure) => {
               return (
                 <div className="form-group my-2 my-4 d-flex align-items-center">
                   <input
@@ -899,7 +908,7 @@ export default class extends Component {
             >
                <div className="col" style = {{width : "20rem", paddingBottom : '1rem' , paddingTop : '1rem'}}>
               <div className="scroll" style = {{overflow : "auto" , width : "18rem" , height : "15rem"}}>
-              <p>{productMessage && productMessage.map((msg) => {
+              <p>{productMessage && productMessage.forEach((msg) => {
               return (
                 <div >
                   <small>{msg.senderName ? msg.senderName : ''}</small>
@@ -978,3 +987,4 @@ const styles = {
     opacity: 0,
   },
 };
+export default LeftSection;
