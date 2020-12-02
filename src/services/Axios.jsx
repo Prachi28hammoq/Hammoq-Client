@@ -17,11 +17,11 @@ if (process.env.REACT_APP_STAGE === "devlocal") {
   assetsURL = "https://app.hammoq.com/assets/";
 }
 
-// baseURL = "http://localhost:8000/api";
-// assetsURL = "http://localhost:8000/assets/";
+baseURL = "http://localhost:8000/api";
+assetsURL = "http://localhost:8000/assets/";
 
-baseURL = "https://stageapp.avoidpoints.com/api";
-assetsURL = "https://stageapp.avoidpoints.com/assets/";
+// baseURL = "https://stageapp.avoidpoints.com/api";
+// assetsURL = "https://stageapp.avoidpoints.com/assets/";
 // baseURL = "https://devcust.avoidpoints.com/api";
 // assetsURL = "https://devcust.avoidpoints.com/assets/";
 
