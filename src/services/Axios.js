@@ -12,7 +12,6 @@ const assetsURL = "https://stageapp.avoidpoints.com/assets/";
 // const baseURL = "https://devcust.avoidpoints.com/api";
 // const assetsURL = "https://devcust.avoidpoints.com/assets/";
 
-
 //const socketCon = "http://localhost:8000";
 
 Axios.defaults.baseURL = baseURL + "/client";
