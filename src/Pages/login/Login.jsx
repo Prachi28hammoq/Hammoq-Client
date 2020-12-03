@@ -24,6 +24,7 @@ class Login extends Component {
           return;
         }
         localStorage.setItem("token", data.token);
+        localStorage.setItem("prodMsgId", "");
         window.open("/basic", "_self");
       })
       .catch((err) => {

@@ -43,6 +43,7 @@ class ChatMessages extends React.Component {
     socket.emit("user-connected", { roomId: this.props.roomId, tag: "client" });
     this.setState({ roomId: this.props.roomId, canMessageSend: true });
   };
+
   handleMessageSend = () => {
     //console.log(this.props.match.params.id,'idddddddddddd')
     if (this.state.message.trim() != "") {
@@ -67,92 +68,98 @@ class ChatMessages extends React.Component {
   render() {
     //console.log(this.state.messages, this.props, "render messages");
     return (
-      <Modal
-        className="modal-side modal-bottom-right modal-fade-right"
-        size="md"
-        show={this.props.modalOpen}
-        onHide={this.props.handleModalOpen}
-        style={{
-          borderRadius: "10px",
-          top: "45%",
-          left: "35%",
-          transform: "translate(-35%, 45%) !important",
-          backdrop: "none",
-          keyboard: false,
-          pointerEvents: 'none'
-        }}
-      >
-        <div className="main-container">
-          <div className="msg-header">
-            <div className="header-icon">
-              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-            </div>
-          </div>
-          <div className="msg_history" id="msg_history">
-            {this.state.messages.map((data) => {
-              if (data.tag == "client") {
-                return (
-                  <div className="outgoing_msg">
-                    <div className="sent_msg">
-                      <p>{data.text}</p>
-                      <span className="time_date">
-                        {moment(data.date).format("lll")}
-                      </span>
-                      {data.productId && (
-                        <small>
-                          <Link to={`/edit/${data.productId}`}>
-                            for Product
-                          </Link>
-                        </small>
-                      )}
-                    </div>
-                  </div>
-                );
-              } else {
-                return (
-                  <div className="incoming_msg">
-                    <div class="received_msg received_withd_msg">
-                      <div>
-                        <p>{data.text}</p>
+      <div>
+        {this.props.modalOpen && (
+          <div
+            className="modal-side modal-bottom-right modal-fade-right"
+            size="md"
+            show={this.props.modalOpen}
+            onHide={this.props.handleModalOpen}
+            data-backdrop="false"
+            style={{
+              borderRadius: "10px",
+              width: "450px",
+              position: "fixed",
+              right: "15px",
+              zIndex: "1",
+              backgroundColor: "white",
+              bottom: "75px",
+              border: "1px solid lightgrey",
+            }}
+          >
+            <div className="main-container">
+              <div className="msg-header">
+                <div className="header-icon">
+                  <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="msg_history" id="msg_history">
+                {this.state.messages.map((data) => {
+                  if (data.tag == "client") {
+                    return (
+                      <div className="outgoing_msg">
+                        <div className="sent_msg">
+                          <p>{data.text}</p>
+                          <span className="time_date">
+                            {moment(data.date).format("lll")}
+                          </span>
+                          {data.productId && (
+                            <small>
+                              <Link to={`/edit/${data.productId}`}>
+                                for Product
+                              </Link>
+                            </small>
+                          )}
+                        </div>
                       </div>
+                    );
+                  } else {
+                    return (
+                      <div className="incoming_msg">
+                        <div class="received_msg received_withd_msg">
+                          <div>
+                            <p>{data.text}</p>
+                          </div>
 
-                      <span className="time_date">
-                        {moment(data.date).format("lll")}
-                      </span>
-                      {data.productId && (
-                        <small>
-                          <Link to={`/edit/${data.productId}`}>
-                            for Product
-                          </Link>
-                        </small>
-                      )}
-                    </div>
-                  </div>
-                );
-              }
-            })}
-          </div>
-          <div className="type_msg">
-            <div className="input_msg_write">
-              <input
-                type="text"
-                id="text"
-                onChange={(e) => this.handleChange(e)}
-                placeholder="write a message"
-                value={this.state.message}
-              />
+                          <span className="time_date">
+                            {moment(data.date).format("lll")}
+                          </span>
+                          {data.productId && (
+                            <small>
+                              <Link to={`/edit/${data.productId}`}>
+                                for Product
+                              </Link>
+                            </small>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+              </div>
+              <div className="type_msg">
+                <div className="input_msg_write">
+                  <input
+                    type="text"
+                    id="text"
+                    onChange={(e) => this.handleChange(e)}
+                    placeholder="write a message"
+                    value={this.state.message}
+                  />
+                </div>
+
+                <button
+                  className="msg_send_btn"
+                  type="button"
+                  onClick={this.handleMessageSend}
+                >
+                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
-
-            <button
-              className="msg_send_btn"
-              type="button"
-              onClick={this.handleMessageSend}
-            >
-              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-            </button>
           </div>
-        </div>
-      </Modal>
+        )}
+      </div>
     );
   }
 }

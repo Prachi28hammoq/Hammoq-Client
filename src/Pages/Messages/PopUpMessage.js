@@ -27,34 +27,28 @@ class PopUpMessage extends React.Component {
     const token = localStorage.getItem("token");
     const decoded = jwt_decode(token);
     var id = decoded._doc._id;
-    this.setState({ roomId:id });
+    this.setState({ roomId: id });
   };
 
-  handleRoomJoin = (id) => {
-    this.setState({
-      roomId: id,
-      canMessageSend: true,
-      // chatpopOpen: !this.state.chatpopOpen,
-      modalOpen: !this.state.modalOpen,
-    });
-  };
+  // handleRoomJoin = (id) => {
+  //   this.setState({
+  //     roomId: id,
+  //     canMessageSend: true,
+  //     // chatpopOpen: !this.state.chatpopOpen,
+  //     modalOpen: !this.state.modalOpen,
+  //   });
+  // };
 
   handleChange = (event) => {
     this.setState({ message: event.target.value });
   };
 
-
-
   //modal
   handleModalOpen = () => {
-    this.setState((prevState) => {
-      return {
-        modalOpen: !prevState.modalOpen,
-      };
+    this.setState({
+      modalOpen: !this.state.modalOpen,
     });
   };
-
-
 
   render() {
     return (
@@ -66,8 +60,7 @@ class PopUpMessage extends React.Component {
           modalOpen={this.state.modalOpen}
           handleModalOpen={this.handleModalOpen}
           roomId={this.state.roomId}
-        >
-        </ChatMessages>
+        ></ChatMessages>
       </div>
     );
   }

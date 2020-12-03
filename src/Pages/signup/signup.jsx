@@ -90,6 +90,7 @@ class Signup extends Component {
         }
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("paymentadded", false);
+        localStorage.setItem("prodMsgId", "");
         window.open("/addpayment", "_self");
       })
       .catch((err) => {
