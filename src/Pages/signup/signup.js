@@ -119,7 +119,7 @@ class Signup extends Component {
       isSubmitting,
     } = this.state;
     return (
-      <div>
+      <div className="row col-lg-5 m-auto">
         <form className="formIt mt-7">
           <div className="d-flex align-items-center justify-content-between mb-5 ml-5 mr-5">
             <img src={Logo} alt="hammoq" className="img" />
