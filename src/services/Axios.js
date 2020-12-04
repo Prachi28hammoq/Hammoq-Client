@@ -1,7 +1,7 @@
 import Axios from "axios";
 
-// const baseURL = "https://app.hammoq.com/api";
-// const assetsURL = "https://app.hammoq.com/assets/";
+const baseURL = "https://app.hammoq.com/api";
+const assetsURL = "https://app.hammoq.com/assets/";
 
 // const baseURL = "https://stageapp.avoidpoints.com/api";
 // const assetsURL = "https://stageapp.avoidpoints.com/assets/";
