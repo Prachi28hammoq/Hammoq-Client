@@ -6,8 +6,6 @@ import "./BasicForm.css";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
 import { assetsURL, socketCon } from "../../services/Axios";
-import io from "socket.io-client";
-import SocketIOFileUpload from "socketio-file-upload";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import imageCompression from "browser-image-compression";
 
@@ -111,7 +109,7 @@ class BasicForm extends Component {
           const otherss = [...this.state.othersstate];
 
           otherss.push(localStorage.getItem(d) || false);
-          console.log(otherss, "otherssssssssssssssssssssssss");
+          // console.log(otherss, "otherssssssssssssssssssssssss");
 
           this.setState({ othersstate: otherss });
           // if (!localStorage.getItem(d)) {
@@ -132,11 +130,11 @@ class BasicForm extends Component {
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        console.log({ data }, "client user value check");
-        console.log(data, "client detail");
+        // console.log({ data }, "client user value check");
+        // console.log(data, "client detail");
         if (parseInt(data.balance) < 5 && data.savedCards.length > 0) {
           this.setState({ open: true });
-        }else if(parseInt(data.balance) < 5 && data.savedCards.length == 0) {
+        } else if (parseInt(data.balance) < 5 && data.savedCards.length == 0) {
           window.alert(
             "Low Payment and No card added, Please add a card and then add payment.."
           );
@@ -293,7 +291,9 @@ class BasicForm extends Component {
     ) {
       flag = 1;
     }
-    if (mplace == "true" && flag == 0) {
+    // console.log(mplace, flag, "checking");
+    // window.alert("checking");
+    if ((mplace == true || mplace == "true") && flag == 0) {
       return alert("Please choose any marketplace to list the product");
     }
 
@@ -330,8 +330,8 @@ class BasicForm extends Component {
     if (this.state.bal - total < 0) {
       if (this.state.savedCards.length > 0) {
         this.setState({ open: true });
-        window.alert('Insufficient balance')
-      }else{
+        window.alert("Insufficient balance");
+      } else {
         window.alert(
           "Low Payment and No card added, Please add a card and then add payment.."
         );
@@ -556,8 +556,6 @@ class BasicForm extends Component {
   };
 
   handleOnClick = (o, i) => {
-    // const ot = [...othersstate];
-    // ot[i] = !ot[i];
     if (this.state.othersstate[i] == "false") {
       this.state.othersstate[i] = "true";
     } else if (this.state.othersstate[i] == "true") {
@@ -1170,11 +1168,6 @@ class BasicForm extends Component {
                 ) : null}
                 {othersbool
                   ? others.map((o, i) => {
-                      console.log(
-                        this.state.othersstate[i],
-                        i,
-                        "othherbadkjfkjb"
-                      );
                       return (
                         <div
                           className="col-12 col-lg-6"

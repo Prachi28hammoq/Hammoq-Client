@@ -27,6 +27,7 @@ export default class extends Component {
         poshmark: { title: "", check: "" },
         mercari: { title: "", check: "" },
         delist: { title: "", check: "" },
+        shortDescription: "",
       },
       templatename: "",
       isSubmitting: false,
@@ -57,13 +58,11 @@ export default class extends Component {
       othersstate: [],
       otherfromdb: [],
       othertolist: [],
-
       othersurl: [],
       ebayurl: "",
       poshmarkurl: "",
       mercariurl: "",
       showcat: false,
-
       rates: {},
       bal: 0,
       basiccheck: true,
@@ -86,7 +85,7 @@ export default class extends Component {
   handelMessageNotSeen() {
     var msgSeenTemp = [];
     var data = this.state.data;
-    console.log(data,'dataaaaaaaaaa')
+    // console.log(data,'dataaaaaaaaaa')
     if (data.messageSeen) {
       for (let i = 0; i < data.messageSeen.length; i++) {
         if (data.messageSeen[i].client == false) {
@@ -172,8 +171,8 @@ export default class extends Component {
     ).then((res) => {
       const { images, data } = this.state;
       this.setState({ data: res.data.products[0] });
-
-      this.handelMessageNotSeen()
+      console.log(res.data.products[0], "hello");
+      this.handelMessageNotSeen();
 
       if (res.data.products[0].extraMeasures) {
         this.state.extraMeasures = JSON.parse(
@@ -286,7 +285,7 @@ export default class extends Component {
         Axios.get("/payment/rates")
           .then((res) => {
             //rates = res.data[res.data.length - 1];
-            this.setState({ rates: res.data[res.data.length-1] });
+            this.setState({ rates: res.data[res.data.length - 1] });
 
             Axios.get("/clientdetails")
               .then(({ data }) => {
@@ -361,9 +360,11 @@ export default class extends Component {
     } else {
       data[name] = value;
     }
-    console.log(data);
+    // console.log(data);
+
     this.setState({ data });
     this.setState({ editchange: true });
+    // console.log(this.state.shortDescription);
   };
 
   handleOtherTitles = (e) => {
@@ -497,7 +498,7 @@ export default class extends Component {
     dataform.append("brand", data.brand);
     dataform.append("model", data.model);
     dataform.append("title", data.title);
-    dataform.append("shortDescription", this.state.input7);
+    dataform.append("shortDescription", data.shortDescription);
     dataform.append("condition_name", data.condition_name);
     dataform.append("ebay", data.ebay.title);
     dataform.append("mercari", data.mercari.title);
