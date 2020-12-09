@@ -1,4 +1,4 @@
 import socketIOClient from "socket.io-client";
-export const socket = socketIOClient("https://app.hammoq.com", {
+export const socket = socketIOClient("https://stageapp.avoidpoints.com", {
   transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
 });
