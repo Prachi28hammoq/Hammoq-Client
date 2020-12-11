@@ -82,7 +82,7 @@ class BasicForm extends Component {
   componentDidMount = () => {
     const { cid, images } = this.state;
     Axios.get("/password/getstatus").then(({ data }) => {
-      //console.log(data);
+      console.log(data,'webdata');
       this.setState({ Ebay: data.Ebay });
       this.setState({ Poshmark: data.Poshmark });
       this.setState({ Mercari: data.Mercari });
@@ -97,10 +97,11 @@ class BasicForm extends Component {
         console.log(err);
       });
     Axios.get("/password/getstatus/others").then(({ data }) => {
-      //console.log(data, "other data");
+      console.log(data, "other data");
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
+          // console.log(data)
           const others = [...this.state.others];
           others.push(d);
 
@@ -109,14 +110,14 @@ class BasicForm extends Component {
           const otherss = [...this.state.othersstate];
 
           otherss.push(localStorage.getItem(d) || false);
-          // console.log(otherss, "otherssssssssssssssssssssssss");
+          console.log(otherss, "otherssssssssssssssssssssssss");
 
           this.setState({ othersstate: otherss });
           // if (!localStorage.getItem(d)) {
           //   localStorage.setItem(d, false);
           // }
 
-          //console.log(this.state.othersstate)
+          console.log(this.state.othersstate)
         });
       }
     });
@@ -395,6 +396,9 @@ class BasicForm extends Component {
     localStorage.setItem("mercari", this.state.mercari);
     localStorage.setItem("poshmark", this.state.poshmark);
     localStorage.setItem("delist", this.state.delist);
+    for(let i=0;i<this.state.others.length;i++){
+      localStorage.setItem(this.state.others[i],this.state.othersstate[i])
+    }
     this.setState({ isSubmitting: true });
 
     // var object = {};
@@ -555,13 +559,16 @@ class BasicForm extends Component {
   };
 
   handleOnClick = (o, i) => {
-    if (this.state.othersstate[i] == "false") {
+    console.log(this.state.othersstate,'others')
+    if (this.state.othersstate[i] == "false" || this.state.othersstate[i] == false) {
       this.state.othersstate[i] = "true";
-    } else if (this.state.othersstate[i] == "true") {
+    } else if (this.state.othersstate[i] == "true" || this.state.othersstate[i] == true) {
       this.state.othersstate[i] = "false";
     }
-    localStorage.setItem(o, this.state.othersstate[i]);
+    console.log(this.state.othersstate,'others')
     this.setState({ othersstate: this.state.othersstate });
+    
+    // localStorage.setItem(o, this.state.othersstate[i]);
   };
 
   handleBulkUpload = async (e) => {
