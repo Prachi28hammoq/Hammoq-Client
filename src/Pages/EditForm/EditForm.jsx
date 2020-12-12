@@ -221,21 +221,28 @@ export default class extends Component {
         this.setState({ showcat: true });
       }
 
-      // if(res.data.products[0])
+      // console.log(res.data.products[0], "prod");
 
       if (res.data.products[0].others) {
+        // console.log("he;;;;;;;;;;;;;;");
         this.state.otherfromdb = JSON.parse(res.data.products[0].others);
-        //console.log(this.state.otherfromdb);
+        // console.log(this.state.otherfromdb, "otherformdb");
+
         this.state.otherfromdb.map((db, i) => {
           this.state.othersstate[i] = db.status;
-          if (db.status == true && db.url != undefined && db.url != "") {
+          if (
+            (db.status == true || db.status == "true") &&
+            db.url != undefined &&
+            db.url != ""
+          ) {
             this.state.othersurl[i] = db;
           }
-          if (db.status == true) {
-            this.state.othertolist[i] = db;
+          if (db.status == true || db.status == "true") {
+            this.state.othertolist.push(db);
           }
         });
-        //console.log(this.state.othersurl);
+        this.setState({ othertolist: this.state.othertolist });
+        // console.log(this.state.othertolist);
       }
 
       if (res.data.products[0]._id) {
@@ -583,10 +590,20 @@ export default class extends Component {
   };
 
   toggleSelectedOthersWebsite = (i) => {
-    const { othersstate } = this.state;
+    const { othersstate, others } = this.state;
     // console.log(this.state.othersstate, 'other user websiter')
-    othersstate[i] = !othersstate[i];
-    this.setState({ othersstate });
+    if (othersstate[i] == false || othersstate[i] == "false") {
+      othersstate[i] = "true";
+      this.state.othertolist.push({ name: others[i], status: othersstate[i] });
+    } else if (othersstate[i] == true || othersstate[i] == "true") {
+      console.log(this.state.othertolist);
+      var idx = this.state.othertolist.findIndex((o) => {
+        return o.name == others[i];
+      });
+      this.state.othertolist.splice(idx, 1);
+      othersstate[i] = "false";
+    }
+    this.setState({ othersstate, othertolist: this.state.othertolist });
   };
 
   handleImageChange = async (event) => {
@@ -974,7 +991,7 @@ export default class extends Component {
       showcat,
     } = this.state;
 
-    // console.log(this.state.images, 'images')
+    // console.log(others, othersstate, "images");
     return (
       <div className="container-fluid px-3 template">
         <Link to="/products/submitted">
