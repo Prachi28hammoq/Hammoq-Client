@@ -286,7 +286,7 @@ export default class extends Component {
         Axios.get("/payment/rates")
           .then((res) => {
             //rates = res.data[res.data.length - 1];
-            this.setState({ rates: res.data[res.data.length - 1] });
+            this.setState({ rates: res.data[res.data.length-1] });
 
             Axios.get("/clientdetails")
               .then(({ data }) => {
@@ -294,7 +294,7 @@ export default class extends Component {
                 if (this.state.rates.basic / 100 > this.state.bal) {
                   this.setState({ basiccheck: false });
                 }
-                if (this.state.rates.advance / 100 > this.state.bal) {
+                if (this.state.rates.adv / 100 > this.state.bal) {
                   this.setState({ advancecheck: false });
                 }
 

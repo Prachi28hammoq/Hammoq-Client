@@ -1,23 +1,23 @@
-body{
-    font-family: 'Poppins', sans-serif;
-  }
-.paymentIt{
-    width: 1300px;
-    margin: auto;
-    padding-top: 10px;
+body {
+  font-family: "Poppins", sans-serif;
 }
-.pay{
- text-align: center;
+.paymentIt {
+  width: 90vw;
+  margin: auto;
+  padding-top: 10px;
 }
-#imageset{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+.pay {
+  text-align: center;
 }
-.adjustIt{
-    margin-top: 10px;
+#imageset {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
-#fontIt{
-    font-weight: normal;
+.adjustIt {
+  margin-top: 10px;
+}
+#fontIt {
+  font-weight: normal;
 }

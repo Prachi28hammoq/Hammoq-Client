@@ -27,12 +27,13 @@ class AddPayment extends Component {
     const result = await stripe.createToken(card);
     let price = 100; //dollars
 
-    console.log(result);
+    //console.log(result);
     this.setState({ loading: true });
     if (localStorage.getItem("paymentadded") == "true") {
       price = 1; //dollars
     }
     if (result.error) {
+      //console.log(result.error)
       alert("Fill up the details");
       this.setState({ loading: false });
     }
@@ -173,7 +174,7 @@ class AddPayment extends Component {
                             Payment & Actions
                           </h4>
                           <label>
-                            To change payment card please add a credit card,
+                            To add/change payment card please add a credit card,
                             <br />{" "}
                             {localStorage.getItem("paymentadded") == "true"
                               ? "$1 will be deducted"

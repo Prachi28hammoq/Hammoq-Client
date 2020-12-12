@@ -245,7 +245,7 @@ export default class extends Component {
     Axios.get("/payment/rates")
       .then((res) => {
         //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length - 1] });
+        this.setState({ rates: res.data[res.data.length-1]});
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
