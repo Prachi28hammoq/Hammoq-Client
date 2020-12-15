@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-//import Popover from "@material-ui/core/Popover";
+import Popover from "@material-ui/core/Popover";
 import "./searchcartmin.css";
 import Search from "../utils/Search";
-//import Comment from "./Comment";
+import Comment from "./Comment";
 import Axios, { assetsURL } from "../../services/Axios";
-//import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import LoadingSpinner from "../utils/loader";
 import Pagination from "../../Components/pagination/Pagination";
 import Badge from "@material-ui/core/Badge";
 import MailIcon from "@material-ui/icons/Mail";
-//import { fireEvent } from "@testing-library/react";
-//import { formatMs } from "@material-ui/core";
+import { fireEvent } from "@testing-library/react";
+import { formatMs } from "@material-ui/core";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
 const $ = window.$;
@@ -49,14 +49,14 @@ class Searchcart extends Component {
   }
 
   handelProductMessageSeen() {
-    var data = this.state.products.filter((status) => status.status !== false);
+    var data = this.state.products.filter((status) => status.status != false);
     console.log(data,'dataaaaaaa')
     var prodMsgSeen = true
     var tempProdMsgSeen = []
     for (var i = 0; i < data.length; i++) {
         prodMsgSeen = true;
         for (var j = 0; j < data[i].messageSeen.length; j++) {
-          if (data[i].messageSeen[j].client === false) {
+          if (data[i].messageSeen[j].client == false) {
             prodMsgSeen = false;
           }
         }
@@ -72,7 +72,7 @@ class Searchcart extends Component {
     Axios.get("/payment/rates")
       .then((res) => {
         //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length - 1] });
+        this.setState({ rates: res.data[res.data.length-1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -83,7 +83,7 @@ class Searchcart extends Component {
           window.open("/basic", "_self");
         } else {
           this.setState({
-            products: data.data.filter((status) => status.status !== false),
+            products: data.data.filter((status) => status.status != false),
             totalPage: parseInt(data.pages),
             page: parseInt(data.currPage),
             inventoryCount: data.count.inventoryCount,
@@ -112,7 +112,7 @@ class Searchcart extends Component {
     Axios.get("/password/getstatus/others").then(({ data }) => {
       if (data.length > 0) {
         this.setState({ othersbool: true });
-        data.forEach((d, i) => {
+        data.map((d, i) => {
           const others = [...this.state.others];
           others.push(d);
           this.setState({ others });
@@ -128,12 +128,12 @@ class Searchcart extends Component {
 
 
   duplicateHandler = async (itemId) => {
-    //const response = await Axios.post(`/product/${itemId}`, {
-    //  headers: {
-    //    "x-access-token": localStorage.getItem("token"),
-    //    "content-type": "application/x-www-form-urlencoded",
-    //  },
-    //});
+    const response = await Axios.post(`/product/${itemId}`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    });
     const response1 = await Axios.get(
       `/product/type/${this.state.prodStatus}`,
       { params: { page: 1, size: 10 } }
@@ -153,7 +153,7 @@ class Searchcart extends Component {
       () =>
         this.setState({
           searchedProducts: this.state.searchedProducts.filter((filtered) => {
-            return filtered.status === true;
+            return filtered.status == true;
           }),
         })
     );
@@ -189,7 +189,7 @@ class Searchcart extends Component {
         .then(({ data }) => {
           console.log(data, "page chanegs dataaaa");
           if (data) this.setState({ 
-            products: data.data.filter((status) => status.status !== false)
+            products: data.data.filter((status) => status.status != false)
             ,loading: false });
           this.handelProductMessageSeen();
         })
@@ -203,7 +203,7 @@ class Searchcart extends Component {
     })
       .then(({ data }) => {
         this.setState({
-          products: data.data.filter((status) => status.status !== false),
+          products: data.data.filter((status) => status.status != false),
           rowsPerPage: val,
           totalPage: data.pages,
         });
@@ -226,25 +226,25 @@ class Searchcart extends Component {
     });
   }
   render() {
-    //const { comment, addComment } = this.props;
+    const { comment, addComment } = this.props;
     // console.log(this.state.products, "products");
     const {
       products,
       rates,
       searchedProducts,
       search,
-      //bal,
+      bal,
       Ebay,
       Poshmark,
       Mercari,
       othersbool,
-      //others,
-      //othersstate,
+      others,
+      othersstate,
       datesort,
-      //counter,
+      counter,
       rowsPerPage,
       page,
-      //clientdetails,
+      clientdetails,
       totalPage,
       filteredProducts,
       productMessageSeen,
@@ -357,7 +357,6 @@ class Searchcart extends Component {
               horizontal: "center",
                 }}
                 />
-
             <Message addComment={this.addComment} comment={comment} />
           </div> */}
 
@@ -448,7 +447,7 @@ class Searchcart extends Component {
               {datesort ? (
                 <>
                   {newproducts && newproducts.length > 0 ? (
-                    newproducts.reverse().forEach((product, idx) => {
+                    newproducts.reverse().map((product, idx) => {
                       return (
                         <tr>
                           <td>{idx + 1 + (page - 1) * rowsPerPage}</td>
@@ -458,11 +457,11 @@ class Searchcart extends Component {
                                 product.images.default_image.substring(
                                   0,
                                   product.images.default_image.indexOf(":")
-                                ) !== "http" &&
+                                ) != "http" &&
                                 product.images.default_image.substring(
                                   0,
                                   product.images.default_image.indexOf(":")
-                                ) !== "https"
+                                ) != "https"
                                   ? assetsURL + product.images.default_image
                                   : product.images.default_image
                               }
@@ -483,13 +482,13 @@ class Searchcart extends Component {
                             {product.ebay.check && Ebay ? (
                               <div>
                                 <small>
-                                  {product.ebay.url === "" ||
-                                  product.ebay.url === null ? (
+                                  {product.ebay.url == "" ||
+                                  product.ebay.url == null ? (
                                     <p className="text-danger">Ebay</p>
-                                  ) : product.ebay.url === "d" ? (
+                                  ) : product.ebay.url == "d" ? (
                                     "Ebay"
                                   ) : (
-                                    <a href={product.ebay.url} target="_blank" rel="noreferrer">
+                                    <a href={product.ebay.url} target="_blank">
                                       Ebay
                                     </a>
                                   )}
@@ -499,15 +498,15 @@ class Searchcart extends Component {
                             {product.poshmark.check && Poshmark ? (
                               <div>
                                 <small>
-                                  {product.poshmark.url === "" ||
-                                  product.poshmark.url === null ? (
+                                  {product.poshmark.url == "" ||
+                                  product.poshmark.url == null ? (
                                     <p className="text-danger">Poshmark</p>
-                                  ) : product.poshmark.url === "d" ? (
+                                  ) : product.poshmark.url == "d" ? (
                                     "Poshmark"
                                   ) : (
                                     <a
                                       href={product.poshmark.url}
-                                      target="_blank" rel="noreferrer"
+                                      target="_blank"
                                     >
                                       Poshmark
                                     </a>
@@ -518,15 +517,15 @@ class Searchcart extends Component {
                             {product.mercari.check && Mercari ? (
                               <div>
                                 <small>
-                                  {product.mercari.url === "" ||
-                                  product.mercari.url === null ? (
+                                  {product.mercari.url == "" ||
+                                  product.mercari.url == null ? (
                                     <p className="text-danger">Mercari</p>
-                                  ) : product.mercari.url === "d" ? (
+                                  ) : product.mercari.url == "d" ? (
                                     "Mercari"
                                   ) : (
                                     <a
                                       href={product.mercari.url}
-                                      target="_blank" rel="noreferrer"
+                                      target="_blank"
                                     >
                                       Mercari
                                     </a>
@@ -538,13 +537,13 @@ class Searchcart extends Component {
                               <div>
                                 <small>
                                   Delist -
-                                  {product.delist.url === "" ? "false" : "true"}
+                                  {product.delist.url == "" ? "false" : "true"}
                                 </small>
                               </div>
                             ) : null}
                             {othersbool &&
                               product.others &&
-                              JSON.parse(product.others).forEach((items) => {
+                              JSON.parse(product.others).map((items) => {
                                 console.log(
                                   items,
                                   "checking values for status"
@@ -554,7 +553,7 @@ class Searchcart extends Component {
                                     <div>
                                       <small>
                                         {items.name}-
-                                        {items.url === "" ? "false" : "true"}
+                                        {items.url == "" ? "false" : "true"}
                                       </small>
                                     </div>
                                   );
@@ -624,22 +623,22 @@ class Searchcart extends Component {
               ) : (
                 <>
                   {newproducts && newproducts.length > 0 ? (
-                    newproducts.forEach((product, idx) => {
+                    newproducts.map((product, idx) => {
                       return (
                         <tr>
                           <td>{idx + 1 + (page - 1) * rowsPerPage}</td>
                           <td>
                             <img
                               src={
-                                product.images.default_image !== null &&
+                                product.images.default_image != null &&
                                 product.images.default_image.substring(
                                   0,
                                   product.images.default_image.indexOf(":")
-                                ) !== "http" &&
+                                ) != "http" &&
                                 product.images.default_image.substring(
                                   0,
                                   product.images.default_image.indexOf(":")
-                                ) !== "https"
+                                ) != "https"
                                   ? assetsURL + product.images.default_image
                                   : product.images.default_image
                               }
@@ -660,13 +659,13 @@ class Searchcart extends Component {
                             {product.ebay.check && Ebay ? (
                               <div>
                                 <small>
-                                  {product.ebay.url === "" ||
-                                  product.ebay.url === null ? (
+                                  {product.ebay.url == "" ||
+                                  product.ebay.url == null ? (
                                     <p className="text-danger">Ebay</p>
-                                  ) : product.ebay.url === "d" ? (
+                                  ) : product.ebay.url == "d" ? (
                                     "Ebay"
                                   ) : (
-                                    <a href={product.ebay.url} target="_blank" rel="noreferrer">
+                                    <a href={product.ebay.url} target="_blank">
                                       Ebay
                                     </a>
                                   )}
@@ -676,15 +675,15 @@ class Searchcart extends Component {
                             {product.poshmark.check && Poshmark ? (
                               <div>
                                 <small>
-                                  {product.poshmark.url === "" ||
-                                  product.poshmark.url === null ? (
+                                  {product.poshmark.url == "" ||
+                                  product.poshmark.url == null ? (
                                     <p className="text-danger">Poshmark</p>
-                                  ) : product.poshmark.url === "d" ? (
+                                  ) : product.poshmark.url == "d" ? (
                                     "Poshmark"
                                   ) : (
                                     <a
                                       href={product.poshmark.url}
-                                      target="_blank" rel="noreferrer"
+                                      target="_blank"
                                     >
                                       Poshmark
                                     </a>
@@ -695,15 +694,15 @@ class Searchcart extends Component {
                             {product.mercari.check && Mercari ? (
                               <div>
                                 <small>
-                                  {product.mercari.url === "" ||
-                                  product.mercari.url === null ? (
+                                  {product.mercari.url == "" ||
+                                  product.mercari.url == null ? (
                                     <p className="text-danger">Mercari</p>
-                                  ) : product.mercari.url === "d" ? (
+                                  ) : product.mercari.url == "d" ? (
                                     "Mercari"
                                   ) : (
                                     <a
                                       href={product.mercari.url}
-                                      target="_blank" rel="noreferrer"
+                                      target="_blank"
                                     >
                                       Mercari
                                     </a>
@@ -715,19 +714,19 @@ class Searchcart extends Component {
                               <div>
                                 <small>
                                   Delist -
-                                  {product.delist.url === "" ? "false" : "true"}
+                                  {product.delist.url == "" ? "false" : "true"}
                                 </small>
                               </div>
                             ) : null}
                             {othersbool &&
                               product.others &&
-                              JSON.parse(product.others).forEach((items) => {
+                              JSON.parse(product.others).map((items) => {
                                 if (items && items.status) {
                                   return (
                                     <div>
                                       <small>
                                         {items.name}-
-                                        {items.url === "" ? "false" : "true"}
+                                        {items.url == "" ? "false" : "true"}
                                       </small>
                                     </div>
                                   );

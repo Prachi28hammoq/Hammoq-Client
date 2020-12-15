@@ -41,15 +41,15 @@ class Signup extends Component {
     e.preventDefault();
     const {
       term1,
-      //term2,
-      //address1,
-      //address2,
+      term2,
+      address1,
+      address2,
       password,
       confirmPassword,
-      //country,
-      //city,
-      //state,
-      //zip,
+      country,
+      city,
+      state,
+      zip,
       firstName,
       lastName,
       email,
@@ -61,17 +61,17 @@ class Signup extends Component {
       return alert("Accept all the terms.");
     }
 
-    if (email === "") {
+    if (email == "") {
       this.setState({ isSubmitting: false });
       return alert("Email field is required.");
     }
 
-    if (phoneno === "") {
+    if (phoneno == "") {
       this.setState({ isSubmitting: false });
       return alert("Phone.no field is required.");
     }
 
-    if (firstName === "" || lastName === "") {
+    if (firstName == "" || lastName == "") {
       this.setState({ isSubmitting: false });
       return alert("Name field is required.");
     }
@@ -106,20 +106,20 @@ class Signup extends Component {
     const {
       firstName,
       lastName,
-      //address1,
-      //address2,
-      //country,
-      //state,
-      //zip,
+      address1,
+      address2,
+      country,
+      state,
+      zip,
       email,
       phoneno,
-      //city,
+      city,
       password,
       confirmPassword,
       isSubmitting,
     } = this.state;
     return (
-      <div>
+      <div className="row col-lg-5 m-auto">
         <form className="formIt mt-7">
           <div className="d-flex align-items-center justify-content-between mb-5 ml-5 mr-5">
             <img src={Logo} alt="hammoq" className="img" />
@@ -193,9 +193,9 @@ class Signup extends Component {
             name="couponcode"
             className="form-control mb-4"
           ></input>
-          {/*<a href="" target="">
+          <a href="" target="_blank">
             Terms and Conditions
-          </a>*/}
+          </a>
           <div className="form-check">
             <input
               type="checkbox"

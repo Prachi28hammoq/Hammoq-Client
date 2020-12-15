@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import LeftSection from "./components/LeftSection/LeftSection";
 import RightSection from "./components/RightSection/RightSection";
+import "./EditForm.css";
 import Axios from "../../services/Axios";
 import { Link } from "react-router-dom";
 //import { assetsURL } from "../../services/Axios";
@@ -101,6 +102,21 @@ class ListForm extends Component {
     const token = localStorage.getItem("token");
     const decoded = jwt_decode(token);
     this.agentid = decoded._doc._id;
+  }
+
+
+  handelMessageNotSeen() {
+    var msgSeenTemp = [];
+    var data = this.state.data;
+    console.log(data,'dataaaaaaaaaa')
+    if (data.messageSeen) {
+      for (let i = 0; i < data.messageSeen.length; i++) {
+        if (data.messageSeen[i].client == false) {
+          msgSeenTemp.push(data.messageSeen[i].field);
+        }
+      }
+    }
+    this.setState({ messageNotSeen: msgSeenTemp });
   }
 
 componentDidMount = () => {
