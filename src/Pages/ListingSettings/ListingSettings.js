@@ -176,6 +176,7 @@ const ListingSettings = () => {
 
         savedData = res.data.configSettings[0].shipping[0];
         //console.log("shipping data: ", savedData);
+        setCalculatedShipping(savedData.calculatedShipping);
         setFreeShipping(savedData.freeShipping);
         setFlatShippingRulesStatus(savedData.flatShippingRules[0].flatShippingRulesStatus);
         setFlatShippingRules(savedData.flatShippingRules)
@@ -281,6 +282,7 @@ const ListingSettings = () => {
     };
 
     var shippingSettingsObj = {
+      calculatedShipping: calculatedShipping,
       freeShipping: freeShipping,
       flatShippingRulesStatus: flatShippingRulesStatus,
       flatShippingRules: flatShippingRules,
