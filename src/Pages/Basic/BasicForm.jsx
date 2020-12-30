@@ -5,9 +5,9 @@ import ButtonGroup from "./ButtonGroup";
 import "./BasicForm.css";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
-import { assetsURL } from "../../services/Axios";
-//import io from "socket.io-client";
-//import SocketIOFileUpload from "socketio-file-upload";
+import { assetsURL, socketCon } from "../../services/Axios";
+import io from "socket.io-client";
+import SocketIOFileUpload from "socketio-file-upload";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import imageCompression from "browser-image-compression";
 
@@ -19,13 +19,14 @@ class BasicForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      savedCards: [],
       username: "",
       password: "",
       users: [],
       website: "",
       otherssignal: false,
       loading: false,
-
+      offeredRate: {},
       input1: localStorage.getItem("condition") || "",
       input2: "",
       input3: 0,
@@ -78,11 +79,10 @@ class BasicForm extends Component {
       productId: "",
     };
     this.handleChange.bind(this);
-    this.handleSingleUpdate.bind(this);
   }
 
   componentDidMount = () => {
-    //const { cid, images } = this.state;
+    const { cid, images } = this.state;
     Axios.get("/password/getstatus").then(({ data }) => {
       //console.log(data);
       this.setState({ Ebay: data.Ebay });
@@ -102,14 +102,14 @@ class BasicForm extends Component {
       //console.log(data, "other data");
       if (data.length > 0) {
         this.setState({ othersbool: true });
-        data.forEach((d, i) => {
+        data.map((d, i) => {
           const others = [...this.state.others];
           others.push(d);
 
           this.setState({ others });
 
           const otherss = [...this.state.othersstate];
-         
+
           otherss.push(localStorage.getItem(d) || false);
           console.log(otherss, "otherssssssssssssssssssssssss");
 
@@ -134,8 +134,21 @@ class BasicForm extends Component {
       .then(({ data }) => {
         console.log({ data }, "client user value check");
         console.log(data, "client detail");
-        if (parseInt(data.balance) < 5) this.setState({ open: true });
-        this.setState({ bal: data.balance, client_id: data._id });
+        if (parseInt(data.balance) < 5 && data.savedCards.length > 0) {
+          this.setState({ open: true });
+        }else if(parseInt(data.balance) < 5 && data.savedCards.length == 0) {
+          window.alert(
+            "Low Payment and No card added, Please add a card and then add payment.."
+          );
+          window.open("/addpayment", "_self");
+        }
+        this.setState({
+          bal: data.balance,
+          client_id: data._id,
+          savedCards: data.savedCards,
+          cid: data._id,
+          offeredRate: data.offeredRate || {},
+        });
         this.setState({ cid: data._id }, () =>
           localStorage.setItem("cid", this.state.cid)
         );
@@ -152,8 +165,8 @@ class BasicForm extends Component {
     // });
     // socket.on("server2clientimg", (i) => {
     //   //console.log(i);
-    //   i.img.forEach((imgi) => {
-    //     if (imgi.cid === localStorage.getItem("cid"))
+    //   i.img.map((imgi) => {
+    //     if (imgi.cid == localStorage.getItem("cid"))
     //       images[imgi.index].img = imgi.name;
     //   });
 
@@ -170,12 +183,12 @@ class BasicForm extends Component {
   //   socket.on("imgupload", (i) => {
   //     console.log("imgcnt:" + i.imgcnt);
   //     var imglen = this.state.images.filter((i) => {
-  //       if (i.img !== "") {
+  //       if (i.img != "") {
   //         return true;
   //       }
   //     });
   //     console.log(imglen.length);
-  //     if (i.cid === cid && imglen.length === i.imgcnt) {
+  //     if (i.cid == cid && imglen.length == i.imgcnt) {
   //       return false;
   //     } else {
   //       return true;
@@ -184,7 +197,7 @@ class BasicForm extends Component {
   // };
 
   fetchimg = (src) => {
-    //const { cid } = this.state;
+    const { cid } = this.state;
     this.setState({ fullimg: src }, () => {
       $("#addTemplateModal1").modal("show");
     });
@@ -196,7 +209,7 @@ class BasicForm extends Component {
     //   console.log(re);
     //   this.setState({ img: re.img }, () => {
     //     this.state.img.forEach((i) => {
-    //       if (i.key === this.state.fullimg) {
+    //       if (i.key == this.state.fullimg) {
     //         // this.setState({ fullimg: src }, () => {
     //         //   $("#addTemplateModal1").modal("show");
     //         // });
@@ -226,26 +239,23 @@ class BasicForm extends Component {
 
   onSubmit = () => {
     //e.preventDefault();
-    const { 
-      images, 
-      //cid 
-    } = this.state;
+    const { images, cid } = this.state;
     const data = new FormData();
 
     images.forEach((image) => {
       if (!!image.img) data.append(image.key, image.img);
     });
 
-    if (images[0].img === "") {
+    if (images[0].img == "") {
       return alert("Atleast first image is required");
     }
 
-    if (this.state.input1 === "Select Condition *" || this.state.input1 === "") {
+    if (this.state.input1 == "Select Condition *" || this.state.input1 == "") {
       return alert("Condition is required");
     }
 
     var y = [];
-    this.state.others.forEach((o, i) => {
+    this.state.others.map((o, i) => {
       let obj = {
         name: o,
         status: this.state.othersstate[i],
@@ -258,10 +268,10 @@ class BasicForm extends Component {
     var mplace = true;
 
     if (
-      this.state.Ebay === true ||
-      this.state.Poshmark === true ||
-      this.state.Mercari === true ||
-      this.state.others.length !== 0
+      this.state.Ebay == true ||
+      this.state.Poshmark == true ||
+      this.state.Mercari == true ||
+      this.state.others.length != 0
     ) {
       mplace = true;
     } else {
@@ -272,35 +282,35 @@ class BasicForm extends Component {
 
     var flag = 0;
     this.state.othersstate.forEach((os) => {
-      if (os === true) {
+      if (os == "true") {
         flag = 1;
       }
     });
     if (
-      (this.state.Ebay === true && this.state.ebay === true) ||
-      (this.state.Poshmark === true && this.state.poshmark === true) ||
-      (this.state.Mercari === true && this.state.mercari === true)
+      (this.state.Ebay == true && this.state.ebay == true) ||
+      (this.state.Poshmark == true && this.state.poshmark == true) ||
+      (this.state.Mercari == true && this.state.mercari == true)
     ) {
       flag = 1;
     }
-    if (mplace === true && flag === 0) {
+    if (mplace == "true" && flag == 0) {
       return alert("Please choose any marketplace to list the product");
     }
 
     //bal check routine
     var cnt = 0;
 
-    if (this.state.Ebay && this.state.ebay === true) {
+    if (this.state.Ebay && this.state.ebay == true) {
       cnt++;
     }
-    if (this.state.Poshmark && this.state.poshmark === true) {
+    if (this.state.Poshmark && this.state.poshmark == true) {
       cnt++;
     }
-    if (this.state.Mercari && this.state.mercari === true) {
+    if (this.state.Mercari && this.state.mercari == true) {
       cnt++;
     }
     this.state.othersstate.forEach((os) => {
-      if (os === true) {
+      if (os == "true") {
         cnt++;
         console.log(os);
       }
@@ -311,20 +321,28 @@ class BasicForm extends Component {
     var total = 0;
     rate1 = (this.state.rates.basic / 100) * 1;
     rate2 = (this.state.rates.advance / 100) * (cnt - 1);
-    if (this.state.delist === true) {
+    if (this.state.delist == true) {
       rate3 = (this.state.rates.list / 100) * (cnt - 1);
     }
     total = rate1 + rate2 + rate3;
     console.log(this.state.bal);
 
     if (this.state.bal - total < 0) {
-      return alert("Insufficient balance");
+      if (this.state.savedCards.length > 0) {
+        this.setState({ open: true });
+        window.alert('Insufficient balance')
+      }else{
+        window.alert(
+          "Low Payment and No card added, Please add a card and then add payment.."
+        );
+        window.open("/addpayment", "_self");
+      }
     }
 
     console.log(y, "chening y value");
     data.append("sku", this.state.input2);
 
-    if (this.state.input3 === 0) {
+    if (this.state.input3 == 0) {
       data.append("quantity", 1);
     } else {
       data.append("quantity", this.state.input3);
@@ -398,7 +416,9 @@ class BasicForm extends Component {
 
       .then((response) => {
         console.log(response, "data append");
-        let productId =response.data.products ?  response.data.products[response.data.products.length - 1]._id : response.data.products
+        let productId = response.data.products
+          ? response.data.products[response.data.products.length - 1]._id
+          : response.data.products;
         if (this.state.templateId) {
           Axios.post(
             "/producttemplate",
@@ -412,21 +432,16 @@ class BasicForm extends Component {
             console.log(response, "user data user");
           });
         }
-       window.open("/basic", "_self");
+        window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
     //}
   };
 
   handleSubmit = (e) => {
-    const { 
-      website, 
-      username, 
-      password, 
-      //users 
-    } = this.state;
+    const { website, username, password, users } = this.state;
     e.preventDefault();
-    if (website !== "" && username !== "" && password !== "") {
+    if (website != "" && username != "" && password != "") {
       this.setState({ loading: true });
 
       Axios.post("/password", {
@@ -437,13 +452,13 @@ class BasicForm extends Component {
         .then((response) => {
           //this.setState({ loading: false });
           alert("Login details has been added");
-          if (website === "Ebay") {
+          if (website == "Ebay") {
             this.setState({ Ebay: true });
             this.setState({ loading: false });
-          } else if (website === "Poshmark") {
+          } else if (website == "Poshmark") {
             this.setState({ Poshmark: true });
             this.setState({ loading: false });
-          } else if (website === "Mercari") {
+          } else if (website == "Mercari") {
             this.setState({ Mercari: true });
             this.setState({ loading: false });
           } else {
@@ -459,7 +474,7 @@ class BasicForm extends Component {
               this.setState({ loading: false });
               if (data.length > 0) {
                 this.setState({ othersbool: true });
-                data.forEach((d, i) => {
+                data.map((d, i) => {
                   const others = [...this.state.others];
                   others.push(d);
                   this.setState({ others });
@@ -488,10 +503,7 @@ class BasicForm extends Component {
   };
 
   handleChange = async (event) => {
-    const { 
-      images, 
-      //cid 
-    } = this.state;
+    const { images, cid } = this.state;
     //console.log(images);
     const options = {
       maxSizeMB: 0.3,
@@ -531,48 +543,33 @@ class BasicForm extends Component {
     // console.log(this.state.images);
   };
 
-  handleSingleUpdate = (inputVariable, newVariable) => 
-  {
-    this.setState({[inputVariable]:newVariable});
-  };
-
   handleChangepop = (e) => {
     const { name, value } = e.target;
-    if (value === "Others") {
+    if (value == "Others") {
       this.setState({ otherssignal: true });
     } else {
-      if (value === "Ebay" || value === "Poshmark" || value === "Mercari") {
+      if (value == "Ebay" || value == "Poshmark" || value == "Mercari") {
         this.setState({ otherssignal: false });
       }
       this.setState({ [name]: value });
     }
   };
-  
-  handleOnClick = (o,i) => {
-    
-      // const ot = [...othersstate];
-      // ot[i] = !ot[i];
-      if(this.state.othersstate[i] === "false"){
-        this.handleSingleUpdate(this.state.othersstate[i],"true");
-      } else if(this.state.othersstate[i] === "true"){
-        this.handleSingleUpdate(this.state.othersstate[i],"false");
-      }
-      localStorage.setItem(
-        o,
-        this.state.othersstate[i]
-      );
-      this.setState({ othersstate: this.state.othersstate});
-     
-  
-  }
+
+  handleOnClick = (o, i) => {
+    // const ot = [...othersstate];
+    // ot[i] = !ot[i];
+    if (this.state.othersstate[i] == "false") {
+      this.state.othersstate[i] = "true";
+    } else if (this.state.othersstate[i] == "true") {
+      this.state.othersstate[i] = "false";
+    }
+    localStorage.setItem(o, this.state.othersstate[i]);
+    this.setState({ othersstate: this.state.othersstate });
+  };
 
   handleBulkUpload = async (e) => {
-  
-    const { 
-      images, 
-      //cid 
-    } = this.state;
-    //var imgobj = [];
+    const { images, cid } = this.state;
+    var imgobj = [];
     const files = e.target.files;
     const count = files.length;
 
@@ -599,9 +596,9 @@ class BasicForm extends Component {
     this.setState({ isSubmitting: false });
     //this.setState({ images }, () => console.log(this.state.images));
 
-    // images.forEach((i) => {
+    // images.map((i) => {
     //   var reader = new FileReader();
-    //   if (i.img !== "") {
+    //   if (i.img != "") {
     //     reader.readAsDataURL(i.img);
     //     reader.onload = function () {
     //       //console.log(reader.result);
@@ -644,21 +641,22 @@ class BasicForm extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  updatePayment = async (amount) => {
+  updatePayment = async (amount, stripeId) => {
     let body = {
       customer_id: this.state.client_id,
       amount: amount,
+      stripeId: stripeId,
     };
     this.setState({ open: false });
     await Axios.post("/payment/payment", body)
       .then(({ data }) => {
-        console.log(data,'update mpadfjafjk')
+        console.log(data, "update mpadfjafjk");
         if (data.success) {
-          alert(data.msg)
-          window.open('/basic','_self')
+          alert(data.msg);
+          window.open("/basic", "_self");
         } else {
-          alert("Credit Card is Not added") 
-          window.open('/addpayment',"_self")
+          alert("Credit Card is Not added");
+          window.open("/addpayment", "_self");
         }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -668,8 +666,9 @@ class BasicForm extends Component {
       website,
       username,
       password,
-      //users,
+      users,
       otherssignal,
+
       images,
       isSubmitting,
       Ebay,
@@ -677,7 +676,7 @@ class BasicForm extends Component {
       Mercari,
       othersbool,
       others,
-      //othersstate,
+      othersstate,
       fullimg,
       img,
       templates,
@@ -690,6 +689,7 @@ class BasicForm extends Component {
           open={this.state.open}
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
+          savedCards={this.state.savedCards}
         />
         <Link to="/products/submitted">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -798,7 +798,7 @@ class BasicForm extends Component {
           </div>
           <div className="col-12 col-md-6">
             <div className="row m-auto">
-              {images.forEach((image, idx) => {
+              {images.map((image, idx) => {
                 return (
                   <div className="col-4 col-md-3 px-1 ">
                     <div
@@ -825,7 +825,7 @@ class BasicForm extends Component {
                             </button>
                           </div>
 
-                          <img src={fullimg} style={{ height: "500px" }} alt="Alt PlaceHolder" />
+                          <img src={fullimg} style={{ height: "500px" }} />
                         </div>
                       </div>
                     </div>
@@ -841,7 +841,6 @@ class BasicForm extends Component {
                                   : URL.createObjectURL(image.img)
                               }
                               style={{ width: "100%", height: "90px" }}
-                              alt="Alt PlaceHolder"
                               onClick={() => {
                                 this.setState({ fullimg: image.key }, () => {
                                   this.fetchimg(
@@ -904,8 +903,12 @@ class BasicForm extends Component {
                       accept="image/*"
                       className="custom-file-input"
                       multiple
-                      onChange={(e)=>{this.handleBulkUpload(e)}}
-                      onClick={(e)=>{console.log(e,'onclick')}}
+                      onChange={(e) => {
+                        this.handleBulkUpload(e);
+                      }}
+                      onClick={(e) => {
+                        console.log(e, "onclick");
+                      }}
                     ></input>
                     <label
                       className="custom-file-label"
@@ -913,7 +916,6 @@ class BasicForm extends Component {
                     >
                       Bulk Upload Images
                     </label>
-                    
                   </div>
                 </div>
               </div>
@@ -928,7 +930,7 @@ class BasicForm extends Component {
                   >
                     <option value="">Choose Template</option>
                     {templates &&
-                      templates.forEach((template) => {
+                      templates.map((template) => {
                         return (
                           <option value={template._id}>{template.name}</option>
                         );
@@ -1015,7 +1017,6 @@ class BasicForm extends Component {
                   placeholder="Cost of Goods"
                   className="form-control"
                   step="0.01"
-
                 />
               </div>
 
@@ -1168,23 +1169,30 @@ class BasicForm extends Component {
                   </div>
                 ) : null}
                 {othersbool
-                  ? others.forEach((o, i) => {
-                    console.log(this.state.othersstate[i],i,'othherbadkjfkjb')
+                  ? others.map((o, i) => {
+                      console.log(
+                        this.state.othersstate[i],
+                        i,
+                        "othherbadkjfkjb"
+                      );
                       return (
-                        <div className="col-12 col-lg-6"  onClick = {() => this.handleOnClick(o,i)}>
-                          <div className="form-check"   >
-                            {this.state.othersstate[i] === "true" ?   <input
-                              className="form-check-input"
-                              type="checkbox"
-                             
-                              checked
-                            
-                            /> :   <input
-                            className="form-check-input"
-                            type="checkbox"
-                       
-                          /> }
-                          
+                        <div
+                          className="col-12 col-lg-6"
+                          onClick={() => this.handleOnClick(o, i)}
+                        >
+                          <div className="form-check">
+                            {this.state.othersstate[i] == "true" ? (
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                checked
+                              />
+                            ) : (
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                              />
+                            )}
 
                             <label
                               className="form-check-label"

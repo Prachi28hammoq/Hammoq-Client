@@ -128,6 +128,7 @@ const ListingSettings = () => {
   const [phoneNum, setPhoneNum] = useState("");
   const [storeLink, setStoreLink] = useState("");
   const [findUs, setFindUs] = useState("");
+  const [referralCode, setReferralCode] = useState("");
 
   //Client ID
   //const [clientID, setClientID] = useState("");
@@ -143,6 +144,7 @@ const ListingSettings = () => {
         setPhoneNum(savedData.phoneno);
         setStoreLink(savedData.storeName);
         setFindUs(savedData.findOutAboutUs);
+        setReferralCode(savedData.referralCode);
 
         //console.log("Client's saved data: ", res.data.configSettings[0]);
         savedData = res.data.configSettings[0].listing[0];
@@ -378,6 +380,7 @@ const ListingSettings = () => {
                 onChange={(e) => setLastName(e.target.value)}
               />
               <TextField
+                disabled
                 style={{ margin: "10px" }}
                 id='emailAddressInput'
                 label='Email Address'
@@ -399,6 +402,7 @@ const ListingSettings = () => {
             <div className='group__two'>
               <TextField
                 className='group__two_one'
+                style={{ margin: "10px" }}
                 id='storeLinkInput'
                 label='Store Name / Store Link'
                 type='search'
@@ -408,12 +412,24 @@ const ListingSettings = () => {
               />
               <TextField
                 className='group__two_two'
+                style={{ margin: "10px" }}
                 id='findUsInput'
                 label='How did you find about us?'
                 type='search'
                 variant='outlined'
                 value={findUs}
                 onChange={(e) => setFindUs(e.target.value)}
+              />
+              <TextField
+                disabled
+                className='group__two_two'
+                style={{ margin: "10px" }}
+                id='referralCode'
+                label='Referral Code'
+                type='search'
+                variant='outlined'
+                value={referralCode}
+                onChange={(e) => setReferralCode(e.target.value)}
               />
             </div>
         <div className='col_one_scroll'>
