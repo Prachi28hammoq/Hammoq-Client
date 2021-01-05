@@ -245,7 +245,7 @@ export default class extends Component {
     Axios.get("/payment/rates")
       .then((res) => {
         //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length - 1] });
+        this.setState({ rates: res.data[res.data.length-1]});
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
@@ -618,7 +618,7 @@ export default class extends Component {
           },
         })
           .then((response) => {
-            window.open("/products", "_self");
+            window.open("/products/submitted", "_self");
           })
           .catch((err) => {
             this.setState({ isSubmitting: true });
@@ -906,7 +906,7 @@ export default class extends Component {
             <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
           </Link>
         ) : (
-          <Link to="/products">
+          <Link to="/products/submitted">
             <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
           </Link>
         )}
@@ -1129,7 +1129,7 @@ export default class extends Component {
             <input
               type="button"
               defaultValue="Cancel"
-              onClick={() => window.open("/products", "_self")}
+              onClick={() => window.open("/products/submitted", "_self")}
               className="btn btn-danger mb-4 btn-block col-12 mr-auto col-lg-12"
             />
           </div>

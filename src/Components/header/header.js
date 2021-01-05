@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import message from "../../Pages/Messages/message";
+//import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
-import PaymentAlert from "../paymentAlert/PaymentAlert";
 import Axios, { assetsURL } from "../../services/Axios";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
+
+let refreshTokenInterval;
 
 class header extends Component {
   constructor() {
@@ -16,11 +19,17 @@ class header extends Component {
       advancecheck: true,
       open: false,
       client_id: "",
+      customerName: "",
+      clientMessageSeenCount: 0,
     };
   }
 
   componentDidMount = async () => {
     if (localStorage.getItem("token")) {
+
+      this.refreshUserTokenForAllEbayAccounts();
+      refreshTokenInterval = setInterval(() => this.refreshUserTokenForAllEbayAccounts(), 7100000);
+
       await Axios.get("/payment/rates")
         .then((res) => {
           //rates = res.data[res.data.length - 1];
@@ -30,9 +39,14 @@ class header extends Component {
 
       await Axios.get("/clientdetails")
         .then(({ data }) => {
-          console.log(data, "user data checking");
           if (parseInt(data.balance) < 5) this.setState({ open: true });
-          this.setState({ bal: data.balance, client_id: data._id });
+          this.setState({
+            bal: data.balance,
+            client_id: data._id,
+            customerName: data.firstName,
+            clientMessageSeenCount: data.clientMessageSeenCount,
+          });
+          localStorage.setItem("customerName", this.state.customerName);
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
@@ -44,9 +58,28 @@ class header extends Component {
       // }
     }
   };
+
+  componentWillUnmount = async () => {
+
+    clearInterval(refreshTokenInterval);
+
+  }
+
+  refreshUserTokenForAllEbayAccounts = async () => {
+
+    let res = await Axios.post('/ebayAuth/refreshtokens/');
+
+}
+
+  logoutHandler = () => {
+    localStorage.removeItem("token");
+    window.open("/login", "_self");
+  };
+
   handleClose = () => {
     this.setState({ open: false });
   };
+
   updatePayment = async (amount) => {
     let body = {
       customer_id: this.state.client_id,
@@ -60,6 +93,7 @@ class header extends Component {
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
+
   render() {
     const { basiccheck, advancecheck, rates, bal } = this.state;
     return (
@@ -72,11 +106,12 @@ class header extends Component {
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
        />*/}
+
         <a href="/" className="navbar-brand">
           <img src={Logo} alt="hammock" height="40px" />
         </a>
         <h5 className="ml-4 mt-2">
-          <i className="text-white">Balance: $ {bal.toFixed(2)}</i>
+          <i className="text-white">Balance: $ {bal ? bal.toFixed(2) : 0}</i>
         </h5>
         <button
           className="navbar-toggler"
@@ -102,9 +137,19 @@ class header extends Component {
                 </a>
               </li>
             </li> */}
+
             <li class="nav-item">
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
+              </Link>
+            </li>
+            <li class="nav-item">
+              <Link
+                to="/messages"
+                className="nav-link"
+                style={{ color: "white" }}
+              >
+                Messages({this.state.clientMessageSeenCount})
               </Link>
             </li>
 
@@ -117,9 +162,36 @@ class header extends Component {
                 Templates
               </a>
             </li>
+            <li class="nav-item">
+              <a
+                href="/ebayaccounts"
+                className="nav-link"
+                style={{ color: "white" }}
+              >
+                Ebay Accounts
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="/ebayaccounting"
+                className="nav-link"
+                style={{ color: "white" }}
+              >
+                Ebay Accounting
+              </a>
+            </li>
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>
+            <li class="nav-item">
+              <span
+                onClick={this.logoutHandler}
+                className="nav-link c-pointer text-danger"
+              >
+                <div className="fas fa-sign-out-alt mr-1"></div>
+                Logout
+              </span>
+            </li>
           </ul>
         </div>
       </nav>

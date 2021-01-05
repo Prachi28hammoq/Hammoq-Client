@@ -7,6 +7,10 @@ import {
   ElementsConsumer,
 } from "@stripe/react-stripe-js";
 
+// use the following key according to need
+// dev- pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w
+// live- pk_live_eHRa9qUfyNNMG2lgJVYOj9Js00hCyttVfu
+
 const stripePromise = loadStripe("pk_live_eHRa9qUfyNNMG2lgJVYOj9Js00hCyttVfu");
 class PaymentComponent extends Component {
   constructor(props) {

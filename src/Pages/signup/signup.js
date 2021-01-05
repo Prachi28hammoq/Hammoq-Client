@@ -20,6 +20,7 @@ class Signup extends Component {
       phoneno: "",
       password: "",
       confirmPassword: "",
+      referralCode: "",
       term1: false,
       term2: false,
       isSubmitting: false,
@@ -54,6 +55,7 @@ class Signup extends Component {
       lastName,
       email,
       phoneno,
+      referralCode
     } = this.state;
 
     if (!term1) {
@@ -117,14 +119,15 @@ class Signup extends Component {
       password,
       confirmPassword,
       isSubmitting,
+      referralCode
     } = this.state;
     return (
-      <div>
+      <div className="row col-lg-5 m-auto">
         <form className="formIt mt-7">
           <div className="d-flex align-items-center justify-content-between mb-5 ml-5 mr-5">
             <img src={Logo} alt="hammoq" className="img" />
           </div>
-          <Link to="/products">
+          <Link to="/products/submitted">
             <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
           </Link>
           <div>
@@ -190,8 +193,17 @@ class Signup extends Component {
           <label htmlFor="couponcode">COUPON CODE:</label>
           <input
             type="text"
-            name="couponcode"
+            name="referralCode"
             className="form-control mb-4"
+          ></input>
+          <label htmlFor="referralCode">REFERRAL CODE:</label>
+          <input
+            type="text"
+            name="referralCode"
+            value={referralCode}
+            onChange={this.handleChange}
+            className="form-control mb-4"
+            required
           ></input>
           <a href="" target="_blank">
             Terms and Conditions
@@ -217,10 +229,10 @@ class Signup extends Component {
               SIGNING UP...
             </button>
           ) : (
-            <button className="btn btn-primary" onClick={this.handleSubmit}>
-              SIGNUP
-            </button>
-          )}
+              <button className="btn btn-primary" onClick={this.handleSubmit}>
+                SIGNUP
+              </button>
+            )}
         </form>
       </div>
     );

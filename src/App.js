@@ -25,15 +25,21 @@ import {
   Charts,
   Config,
   AcceptUrl,
+  EbayAccounts,
+  EbayAccounting
 } from "./Pages";
+import Message from './Pages/Messages/message'
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
+
 
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
   return (
     <div>
+    <head><script>{(function(w,r){w._rwq=r;w[r]=w[r]||function(){(w[r].q=w[r].q||[]).push(arguments)}})(window,'rewardful')}</script>
+<script async src='https://r.wdfl.co/rw.js' data-rewardful='d8ce50'></script></head>
       {!["/signup", "/signin"].includes(pathname) && <div className="fixed-top"> <Header /></div>}
       <div className = "container-fluid px-5 py-5 admin my-5">
       {localStorage.getItem("token") ? (
@@ -55,13 +61,17 @@ const Routes = withRouter((props) => {
               path="/template/:templateid"
               component={TemplateForm}
             />
+            
             <Route exact path="/basic" component={BasicForm} />
             <Route exact path="/edit/:id" component={EditForm} />
-            <Route exact path="/products" component={Searchcart} />
+            <Route exact path="/products/:prodStatus" component={Searchcart} />
             <Route exact path="/transactions" component={Transactions} />
             <Route exact path="/setting" component={Settings} />
             <Route exact path="/client/ebay/:id" component={AcceptUrl} />
-            <Route path="/" component={() => <Redirect to="/products" />} />
+            <Route exact path="/messages" component ={Message} />
+            <Route exact path="/ebayaccounts" component={EbayAccounts} />
+            <Route path="/ebayaccounting" component={EbayAccounting} />
+            <Route path="/" component={() => <Redirect to="/products/submitted" />} />
           </Switch>
         ) : (
           <Switch>

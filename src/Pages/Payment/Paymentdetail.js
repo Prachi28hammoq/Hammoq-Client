@@ -73,7 +73,7 @@ class AddPayment extends Component {
 
     check = arr.toString();
 
-    console.log("check", check);
+    // console.log("check", check);
     const { stripe, elements } = this.props;
     const card = elements.getElement(CardElement);
     const result = await stripe.createToken(card);
@@ -95,9 +95,11 @@ class AddPayment extends Component {
         (axios.defaults.headers.common["x-access-token"] = tokenvalue)
       );
       if (response.data.success) {
+
         alert(response.data.msg);
         this.props.history.push("/addpassword");
       } else {
+        //console.log(respone.data,'bhghjghjggfhghjghjghjghjghjghjghjghjgjgjhgj')
         alert(response.data.msg);
       }
     }

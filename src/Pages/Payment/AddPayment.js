@@ -9,10 +9,6 @@ import LoadingSpinner from "../utils/loader";
 
 const $ = window.$;
 
-
-function getClientReferenceId(in_1HWqISLZqDnjpbwXy9iTCVgO) {
-  return window.Rewardful && window.Rewardful.referral || ('checkout_'+(new Date).getTime());
-}
 class AddPayment extends Component {
   constructor() {
     super();
@@ -20,6 +16,7 @@ class AddPayment extends Component {
       email: "",
       name: "",
       loading: false,
+      
     };
   }
 
@@ -30,18 +27,19 @@ class AddPayment extends Component {
     const result = await stripe.createToken(card);
     let price = 100; //dollars
 
-    console.log(result);
+    //console.log(result);
     this.setState({ loading: true });
     if (localStorage.getItem("paymentadded") == "true") {
       price = 1; //dollars
     }
-    if (result.error) {
-      alert("Fill up the details");
-      this.setState({ loading: false });
-    }
+    //if (result.error) {
+      //console.log(result.error)
+      //alert("Fill up the details");
+      //this.setState({ loading: false });
+    //}
     await Axios.post("/payment/firstpayment", {
       email: this.state.email,
-      card_details: result,
+      card_details: {token: {card: {brand: 'MasterCard', exp_month: '04', exp_year: '2022', last4: '1234'}}},
       price: price,
     })
       .then((res) => {
@@ -78,6 +76,7 @@ class AddPayment extends Component {
   componentDidMount(prevProps) {
     Axios.get("/clientdetails")
       .then(({ data }) => {
+        console.log(data,'client detail')
         this.setState({ email: data.email });
         this.setState({ name: data.firstName });
 
@@ -166,6 +165,8 @@ class AddPayment extends Component {
               <div className="card-wrapper">
                 <div className="card fat custom-card-margin">
                   <div className="card-body">
+                    <div>
+                    </div>
                     {localStorage.getItem("paymentadded") == "true" ? (
                       <>
                         <div className="text-center ">
@@ -173,7 +174,7 @@ class AddPayment extends Component {
                             Payment & Actions
                           </h4>
                           <label>
-                            To change payment card please add a credit card,
+                            To add/change payment card please add a credit card,
                             <br />{" "}
                             {localStorage.getItem("paymentadded") == "true"
                               ? "$1 will be deducted"
@@ -191,6 +192,7 @@ class AddPayment extends Component {
                             <input type="hidden" />
                             <br />
                             <CardElement />
+                            
                             <button
                               type="button"
                               onClick={() =>

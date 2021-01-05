@@ -17,7 +17,7 @@ export default class extends Component {
 
   componentDidMount = () => {
     Axios.get("/template")
-      .then(({ data }) => this.setState({ templates: data.templates }))
+       .then(({ data }) => this.setState({ templates: data.templates }))
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
     $("#addTemplateModal").on("hidden.bs.modal", (e) => {
       this.setState({ templateName: "" });
@@ -39,7 +39,9 @@ export default class extends Component {
 
     Axios.post("/template", { name: this.state.templateName, data: {} })
       .then(({ data }) => {
+        console.log(data, 'teempalated')
         const { templateName } = this.state;
+        
         const idx = data.templates.findIndex((a) => a.name === templateName);
         window.open("/template/" + data.templates[idx]._id, "_self");
       })
@@ -51,7 +53,7 @@ export default class extends Component {
     return (
       <div>
         <div className="container p-4">
-          <Link to="/products">
+          <Link to="/products/submitted">
             <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
           </Link>
           {/* modal */}
