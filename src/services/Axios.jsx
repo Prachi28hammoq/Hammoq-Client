@@ -29,9 +29,5 @@ else if(process.env.REACT_APP_STAGE === 'production')
 
 Axios.defaults.baseURL = baseURL + "/client";
 
-if ('token' in localStorage) {
-    Axios.defaults.headers.common["x-access-token"] = localStorage.getItem("token");
-}
-
 export default Axios;
 export { baseURL, assetsURL };
