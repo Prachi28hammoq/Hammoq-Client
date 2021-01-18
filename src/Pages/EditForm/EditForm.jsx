@@ -471,6 +471,27 @@ class EditForm extends Component {
     e.preventDefault();
     const { data, images, extraMeasures, extraDescriptions } = this.state;
     const dataform = new FormData();
+    
+    const manualProdList =
+      (this.state.data["ebay"]["url"] !== undefined &&
+        this.state.data["ebay"]["url"] !== "") ||
+      (this.state.data["mercari"]["url"] !== undefined &&
+        this.state.data["mercari"]["url"] !== "") ||
+      (this.state.data["poshmark"]["title"] !== undefined &&
+        this.state.data["poshmark"]["url"] !== "");
+    // const manualProdListBy = this.props;
+    const ebayUrl =
+      this.state.data["ebay"]["url"] !== undefined
+        ? this.state.data["ebay"]["url"]
+        : "";
+    const poshMarkUrl =
+      this.state.data["poshmark"]["url"] !== undefined
+        ? this.state.data["poshmark"]["url"]
+        : "";
+    const mercariUrl =
+      this.state.data["mercari"]["url"] !== undefined
+        ? this.state.data["mercari"]["url"]
+        : "";
     images.forEach((image) => {
       if(image.img)
       {
