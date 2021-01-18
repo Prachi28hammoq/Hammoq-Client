@@ -78,7 +78,7 @@ class LeftSection extends Component {
             typeof image.img === "string"
               ? image.img.substring(0, 4) !== "http" &&
                 image.img.substring(0, 5) !== "https"
-                ? HOST + image.img
+                ? assetsURL + image.img
                 : image.img
               : image.img !== null
               ? URL.createObjectURL(image.img)
@@ -347,7 +347,7 @@ class LeftSection extends Component {
                           <img
                             src={
                               typeof image.img === "string"
-                                ? HOST + image.img
+                                ? assetsURL + image.img
                                 : URL.createObjectURL(image.img)
                             }
                             style={{ width: "100%", height: "90px" }}
@@ -357,7 +357,7 @@ class LeftSection extends Component {
                                 {
                                   fullimg:
                                     typeof image.img === "string"
-                                      ? HOST + image.img
+                                      ? assetsURL + image.img
                                       : URL.createObjectURL(image.img),
                                 },
                                 () => {
