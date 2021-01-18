@@ -1,4 +1,2 @@
 node_modules
-# src/services
-build
 /package-lock.json

@@ -17,7 +17,7 @@
     "chart.js": "^2.9.3",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.1",
-    "jwt-decode": "^3.1.2",
+    "jwt-decode": "^3.0.0",
     "material-ui-popup-state": "^1.6.1",
     "rambda": "^6.4.0",
     "react": "^16.13.1",
@@ -41,7 +41,7 @@
   "scripts": {
     "start": "react-scripts start",
     "startdevlocal": "REACT_APP_STAGE=devlocal PORT=3000 react-scripts start",
-    "startdevhost": "react-scripts build && REACT_APP_STAGE=devhost",
+    "startdevhost": "REACT_APP_STAGE=devhost PORT=3000 react-scripts start",
     "startstage": "react-scripts build && REACT_APP_STAGE=staging",
     "startproduction": "react-scripts build && REACT_APP_STAGE=production",
     "build": "react-scripts build",
