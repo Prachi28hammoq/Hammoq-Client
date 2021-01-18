@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./LeftSection.css";
 //import Imagebtn from "../Imagebtn";
 //import { Link } from "react-router-dom";
-import { assetsURL } from "../../../../services/Axios";
+import { HOST } from "../../../../services/Axios";
 //import Popover from '@material-ui/core/Popover';
 //import Axios from '../../../../services/Axios';
 //import Badge from '@material-ui/core/Badge';
@@ -78,7 +78,7 @@ class LeftSection extends Component {
             typeof image.img === "string"
               ? image.img.substring(0, 4) !== "http" &&
                 image.img.substring(0, 5) !== "https"
-                ? assetsURL + image.img
+                ? HOST + image.img
                 : image.img
               : image.img !== null
               ? URL.createObjectURL(image.img)
@@ -123,8 +123,7 @@ class LeftSection extends Component {
       removeImg,
       extraDescriptions,
       //toggleSelectedOthersWebsite,
-      toggleSelectedWebsite,
-      companyBlurb
+      toggleSelectedWebsite
     } = this.props;
 
     if (custom === false) {
@@ -178,11 +177,11 @@ class LeftSection extends Component {
       );
     }
 
-    if (customdesc == false) {
+    if (customdesc === false) {
       data.shortDescription =
         (data.title !== undefined
           ? data.title !== ""
-            ? data.title + "\n"
+            ? data.title + "\n" + "\n"
             : ""
           : "") +
         (data.brand !== undefined
@@ -282,16 +281,19 @@ class LeftSection extends Component {
           : "");
 
       for (let i = 0; i < extraDescriptions.length; i++) {
-        data.shortDescription +=
-          extraDescriptions[i].key + ": " + extraDescriptions[i].value + "\n";
+        if((extraDescriptions[i].value !== "" | null | undefined | "No Suggested Values") && (extraDescriptions[i].value.localizedValue !== "" | null | undefined | "No Suggested Values"))
+        {
+          data.shortDescription +=
+            extraDescriptions[i].key + ": " + extraDescriptions[i].value.localizedValue + "\n";
+        }
       }
 
-      if(companyBlurb !== undefined)
+      if(data.companyBlurb !== undefined)
       {
         data.shortDescription+=
-        (companyBlurb !== undefined
-          ? companyBlurb !== ""
-            ? "\n" + companyBlurb + "\n"
+        (data.companyBlurb !== undefined
+          ? data.companyBlurb !== ""
+            ? "\n" + data.companyBlurb + "\n"
             : ""
           : "");
       }
@@ -345,7 +347,7 @@ class LeftSection extends Component {
                           <img
                             src={
                               typeof image.img === "string"
-                                ? assetsURL + image.img
+                                ? HOST + image.img
                                 : URL.createObjectURL(image.img)
                             }
                             style={{ width: "100%", height: "90px" }}
@@ -355,7 +357,7 @@ class LeftSection extends Component {
                                 {
                                   fullimg:
                                     typeof image.img === "string"
-                                      ? assetsURL + image.img
+                                      ? HOST + image.img
                                       : URL.createObjectURL(image.img),
                                 },
                                 () => {

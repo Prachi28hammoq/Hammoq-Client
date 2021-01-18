@@ -134,20 +134,26 @@ const ListingSettings = () => {
   //const [clientID, setClientID] = useState("");
 
   useEffect(() => {
-    Axios.get("/clientDetails")
-      .then((res) => {
+    Axios.get('/clientdetails')
+    .then((res) => {
         let savedData = res.data;
 
         setFirstName(savedData.firstName);
         setLastName(savedData.lastName);
         setEmailAddress(savedData.email);
         setPhoneNum(savedData.phoneno);
-        setStoreLink(savedData.storeName);
-        setFindUs(savedData.findOutAboutUs);
         setReferralCode(savedData.referralCode);
+    })
+    .catch((err) => console.log("error fetching client: ", err));
+    Axios.get("/clientdetails/listingSettings")
+      .then((res) => {
+        let savedData = res.data;
+
+        setStoreLink(savedData.storeName);
+        setFindUs(savedData.foundOutAboutUs);
 
         //console.log("Client's saved data: ", res.data.configSettings[0]);
-        savedData = res.data.configSettings[0].listing[0];
+        savedData = res.data.settings[0].listing[0];
         //console.log("listing data: ", savedData);
         var compPriceSign = "" 
         if(savedData.incrCompPrice[0].by !== undefined && savedData.incrCompPrice[0].by === 'percent')
@@ -161,13 +167,19 @@ const ListingSettings = () => {
         setServices(savedData.services);
         setPriceOptions(savedData.priceOptions);
         setOtherPriceOptions(savedData.otherPriceOptions);
-        setIncrCompPrice(savedData.incrCompPrice[0].value + compPriceSign);
+        if(savedData.incrCompPrice[0])
+        {
+          setIncrCompPrice(savedData.incrCompPrice[0].value + compPriceSign);
+        }
         setCompanyBlurb(savedData.companyBlurb);
-        setBestOffer(savedData.bestOffer[0].enabled);
-        setOfferAccept(savedData.bestOffer[0].acceptOfferOf);
-        setIsOfferAccept(savedData.bestOffer[0].isOfferAccepted);
-        setOfferDecline(savedData.bestOffer[0].declineOfferOf);
-        setIsOfferDecline(savedData.bestOffer[0].isOfferDeclined);
+        if(savedData.bestOffer[0])
+        {
+          setBestOffer(savedData.bestOffer[0].enabled);
+          setOfferAccept(savedData.bestOffer[0].acceptOfferOf);
+          setIsOfferAccept(savedData.bestOffer[0].isOfferAccepted);
+          setOfferDecline(savedData.bestOffer[0].declineOfferOf);
+          setIsOfferDecline(savedData.bestOffer[0].isOfferDeclined);
+        }
         setEbaySmartPricing(savedData.ebay_smart);
         setMercariSmartPricing(savedData.mercari_smart);
         setCountry(savedData.country);
@@ -176,19 +188,25 @@ const ListingSettings = () => {
         setMercariTags(savedData.mercariTags);
         setBuyerReqs(savedData.buyerReqs);
 
-        savedData = res.data.configSettings[0].shipping[0];
+        savedData = res.data.settings[0].shipping[0];
         //console.log("shipping data: ", savedData);
         setCalculatedShipping(savedData.calculatedShipping);
         setFreeShipping(savedData.freeShipping);
-        setFlatShippingRulesStatus(savedData.flatShippingRules[0].flatShippingRulesStatus);
+        if(savedData.flatShippingRules[0])
+        {
+          setFlatShippingRulesStatus(savedData.flatShippingRules[0].flatShippingRulesStatus);
+        }
         setFlatShippingRules(savedData.flatShippingRules)
-        setIsReturnAccept(savedData.returns[0].accepted);
-        setReturnedWithin(savedData.returns[0].returnWithin);
-        setRefundAs(savedData.returns[0].refundGivenAs);
-        setReturnShipBy(savedData.returns[0].ReturnShipPaidBy);
+        if(savedData.returns[0])
+        {
+          setIsReturnAccept(savedData.returns[0].accepted);
+          setReturnedWithin(savedData.returns[0].returnWithin);
+          setRefundAs(savedData.returns[0].refundGivenAs);
+          setReturnShipBy(savedData.returns[0].ReturnShipPaidBy);
+        }
 
-        savedData = res.data.configSettings[0].intlShipping[0];
-        //console.log("intlShipping data: ", savedData);
+        savedData = res.data.settings[0].intlShipping[0];
+        console.log("intlShipping data: ", savedData);
         setIncrByDomestic(savedData.incrFromDomestic);
         setShipService(savedData.shippingService);
         setIntlReturnAccepted(savedData.returns[0].accepted);
@@ -201,7 +219,7 @@ const ListingSettings = () => {
         setWorldwideShip(savedData.globalShipping[0].isWorldwide);
         setShipCountries(savedData.globalShipping[0].shipCountries);
 
-        savedData = res.data.configSettings[0].payment[0];
+        savedData = res.data.settings[0].payment[0];
         //console.log("payment data: ", savedData);
         setAllowPaypal(savedData.allowPaypal);
         setPaypalEmail(savedData.paypalEmail);
@@ -336,7 +354,7 @@ const ListingSettings = () => {
       email: emailAddress,
       phoneno: phoneNum,
       storeName: storeLink,
-      findOutAboutUs: findUs,
+      foundOutAboutUs: findUs,
     };
 
     var finalObj = {

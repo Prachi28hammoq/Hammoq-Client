@@ -13,6 +13,11 @@ import TextField from "@material-ui/core/TextField";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import { useTheme /*makeStyles*/ } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { VariableSizeList } from "react-window";
@@ -141,9 +146,7 @@ class RightSection extends Component {
       anchorEl: null,
       productMessage: [],
       field: "",
-      extraDescriptions: [],
       currentSuggestion: [],
-      loadOptional: false,
       gtin: "",
     };
     this.ebayRef = React.createRef();
@@ -162,12 +165,7 @@ class RightSection extends Component {
     }
   }
 
-  handleChanges = (e) => {
-    if (e.target.value.length > max) return 0;
-    this.setState({ count: e.target.value.length });
-  };
-
-  handleMessage = (e) => {
+/*  handleMessage = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -198,46 +196,7 @@ class RightSection extends Component {
     }
   };
 
-  toggleOptional = () => {
-    var { loadOptional } = this.state;
-    this.setState({ loadOptional: !loadOptional });
-  };
-
-  clearExtraDescriptions = () => {
-    this.setState({ extraDescriptions: [] });
-  };
-  customtitle = (e) => {
-    const { custom } = this.state;
-    const { data } = this.props;
-    localStorage.setItem("custom", !custom);
-    this.setState({ custom: !custom });
-    if (data.title) {
-      let title = data.title;
-      this.setState({ title });
-      data.title = title.trim();
-    }
-  };
-
-  setCategory = (str) => {
-    const { data } = this.props;
-    if (this.state.category === str) {
-      data["category"] = "";
-      this.setState({ category: "" });
-    } else {
-      data["category"] = str;
-      this.setState({ category: str });
-    }
-  };
-
-  handleClick = (event) => {
-    this.setState({ anchorE1: event.currentTarget });
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  handleMessageData = async (value, event) => {
+    handleMessageData = async (value, event) => {
     //console.log(value,"value")
     const productId = this.props.productid;
     const clientId = this.props.clientid;
@@ -264,74 +223,37 @@ class RightSection extends Component {
     } catch (error) {
       console.log(error);
     }
+  };*/
+
+  setCategory = (str) => {
+    const { data } = this.props;
+    if (this.state.category === str) {
+      data["category"] = "";
+      this.setState({ category: "" });
+    } else {
+      data["category"] = str;
+      this.setState({ category: str });
+    }
   };
 
-  handleSelectedLeaf = (itemAspectsArray) => {
-    var { extraDescriptions, count1 } = this.state;
-    extraDescriptions = [];
-    Object.keys(itemAspectsArray.data.aspects).forEach((item, index) => {
-      extraDescriptions.push({
-        key: itemAspectsArray.data.aspects[index].localizedAspectName,
-        aspectUsage:
-          itemAspectsArray.data.aspects[index].aspectConstraint.aspectUsage,
-        suggestedValues: itemAspectsArray.data.aspects[index].aspectValues,
-        aspectRequired:
-          itemAspectsArray.data.aspects[index].aspectConstraint.aspectRequired,
-      });
-      count1 = count1 + 1;
-    });
-
-    this.setState({ extraDescriptions: extraDescriptions, count1: count1 });
+  handleClick = (event) => {
+    this.setState({ anchorE1: event.currentTarget });
   };
 
-  handleSelectedEbayCategory = (category) => {
-    const url = "/ebay/itemAspects/" + category.categoryId;
-    Axios.get(url)
-      .then((response) => response.data)
-      .then((data) => {
-        this.handleSelectedLeaf(data);
-      })
-      .catch((err) => console.log(err));
+  handleClose = () => {
+    this.setState({ anchorEl: null });
   };
 
-  handleDescriptionLabel = (id, e) => {
-    const { value } = e.target;
-    const { extraDescriptions } = this.state;
-    extraDescriptions.forEach((description) => {
-      if (description.id === id) {
-        description.key = value;
-      }
-    });
-    this.setState({ extraDescriptions });
-    console.log(extraDescriptions);
-  };
-
-  handleDescriptionChange = (id, e) => {
-    const { value } = e.target;
-    const { extraDescriptions } = this.state;
-    extraDescriptions.forEach((description) => {
-      if (description.id === id) {
-        description.value = value;
-      }
-    });
-    this.setState({ extraDescriptions });
-    console.log(extraDescriptions);
-  };
-
-  setCategoryField = (categoryName) => {
-    const { ebayCategory } = this.state;
-    this.setState({ ebayCategory: categoryName });
-  };
-
-  ebayGTINCall = () => {
-    const { gtin } = this.state;
-    const url = "/ebay/lookUpForUPCISBN/" + gtin;
-    Axios.get(url)
-      .then((response) => response.data)
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => console.log(err));
+  customtitle = (e) => {
+    const { custom } = this.state;
+    const { data } = this.props;
+    localStorage.setItem("custom", !custom);
+    this.setState({ custom: !custom });
+    if (data.title) {
+      let title = data.title;
+      this.setState({ title });
+      data.title = title.trim();
+    }
   };
 
   handleChangeLocal = (e) => {
@@ -340,50 +262,46 @@ class RightSection extends Component {
     this.setState(change);
   };
 
+  ebayGTINCall = () => {
+  const { gtin } = this.state;
+  const url = "/ebay/lookUpForUPCISBN/" + gtin;
+  Axios.get(url)
+    .then((response) => response.data)
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => console.log(err));
+  };
+
   render = () => {
     const {
-      //selectedWebsites,
-      //ebayCategory,
-      //category,
-      //showMoreLines,
       custom,
-      //anchorEl,
-      extraDescriptions,
-      //handleDescriptionChange,
-      handleDescriptionLabel,
-      //suggestTitles,
       showOtherTitles,
-      //msgFormToggle,
-      //productMessage,
-      loadOptional,
       gtin,
     } = this.state;
-
-    //const open = Boolean(anchorEl);
-    //const id = open ? 'simple-popover' : undefined;
 
     const {
       data,
       handleChange,
-      //images,
-      //handleBulkUpload,
-      //handleImageChange,
-      //removeImg,
       addMeasure,
-      //addDescription,
-      //extraMeasures,
-      //removeMeasure,
+      addDescription,
+      extraMeasures,
+      handleDescriptionChange,
+      handleDescriptionLabel,
       removeDescription,
-      //handleMeasureChange,
-      //handleMeasureLabel,
+      handleSelectedLeaf,
+      handleSelectedEbayCategory,
       handleOtherTitles,
       handleUrl,
-      //brandacc,
-      //coloracc,
+      handleCheckboxToggle,
       showcat,
-      //labelacc,
-      //messageNotSeen,
-      suggestions,
+      ebayCategoryDropDownItems,
+      onSubmit,
+      extraDescriptions,
+      toggleOptional,
+      clearExtraDescriptions,
+      setEbayCategoryField,
+      repopulateExtraDescriptions
     } = this.props;
 
     if (custom === false) {
@@ -445,8 +363,8 @@ class RightSection extends Component {
       <div className='right__app'>
         <EbayCategoryModal
           ref={this.ebayRef}
-          onSelectedLeafModalClose={this.handleSelectedLeaf}
-          setSelectedCategoryField={this.setCategoryField}
+          onSelectedLeafModalClose={handleSelectedLeaf}
+          setSelectedCategoryField={setEbayCategoryField}
         />
         <div>
           {/* Product Titles */}
@@ -747,6 +665,7 @@ class RightSection extends Component {
                   ></input>
                 </div>
               </div>
+              <label className='compPriceSetting'>{data.compPriceSetting}</label>
               <div className='arrange__details'>
                 <div className='details__col'>
                   <label htmlFor='SKU' className='label__style'>
@@ -875,33 +794,54 @@ class RightSection extends Component {
           {/* ========================================================================================================== */}
 
           <div className='measurements__header'>
-            <div className='prodname_div'>
-              <div className='productdetails_adjust'>Product Details</div>
-              <div className='product__header_btn_ctn'>
-                <button
-                  className={`btn mr-3 ${
-                    loadOptional ? "fill__button" : "outline__button"
-                  } btn-sm`}
-                  onClick={this.toggleOptional}
-                >
-                  Optional
-                </button>
-                <button
-                  className='btn mr-3 btn-success btn-sm'
-                  onClick={this.clearExtraDescriptions}
-                >
-                  Reset
-                </button>
+              <div className='productdetails_adjust'>
+                Product Details
               </div>
+              <div className='product__header_btn_ctn'>
+                <Select
+                  id='condition_name'
+                  name='condition_name'
+                  className='condition__input'
+                  value={data.condition_name}
+                  onChange={handleChange}
+                  >
+                  <MenuItem value={data.condition_name} disabled>{data.condition_name}</MenuItem>
+                  <MenuItem value='New'>New</MenuItem>
+                  <MenuItem value='New (Other/Open Box)'>New (Other/Open Box)</MenuItem>
+                  <MenuItem value='New With Defects'>New With Defects</MenuItem>
+                  <MenuItem value='Seller Refurbished'>Seller Refurbished</MenuItem>
+                  <MenuItem value='Used'>Used</MenuItem>
+                  <MenuItem value='Broken/For Repair'>Broken/For Repair</MenuItem>
+                </Select>
+              <ToggleButton
+                className='product__togglebtn'
+                variant='contained'
+                selected={data.ebayOptionalFieldsActive}
+                onClick={toggleOptional}
+              >
+                Optional
+              </ToggleButton>
+              <button
+                className='btn-success product__btn'
+                onClick={clearExtraDescriptions}
+              >
+                Reset Details
+              </button>
+              <button
+                className='btn-success product__btn'
+                onClick={repopulateExtraDescriptions}
+              >
+                Undo Delete
+              </button>
             </div>
           </div>
           {extraDescriptions.length !== 0 ? (
-            extraDescriptions
-              .filter((description) =>
-                loadOptional ? true : description.aspectUsage === "RECOMMENDED"
+            extraDescriptions.filter((description) =>
+                data.ebayOptionalFieldsActive ? true : description.aspectUsage === "RECOMMENDED"
               )
-              .forEach((description) => {
+              .map((description) => {
                 return (
+                  <>
                   <div className='measurement__body'>
                     <input
                       className={`form-control form-control-sm col-4 mr-3 ${
@@ -913,11 +853,9 @@ class RightSection extends Component {
                       }`}
                       type='text'
                       name='label'
-                      id={description.key}
-                      defaultValue={description.key}
-                      onChange={(e) =>
-                        handleDescriptionLabel(description.id, e)
-                      }
+                      id={description.id}
+                      value={description.key}
+                      onChange={(e) => handleDescriptionLabel(description.id, e)}
                       placeholder='key'
                     />
                     :-
@@ -925,10 +863,16 @@ class RightSection extends Component {
                       options={
                         description.suggestedValues
                           ? description.suggestedValues
-                          : [("localizedValue": "No Suggested Values")]
+                          : [{"localizedValue": "No Suggested Values"}]
                       }
                       getOptionLabel={(option) => option.localizedValue}
                       style={{ width: 300 }}
+                      value={description.value}
+                      onChange={(event, value, reason) =>
+                        reason === "select-option"
+                          ? handleDescriptionChange(description.id, value)
+                          : null
+                      }
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -943,6 +887,7 @@ class RightSection extends Component {
                       <div className='fa fa-minus-square ml-3'></div>
                     </button>
                   </div>
+                  </>
                 );
               })
           ) : (
@@ -964,16 +909,6 @@ class RightSection extends Component {
                     type='text'
                     className='properties__input'
                   ></input>
-                  <select
-                    id='condition'
-                    name='condition'
-                    className='properties__input'
-                  >
-                    <option value='Condition'>Condition</option>
-                    <option value='New'>New</option>
-                    <option value='Used'>Used</option>
-                    <option value='Salvage'>Salvage</option>
-                  </select>
                 </div>
               </div>
               <div className='segrigate'>
@@ -1151,10 +1086,11 @@ class RightSection extends Component {
                       disableListWrap
                       ListboxComponent={ListboxComponent}
                       renderGroup={renderGroup}
-                      options={suggestions}
+                      options={ebayCategoryDropDownItems}
                       getOptionLabel={(option) => option.categoryName}
                       renderInput={(params) => (
                         <TextField
+                          placeholder={data.ebayCategoryField ? data.ebayCategoryField : ""}
                           {...params}
                           style={{
                             borderRadius: 7,
@@ -1172,7 +1108,7 @@ class RightSection extends Component {
                       )}
                       onChange={(event, value, reason) =>
                         reason === "select-option"
-                          ? this.handleSelectedEbayCategory(value)
+                          ? handleSelectedEbayCategory(value)
                           : null
                       }
                     />
@@ -1192,13 +1128,20 @@ class RightSection extends Component {
                 >
                   Secondary Category
                   <div>
-                    <input className='general__input_brz'></input>
+                    <input 
+                    className='general__input_brz'
+                    ></input>
                     <button className='brz__btn'>Browse</button>
                   </div>
                 </label>
                 <label htmlFor='ListingFormat' className='label__style_general'>
                   Listing Format
-                  <input className='general__input'></input>
+                  <input 
+                  className='general__input'
+                  name='listingFormat'
+                  defaultValue={data.listingFormat}
+                  onChange={handleChange}
+                  ></input>
                 </label>
               </div>
 
@@ -1209,20 +1152,36 @@ class RightSection extends Component {
                   className='label__style_general'
                 >
                   Giving Works Charity ID
-                  <input className='general__input'></input>
+                  <input 
+                  className='general__input'
+                  name='givingWorksCharityID'
+                  defaultValue={data.givingWorksCharityID}
+                  onChange={handleChange}
+                  ></input>
                 </label>
                 <label
                   htmlFor='GivingWorksDonationPercentage'
                   className='label__style_general'
                 >
                   Giving Works Donation %
-                  <input className='general__input'></input>
+                  <input 
+                  className='general__input'
+                  name='givingWorksDonationPercentage'
+                  defaultValue={data.givingWorksDonationPercentage}
+                  onChange={handleChange}
+                  ></input>
                 </label>
                 <label
                   htmlFor='StoreCategory1'
                   className='label__style_general'
                 >
-                  Store Category 1<input className='general__input'></input>
+                  Store Category 1
+                  <input 
+                  className='general__input'
+                  name='storeCategoryOne'
+                  defaultValue={data.storeCategoryOne}
+                  onChange={handleChange}
+                  ></input>
                 </label>
               </div>
 
@@ -1232,15 +1191,31 @@ class RightSection extends Component {
                   htmlFor='StoreCategory2'
                   className='label__style_general'
                 >
-                  Store Category 2<input className='general__input'></input>
+                  Store Category 2
+                  <input 
+                  className='general__input'
+                  name='storeCategoryTwo'
+                  defaultValue={data.storeCategoryTwo}
+                  onChange={handleChange}
+                  ></input>
                 </label>
                 <label htmlFor='LotSize' className='label__style_general'>
                   Lot Size
-                  <input className='general__input'></input>
+                  <input 
+                  className='general__input'
+                  name='lotSize'
+                  defaultValue={data.lotSize}
+                  onChange={handleChange}
+                  ></input>
                 </label>
                 <label htmlFor='Type' className='label__style_general'>
                   Type
-                  <input className='general__input'></input>
+                  <input 
+                  className='general__input'
+                  name='type'
+                  defaultValue={data.type}
+                  onChange={handleChange}
+                  ></input>
                 </label>
               </div>
             </div>
@@ -1254,13 +1229,23 @@ class RightSection extends Component {
                   <label htmlFor='ShippingServiceDom' className='label__style'>
                     Shipping Service
                   </label>
-                  <input className='dom__input'></input>
+                  <input 
+                  className='dom__input'
+                  name='domesticShippingService'
+                  defaultValue={data.domesticShippingService}
+                  onChange={handleChange}
+                  ></input>
                 </div>
                 <div className='arrange__col_dom'>
                   <label htmlFor='CostDom' className='label__style'>
                     Cost
                   </label>
-                  <input className='dom__input'></input>
+                  <input 
+                  className='dom__input'
+                  name='domesticShippingCost'
+                  defaultValue={data.domesticShippingCost}
+                  onChange={handleChange}
+                  ></input>
                 </div>
               </div>
 
@@ -1271,7 +1256,12 @@ class RightSection extends Component {
                   <label htmlFor='EachAdditionalDom' className='label__style'>
                     Each Additional
                   </label>
-                  <input className='dom__input'></input>
+                  <input 
+                  className='dom__input'
+                  name='domesticShippingEachAdditional'
+                  defaultValue={data.domesticShippingEachAdditional}
+                  onChange={handleChange}
+                  ></input>
                 </div>
                 <div className='arrange__col_dom'>
                   <label
@@ -1280,14 +1270,24 @@ class RightSection extends Component {
                   >
                     AK/HI/PR Surcharge
                   </label>
-                  <input className='dom__input'></input>
+                  <input 
+                  className='dom__input'
+                  name='domesticShippingSurcharge'
+                  defaultValue={data.domesticShippingSurcharge}
+                  onChange={handleChange}
+                  ></input>
                 </div>
               </div>
 
               {/* ==================================================================================== */}
               <div className='arrange__col_dom'>
                 <div className='free__ship'>
-                  <input type='checkbox' className='dom__input'></input>
+                  <input 
+                  type='checkbox' 
+                  className='dom__input'
+                  checked={data.domesticShippingFreeShippingActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'domesticShippingFreeShippingActive')}}
+                  ></input>
                   <label
                     htmlFor='FreeShippingDom'
                     className='label__style_free'
@@ -1307,13 +1307,23 @@ class RightSection extends Component {
                   <label htmlFor='ShippingServiceInt' className='label__style'>
                     Shipping Service
                   </label>
-                  <input className='dom__input'></input>
+                  <input 
+                  className='dom__input'
+                  name='internationalShippingService'
+                  defaultValue={data.internationalShippingService}
+                  onChange={handleChange}
+                  ></input>
                 </div>
                 <div className='arrange__col_dom'>
                   <label htmlFor='CostInt' className='label__style'>
                     Cost
                   </label>
-                  <input className='dom__input'></input>
+                  <input 
+                  className='dom__input'
+                  name='internationalShippingCost'
+                  defaultValue={data.internationalShippingCost}
+                  onChange={handleChange}
+                  ></input>
                 </div>
               </div>
 
@@ -1324,7 +1334,12 @@ class RightSection extends Component {
                   <label htmlFor='EachAdditionalInt' className='label__style'>
                     Each Additional
                   </label>
-                  <input className='dom__input'></input>
+                  <input 
+                  className='dom__input'
+                  name='internationalShippingEachAdditional'
+                  defaultValue={data.internationalShippingEachAdditional}
+                  onChange={handleChange}
+                  ></input>
                 </div>
                 <div className='arrange__col_dom'>
                   <label
@@ -1333,14 +1348,25 @@ class RightSection extends Component {
                   >
                     AK/HI/PR Surcharge
                   </label>
-                  <input className='dom__input'></input>
+                  <input 
+                  className='dom__input'
+                  name='internationalShippingSurcharge'
+                  defaultValue={data.internationalShippingSurcharge}
+                  onChange={handleChange}
+                  ></input>
                 </div>
               </div>
 
               {/* ==================================================================================== */}
               <div className='arrange__col_dom'>
                 <div className='free__ship'>
-                  <input type='checkbox' className='dom__input'></input>
+                  <input 
+                  type='checkbox' 
+                  className='dom__input'
+                  name='internationalShippingFreeShippingActive'
+                  checked={data.internationalShippingFreeShippingActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'internationalShippingFreeShippingActive')}}
+                  ></input>
                   <label
                     htmlFor='FreeShippingInt'
                     className='label__style_free'
@@ -1360,21 +1386,51 @@ class RightSection extends Component {
                   Yes, best offer enabled
                 </button>
                 <div className='option_div'>
-                  <input type='checkbox'></input>{" "}
+                  <input 
+                  type='checkbox'
+                  name='bestOfferAcceptFloorActive'
+                  checked={data.bestOfferAcceptFloorActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'bestOfferAcceptFloorActive')}}
+                  ></input>{" "}
                   <label>Automatically accept offers of atleast</label>{" "}
-                  <input className='inputbox1'></input>
+                  <input 
+                  className='inputbox1'
+                  name='bestOfferAcceptFloorValue'
+                  defaultValue={data.bestOfferAcceptFloorValue}
+                  onChange={handleChange}
+                  ></input>
                 </div>
                 <div className='option_div'>
-                  <input type='checkbox'></input>{" "}
+                  <input 
+                  type='checkbox'
+                  name='bestOfferDeclineCeilingActive'
+                  checked={data.bestOfferDeclineCeilingActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'bestOfferDeclineCeilingActive')}}
+                  ></input>{" "}
                   <label>Automatically decline offers lower than</label>{" "}
-                  <input className='inputbox'></input>
+                  <input 
+                  className='inputbox'
+                  name='bestOfferDeclineCeilingValue'
+                  defaultValue={data.bestOfferDeclineCeilingValue}
+                  onChange={handleChange}
+                  ></input>
                 </div>
               </div>
             </div>
             <div className='decition_buttons'>
-              <button className='save_to_draft'>Save to draft</button>
-              <button className='submit'>Submit</button>
-              <button className='cancel'>Cancel</button>
+              <button 
+              className='save_to_draft'
+              onClick={(e) => {onSubmit(e, "draft");}}>
+              Save to draft
+              </button>
+              {/* "submit should only be on the drafted section. Change submit on the submitted section to save to submitted"  */}
+              <button 
+              className='submit'
+              >Submit</button>
+              <button 
+              className='cancel'
+              onClick={() => window.open("/searchcart", "_self")}
+              >Cancel</button>
             </div>
           </div>
         </div>

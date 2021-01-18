@@ -3,17 +3,16 @@ import LeftSection from "./components/LeftSection/LeftSection";
 import RightSection from "./components/RightSection/RightSection";
 import "./EditForm.css";
 import Axios from "../../services/Axios";
-import { Link } from "react-router-dom";
-//import { assetsURL } from "../../services/Axios";
+//import LoadingSpinner from "../utils/loader";
 import imageCompression from "browser-image-compression";
 import { has } from "rambda";
 import { evaluateTree } from "../utils/parser";
+//import $ from "jquery";
+//import imageDataURI from "image-data-uri";
 import jwt_decode from "jwt-decode";
 
-Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
-
-class ListForm extends Component {
-	constructor() {
+class EditForm extends Component {
+  constructor() {
     super();
     this.state = {
       data: {
@@ -33,6 +32,7 @@ class ListForm extends Component {
       isSubmitting: false,
       extraMeasures: [],
       extraDescriptions: [],
+      deletedDescriptions: [],
       ctemplates: [],
       templates: [],
       count: 1,
@@ -84,26 +84,31 @@ class ListForm extends Component {
       agentName : '',
       templateIdd: '',
 
-      suggestions: [],
+      ebayCategoryDropDownItems: [],
       companyBlurb: "",
       originZipCode: 0,
-      freeShipping: false,
-      flatShipping: false,
+      calculatedShippingActive: false,
+      freeShippingActive: false,
+      flatShippingActive: false,
       flatShippingRules: [],
-      calculatedShipping: false,
-      bestOfferStatus: false,
+      bestOfferActive: false,
       bestOfferSettings: [],
       mercariHashtags: [],
       internationalShipping: [],
       compPriceSetting: "",
       compPriceIncreaseValue: 0,
       compPriceIncreaseMethod: "",
+      rightSectionProps: [],
     };
     const token = localStorage.getItem("token");
     const decoded = jwt_decode(token);
     this.agentid = decoded._doc._id;
   }
 
+  handleChangesTemplate = (e) => {
+    this.setState({ templateIdd: e.target.value });
+    this.setTemplate(e.target.value);
+  };
 
   handelMessageNotSeen() {
     var msgSeenTemp = [];
@@ -111,15 +116,73 @@ class ListForm extends Component {
     console.log(data,'dataaaaaaaaaa')
     if (data.messageSeen) {
       for (let i = 0; i < data.messageSeen.length; i++) {
-        if (data.messageSeen[i].client == false) {
+        if (data.messageSeen[i].client === false) {
           msgSeenTemp.push(data.messageSeen[i].field);
         }
       }
     }
     this.setState({ messageNotSeen: msgSeenTemp });
   }
+  setTemplate = (tempid) => {
+    //const { images } = this.state;
+    let { templatename } = this.state;
+    // images.forEach((i) => {
+    //   i.img = "";
+    // });
+    Axios.get(`/template/${tempid}`)
+      .then(({ data }) => {
+        if (!data.templates[0].data) {
+          data.templates[0].data = {};
+          this.state.data["ebay"]["check"] = false;
+          this.state.data["poshmark"]["check"] = false;
+          this.state.data["mercari"]["check"] = false;
+          this.state.data["delist"]["check"] = false;
+        } else {
+          Object.entries(this.state.data).forEach((item) => {
+            if (item[1] === "" || item[1] === undefined || item[1] === null) {
+              this.state.data[`${item[0]}`] =
+                data.templates[0].data[`${item[0]}`];
+            }
+          });
 
-componentDidMount = () => {
+          //this.setState({ data: data.templates[0].data });
+          templatename = data.templates[0].name;
+          this.setState({ templatename });
+
+          this.state.data["ebay"]["title"] = data.templates[0].data.ebay.title;
+          this.state.data["poshmark"]["title"] =
+            data.templates[0].data.poshmark.title;
+          this.state.data["mercari"]["title"] =
+            data.templates[0].data.mercari.title;
+          this.state.data["delist"]["title"] =
+            data.templates[0].data.delist.title;
+          // if (data.templates[0].data.images) {
+          //   images.forEach((image) => {
+          //     image.img = data.templates[0].data.images[image.key];
+          //   });
+          //   this.setState({ images });
+          // }
+
+          if (data.templates[0].data.extraMeasures) {
+            this.state.extraMeasures = JSON.parse(
+              data.templates[0].data.extraMeasures
+            );
+            this.state.count = this.state.extraMeasures.length + 1;
+          }
+
+          if (data.templates[0].data.others) {
+            this.state.otherfromdb = JSON.parse(data.templates[0].data.others);
+            //console.log(this.state.otherfromdb);
+            this.state.otherfromdb.forEach((db, i) => {
+              this.state.othersstate[i] = db.status;
+            });
+          }
+        }
+      })
+      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+  };
+
+  componentDidMount = () => {
     Axios.get("/template")
       .then(({ data }) => this.setState({ templates: data.templates }))
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -320,90 +383,6 @@ componentDidMount = () => {
     });
   };
 
-  skuSearch = () => {
-    const { images } = this.state;
-    // images.forEach((i) => {
-    //   i.img = "";
-    // });
-    Axios.get(`/product/cid/${this.state.sku}/${this.props.match.params.clientid}`)
-      .then(({ data }) => {
-        console.log(data);
-        if (!data) {
-          data = {};
-          this.state.data["ebay"]["check"] = false;
-          this.state.data["poshmark"]["check"] = false;
-          this.state.data["mercari"]["check"] = false;
-          this.state.data["delist"]["check"] = false;
-        } else {
-          this.setState({ data: data });
-          if (data.extraMeasures) {
-            this.state.extraMeasures = JSON.parse(data.extraMeasures);
-            this.state.count = this.state.extraMeasures.length + 1;
-          }
-          if (data.templates[0].data.others) {
-            this.state.otherfromdb = JSON.parse(data.templates[0].data.others);
-            this.state.otherfromdb.forEach((db, i) => {
-              this.state.othersstate[i] = db.status;
-            });
-          }
-          this.state.data["ebay"]["title"] = data.ebay.title;
-          this.state.data["poshmark"]["title"] = data.poshmark.title;
-          this.state.data["mercari"]["title"] = data.mercari.title;
-          this.state.data["delist"]["title"] = data.delist.title;
-          // if (data.images) {
-          //   images.forEach((image) => {
-          //     image.img = data.images[image.key];
-          //   });
-          //   this.setState({ images });
-          // }
-        }
-      })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  };
-
-  setModelName = () => {
-    const jsonToObject = (data) => JSON.parse(data);
-    //const trace = (x) => {
-    //  console.log(x);
-    //  return x;
-    //};
-    const { clientid } = this.props.match.params;
-    const id = this.props.match.params.productid;
-    Axios.get(`/product/vision/${clientid}/${id}`)
-         .then((data) => 
-         {
-          console.log(data);
-          if (has("labels", data.data)) {
-            const table = data.data.labels.forEach(jsonToObject).reduce(
-              (tb, curLabel) => ({
-                ...tb,
-                [curLabel.description]: curLabel.score,
-              }),
-              {}
-            );
-
-          const eva = (pre, curRule) => {
-            console.log("rule", curRule);
-            if (has("output", curRule) && has("expression", curRule)) {
-              const re = evaluateTree(curRule, table);
-              if (re !== "") return [...pre, re];
-            }
-            return pre;
-          };
-          this.getRules().then((data) => {
-            console.log("res", data);
-            const res = data.reduce(eva, []);
-            if (res.length > 0)
-              this.setState({
-                ...this.state,
-                data: { ...this.state.data, model: res[0] },
-              });
-          });
-        }
-      })
-      .catch(console.dir);
-  };
-
   handleChange = (e) => {
     const { name, value } = e.target;
     const { data } = this.state;
@@ -469,33 +448,12 @@ componentDidMount = () => {
     //console.log(extraMeasures);
   };
 
-  handleDescriptionChange = (id, e) => {
-    const { value } = e.target;
-    const { extraDescriptions } = this.state;
-    extraDescriptions.forEach((description) => {
-      if (description.id === id) {
-        description.value = value;
-      }
-    });
-    this.setState({ extraDescriptions });
-   // console.log(extraDescriptions);
-  };
-
   addMeasure = (e) => {
   //  console.log("addMeaseure");
     const { extraMeasures, count } = this.state;
     extraMeasures.push({ label: "", val: "", id: count });
     this.setState({ extraMeasures });
     this.setState({ count: count + 1 });
-  };
-
-  addDescription = () => {
-  //  console.log("add description");
-    const { extraDescriptions, count1 } = this.state;
-    extraDescriptions.push({ key: "", value: "", id: count1 });
-  //  console.log(extraDescriptions);
-    this.setState({ extraDescriptions });
-    this.setState({ count1: count1 + 1 });
   };
 
   removeMeasure = (id, e) => {
@@ -509,45 +467,15 @@ componentDidMount = () => {
     this.setState({ count: count - 1 });
   };
 
-  removeDescription = (id, e) => {
-    const { 
-      extraDescriptions, 
-      //count1 
-    } = this.state;
-    this.setState({
-      extraDescriptions: extraDescriptions.filter((description) => {
-        return description.id !== id;
-      }),
-    });
-  };
-
   onSubmit = (e,  value) => {
     e.preventDefault();
-    const { clientid, productid } = this.props.match.params;
     const { data, images, extraMeasures, extraDescriptions } = this.state;
-    const manualProdList =
-      (this.state.data["ebay"]["url"] !== undefined &&
-        this.state.data["ebay"]["url"] !== "") ||
-      (this.state.data["mercari"]["url"] !== undefined &&
-        this.state.data["mercari"]["url"] !== "") ||
-      (this.state.data["poshmark"]["title"] !== undefined &&
-        this.state.data["poshmark"]["url"] !== "");
-    // const manualProdListBy = this.props;
-    const ebayUrl =
-      this.state.data["ebay"]["url"] !== undefined
-        ? this.state.data["ebay"]["url"]
-        : "";
-    const poshMarkUrl =
-      this.state.data["poshmark"]["url"] !== undefined
-        ? this.state.data["poshmark"]["url"]
-        : "";
-    const mercariUrl =
-      this.state.data["mercari"]["url"] !== undefined
-        ? this.state.data["mercari"]["url"]
-        : "";
     const dataform = new FormData();
     images.forEach((image) => {
-      if (!!image.img) dataform.append(image.key, image.img);
+      if(image.img)
+      {
+        dataform.append(image.key, image.img);
+      }
     });
 
     var y = [];
@@ -555,18 +483,19 @@ componentDidMount = () => {
       let obj = {
         name: o,
         status: this.state.othersstate[i],
+        url: this.state.othersurl[i] ? this.state.othersurl[i] : "",
       };
       y.push(obj);
     });
-    console.log(y);
 
     this.setState({ isSubmitting: true });
 
     dataform.append("sku", data.sku);
+    dataform.append("upc", data.upc);
     dataform.append("quantity", data.quantity);
     dataform.append("price", data.price);
     dataform.append("extraMeasures", JSON.stringify(extraMeasures));
-    //dataform.append("extraDescription", JSON.stringify(extraDescriptions));
+    dataform.append("extraDescription", JSON.stringify(extraDescriptions));
     dataform.append("brand", data.brand);
     dataform.append("model", data.model);
     dataform.append("modelNo", data.modelNo)
@@ -587,6 +516,14 @@ componentDidMount = () => {
     dataform.append("style", data.style);
     dataform.append("pattern", data.pattern);
     dataform.append("category", data["category"]);
+    dataform.append("categorySecondary", data.categorySecondary);
+    dataform.append("listingFormat", data.listingFormat);
+    dataform.append("givingWorksCharityID", data.givingWorksCharityID);
+    dataform.append("givingWorksDonationPercentage", data.givingWorksDonationPercentage);
+    dataform.append("storeCategoryOne", data.storeCategoryOne);
+    dataform.append("storeCategoryTwo", data.storeCategoryTwo);
+    dataform.append("lotSize", data.lotSize);
+    dataform.append("type", data.type);
     dataform.append("seasonOrWeather", data.seasonOrWeather);
     dataform.append("care", data.care);
     dataform.append("inseam", data.inseam);
@@ -594,7 +531,6 @@ componentDidMount = () => {
     dataform.append("waist", data.waist);
     dataform.append("bottomDescription", data.bottomDescription);
     dataform.append("msrp", data.msrp);
-    dataform.append("upc", data.upc);
     dataform.append("mrp", data.mrp);
     dataform.append("keywords", data.keywords);
     dataform.append("notes", data.notes);
@@ -606,6 +542,18 @@ componentDidMount = () => {
     dataform.append("packageHeight", data.packageHeight);
     dataform.append("costOfGoods", data.costOfGoods);
     dataform.append("shippingFees", data.shippingFees);
+    dataform.append("domesticShippingService", data.domesticShippingService);
+    dataform.append("domesticShippingCost", data.domesticShippingCost);
+    dataform.append("domesticShippingEachAdditional", data.domesticShippingEachAdditional);
+    dataform.append("domesticShippingSurcharge", data.domesticShippingSurcharge);
+    dataform.append("domesticShippingFreeShippingActive", data.domesticShippingFreeShippingActive);
+    dataform.append("internationalShippingService", data.internationalShippingService);
+    dataform.append("internationalShippingCost", data.internationalShippingCost);
+    dataform.append("internationalShippingEachAdditional", data.internationalShippingEachAdditional);
+    dataform.append("internationalShippingSurcharge", data.internationalShippingSurcharge);
+    dataform.append("internationalShippingFreeShippingActive", data.internationalShippingFreeShippingActive);
+    dataform.append("calculatedShippingActive", data.calculatedShippingActive);
+    dataform.append("calculatedShipping", data.calculatedShipping);
     dataform.append("profit", data.profit);
     dataform.append("status", true);
     dataform.append("line", JSON.stringify(extraDescriptions));
@@ -624,31 +572,19 @@ componentDidMount = () => {
     dataform.append("ebayUrl", ebayUrl);
     dataform.append("poshMarkUrl", poshMarkUrl);
     dataform.append("mercariUrl", mercariUrl);
-    if(value === "draft"){
-      dataform.append("prodStatus", "draft");
-    }
-    if (
-      this.state.ebayurl !== "" &&
-      this.state.ebayurl !== null &&
-      this.state.ebayurl !== "d"
-    ) {
-      dataform.append("ebayurl", data["ebay"]["url"]);
-    }
-    if (
-      this.state.poshmarkurl !== "" &&
-      this.state.poshmarkurl !== null &&
-      this.state.poshmarkurl !== "d"
-    ) {
-      dataform.append("poshmarkurl", data["poshmark"]["url"]);
-    }
-    if (
-      this.state.mercariurl !== "" &&
-      this.state.mercariurl !== null &&
-      this.state.mercariurl !== "d"
-    ) {
-      dataform.append("mercariurl", data["mercari"]["url"]);
-    }
-   
+    dataform.append("bestOfferActive", data.bestOfferActive);
+    dataform.append("bestOfferAcceptFloorActive", data.bestOfferAcceptFloorActive);
+    dataform.append("bestOfferDeclineCeilingActive", data.bestOfferDeclineCeilingActive);
+    dataform.append("bestOfferAcceptFloorValue", data.bestOfferAcceptFloorValue);
+    dataform.append("bestOfferDeclineCeilingValue", data.bestOfferDeclineCeilingValue);
+    dataform.append("compPriceSetting", data.compPriceSetting);
+    dataform.append("compPriceIncreaseValue", data.compPriceIncreaseValue);
+    dataform.append("compPriceIncreaseMethod", data.compPriceIncreaseMethod);
+    dataform.append("mercariHashtags", data.mercariHashtags);
+    dataform.append("companyBlurb", data.companyBlurb);
+    dataform.append("ebayCategoryField", data.ebayCategoryField);
+    dataform.append("ebayOptionalFieldsActive", data.ebayOptionalFieldsActive);
+    
     Axios.put(`/product/${this.props.match.params.id}`, dataform, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -732,6 +668,15 @@ componentDidMount = () => {
     this.setState({ isSubmitting: false });
   };
 
+  handleCheckboxToggle = (booleanValue, name) => {
+    const { data } = this.state;
+
+    data[name] = booleanValue;
+
+    this.setState({ data });
+    this.setState({ editchange: true });
+  }
+
   removeImg = (idx) => {
     const { images } = this.state;
     images[idx].img = "";
@@ -743,11 +688,6 @@ componentDidMount = () => {
   };
 
   listHandler = async (website) => {
-    const tempData = {listing:1,crosslisting:0,delisting:0}
-    await Axios.post("/nooflistings/",tempData,{headers: {"x-access-token": localStorage.getItem("token"),},})
-
-    //console.log(website,"websitesssssss")
-
     if (this.state.editchange === true) {
       return alert("Please save changes before listing");
     }
@@ -780,16 +720,12 @@ componentDidMount = () => {
     if (this.state.editchange === true) {
       return alert("Please save changes before listing");
     }
-    if (this.state.editchange === true) {
-      return alert("Please save changes before listing");
-    }
     if (website === "ebay") {
       localStorage.setItem("actionebay", "editebay");
       localStorage.setItem("ebaydelisturl", this.state.ebayurl);
      
       window.location.reload();
       // window.open("https://www.ebay.com/sh/lst/active");
-     
     }
     if (website === "poshmark") {
       localStorage.setItem("actionposhmark", "editposhmark");
@@ -833,10 +769,6 @@ componentDidMount = () => {
       //window.open("https://www.mercari.com/sell/");
       count = count+1;
     }
-
-    const tempData = {listing:1,crosslisting:count-1,delisting:0}
-    await Axios.post("/nooflistings/",tempData,{headers: {"x-access-token": localStorage.getItem("token"),},})
-
   };
 
   editHandlerAll = () => {
@@ -952,8 +884,6 @@ componentDidMount = () => {
       window.location.reload();
       //window.open(this.state.mercariurl);
     }
-    const tempData = {listing:0,crosslisting:0,delisting:count}
-    await Axios.post("/nooflistings/",tempData,{headers: {"x-access-token": localStorage.getItem("token"),},})
   };
 
   listallow = () => {
@@ -1065,11 +995,13 @@ componentDidMount = () => {
       return false;
     }
   };
+
   setCategory = (str) => {
     const { data } = this.state;
     data["category"] = str;
     this.setState({ data });
   };
+
   blobToBase64 = (blob) => {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
@@ -1091,12 +1023,121 @@ componentDidMount = () => {
      console.log(err) || alert(JSON.stringify({ err: err }));
    });
 
- }
+  }
 
- handleChangesTemplate = (e) => {
-   this.setState({templateIdd : e.target.value})
-  this.set_c_Template(e.target.value)
- }
+   handleChangesTemplate = (e) => {
+     this.setState({templateIdd : e.target.value})
+    this.set_c_Template(e.target.value)
+   }
+
+  clearExtraDescriptions = () => {
+    this.setState({ extraDescriptions: [] });
+    this.setState({ deletedDescriptions: [] });
+  };
+
+  handleSelectedLeaf = (itemAspectsArray) => {
+    var { extraDescriptions, count1 } = this.state;
+    extraDescriptions = [];
+    Object.keys(itemAspectsArray.data.aspects).forEach((item, index) => {
+      extraDescriptions.push({
+        id: index,
+        key: itemAspectsArray.data.aspects[index].localizedAspectName,
+        aspectUsage: itemAspectsArray.data.aspects[index].aspectConstraint.aspectUsage,
+        suggestedValues: itemAspectsArray.data.aspects[index].aspectValues,
+        aspectRequired: itemAspectsArray.data.aspects[index].aspectConstraint.aspectRequired,
+        value: ""
+      });
+      count1 = count1 + 1;
+    });
+
+    this.setState({ extraDescriptions: extraDescriptions, count1: count1 });
+  };
+
+  handleSelectedEbayCategory = (category) => {
+    const url = "/ebay/itemAspects/" + category.categoryId;
+    var { data } = this.state;
+    Axios.get(url)
+      .then((response) => response.data)
+      .then((data) => {
+        this.handleSelectedLeaf(data);
+      })
+      .catch((err) => console.log(err));
+
+      data['ebayCategoryField'] = category.categoryName;
+      this.setState({ data });
+  };
+
+  handleDescriptionLabel = (id, e) => {
+    const { value } = e.target;
+    const { extraDescriptions } = this.state;
+    extraDescriptions.forEach((description) => {
+      if (description.id === id) {
+        description.key = value;
+      }
+    });
+    this.setState({ extraDescriptions });
+  };
+
+  handleDescriptionChange = (id, value) => {
+    const { extraDescriptions } = this.state;
+    extraDescriptions.forEach((description) => {
+      if (description.id === id) {
+        description.value = value;
+      }
+    });
+    this.setState({ extraDescriptions });
+  };
+
+  addDescription = () => {
+    const { extraDescriptions, count1 } = this.state;
+    extraDescriptions.push({ key: "", value: "", id: count1 });
+    this.setState({ extraDescriptions });
+    this.setState({ count1: count1 + 1 });
+  };
+
+  arrayFilterStorage = (item, filterValue) => 
+  {
+    var {deletedDescriptions} = this.state;
+
+    if(item.id !== filterValue)
+    {
+      return true;
+    }
+    else if(item.id === filterValue)
+    {
+      deletedDescriptions.push(item);
+      this.setState({deletedDescriptions});
+      return false;
+    }
+  }
+
+  removeDescription = (id, e) => {
+    const { extraDescriptions } = this.state;
+
+    this.setState({extraDescriptions: extraDescriptions.filter((description) => {return this.arrayFilterStorage(description, id)})});
+  };
+
+  toggleOptional = () => {
+    var { data } = this.state;
+    data['ebayOptionalFieldsActive'] = !data.ebayOptionalFieldsActive;
+    this.setState({ data });
+  };
+
+  setEbayCategoryField = (categoryName) => {
+    var { data } = this.state
+    data['ebayCategoryField'] = categoryName;
+    this.setState({ data });
+  };
+
+  repopulateExtraDescriptions = () => {
+    var { extraDescriptions, deletedDescriptions } = this.state;
+
+    var concatenatedArray = extraDescriptions.concat(deletedDescriptions);
+
+    this.setState({deletedDescriptions: []});
+    this.setState({extraDescriptions:concatenatedArray});
+  }
+
   render = () => {
     const {
       data,
@@ -1108,30 +1149,30 @@ componentDidMount = () => {
       Ebay,
       Poshmark,
       Mercari,
-      templatename,
-      othersbool,
-      others,
-      othersstate,
+      //templatename,
+      //othersbool,
+      //others,
+      //othersstate,
       //otherfromdb,
-      othertolist,
-      othersurl,
-      ebayurl,
-      poshmarkurl,
-      mercariurl,
-      activity_check,
+      //othertolist,
+      //othersurl,
+      //ebayurl,
+      //poshmarkurl,
+      //mercariurl,
+      //activity_check,
       showcat,
       brandacc,
       coloracc,
       labelacc,
       //messageNotSeen,
-      suggestions,
+      ebayCategoryDropDownItems
     } = this.state;
     //const {templateid} = this.props.match.params
-	  return (
-	    <div className='app'>
-	      <div className='app__body'>
-	        <LeftSection
-	          data={data}
+    return (
+      <div className='app'>
+        <div className='app__body'>
+          <LeftSection
+            data={data}
             images={images}
             Ebay={Ebay}
             Poshmark={Poshmark}
@@ -1147,41 +1188,45 @@ componentDidMount = () => {
             productid = {this.state.productid}
             clientid = {this.state.clientid}
             extraDescriptions={this.state.extraDescriptions}
-            companyBlurb={this.state.companyBlurb}
               />
-	        <RightSection
-	          data={data}
-	          handleChange={this.handleChange}
-	          images={images}
-	          extraMeasures={extraMeasures}
-	          brandacc={brandacc}
-	          coloracc={coloracc}
-	          labelacc={labelacc}
-	          extraDescriptions={this.state.extraDescriptions}
-	          addMeasure={this.addMeasure}
-	          addDescription={this.addDescription}
-	          handleMeasureChange={this.handleMeasureChange}
-	          handleDescriptionChange={this.handleDescriptionChange}
-	          handleMeasureLabel={this.handleMeasureLabel}
-	          handleDescriptionLabel={this.handleDescriptionLabel}
-	          removeMeasure={this.removeMeasure}
-	          removeDescription={this.removeDescription}
-	          removeImg={this.removeImg}
-	          handleBulkUpload={this.handleBulkUpload}
-	          handleImageChange={this.handleImageChange}
-	          handleOtherTitles={this.handleOtherTitles}
-	          handleUrl={this.handleUrl}
-	          productid = {this.state.productid}
-	          clientid = {this.state.clientid}
-	          productMessage = {this.state.productMessage}
-	          showcat={showcat}
+          <RightSection
+            data={data}
+            handleChange={this.handleChange}
+            brandacc={brandacc}
+            coloracc={coloracc}
+            labelacc={labelacc}
+            addMeasure={this.addMeasure}
+            removeMeasure={this.removeMeasure}
+            extraMeasures={extraMeasures}
+            handleMeasureChange={this.handleMeasureChange}
+            handleMeasureLabel={this.handleMeasureLabel}
+            clearExtraDescriptions={this.clearExtraDescriptions}
+            addDescription={this.addDescription}
+            extraDescriptions={this.state.extraDescriptions}
+            handleDescriptionChange={this.handleDescriptionChange}
+            handleDescriptionLabel={this.handleDescriptionLabel}
+            removeDescription={this.removeDescription}
+            repopulateExtraDescriptions={this.repopulateExtraDescriptions}
+            handleSelectedLeaf={this.handleSelectedLeaf}
+            handleSelectedEbayCategory={this.handleSelectedEbayCategory}
+            handleOtherTitles={this.handleOtherTitles}
+            toggleOptional={this.toggleOptional}
+            handleUrl={this.handleUrl}
+            productid = {this.state.productid}
+            clientid = {this.state.clientid}
+            productMessage = {this.state.productMessage}
+            showcat={showcat}
             setCategory={this.setCategory}
-            suggestions={suggestions}
+            ebayCategoryDropDownItems={ebayCategoryDropDownItems}
+            handleCheckboxToggle={this.handleCheckboxToggle}
+            onSubmit={this.onSubmit}
+            isSubmitting={this.isSubmitting}
+            setEbayCategoryField={this.setEbayCategoryField}
               />
-	      </div>
-	    </div>
-	  );
-	}
+        </div>
+      </div>
+    );
+  }
 }
 
-export default ListForm;
+export default EditForm;
