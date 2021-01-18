@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./LeftSection.css";
 //import Imagebtn from "../Imagebtn";
 //import { Link } from "react-router-dom";
-import { HOST } from "../../../../services/Axios";
+import { assetsURL } from "../../../../services/Axios";
 //import Popover from '@material-ui/core/Popover';
 //import Axios from '../../../../services/Axios';
 //import Badge from '@material-ui/core/Badge';
