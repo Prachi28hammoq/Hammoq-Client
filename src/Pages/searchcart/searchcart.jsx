@@ -365,7 +365,7 @@ class Searchcart extends Component {
                 type="button"
                 className="btn btn-primary d-inline mr-3 mb-3"
                 onClick={() => {
-                  //this.handleInventory()
+                  this.handleInventory()
                   this.props.history.push("/products/inventory");
                   window.location.reload();
                   //console.log(this.props.history)
@@ -376,7 +376,7 @@ class Searchcart extends Component {
               <button
                 className="btn btn-primary d-inline mr-3 mb-3"
                 onClick={() => {
-                  // this.handleDrafts();
+                  this.handleDrafts();
 
                   this.props.history.push("/products/draft");
                   window.location.reload();
@@ -387,7 +387,7 @@ class Searchcart extends Component {
               <button
                 className="btn btn-primary d-inline mr-3 mb-3"
                 onClick={() => {
-                  //this.handleSubmitted();
+                  this.handleSubmitted();
                   this.props.history.push("/products/submitted");
                   window.location.reload();
                 }}
