@@ -354,6 +354,11 @@ export default class extends Component {
         this.setTemplate(response.data.templateId);
       }
     });
+
+    Axios.get('ebay/itemSuggestionPopulater')
+         .then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
+
+    };
   };
 
   handleChange = (e) => {
@@ -961,479 +966,85 @@ export default class extends Component {
       images,
       isSubmitting,
       extraMeasures,
-      templates,
+      //templates,
+      //ctemplates,
       Ebay,
       Poshmark,
       Mercari,
-      templatename,
-      othersbool,
-      others,
-      othersstate,
+      //templatename,
+      //othersbool,
+      //others,
+      //othersstate,
       //otherfromdb,
-      othertolist,
-      othersurl,
-      ebayurl,
-      poshmarkurl,
-      mercariurl,
-      activity_check,
+      //othertolist,
+      //othersurl,
+      //ebayurl,
+      //poshmarkurl,
+      //mercariurl,
+      //activity_check,
       showcat,
+      brandacc,
+      coloracc,
+      labelacc,
+      //messageNotSeen,
+      ebayCategoryDropDownItems
     } = this.state;
-
-    // console.log(this.state.images, 'images')
+    //const {templateid} = this.props.match.params
     return (
-      <div className="container-fluid px-3 template">
-        <Link to="/products/submitted">
-          <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
-        </Link>
-        <h2 className="text-dark d-flex justify-content-lg-center pb-4">
-          Create or Edit Listing: {templatename}
-        </h2>
-        <div className="col-md-4">
-          <select
-            value={this.state.templateIdd}
-            className="form-control"
-            onChange={this.handleChangesTemplate}
-          >
-            <option>Choose Template</option>
-            {templates &&
-              templates.forEach((temp) => {
-                return <option value={temp._id}>{temp.name}</option>;
-              })}
-          </select>
-        </div>
-        <div className="row">
-          <div className="col-12 col-lg-6 pr-4 order-2 order-lg-1">
-            {/* <div className="col-12 col-lg-6 pr-4"> */}
-            <LeftSection
-              messageNotSeen={this.state.messageNotSeen}
-              data={data}
-              images={images}
-              Ebay={Ebay}
-              Poshmark={Poshmark}
-              Mercari={Mercari}
-              othersbool={othersbool}
-              others={others}
-              othersstate={othersstate}
-              showcat={showcat}
-              isSubmitting={isSubmitting}
-              toggleSelectedOthersWebsite={this.toggleSelectedOthersWebsite}
-              handleChange={this.handleChange}
-              extraMeasures={extraMeasures}
-              addMeasure={this.addMeasure}
-              removeMeasure={this.removeMeasure}
-              handleMeasureChange={this.handleMeasureChange}
-              handleMeasureLabel={this.handleMeasureLabel}
-              removeImg={this.removeImg}
-              handleBulkUpload={this.handleBulkUpload}
-              handleImageChange={this.handleImageChange}
-              handleOtherTitles={this.handleOtherTitles}
-              toggleSelectedWebsite={this.toggleSelectedWebsite}
-              setCategory={this.setCategory}
-              message={this.state.message}
-              productid={this.state.productid}
-            />
-          </div>
-          <div className="col-12 col-lg-6 pl-lg-3 order-1 order-lg-2">
-            <RightSection
-              messageNotSeen={this.state.messageNotSeen}
-              data={data}
-              toggleSelectedWebsite={this.toggleSelectedWebsite}
-              handleChange={this.handleChange}
-              images={images}
-              extraMeasures={extraMeasures}
-              extraDescriptions={this.state.extraDescriptions}
-              addMeasure={this.addMeasure}
-              addDescription={this.addDescription}
-              handleUrl={this.handleUrl}
-              handleMeasureChange={this.handleMeasureChange}
-              handleDescriptionChange={this.handleDescriptionChange}
-              handleMeasureLabel={this.handleMeasureLabel}
-              handleDescriptionLabel={this.handleDescriptionLabel}
-              removeDescription={this.removeDescription}
-              removeMeasure={this.removeMeasure}
-              removeImg={this.removeImg}
-              handleBulkUpload={this.handleBulkUpload}
-              handleImageChange={this.handleImageChange}
-              handleOtherTitles={this.handleOtherTitles}
-              message={this.state.message}
-              productid={this.state.productid}
-            />
-          </div>
-        </div>
-
-        <div className="d-flex justify-content-center">
-          <div className="dropdown mr-2">
-            <button
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              data-toggle="dropdown"
-              style={{ width: "200px" }}
-            >
-              Listing
-              <span className="caret"></span>
-            </button>
-            <ul className="dropdown-menu">
-              <li>{activity_check ? null : <p>Insufficent balance</p>}</li>
-              <li>
-                {data["ebay"]["check"] &&
-                activity_check &&
-                (ebayurl === null || ebayurl === "") ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="ebay"
-                    onClick={() => {
-                      this.listHandler("ebay");
-                    }}
-                  >
-                    Ebay
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {data["poshmark"]["check"] &&
-                activity_check &&
-                (poshmarkurl === null || poshmarkurl === "") ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="poshmark"
-                    onClick={() => {
-                      this.listHandler("poshmark");
-                    }}
-                  >
-                    Poshmark
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {" "}
-                {data["mercari"]["check"] &&
-                activity_check &&
-                (mercariurl === null || mercariurl === "") ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="mercari"
-                    onClick={() => {
-                      this.listHandler("mercari");
-                    }}
-                  >
-                    Mercari
-                  </button>
-                ) : null}
-              </li>
-
-              {othersbool && activity_check
-                ? othertolist.forEach((o, i) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="othersstate"
-                          onClick={() => {
-                            this.listHandler(o.name);
-                          }}
-                        >
-                          {o.name}
-                        </button>
-                      </li>
-                    );
-                  })
-                : null}
-              <li>
-                {activity_check && this.listallow() ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="listall"
-                    onClick={() => {
-                      this.listHandlerAll();
-                    }}
-                  >
-                    List All
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                <button
-                  className="btn colorIt"
-                  style={{ width: "100%", textAlign: "left" }}
-                  id="none"
-                >
-                  None
-                </button>
-              </li>
-              {/* <li>
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delist"
-                  >
-                    Delist
-                  </button>
-                </li> */}
-            </ul>
-          </div>
-
-          <div className="dropdown mr-2">
-            <button
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              data-toggle="dropdown"
-              style={{ width: "200px" }}
-            >
-              Delist
-              <span className="caret"></span>
-            </button>
-            <ul className="dropdown-menu">
-              <li>
-                {Ebay &&
-                data["ebay"]["check"] &&
-                ebayurl !== "d" &&
-                ebayurl !== null &&
-                ebayurl !== "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="ebay"
-                    onClick={() => {
-                      this.delistHandler("ebay");
-                    }}
-                  >
-                    Ebay
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {Poshmark &&
-                data["poshmark"]["check"] &&
-                poshmarkurl !== "d" &&
-                poshmarkurl !== null &&
-                poshmarkurl !== "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="poshmark"
-                    onClick={() => {
-                      this.delistHandler("poshmark");
-                    }}
-                  >
-                    Poshmark
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {Mercari &&
-                data["mercari"]["check"] &&
-                mercariurl !== "d" &&
-                mercariurl !== null &&
-                mercariurl !== "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="mercari"
-                    onClick={() => {
-                      this.delistHandler("mercari");
-                    }}
-                  >
-                    Mercari
-                  </button>
-                ) : null}
-              </li>
-
-              {othersbool
-                ? othersurl.forEach((o, i) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="othersstate"
-                          onClick={() => {
-                            this.delistHandler(o.name);
-                          }}
-                        >
-                          {o.name}
-                        </button>
-                      </li>
-                    );
-                  })
-                : null}
-              <li>
-                {this.delistallow() ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delistall"
-                    onClick={() => {
-                      this.delistHandlerAll();
-                    }}
-                  >
-                    Delist All
-                  </button>
-                ) : null}
-              </li>
-              <li>{this.nonelisted() ? "None Listed" : null}</li>
-              {/* <li>
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delist"
-                  >
-                    Delist
-                  </button>
-                </li> */}
-            </ul>
-          </div>
-
-          <div className="dropdown mr-2">
-            <button
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              data-toggle="dropdown"
-              style={{ width: "200px" }}
-            >
-              Edit
-              <span className="caret"></span>
-            </button>
-            <ul className="dropdown-menu">
-              <li>
-                {Ebay &&
-                data["ebay"]["check"] &&
-                ebayurl !== "d" &&
-                ebayurl !== null &&
-                ebayurl !== "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="ebay"
-                    onClick={() => {
-                      this.editHandler("ebay");
-                    }}
-                  >
-                    Ebay
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {Poshmark &&
-                data["poshmark"]["check"] &&
-                poshmarkurl !== "d" &&
-                poshmarkurl !== null &&
-                poshmarkurl !== "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="poshmark"
-                    onClick={() => {
-                      this.editHandler("poshmark");
-                    }}
-                  >
-                    Poshmark
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {Mercari &&
-                data["mercari"]["check"] &&
-                mercariurl !== "d" &&
-                mercariurl !== null &&
-                mercariurl !== "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="mercari"
-                    onClick={() => {
-                      this.editHandler("mercari");
-                    }}
-                  >
-                    Mercari
-                  </button>
-                ) : null}
-              </li>
-
-              {othersbool
-                ? othersurl.forEach((o, i) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="othersstate"
-                          onClick={() => {
-                            this.editHandler(o.name);
-                          }}
-                        >
-                          {o.name}s{" "}
-                        </button>
-                      </li>
-                    );
-                  })
-                : null}
-              <li>
-                {this.delistallow() ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delistall"
-                    onClick={() => {
-                      this.editHandlerAll();
-                    }}
-                  >
-                    Edit All
-                  </button>
-                ) : null}
-              </li>
-              <li>{this.nonelisted() ? "None Listed" : null}</li>
-              {/* <li>
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delist"
-                  >
-                    Delist
-                  </button>
-                </li> */}
-            </ul>
-          </div>
-        </div>
-        <br />
-        <div className="row d-lg-flex justify-content-lg-center">
-          <div className="col-12 col-lg-2 mt-2">
-            {isSubmitting ? (
-              <button
-                className="btn btn-success mb-4 btn-block col-12 mr-auto col-lg-12"
-                disabled
-              >
-                <span
-                  className="spinner-border spinner-border-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                />
-                Submitting...
-              </button>
-            ) : (
-              <button
-                className="btn btn-success mb-4 btn-block col-12 mr-auto col-lg-12"
-                onClick={this.onSubmit}
-              >
-                Save
-              </button>
-            )}
-          </div>
-
-          <div className="col-12 col-lg-2 mt-2">
-            <input
-              type="button"
-              defaultValue="Cancel"
-              onClick={() =>
-                window.open(`/products/${data.prodStatus}`, "_self")
-              }
-              className="btn btn-danger mb-4 btn-block col-12 mr-auto col-lg-12"
-            />
-          </div>
+      <div className='app'>
+        <div className='app__body'>
+          <LeftSection
+            data={data}
+            images={images}
+            Ebay={Ebay}
+            Poshmark={Poshmark}
+            Mercari={Mercari}
+            isSubmitting={isSubmitting}
+            handleChange={this.handleChange}
+            removeImg={this.removeImg}
+            handleBulkUpload={this.handleBulkUpload}
+            handleImageChange={this.handleImageChange}
+            handleOtherTitles={this.handleOtherTitles}
+            toggleSelectedOthersWebsite={this.toggleSelectedOthersWebsite}
+            toggleSelectedWebsite={this.toggleSelectedWebsite}
+            productid = {this.state.productid}
+            clientid = {this.state.clientid}
+            extraDescriptions={this.state.extraDescriptions}
+              />
+          <RightSection
+            data={data}
+            handleChange={this.handleChange}
+            brandacc={brandacc}
+            coloracc={coloracc}
+            labelacc={labelacc}
+            addMeasure={this.addMeasure}
+            removeMeasure={this.removeMeasure}
+            extraMeasures={extraMeasures}
+            handleMeasureChange={this.handleMeasureChange}
+            handleMeasureLabel={this.handleMeasureLabel}
+            clearExtraDescriptions={this.clearExtraDescriptions}
+            addDescription={this.addDescription}
+            extraDescriptions={this.state.extraDescriptions}
+            handleDescriptionChange={this.handleDescriptionChange}
+            handleDescriptionLabel={this.handleDescriptionLabel}
+            removeDescription={this.removeDescription}
+            repopulateExtraDescriptions={this.repopulateExtraDescriptions}
+            handleSelectedLeaf={this.handleSelectedLeaf}
+            handleSelectedEbayCategory={this.handleSelectedEbayCategory}
+            handleOtherTitles={this.handleOtherTitles}
+            toggleOptional={this.toggleOptional}
+            handleUrl={this.handleUrl}
+            productid = {this.state.productid}
+            clientid = {this.state.clientid}
+            productMessage = {this.state.productMessage}
+            showcat={showcat}
+            setCategory={this.setCategory}
+            ebayCategoryDropDownItems={ebayCategoryDropDownItems}
+            handleCheckboxToggle={this.handleCheckboxToggle}
+            onSubmit={this.onSubmit}
+            isSubmitting={this.isSubmitting}
+            setEbayCategoryField={this.setEbayCategoryField}
+              />
         </div>
       </div>
     );
