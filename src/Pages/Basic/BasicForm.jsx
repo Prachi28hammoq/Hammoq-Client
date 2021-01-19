@@ -406,7 +406,7 @@ class BasicForm extends Component {
     //   return alert("Please Wait! Images are uploading.....");
     // } else {
     //let productId = ''
-
+    console.log(data)
     Axios.post("/product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
