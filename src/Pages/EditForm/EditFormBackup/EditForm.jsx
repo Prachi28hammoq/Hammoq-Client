@@ -76,6 +76,22 @@ export default class extends Component {
       inventoryCount: 0,
       messageNotSeen: [],
       templateIdd: "",
+
+      ebayCategoryDropDownItems: [],
+      companyBlurb: "",
+      originZipCode: 0,
+      calculatedShippingActive: false,
+      freeShippingActive: false,
+      flatShippingActive: false,
+      flatShippingRules: [],
+      bestOfferActive: false,
+      bestOfferSettings: [],
+      mercariHashtags: [],
+      internationalShipping: [],
+      compPriceSetting: "",
+      compPriceIncreaseValue: 0,
+      compPriceIncreaseMethod: "",
+      rightSectionProps: [],
     };
   }
   handleChangesTemplate = (e) => {
