@@ -382,10 +382,8 @@ class EditForm extends Component {
       }
     });
 
-    Axios.get('ebay/itemSuggestionPopulater')
-       .then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
+    Axios.get('ebay/itemSuggestionPopulater').then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
 
-    };
   };
 
   handleChange = (e) => {
