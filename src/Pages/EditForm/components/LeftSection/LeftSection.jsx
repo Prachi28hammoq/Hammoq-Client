@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./LeftSection.css";
 //import Imagebtn from "../Imagebtn";
 //import { Link } from "react-router-dom";
-import { assetURL } from "../../../../services/Axios";
+import { assetsURL } from "../../../../services/Axios";
 //import Popover from '@material-ui/core/Popover';
 //import Axios from '../../../../services/Axios';
 //import Badge from '@material-ui/core/Badge';
@@ -73,7 +73,7 @@ class LeftSection extends Component {
             typeof image.img === "string"
               ? image.img.substring(0, 4) !== "http" &&
                 image.img.substring(0, 5) !== "https"
-                ? assetURL + image.img
+                ? assetsURL + image.img
                 : image.img
               : image.img !== null
               ? URL.createObjectURL(image.img)
@@ -289,7 +289,7 @@ class LeftSection extends Component {
                           <img
                             src={
                               typeof image.img === "string"
-                                ? assetURL + image.img
+                                ? assetsURL + image.img
                                 : URL.createObjectURL(image.img)
                             }
                             style={{ width: "100%", height: "90px" }}
@@ -299,7 +299,7 @@ class LeftSection extends Component {
                                 {
                                   fullimg:
                                     typeof image.img === "string"
-                                      ? assetURL + image.img
+                                      ? assetsURL + image.img
                                       : URL.createObjectURL(image.img),
                                 },
                                 () => {
