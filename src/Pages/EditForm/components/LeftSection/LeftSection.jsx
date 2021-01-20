@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./LeftSection.css";
 //import Imagebtn from "../Imagebtn";
 //import { Link } from "react-router-dom";
-import { assetsURL } from "../../../../services/Axios";
+import { HOST } from "../../../../services/Axios";
 //import Popover from '@material-ui/core/Popover';
 //import Axios from '../../../../services/Axios';
 //import Badge from '@material-ui/core/Badge';
@@ -26,32 +26,27 @@ class LeftSection extends Component {
   constructor() {
     super();
     this.state = {
+      shortDescCharCount: 0,
       messageFormToggle: false,
       modalImage: "",
       imageIndex: 0,
       anchorEl: null,
-      custom: true,
       customdesc: false,
       desc: ""
     };
   }
 
-  componentWillMount() {
-    if ("custom" in localStorage) {
-      let custom = localStorage.getItem("custom");
-      this.setState({ custom: custom === "true" });
-    }
-
-    if ("customdesc" in localStorage) {
-      this.setState({
-        customdesc: localStorage.getItem("customdesc") === "true",
-      });
+  componentWillMount() 
+  {
+    if ("customdesc" in localStorage) 
+    {
+      this.setState({customdesc: localStorage.getItem("customdesc") === "true"});
     }
   }
 
   handleChanges = (e) => {
     if (e.target.value.length > max) return 0;
-    this.setState({ count: e.target.value.length });
+    this.setState({ shortDescCharCount: e.target.value.length });
   };
 
   handleClick = (event) => {
@@ -78,7 +73,7 @@ class LeftSection extends Component {
             typeof image.img === "string"
               ? image.img.substring(0, 4) !== "http" &&
                 image.img.substring(0, 5) !== "https"
-                ? assetsURL + image.img
+                ? HOST + image.img
                 : image.img
               : image.img !== null
               ? URL.createObjectURL(image.img)
@@ -107,8 +102,6 @@ class LeftSection extends Component {
   render = () => {
     const { 
       //suggestTitles, 
-      //showOtherTitles,
-      custom,
       customdesc 
     } = this.state;
     const {
@@ -125,57 +118,6 @@ class LeftSection extends Component {
       //toggleSelectedOthersWebsite,
       toggleSelectedWebsite
     } = this.props;
-
-    if (custom === false) {
-      data.title = [
-        data.brand,
-        data.colorShade,
-        data.material,
-        data.size,
-        data.style,
-        data.pattern,
-        data.seasonOrWeather,
-        data.care,
-        data.madeIn,
-      ].reduce((title, val) =>
-        val === undefined || val === "" ? title : title + " " + val
-      );
-      data.ebay.title = [
-        data.brand,
-        data.colorShade,
-        data.material,
-        data.size,
-        data.style,
-        data.pattern,
-        data.seasonOrWeather,
-        data.care,
-        data.madeIn,
-      ].reduce((title, val) =>
-        val === undefined || val === "" ? title : title + " " + val
-      );
-      data.poshmark.title = [
-        data.brand,
-        data.colorShade,
-        data.material,
-        data.size,
-        data.seasonOrWeather,
-        data.care,
-        data.madeIn,
-      ].reduce((title, val) =>
-        val === undefined || val === "" ? title : title + " " + val
-      );
-      data.mercari.title = [
-        data.brand,
-        data.colorShade,
-        data.material,
-        data.size,
-        data.seasonOrWeather,
-        data.care,
-        data.madeIn,
-      ].reduce((title, val) =>
-        val === undefined || val === "" ? title : title + " " + val
-      );
-    }
 
     if (customdesc === false) {
       data.shortDescription =
@@ -281,7 +223,7 @@ class LeftSection extends Component {
           : "");
 
       for (let i = 0; i < extraDescriptions.length; i++) {
-        if((extraDescriptions[i].value !== "" | null | undefined | "No Suggested Values") && (extraDescriptions[i].value.localizedValue !== "" | null | undefined | "No Suggested Values"))
+        if((extraDescriptions[i].value !== "" || extraDescriptions[i].value !== null || extraDescriptions[i].value !== undefined || extraDescriptions[i].value !== "No Suggested Values" || extraDescriptions[i].value !== "undefined") && (extraDescriptions[i].value.localizedValue !== "" | null | undefined | "No Suggested Values"))
         {
           data.shortDescription +=
             extraDescriptions[i].key + ": " + extraDescriptions[i].value.localizedValue + "\n";
@@ -347,7 +289,7 @@ class LeftSection extends Component {
                           <img
                             src={
                               typeof image.img === "string"
-                                ? assetsURL + image.img
+                                ? HOST + image.img
                                 : URL.createObjectURL(image.img)
                             }
                             style={{ width: "100%", height: "90px" }}
@@ -357,7 +299,7 @@ class LeftSection extends Component {
                                 {
                                   fullimg:
                                     typeof image.img === "string"
-                                      ? assetsURL + image.img
+                                      ? HOST + image.img
                                       : URL.createObjectURL(image.img),
                                 },
                                 () => {
@@ -456,23 +398,19 @@ class LeftSection extends Component {
             Short Description
             {
               customdesc ?
-                <button
-                className={
-                    "btn btn-warning ml-2 btn-sm"
-                }
+              <button
+              className={"btn btn-success ml-2  btn-sm"}
+              onClick={this.customdescription}
+              >
+              Custom
+            </button>
+            :
+              <button
+                className={"btn btn-warning ml-2 btn-sm"}
                 onClick={this.customdescription}
               >
                  Automatic Generate
               </button>
-            :
-              <button
-              className={
-                  "btn btn-success ml-2  btn-sm"
-              }
-              onClick={this.customdescription}
-            >
-              Custom
-            </button>
           }
           </label>
           <textarea
@@ -485,7 +423,7 @@ class LeftSection extends Component {
             onChange={handleChange}
           ></textarea>
           <small className="form-text text-muted" style={{ fontSize: "0.5em" }}>
-            {this.state.count}/5000 max characters
+            {this.state.shortDescCharCount}/5000 max characters
           </small>
         </div>
         <div className="form-group mt-3">

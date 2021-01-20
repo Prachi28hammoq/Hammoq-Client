@@ -137,7 +137,6 @@ class RightSection extends Component {
       count: 0,
       custom: true,
       title: "",
-      customdesc: false,
       desc: "",
       msgFormToggle: false,
       msgFormTitle: "",
@@ -156,12 +155,6 @@ class RightSection extends Component {
     if ("custom" in localStorage) {
       let custom = localStorage.getItem("custom");
       this.setState({ custom: custom === "true" });
-    }
-
-    if ("customdesc" in localStorage) {
-      this.setState({
-        customdesc: localStorage.getItem("customdesc") === "true",
-      });
     }
   }
 
@@ -301,16 +294,15 @@ class RightSection extends Component {
       toggleOptional,
       clearExtraDescriptions,
       setEbayCategoryField,
-      repopulateExtraDescriptions
+      repopulateExtraDescriptions,
+      priceCalculation,
+      shippingDropDownItems
     } = this.props;
 
     if (custom === false) {
       data.title = [
         data.brand,
         data.colorShade,
-        data.model,
-        data.modelNo,
-        data.category,
         data.material,
         data.size,
         data.style,
@@ -324,7 +316,6 @@ class RightSection extends Component {
       data.ebay.title = [
         data.brand,
         data.colorShade,
-        data.modelNo,
         data.material,
         data.size,
         data.style,
@@ -409,11 +400,11 @@ class RightSection extends Component {
               className='col-sm-4 text-left col-form-label col-form-label-sm'
               onClick={() => {
                 this.setState({ showOtherTitles: !showOtherTitles });
-                // let title=data.title;
-                // data.title=title.trim();
-                // data.ebay.title=data.title;
-                // data.poshmark.title=data.title;
-                // data.mercari.title=data.title;
+                let title=data.title;
+                data.title=title.trim();
+                data.ebay.title=data.title;
+                data.poshmark.title=data.title;
+                data.mercari.title=data.title;
               }}
             >
               <Link to='#'>{showOtherTitles ? "Hide" : "Show"} All Titles</Link>
@@ -609,6 +600,9 @@ class RightSection extends Component {
                   <label htmlFor='Price' className='label__style'>
                     Price
                   </label>
+                  <label htmlFor='Price' className='label__style'>
+                    Apply Price
+                  </label>
                   <label htmlFor='MRP' className='label__style'>
                     MRP
                   </label>
@@ -619,21 +613,27 @@ class RightSection extends Component {
                     Cost of Goods
                   </label>
                   <label htmlFor='SOC' className='label__style'>
-                    Shipping/other Costs
+                    Shipping/Other Costs
                   </label>
                 </div>
                 <div className='details__input_header'>
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='price'
                     id='price'
                     defaultValue={data.price}
                     onChange={handleChange}
                   ></input>
+                  <button
+                    className='details__input'
+                    onClick={priceCalculation}
+                  >Calculate</button>
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='mrp'
                     id='mrp'
                     defaultValue={data.mrp}
@@ -650,6 +650,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='costOfGoods'
                     id='costOfGoods'
                     defaultValue={data.costOfGoods}
@@ -658,6 +659,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='shippingFees'
                     id='shippingFees'
                     defaultValue={data.shippingFees}
@@ -704,6 +706,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='quantity'
                     id='quantity'
                     defaultValue={data.quantity}
@@ -712,6 +715,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='weightLB'
                     id='weightLB'
                     defaultValue={data.weightLB}
@@ -720,6 +724,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='weightOZ'
                     id='weightOZ'
                     defaultValue={data.weightOZ}
@@ -749,6 +754,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='profit'
                     id='profit'
                     defaultValue={data.profit}
@@ -765,6 +771,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='packageLength'
                     id='packageLength'
                     defaultValue={data.packageLength}
@@ -773,6 +780,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='packageWidth'
                     id='packageWidth'
                     defaultValue={data.packageWidth}
@@ -781,6 +789,7 @@ class RightSection extends Component {
                   <input
                     className='details__input'
                     type='number'
+                    step="any"
                     name='packageHeight'
                     id='packageHeight'
                     defaultValue={data.packageHeight}
@@ -798,21 +807,23 @@ class RightSection extends Component {
                 Product Details
               </div>
               <div className='product__header_btn_ctn'>
-                <Select
+                <select
                   id='condition_name'
                   name='condition_name'
                   className='condition__input'
                   value={data.condition_name}
                   onChange={handleChange}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Without label' }}
                   >
-                  <MenuItem value={data.condition_name} disabled>{data.condition_name}</MenuItem>
-                  <MenuItem value='New'>New</MenuItem>
-                  <MenuItem value='New (Other/Open Box)'>New (Other/Open Box)</MenuItem>
-                  <MenuItem value='New With Defects'>New With Defects</MenuItem>
-                  <MenuItem value='Seller Refurbished'>Seller Refurbished</MenuItem>
-                  <MenuItem value='Used'>Used</MenuItem>
-                  <MenuItem value='Broken/For Repair'>Broken/For Repair</MenuItem>
-                </Select>
+                  <option defaultValue={data.condition_name} disabled>{data.condition_name}</option>
+                  <option defaultValue='New'>New</option>
+                  <option defaultValue='New (Other/Open Box)'>New (Other/Open Box)</option>
+                  <option defaultValue='New With Defects'>New With Defects</option>
+                  <option defaultValue='Seller Refurbished'>Seller Refurbished</option>
+                  <option defaultValue='Used'>Used</option>
+                  <option defaultValue='Broken/For Repair'>Broken/For Repair</option>
+                </select>
               <ToggleButton
                 className='product__togglebtn'
                 variant='contained'
@@ -860,6 +871,7 @@ class RightSection extends Component {
                     />
                     :-
                     <Autocomplete
+                      freeSolo
                       options={
                         description.suggestedValues
                           ? description.suggestedValues
@@ -868,11 +880,7 @@ class RightSection extends Component {
                       getOptionLabel={(option) => option.localizedValue}
                       style={{ width: 300 }}
                       value={description.value}
-                      onChange={(event, value, reason) =>
-                        reason === "select-option"
-                          ? handleDescriptionChange(description.id, value)
-                          : null
-                      }
+                      onChange={(event, value, reason) => handleDescriptionChange(description.id, value)}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -1035,6 +1043,7 @@ class RightSection extends Component {
                     <input
                       className='measurement__input'
                       type='number'
+                      step="any"
                       name='waist'
                       id='waist'
                       defaultValue={data.waist}
@@ -1046,6 +1055,7 @@ class RightSection extends Component {
                     <input
                       className='measurement__input'
                       type='number'
+                      step="any"
                       name='rise'
                       id='rise'
                       defaultValue={data.rise}
@@ -1057,6 +1067,7 @@ class RightSection extends Component {
                     <input
                       className='measurement__input'
                       type='number'
+                      step="any"
                       name='inseam'
                       id='inseam'
                       defaultValue={data.inseam}
@@ -1229,12 +1240,25 @@ class RightSection extends Component {
                   <label htmlFor='ShippingServiceDom' className='label__style'>
                     Shipping Service
                   </label>
-                  <input 
-                  className='dom__input'
-                  name='domesticShippingService'
-                  defaultValue={data.domesticShippingService}
-                  onChange={handleChange}
-                  ></input>
+                  <Autocomplete
+                        name='domesticShippingService'
+                        options={shippingDropDownItems}
+                        getOptionLabel={(option) => option.toString()}
+                        style={{ width: 300 }}
+                        value={data.domesticShippingService}
+                        onChange={(event, value, reason) =>
+                          reason === "select-option"
+                            ? handleChange(event)
+                            : null
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name='domesticShippingService'
+                            classes='form-control form-control-sm col-4 mr-3 aspect__input_field'
+                          />
+                        )}
+                      />
                 </div>
                 <div className='arrange__col_dom'>
                   <label htmlFor='CostDom' className='label__style'>
@@ -1282,16 +1306,13 @@ class RightSection extends Component {
               {/* ==================================================================================== */}
               <div className='arrange__col_dom'>
                 <div className='free__ship'>
+                  <label>
                   <input 
-                  type='checkbox' 
+                  type='checkbox'
                   className='dom__input'
                   checked={data.domesticShippingFreeShippingActive}
                   onChange={(e) => {handleCheckboxToggle(e.target.checked, 'domesticShippingFreeShippingActive')}}
                   ></input>
-                  <label
-                    htmlFor='FreeShippingDom'
-                    className='label__style_free'
-                  >
                     Free Shipping?
                   </label>
                 </div>
@@ -1307,12 +1328,25 @@ class RightSection extends Component {
                   <label htmlFor='ShippingServiceInt' className='label__style'>
                     Shipping Service
                   </label>
-                  <input 
-                  className='dom__input'
-                  name='internationalShippingService'
-                  defaultValue={data.internationalShippingService}
-                  onChange={handleChange}
-                  ></input>
+                  <Autocomplete
+                        name='internationalShippingService'
+                        options={shippingDropDownItems}
+                        getOptionLabel={(option) => option.toString()}
+                        style={{ width: 300 }}
+                        value={data.internationalShippingService}
+                        onChange={(event, value, reason) =>
+                          reason === "select-option"
+                            ? handleChange(event)
+                            : null
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name='internationalShippingService'
+                            classes='form-control form-control-sm col-4 mr-3 aspect__input_field'
+                          />
+                        )}
+                      />
                 </div>
                 <div className='arrange__col_dom'>
                   <label htmlFor='CostInt' className='label__style'>
@@ -1424,9 +1458,24 @@ class RightSection extends Component {
               Save to draft
               </button>
               {/* "submit should only be on the drafted section. Change submit on the submitted section to save to submitted"  */}
-              <button 
-              className='submit'
-              >Submit</button>
+              {data.prodStatus && data.prodStatus === 'submit' ?
+                (
+                  <>
+                  <button className='save'
+                  onClick={(e) => {onSubmit(e, "save");}}>
+                  Save</button>
+                  </>
+                )
+                :
+                (
+                  <>
+                  <button className='submit'
+                  onClick={(e) => {onSubmit(e, "submit");}}>
+                  Submit</button>
+                  </>
+                )
+                
+              }
               <button 
               className='cancel'
               onClick={() => window.open("/searchcart", "_self")}

@@ -951,9 +951,13 @@ class BasicForm extends Component {
                   required
                 >
                   <option>Select Condition *</option>
-                  <option value="New with tags">New with tags</option>
-                  <option value="New without tags">New without tags</option>
+                  <option value="New">New</option>
+                  <option value="New With Tags">New With Tags</option>
+                  <option value="New (Other/Open Box)">New (Other/Open Box)</option>
+                  <option value="New With Defects">New With Defects</option>
+                  <option value="Seller Refurbished">Seller Refurbished</option>
                   <option value="Used">Used</option>
+                  <option value="Broken/For Repair">Broken/For Repair</option>
                 </select>
               </div>
               <div className="col-sm-12 col-md-6  mb-4 mt-4 px-1">

@@ -369,7 +369,11 @@ const ListingSettings = () => {
 
     Axios.post("/clientDetails/listingSettings", finalObj)
       .then((res) => {
-        //console.log("Posted: ", res);
+        console.log(res.data);
+        if(res.data === 'Old Settings Updated' || res.data === 'New Settings Created')
+        {
+          alert('Settings Saved Succesfully!');
+        }
       })
       .catch((err) => console.log("Error: ", err));
   };

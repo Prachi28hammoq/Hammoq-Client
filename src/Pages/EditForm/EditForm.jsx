@@ -85,6 +85,7 @@ class EditForm extends Component {
       templateIdd: '',
 
       ebayCategoryDropDownItems: [],
+      shippingDropDownItems: [],
       companyBlurb: "",
       originZipCode: 0,
       calculatedShippingActive: false,
@@ -383,6 +384,8 @@ class EditForm extends Component {
     });
 
     Axios.get('ebay/itemSuggestionPopulater').then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
+    Axios.get('ebay/shippingPopulater').then((res) => {this.setState({shippingDropDownItems : res.data.data.ShippingCarrierDetails.map((item, key) => {return res.data.data.ShippingCarrierDetails[key].Description})})});
+
 
   };
 
@@ -608,6 +611,10 @@ class EditForm extends Component {
     dataform.append("companyBlurb", data.companyBlurb);
     dataform.append("ebayCategoryField", data.ebayCategoryField);
     dataform.append("ebayOptionalFieldsActive", data.ebayOptionalFieldsActive);
+    if(value === "draft")
+    {
+      dataform.append("prodStatus", "draft");
+    }
     
     Axios.put(`/product/${this.props.match.params.id}`, dataform, {
       headers: {
@@ -616,7 +623,10 @@ class EditForm extends Component {
       },
     })
       .then((response) => {
-        // console.log(response, "image");
+        if(value === "draft")
+        {
+          alert('Product Is Saved As Draft.')
+        }
         window.open(`/products/${data.prodStatus}`, "_self");
       })
       .catch((err) => {
@@ -1162,6 +1172,22 @@ class EditForm extends Component {
     this.setState({extraDescriptions:concatenatedArray});
   }
 
+  priceCalculation = () => {
+    var { data } = this.state;
+    if(data['compPriceIncreaseMethod'] === 'dollar')
+    {
+      data['price'] = parseFloat(data['price']) + parseFloat(data['compPriceIncreaseValue']);
+      data["profit"] = data['price'] - data["costOfGoods"];
+    }
+    if(data['compPriceIncreaseMethod'] === 'percent')
+    {
+      data['price'] = parseFloat(data['price']) + (parseFloat(data['price']) * (parseFloat(data['compPriceIncreaseValue'])/100));
+      data["profit"] = data['price'] - data["costOfGoods"];
+    }
+
+    this.setState({data});
+  };
+
   render = () => {
     const {
       data,
@@ -1189,7 +1215,8 @@ class EditForm extends Component {
       coloracc,
       labelacc,
       //messageNotSeen,
-      ebayCategoryDropDownItems
+      ebayCategoryDropDownItems,
+      shippingDropDownItems
     } = this.state;
     //const {templateid} = this.props.match.params
     return (
@@ -1242,10 +1269,12 @@ class EditForm extends Component {
             showcat={showcat}
             setCategory={this.setCategory}
             ebayCategoryDropDownItems={ebayCategoryDropDownItems}
+            shippingDropDownItems={shippingDropDownItems}
             handleCheckboxToggle={this.handleCheckboxToggle}
             onSubmit={this.onSubmit}
             isSubmitting={this.isSubmitting}
             setEbayCategoryField={this.setEbayCategoryField}
+            priceCalculation={this.priceCalculation}
               />
         </div>
       </div>
