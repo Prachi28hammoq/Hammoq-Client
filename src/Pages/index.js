@@ -13,6 +13,9 @@ import ResetPassword from "./resetpassword/resetpassword";
 import Charts from "./Charts/charts";
 import Config from "./config/title";
 import AcceptUrl from "./AcceptUrl/AcceptUrl";
+import EbayAccounts from "./ebayaccounts/EbayAccounts.js";
+import Accounting from './Accounting/Accounting.js';
+import GmailAccounts from './gmailaccounts/GmailAccounts.js';
 
 export {
   Signup,
@@ -30,4 +33,7 @@ export {
   Charts,
   Config,
   AcceptUrl,
+  EbayAccounts,
+  Accounting,
+  GmailAccounts
 };

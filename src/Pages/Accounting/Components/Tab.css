@@ -1,0 +1,27 @@
+.ebay-accounting-tab {
+    display: inline-block;
+    border: 1px solid #9FA2B2;
+    padding: 10px 10px;
+}
+
+.ebay-accounting-tab:hover {
+    cursor: pointer;
+}
+
+.ebay-accounting-tab:last-child {
+    border-left: none;
+}
+
+.ebay-accounting-tab.active {
+    display: inline-block;
+    border: 1px solid #9FA2B2;
+    border-bottom: 0px solid white;
+    padding: 10px 10px;
+    border-top: 5px solid #26C485;
+    color: #26C485;
+}
+
+.ebay-accounting-tab.active:last-child {
+    border-left: none;
+}
+
