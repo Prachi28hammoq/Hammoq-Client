@@ -46,12 +46,10 @@ class header extends Component {
         })
         .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
-      // if (this.state.rates.basic / 100 > this.state.bal) {
-      //   this.setState({ basiccheck: false });
-      // }
-      // if (this.state.rates.advance / 100 > this.state.bal) {
-      //   this.setState({ advancecheck: false });
-      // }
+        if(this.state.bal >= 5.0)
+        {
+          localStorage.setItem("paymentadded", true);
+        }
     }
   };
 
