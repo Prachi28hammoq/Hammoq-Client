@@ -1068,6 +1068,7 @@ const ListingSettings = () => {
               <label>
                 Items must be returned with in{" "}
                 <input
+                  disabled={!intlReturnAccepted}
                   type='number'
                   min='0'
                   value={intlReturnedWithin}
@@ -1088,6 +1089,7 @@ const ListingSettings = () => {
               <label>
                 Refund must be given as
                 <input
+                  disabled={!intlReturnAccepted}
                   type='text'
                   value={intlRefundAs}
                   className='input_tag'
@@ -1104,6 +1106,7 @@ const ListingSettings = () => {
               <label>
                 Return shipping will be paid by{" "}
                 <input
+                  disabled={!intlReturnAccepted}
                   type='text'
                   value={intlReturnShipBy}
                   className='input_tag'
@@ -1142,6 +1145,7 @@ const ListingSettings = () => {
               <label>
                 Handling time
                 <input
+                  disabled={!useEbayGlobal}
                   type='number'
                   min="0"
                   placeholder="in days"
@@ -1163,6 +1167,7 @@ const ListingSettings = () => {
               <label>
                 cost
                 <input
+                  disabled={!useEbayGlobal}
                   type='number'
                   min='0'
                   placeholder='in $'
@@ -1184,6 +1189,7 @@ const ListingSettings = () => {
             <div className='country_arrange'>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Worldwide'
@@ -1199,6 +1205,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Brazil'
@@ -1223,6 +1230,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='United Kingdom'
@@ -1247,6 +1255,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Mexico'
@@ -1271,6 +1280,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Mexico'
@@ -1297,6 +1307,7 @@ const ListingSettings = () => {
             <div className='country_arrange'>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='China'
@@ -1321,6 +1332,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Germany'
@@ -1345,6 +1357,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='N & S America'
@@ -1369,6 +1382,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Japan'
@@ -1393,6 +1407,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Russia'
@@ -1419,6 +1434,7 @@ const ListingSettings = () => {
             <div className='country_arrange'>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='France'
@@ -1443,6 +1459,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Asia'
@@ -1467,6 +1484,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Canada'
@@ -1491,6 +1509,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Europe'
@@ -1515,6 +1534,7 @@ const ListingSettings = () => {
               </label>
               <label>
                 <input
+                  disabled={!useEbayGlobal}
                   type='checkbox'
                   className='country_input'
                   value='Australia'
