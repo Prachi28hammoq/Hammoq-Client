@@ -52,7 +52,9 @@ class Login extends Component {
               ></img>
             </div>
             <div className="d-flex justify-content-center">
-              <p className="h5 py-2 logotitle" style={{fontSize:"2rem"}}>Photo and Forget it</p>
+              <p className="h5 py-2 logotitle" style={{ fontSize: "2rem" }}>
+                Photo and Forget it
+              </p>
             </div>
             <div className="col-lg-8 col-10 m-auto resp-col">
               <div

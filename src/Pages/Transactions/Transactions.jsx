@@ -41,7 +41,7 @@ class previoustransaction extends React.Component {
         <div className="pay">
           <h3 id="fontIt">Payments & Actions</h3>
         </div>
-        <h3 id="fontIt">Previous Transaction</h3>
+        <h5 id="fontIt">Previous Transaction</h5>
         <div className="row">
           <div className={`${this.state.showComponent ? "col-6" : "col-12"}`}>
             <table className="table adjustIt">

@@ -73,7 +73,7 @@ class AddPayment extends Component {
 
     check = arr.toString();
 
-    console.log("check", check);
+    // console.log("check", check);
     const { stripe, elements } = this.props;
     const card = elements.getElement(CardElement);
     const result = await stripe.createToken(card);
