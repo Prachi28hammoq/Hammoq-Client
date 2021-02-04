@@ -7,11 +7,10 @@ import moment from 'moment'
 //import $ from "jquery";
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-//import Axios from "../../services/Axios";
-// const io = require("socket.io-client");
-// const socket = io.connect("https://devcust.avoidpoints.com");
+import Axios from "../../services/Axios";
+import socket from "../../services/socket";
 
-let socket = require.main.exports.socket;
+//let socket = require.main.exports.socket;
 
 class message extends Component {
   constructor(){
