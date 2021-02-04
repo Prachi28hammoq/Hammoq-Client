@@ -66,7 +66,6 @@ class LeftSection extends Component {
     ) {
       let image = this.props.images[idx];
       // console.log(image, 'index check')
-      console.log(image.img);
       this.setState(
         {
           imageIndex: idx,
