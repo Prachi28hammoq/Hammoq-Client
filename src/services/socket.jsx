@@ -15,7 +15,7 @@ if(process.env.REACT_APP_STAGE === 'devlocal')
 
 else if(process.env.REACT_APP_STAGE === 'devhost')
 {
-	socket = socketIOClient("https://devcust.avoidpoints.com/", 
+	socket = socketIOClient("https://devapi.avoidpoints.com/", 
 	{
 	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
 	});
@@ -23,7 +23,7 @@ else if(process.env.REACT_APP_STAGE === 'devhost')
 
 else if(process.env.REACT_APP_STAGE === 'staging')
 {
-	socket = socketIOClient("https://stageapp.avoidpoints.com/", 
+	socket = socketIOClient("https://stageapi.avoidpoints.com/", 
 	{
 	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
 	});
@@ -31,7 +31,7 @@ else if(process.env.REACT_APP_STAGE === 'staging')
 
 else if(process.env.REACT_APP_STAGE === 'production')
 {
-	socket = socketIOClient("https://app.hammoq.com/", 
+	socket = socketIOClient("https://api.hammoq.com/", 
 	{
 	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
 	});
