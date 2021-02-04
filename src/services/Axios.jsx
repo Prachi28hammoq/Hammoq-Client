@@ -11,20 +11,20 @@ if(process.env.REACT_APP_STAGE === 'devlocal')
 
 else if(process.env.REACT_APP_STAGE === 'devhost')
 {
-	baseURL = "https://devcust.avoidpoints.com/api";
-	assetsURL = "https://devcust.avoidpoints.com/assets/";
+	baseURL = "https://devapi.avoidpoints.com/api";
+	assetsURL = "https://devapi.avoidpoints.com/assets/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'staging')
 {
-	baseURL = "https://stageapp.avoidpoints.com/api";
-	assetsURL = "https://stageapp.avoidpoints.com/assets/";
+	baseURL = "https://stageapi.avoidpoints.com/api";
+	assetsURL = "https://stageapi.avoidpoints.com/assets/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'production')
 {
-	baseURL = "https://app.hammoq.com/api";
-	assetsURL = "https://app.hammoq.com/assets/";
+	baseURL = "https://api.hammoq.com/api";
+	assetsURL = "https://api.hammoq.com/assets/";
 }
 
 Axios.defaults.baseURL = baseURL + "/client";

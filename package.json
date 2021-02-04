@@ -42,8 +42,8 @@
     "start": "react-scripts start",
     "startdevlocal": "REACT_APP_STAGE=devlocal PORT=3000 react-scripts start",
     "startdevhost": "REACT_APP_STAGE=devhost PORT=3000 react-scripts start",
-    "startstage": "react-scripts build && REACT_APP_STAGE=staging",
-    "startproduction": "react-scripts build && REACT_APP_STAGE=production",
+    "startstage": "react-scripts build && REACT_APP_STAGE=staging serve -l 3000 -s build",
+    "startproduction": "react-scripts build && REACT_APP_STAGE=production serve -l 3000 -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
