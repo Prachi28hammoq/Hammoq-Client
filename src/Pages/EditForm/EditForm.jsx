@@ -187,14 +187,12 @@ class EditForm extends Component {
     Axios.get("/template")
       .then(({ data }) => this.setState({ templates: data.templates }))
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-    Axios.get(
-      `/product/${this.props.match.params.id}`,
-      (Axios.defaults.headers.common["x-access-token"] = localStorage.getItem(
-        "token"
-      )),
+      const token = localStorage.getItem("token");
+    Axios.get(`/product/${this.props.match.params.id}`,
       {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
+          "x-access-token": token,
         },
       }
     ).then((res) => {
