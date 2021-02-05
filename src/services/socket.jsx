@@ -1,40 +1,30 @@
 import socketIOClient from "socket.io-client";
 
-var socket = socketIOClient("https://app.hammoq.com/", 
-	{
-	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-	});
+var serverURL = "";
 
 if(process.env.REACT_APP_STAGE === 'devlocal')
 {
-	socket = socketIOClient("http://localhost:8000/", 
-	{
-	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-	});
+	serverURL = "http://localhost:8000/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'devhost')
 {
-	socket = socketIOClient("https://devcust.avoidpoints.com/", 
-	{
-	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-	});
+	serverURL = "https://devapi.avoidpoints.com/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'staging')
 {
-	socket = socketIOClient("https://stageapp.avoidpoints.com/", 
-	{
-	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-	});
+	serverURL = "https://stageapi.avoidpoints.com/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'production')
 {
-	socket = socketIOClient("https://app.hammoq.com/", 
-	{
-	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-	});
+	serverURL = "https://api.hammoq.com/";
 }
+
+let socket = socketIOClient(serverURL, 
+{
+  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
+});
 
 export default socket;
