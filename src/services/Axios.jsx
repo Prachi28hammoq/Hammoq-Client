@@ -11,14 +11,14 @@ if(process.env.REACT_APP_STAGE === 'devlocal')
 
 else if(process.env.REACT_APP_STAGE === 'devhost')
 {
-	baseURL = "https://devapi.avoidpoints.com/api";
-	assetsURL = "https://devapi.avoidpoints.com/assets/";
+	baseURL = "https://devapi.hammoq.com/api";
+	assetsURL = "https://devapi.hammoq.com/assets/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'staging')
 {
-	baseURL = "https://stageapi.avoidpoints.com/api";
-	assetsURL = "https://stageapi.avoidpoints.com/assets/";
+	baseURL = "https://stageapi.hammoq.com/api";
+	assetsURL = "https://stageapi.hammoq.com/assets/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'production')
