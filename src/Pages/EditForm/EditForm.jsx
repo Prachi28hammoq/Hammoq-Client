@@ -513,6 +513,26 @@ class EditForm extends Component {
       y.push(obj);
     });
 
+    //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
+    switch(data.condition_name)
+    {
+      case 'New':
+        data.ebayConditionID = 1000;
+        break;
+      case 'Used':
+        data.ebayConditionID = 3000;
+        break;
+      case 'New (Other/Open Box)':
+        data.ebayConditionID = 2750;
+        break;
+      case 'Seller Refurbished':
+        data.ebayConditionID = 2500;
+        break;
+      case 'Broken/For Repair':
+        data.ebayConditionID = 7000;
+        break;
+    }
+
     this.setState({ isSubmitting: true });
 
     dataform.append("sku", data.sku);

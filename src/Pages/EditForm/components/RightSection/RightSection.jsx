@@ -514,7 +514,7 @@ class RightSection extends Component {
           {/* ========================================================================================================== */}
 
           <div className='account__market'>
-            <div className='account'>
+{/*            <div className='account'>
               <label htmlFor='Account'>Account:</label>
               <select id='Account' name='Account' className='select__account'>
                 <option value='USA'>USA</option>
@@ -522,18 +522,38 @@ class RightSection extends Component {
                 <option value='India'>India</option>
                 <option value='Aus'>Aus</option>
               </select>
-            </div>
+            </div>*/}
+
             {/* ========================================================================================================== */}
 
-            <div className='market'>
-              <label htmlFor='Market'>Market</label>
+{/*            <div className='market'>
+              <label htmlFor='Market'>Market:</label>
               <select id='Market' name='Market' className='select__market'>
                 <option value='Ebay'>Ebay</option>
                 <option value='Poshmark'>Poshmark</option>
                 <option value='Mercari'>Mercari</option>
               </select>
+            </div>*/}
+
+          {/* ========================================================================================================== */}
+
+            <div className='ebayListingType'>
+              <label htmlFor='ebayListingType'>eBay Listing Type:</label>
+              <select 
+              id='ebayListingType' 
+              name='ebayListingType' 
+              className='select__market'
+              value={data.ebayListingType}
+              onChange={handleChange}>
+                <option value='AdType'>AdType</option>
+                <option value='Auction'>Auction</option>
+                <option value='Chinese'>Chinese</option>
+                <option value='FixedPriceItem'>Fixed Price Item</option>
+                <option value='PersonalOffer'>Personal Offer</option>
+              </select>
             </div>
           </div>
+
           {/* ========================================================================================================== */}
 
           <div className='urls'>
@@ -1452,30 +1472,39 @@ class RightSection extends Component {
               </div>
             </div>
             <div className='decition_buttons'>
-              <button 
-              className='save_to_draft'
-              onClick={(e) => {onSubmit(e, "draft");}}>
-              Save to draft
-              </button>
-              {/* "submit should only be on the drafted section. Change submit on the submitted section to save to submitted"  */}
-              {data.prodStatus && data.prodStatus === 'submit' ?
-                (
-                  <>
-                  <button className='save'
-                  onClick={(e) => {onSubmit(e, "save");}}>
-                  Save</button>
-                  </>
-                )
-                :
-                (
-                  <>
-                  <button className='submit'
-                  onClick={(e) => {onSubmit(e, "submit");}}>
-                  Submit</button>
-                  </>
-                )
-                
-              }
+            {process.env.REACT_APP_NAME === 'APP' ?
+            (
+              <>
+              <button className='save_to_draft'
+              onClick={(e) => {onSubmit(e, "save");}}>
+              Save</button>
+              </>
+            )
+            :
+            data.prodStatus && data.prodStatus === 'submit'?
+              (
+                <>
+                <button className='save_to_draft'
+                onClick={(e) => {onSubmit(e, "save");}}>
+                Save
+                </button>
+                </>
+              )
+              :
+              (
+                <>
+                <button 
+                className='save_to_draft'
+                onClick={(e) => {onSubmit(e, "draft");}}>
+                Save to draft
+                </button>
+                <button className='submit'
+                onClick={(e) => {onSubmit(e, "submit");}}>
+                Submit
+                </button>
+                </>
+            )
+            }
               <button 
               className='cancel'
               onClick={() => window.open("/searchcart", "_self")}

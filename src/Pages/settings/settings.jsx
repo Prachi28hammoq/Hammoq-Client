@@ -71,10 +71,12 @@ class settings extends Component {
         });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  }
+  };
+
   handleClose = () => {
     this.setState({ open: false });
   };
+
   updatePayment = async (amount, stripeId) => {
     let body = {
       customer_id: this.state.client_id,
@@ -95,6 +97,7 @@ class settings extends Component {
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
+
   handlePaymentAdd = () => {
     if(this.state.savedCards.length>0){
       return this.setState({ open: true });
