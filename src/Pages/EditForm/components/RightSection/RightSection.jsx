@@ -1481,7 +1481,7 @@ class RightSection extends Component {
               </>
             )
             :
-            data.prodStatus && data.prodStatus === 'submit'?
+            data.prodStatus && data.prodStatus === 'submitted'?
               (
                 <>
                 <button className='save_to_draft'
@@ -1499,7 +1499,7 @@ class RightSection extends Component {
                 Save to draft
                 </button>
                 <button className='submit'
-                onClick={(e) => {onSubmit(e, "submit");}}>
+                onClick={(e) => {onSubmit(e, "submitted");}}>
                 Submit
                 </button>
                 </>
