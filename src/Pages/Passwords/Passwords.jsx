@@ -99,8 +99,7 @@ class Passwords extends Component {
 /*      const token = localStorage.getItem("token");
         var decoded = jwt_decode(token);
         console.log(decoded._doc.email)*/
-        console.log(response.data.authURL)
-        //var authWindow = window.open(response.data.authURL, "_blank");
+        var authWindow = window.open(response.data.authURL, "_blank");
       })
 
       .catch((err) => {
