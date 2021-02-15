@@ -223,10 +223,16 @@ class LeftSection extends Component {
           : "");
 
       for (let i = 0; i < extraDescriptions.length; i++) {
-        if((extraDescriptions[i].value !== "" || extraDescriptions[i].value !== null || extraDescriptions[i].value !== undefined || extraDescriptions[i].value !== "No Suggested Values" || extraDescriptions[i].value !== "undefined") && (extraDescriptions[i].value.localizedValue !== "" | null | undefined | "No Suggested Values"))
+        if((extraDescriptions[i].value !== "" && extraDescriptions[i].value !== null && extraDescriptions[i].value !== undefined && extraDescriptions[i].value !== "No Suggested Values" && extraDescriptions[i].value !== "undefined") && 
+          (extraDescriptions[i].value.localizedValue !== "" && extraDescriptions[i].value.localizedValue !== null && extraDescriptions[i].value.localizedValue !== undefined && extraDescriptions[i].value.localizedValue !== "No Suggested Values" && extraDescriptions[i].value.localizedValue !== "undefined"))
         {
           data.shortDescription +=
             extraDescriptions[i].key + ": " + extraDescriptions[i].value.localizedValue + "\n";
+        }
+        else if(extraDescriptions[i].value !== "" && extraDescriptions[i].value !== null && extraDescriptions[i].value !== undefined && extraDescriptions[i].value !== "No Suggested Values" && extraDescriptions[i].value !== "undefined")
+        {
+          data.shortDescription +=
+            extraDescriptions[i].key + ": " + extraDescriptions[i].value + "\n";
         }
       }
 
@@ -371,24 +377,24 @@ class LeftSection extends Component {
             </div>
           </div>
         <div className='store__buttons'>
-          <button className={`${data["ebay"]["check"] === true ? "outline__button" : "fill__button"}`}
+          <button className={`${data["ebay"]["check"] ? "fill__button" : "outline__button"}`}
                   onClick={() => {toggleSelectedWebsite("ebay");}}
                   id="EbayToggleButton"
                   >Ebay</button>
-          <button className={`${data["mercari"]["check"] === true ? "outline__button" : "fill__button"}`}
+          <button className={`${data["mercari"]["check"] ? "fill__button" : "outline__button"}`}
                   onClick={() => {toggleSelectedWebsite("mercari");}}
                   id="MercariToggleButton"
                   >Mercari</button>
         </div>
         <div className='store__buttons'>
-          <button className={`${data["poshmark"]["check"] === true ? "outline__button" : "fill__button"}`}
+          <button className={`${data["poshmark"]["check"] ? "fill__button" : "outline__button"}`}
                   onClick={() => {toggleSelectedWebsite("poshmark");}}
                   id="PoshmarkToggleButton"
                   >Poshmark</button>
           <button className='outline__button'>Other</button>
         </div>
         <div className='store__buttons'>
-          <button className={`${data["delist"]["check"] === true ? "outline__button_red" : "fill__button_red"} w-100`}
+          <button className={`${data["delist"]["check"] ? "fill__button_red" : "outline__button_red"} w-100`}
                   onClick={() => {toggleSelectedWebsite("delist");}}
                   id="DelistToggleButton"
                   >Delist</button>

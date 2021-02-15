@@ -514,7 +514,7 @@ class RightSection extends Component {
           {/* ========================================================================================================== */}
 
           <div className='account__market'>
-{/*            <div className='account'>
+            <div className='account'>
               <label htmlFor='Account'>Account:</label>
               <select id='Account' name='Account' className='select__account'>
                 <option value='USA'>USA</option>
@@ -522,18 +522,18 @@ class RightSection extends Component {
                 <option value='India'>India</option>
                 <option value='Aus'>Aus</option>
               </select>
-            </div>*/}
+            </div>
 
             {/* ========================================================================================================== */}
 
-{/*            <div className='market'>
+            <div className='market'>
               <label htmlFor='Market'>Market:</label>
               <select id='Market' name='Market' className='select__market'>
                 <option value='Ebay'>Ebay</option>
                 <option value='Poshmark'>Poshmark</option>
                 <option value='Mercari'>Mercari</option>
               </select>
-            </div>*/}
+            </div>
 
           {/* ========================================================================================================== */}
 
@@ -897,14 +897,13 @@ class RightSection extends Component {
                           ? description.suggestedValues
                           : [{"localizedValue": "No Suggested Values"}]
                       }
-                      getOptionLabel={(option) => option.localizedValue}
-                      style={{ width: 300 }}
+                      getOptionLabel={(option) => option.localizedValue ? option.localizedValue : option}
+                      className='form-control-sm col-4 mr-3'
                       value={description.value}
                       onChange={(event, value, reason) => handleDescriptionChange(description.id, value)}
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          classes='form-control form-control-sm col-4 mr-3 aspect__input_field'
                         />
                       )}
                     />
@@ -931,11 +930,17 @@ class RightSection extends Component {
                     placeholder='  Brand or Maker'
                     type='text'
                     className='properties__input'
+                    name='brand'
+                    value={data.brand}
+                    onChange={handleChange}
                   ></input>
                   <input
-                    placeholder='    Style or Feature'
+                    placeholder='    Style/Feature/Model'
                     type='text'
                     className='properties__input'
+                    name='model'
+                    value={data.model}
+                    onChange={handleChange}
                   ></input>
                 </div>
               </div>
@@ -1262,9 +1267,9 @@ class RightSection extends Component {
                   </label>
                   <Autocomplete
                         name='domesticShippingService'
+                        className='dom__input'
                         options={shippingDropDownItems}
                         getOptionLabel={(option) => option.toString()}
-                        style={{ width: 300 }}
                         value={data.domesticShippingService}
                         onChange={(event, value, reason) =>
                           reason === "select-option"
@@ -1274,8 +1279,6 @@ class RightSection extends Component {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            name='domesticShippingService'
-                            classes='form-control form-control-sm col-4 mr-3 aspect__input_field'
                           />
                         )}
                       />
@@ -1350,6 +1353,7 @@ class RightSection extends Component {
                   </label>
                   <Autocomplete
                         name='internationalShippingService'
+                        className='dom__input'
                         options={shippingDropDownItems}
                         getOptionLabel={(option) => option.toString()}
                         style={{ width: 300 }}
@@ -1362,8 +1366,6 @@ class RightSection extends Component {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            name='internationalShippingService'
-                            classes='form-control form-control-sm col-4 mr-3 aspect__input_field'
                           />
                         )}
                       />
@@ -1417,9 +1419,9 @@ class RightSection extends Component {
                   <input 
                   type='checkbox' 
                   className='dom__input'
-                  name='internationalShippingFreeShippingActive'
-                  checked={data.internationalShippingFreeShippingActive}
-                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'internationalShippingFreeShippingActive')}}
+                  name='domesticShippingFreeShippingActive'
+                  checked={data.domesticShippingFreeShippingActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'domesticShippingFreeShippingActive')}}
                   ></input>
                   <label
                     htmlFor='FreeShippingInt'
@@ -1436,9 +1438,15 @@ class RightSection extends Component {
             <div className='dom__header2'>
               <div className='int_ship2'> Best Offer</div>
               <div className='dom__body2'>
-                <button className='button_style'>
-                  Yes, best offer enabled
-                </button>
+              <button
+                type='button'
+                onClick={(e) => {handleCheckboxToggle(!data.bestOfferActive, 'bestOfferActive')}}
+                className='button__q5'
+              >
+                {data.bestOfferActive
+                  ? "Yes, best offer enabled"
+                  : "No, best offer disabled"}
+              </button>
                 <div className='option_div'>
                   <input 
                   type='checkbox'

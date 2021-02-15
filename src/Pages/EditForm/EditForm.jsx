@@ -382,7 +382,7 @@ class EditForm extends Component {
     });
 
     Axios.get('ebay/itemSuggestionPopulater').then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
-    Axios.get('ebay/shippingPopulater').then((res) => {this.setState({shippingDropDownItems : res.data.data.ShippingCarrierDetails.map((item, key) => {return res.data.data.ShippingCarrierDetails[key].Description})})});
+    Axios.get('ebay/shippingPopulater').then((res) => {this.setState({shippingDropDownItems : res.data.data.ShippingServiceDetails.map((item, key) => {return res.data.data.ShippingServiceDetails[key].Description})})});
 
 
   };
