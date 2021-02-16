@@ -415,7 +415,7 @@ class LeftSection extends Component {
                 className={"btn btn-warning ml-2 btn-sm"}
                 onClick={this.customdescription}
               >
-                 Automatic Generate
+                 Automatically Generate
               </button>
           }
           </label>

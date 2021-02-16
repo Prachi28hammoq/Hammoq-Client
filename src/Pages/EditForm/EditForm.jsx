@@ -516,20 +516,20 @@ class EditForm extends Component {
     //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
     switch(data.condition_name)
     {
-      case 'New':
-        data.ebayConditionID = 1000;
+      case "New":
+        this.state.data['ebayConditionID'] = 1000;
         break;
-      case 'Used':
-        data.ebayConditionID = 3000;
+      case "Used":
+        this.state.data['ebayConditionID'] = 3000;
         break;
-      case 'New (Other/Open Box)':
-        data.ebayConditionID = 2750;
+      case "New (Other/Open Box)":
+        this.state.data['ebayConditionID'] = 2750;
         break;
-      case 'Seller Refurbished':
-        data.ebayConditionID = 2500;
+      case "Seller Refurbished":
+        this.state.data['ebayConditionID'] = 2500;
         break;
-      case 'Broken/For Repair':
-        data.ebayConditionID = 7000;
+      case "Broken/For Repair":
+        this.state.data['ebayConditionID'] = 7000;
         break;
     }
 
@@ -562,13 +562,13 @@ class EditForm extends Component {
     dataform.append("pattern", data.pattern);
     dataform.append("category", data["category"]);
     dataform.append("categorySecondary", data.categorySecondary);
-    dataform.append("listingFormat", data.listingFormat);
+    dataform.append("listingFormatType", data.listingFormatType);
     dataform.append("givingWorksCharityID", data.givingWorksCharityID);
     dataform.append("givingWorksDonationPercentage", data.givingWorksDonationPercentage);
     dataform.append("storeCategoryOne", data.storeCategoryOne);
     dataform.append("storeCategoryTwo", data.storeCategoryTwo);
     dataform.append("lotSize", data.lotSize);
-    dataform.append("type", data.type);
+    dataform.append("listingDuration", data.listingDuration);
     dataform.append("seasonOrWeather", data.seasonOrWeather);
     dataform.append("care", data.care);
     dataform.append("inseam", data.inseam);
@@ -629,6 +629,12 @@ class EditForm extends Component {
     dataform.append("companyBlurb", data.companyBlurb);
     dataform.append("ebayCategoryField", data.ebayCategoryField);
     dataform.append("ebayOptionalFieldsActive", data.ebayOptionalFieldsActive);
+    dataform.append("ebayCategoryID", data.ebayCategoryID);
+    dataform.append("ebayConditionID", data.ebayConditionID); //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
+    dataform.append("ebayListingType", data.ebayListingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ListingTypeCodeType.html
+    dataform.append("ebayListingDuration", data.ebayListingDuration);
+    //dataform.append("ebayPaymentMethod", data.ebayPaymentMethod);
+    //dataform.append("paypalEmail", data.paypalEmail);
     if(value === "draft")
     {
       dataform.append("prodStatus", "draft");
@@ -1192,15 +1198,22 @@ class EditForm extends Component {
 
   priceCalculation = () => {
     var { data } = this.state;
-    if(data['compPriceIncreaseMethod'] === 'dollar')
+    if(data['compPriceIncreaseMethod'] || data['compPriceIncreaseValue'] === 'undefined' || data['compPriceIncreaseMethod'] || data['compPriceIncreaseValue'] === 'null')
     {
-      data['price'] = parseFloat(data['price']) + parseFloat(data['compPriceIncreaseValue']);
-      data["profit"] = data['price'] - data["costOfGoods"];
+      alert("User does not have increase comp price settings set.");
     }
-    if(data['compPriceIncreaseMethod'] === 'percent')
+    else
     {
-      data['price'] = parseFloat(data['price']) + (parseFloat(data['price']) * (parseFloat(data['compPriceIncreaseValue'])/100));
-      data["profit"] = data['price'] - data["costOfGoods"];
+      if(data['compPriceIncreaseMethod'] === 'dollar')
+      {
+        data['price'] = parseFloat(data['price']) + parseFloat(data['compPriceIncreaseValue']);
+        data["profit"] = data['price'] - data["costOfGoods"];
+      }
+      if(data['compPriceIncreaseMethod'] === 'percent')
+      {
+        data['price'] = parseFloat(data['price']) + (parseFloat(data['price']) * (parseFloat(data['compPriceIncreaseValue'])/100));
+        data["profit"] = data['price'] - data["costOfGoods"];
+      }
     }
 
     this.setState({data});

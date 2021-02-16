@@ -1116,7 +1116,7 @@ class RightSection extends Component {
             <div className='general__body'>
               <div className='general__col'>
                 <label htmlFor='Category' className='label__style_general'>
-                  Category
+                  Ebay Category 1
                   <div className='category__alignment'>
                     <Autocomplete
                       disableListWrap
@@ -1162,7 +1162,7 @@ class RightSection extends Component {
                   htmlFor='SecondaryCategory'
                   className='label__style_general'
                 >
-                  Secondary Category
+                  Ebay Category 2
                   <div>
                     <input 
                     className='general__input_brz'
@@ -1170,12 +1170,12 @@ class RightSection extends Component {
                     <button className='brz__btn'>Browse</button>
                   </div>
                 </label>
-                <label htmlFor='ListingFormat' className='label__style_general'>
-                  Listing Format
+                <label htmlFor='ListingFormatType' className='label__style_general'>
+                  Listing Format/Type
                   <input 
                   className='general__input'
-                  name='listingFormat'
-                  defaultValue={data.listingFormat}
+                  name='listingFormatType'
+                  defaultValue={data.listingFormatType}
                   onChange={handleChange}
                   ></input>
                 </label>
@@ -1207,6 +1207,19 @@ class RightSection extends Component {
                   onChange={handleChange}
                   ></input>
                 </label>
+                <label htmlFor='listingDuration' className='label__style_general'>
+                  Listing Duration
+                  <input 
+                  className='general__input'
+                  name='listingDuration'
+                  defaultValue={data.listingDuration}
+                  onChange={handleChange}
+                  ></input>
+                </label>
+              </div>
+
+              {/* =============================================================== */}
+              <div className='general__col'>
                 <label
                   htmlFor='StoreCategory1'
                   className='label__style_general'
@@ -1219,10 +1232,6 @@ class RightSection extends Component {
                   onChange={handleChange}
                   ></input>
                 </label>
-              </div>
-
-              {/* =============================================================== */}
-              <div className='general__col'>
                 <label
                   htmlFor='StoreCategory2'
                   className='label__style_general'
@@ -1241,15 +1250,6 @@ class RightSection extends Component {
                   className='general__input'
                   name='lotSize'
                   defaultValue={data.lotSize}
-                  onChange={handleChange}
-                  ></input>
-                </label>
-                <label htmlFor='Type' className='label__style_general'>
-                  Type
-                  <input 
-                  className='general__input'
-                  name='type'
-                  defaultValue={data.type}
                   onChange={handleChange}
                   ></input>
                 </label>
