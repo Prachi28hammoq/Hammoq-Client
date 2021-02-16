@@ -545,11 +545,8 @@ class RightSection extends Component {
               className='select__market'
               value={data.ebayListingType}
               onChange={handleChange}>
-                <option value='AdType'>AdType</option>
                 <option value='Auction'>Auction</option>
-                <option value='Chinese'>Chinese</option>
                 <option value='FixedPriceItem'>Fixed Price Item</option>
-                <option value='PersonalOffer'>Personal Offer</option>
               </select>
             </div>
           </div>

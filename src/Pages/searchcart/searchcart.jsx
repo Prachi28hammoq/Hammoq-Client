@@ -358,7 +358,7 @@ class Searchcart extends Component {
             <Message addComment={this.addComment} comment={comment} />
           </div> */}
 
-{/*            <div style={{ justifyContent: "space-evenly" }}>
+            <div style={{ justifyContent: "space-evenly" }}>
               <button
                 type="button"
                 className="btn btn-primary d-inline mr-3 mb-3"
@@ -392,7 +392,7 @@ class Searchcart extends Component {
               >
                 {this.state.submittedCount} -Submitted
               </button>
-            </div>*/}
+            </div>
           </div>
 
           <table className="table">
