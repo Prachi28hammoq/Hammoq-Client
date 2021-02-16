@@ -5,7 +5,6 @@ import "./EditForm.css";
 import Axios from "../../services/Axios";
 //import LoadingSpinner from "../utils/loader";
 import imageCompression from "browser-image-compression";
-import { has } from "rambda";
 import { evaluateTree } from "../utils/parser";
 //import $ from "jquery";
 //import imageDataURI from "image-data-uri";

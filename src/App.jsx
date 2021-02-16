@@ -30,7 +30,6 @@ import Message from './Pages/Messages/message'
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
-import OnBoarding from "./Pages/OnBoarding/OnBoarding";
 import ListingSettings from "./Pages/ListingSettings/ListingSettings";
 
 
@@ -59,8 +58,6 @@ const Routes = withRouter((props) => {
               path="/template/:templateid"
               component={TemplateForm}
             />
-            
-            <Route exact path="/onboarding" component={OnBoarding} />
 
             <Route exact path="/basic" component={BasicForm} />
             <Route exact path="/edit/:id" component={EditForm} />

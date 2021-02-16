@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
 import { assetsURL, socketCon } from "../../services/Axios";
 import io from "socket.io-client";
-import SocketIOFileUpload from "socketio-file-upload";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import imageCompression from "browser-image-compression";
 

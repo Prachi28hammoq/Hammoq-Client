@@ -1,5 +1,5 @@
 import React from "react";
-import { v4 as uuid } from "uuid";
+import nanoid from "nanoid";
 
 const Select = (props) => (
   <div className="form-group mb-4 row align-items-center">
@@ -9,7 +9,7 @@ const Select = (props) => (
         {...props}
       >
         {props.selectOptions.map((option) => (
-          <option value={option} key={uuid()}>
+          <option value={option} key={nanoid(6)}>
             {option}
           </option>
         ))}
