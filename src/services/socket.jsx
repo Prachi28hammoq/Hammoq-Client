@@ -9,12 +9,12 @@ if(process.env.REACT_APP_STAGE === 'devlocal')
 
 else if(process.env.REACT_APP_STAGE === 'devhost')
 {
-	serverURL = "https://devapi.avoidpoints.com/";
+	serverURL = "https://devapi.hammoq.com/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'staging')
 {
-	serverURL = "https://stageapi.avoidpoints.com/";
+	serverURL = "https://stageapi.hammoq.com/";
 }
 
 else if(process.env.REACT_APP_STAGE === 'production')
