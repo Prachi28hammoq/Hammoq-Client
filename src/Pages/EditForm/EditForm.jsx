@@ -390,6 +390,14 @@ class EditForm extends Component {
   handleChange = (e) => {
     const { name, value } = e.target;
     const { data } = this.state;
+    if (name === "price")
+    {
+      data["profit"] = value - data["costOfGoods"];
+    }
+    if (name === "costOfGoods")
+    {
+      data["profit"] = data["price"] - value;
+    }
     //     if (name === "title") {
     //       data[name] = e.target.value.replace(/[^\w\s]/gi, "");
     //     } else {
@@ -532,6 +540,9 @@ class EditForm extends Component {
         this.state.data['ebayConditionID'] = 7000;
         break;
     }
+
+    this.state.data['ebayListingDuration'] = data.listingDuration;
+
 
     this.setState({ isSubmitting: true });
 
@@ -1114,6 +1125,8 @@ class EditForm extends Component {
   handleSelectedEbayCategory = (category) => {
     const url = "/ebay/itemAspects/" + category.categoryId;
     var { data } = this.state;
+
+    data['categoryID'] = category.categoryId;
     Axios.get(url)
       .then((response) => response.data)
       .then((data) => {
