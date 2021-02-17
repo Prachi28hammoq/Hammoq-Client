@@ -222,6 +222,21 @@ class LeftSection extends Component {
             : ""
           : "");
 
+        if(extraDescriptions.length <= 0 && data['waist'] > 0)
+        {
+          data.shortDescription += 'Waist: ' + data['waist'] + "\n";
+        }
+
+        if(extraDescriptions.length <= 0 && data['rise'] > 0)
+        {
+          data.shortDescription += 'Rise: ' + data['rise'] + "\n";
+        }
+
+        if(extraDescriptions.length <= 0 && data['inseam'] > 0)
+        {
+          data.shortDescription += 'Inseam: ' + data['inseam'] + "\n";
+        }
+
       for (let i = 0; i < extraDescriptions.length; i++) {
         if((extraDescriptions[i].value !== "" && extraDescriptions[i].value !== null && extraDescriptions[i].value !== undefined && extraDescriptions[i].value !== "No Suggested Values" && extraDescriptions[i].value !== "undefined") && 
           (extraDescriptions[i].value.localizedValue !== "" && extraDescriptions[i].value.localizedValue !== null && extraDescriptions[i].value.localizedValue !== undefined && extraDescriptions[i].value.localizedValue !== "No Suggested Values" && extraDescriptions[i].value.localizedValue !== "undefined"))

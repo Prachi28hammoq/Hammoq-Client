@@ -96,9 +96,6 @@ class Passwords extends Component {
   handleeBaySubmit = () => {
     Axios.get("/ebay/consent")
       .then((response) => {
-/*      const token = localStorage.getItem("token");
-        var decoded = jwt_decode(token);
-        console.log(decoded._doc.email)*/
         var authWindow = window.open(response.data.authURL, "_blank");
       })
 
@@ -109,16 +106,18 @@ class Passwords extends Component {
 
   handleDelete =  async (id) => {
     try {
-      //const response = await Axios.delete(`/password/${id}`, {
-      //  headers: {
-      //    "x-access-token": `${localStorage.getItem("token")}`,
-      //  },
-      //})
-      window.confirm("Are You Sure")
+      const response = await Axios.delete(`/password/${id}`, {
+       headers: {
+         "x-access-token": `${localStorage.getItem("token")}`,
+       },
+      })
+      window.confirm("Are You Sure?")
       window.open("/passwords", "_self")
-      // this.setState({users: response.data.Passwords})
+      this.setState({users: response.data.Passwords})
       
-    }catch(error){
+    }
+    catch(error)
+    {
       console.log(error)
     }
     //this.setState({users : this.state.users.filter((user) => user._id !=== id)})

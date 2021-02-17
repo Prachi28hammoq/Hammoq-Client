@@ -1416,9 +1416,9 @@ class RightSection extends Component {
                   <input 
                   type='checkbox' 
                   className='dom__input'
-                  name='domesticShippingFreeShippingActive'
-                  checked={data.domesticShippingFreeShippingActive}
-                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'domesticShippingFreeShippingActive')}}
+                  name='internationalShippingFreeShippingActive'
+                  checked={data.internationalShippingFreeShippingActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'internationalShippingFreeShippingActive')}}
                   ></input>
                   <label
                     htmlFor='FreeShippingInt'
@@ -1483,15 +1483,24 @@ class RightSection extends Component {
               <button className='save_to_draft'
               onClick={(e) => {onSubmit(e, "save");}}>
               Save</button>
+              <button className='submit'
+              onClick={(e) => {onSubmit(e, "submitted");}}>
+              Submit
+              </button>
               </>
             )
             :
             data.prodStatus && data.prodStatus === 'submitted'?
               (
                 <>
-                <button className='save_to_draft'
-                onClick={(e) => {onSubmit(e, "save");}}>
-                Save
+                <button 
+                className='save_to_draft'
+                onClick={(e) => {onSubmit(e, "draft");}}>
+                Save to Draft
+                </button>
+                <button className='submit'
+                onClick={(e) => {onSubmit(e, "submitted");}}>
+                Submit
                 </button>
                 </>
               )
@@ -1500,11 +1509,11 @@ class RightSection extends Component {
                 <>
                 <button 
                 className='save_to_draft'
-                onClick={(e) => {onSubmit(e, "draft");}}>
-                Save to draft
+                onClick={(e) => {onSubmit(e, "save");}}>
+                Save
                 </button>
                 <button className='submit'
-                onClick={(e) => {onSubmit(e, "submitted");}}>
+                onClick={(e) => {onSubmit(e, "inventory");}}>
                 Submit
                 </button>
                 </>
