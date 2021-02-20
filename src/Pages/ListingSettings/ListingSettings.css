@@ -228,12 +228,17 @@
   /* border: 1px solid black; */
 }
 .r2_q4_inner_align_input {
+  background: #ffff;
   width: 70%;
   border-radius: 7px;
   margin-left: 3px;
   align-content: center;
   border: 1px solid gray;
   /* border: 1px solid black; */
+}
+
+.r2_q4_inner_align_input:disabled {
+  background: transparent !important;
 }
 
 .text_allign {
@@ -315,12 +320,19 @@
 
   /* border: 1px solid black; */
 }
+
 .input_tag {
+  background: #ffff;
   border-radius: 7px;
   width: 100px;
   border: 1px solid gray;
   margin-left: 5px;
 }
+
+.input_tag:disabled {
+  background: transparent;
+}
+
 .r3_q2_align {
   display: flex;
   border: 1px solid #f0f0f0;

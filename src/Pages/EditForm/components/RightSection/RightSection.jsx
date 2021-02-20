@@ -640,7 +640,7 @@ class RightSection extends Component {
                     step="any"
                     name='price'
                     id='price'
-                    defaultValue={data.price}
+                    value={data.price}
                     onChange={handleChange}
                   ></input>
                   <button
@@ -653,7 +653,7 @@ class RightSection extends Component {
                     step="any"
                     name='mrp'
                     id='mrp'
-                    defaultValue={data.mrp}
+                    value={data.mrp}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -661,7 +661,7 @@ class RightSection extends Component {
                     type='number'
                     name='msrp'
                     id='msrp'
-                    defaultValue={data.msrp}
+                    value={data.msrp}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -670,7 +670,7 @@ class RightSection extends Component {
                     step="any"
                     name='costOfGoods'
                     id='costOfGoods'
-                    defaultValue={data.costOfGoods}
+                    value={data.costOfGoods}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -679,7 +679,7 @@ class RightSection extends Component {
                     step="any"
                     name='shippingFees'
                     id='shippingFees'
-                    defaultValue={data.shippingFees}
+                    value={data.shippingFees}
                     onChange={handleChange}
                   ></input>
                 </div>
@@ -709,7 +709,7 @@ class RightSection extends Component {
                     type='text'
                     name='sku'
                     id='sku'
-                    defaultValue={data.sku}
+                    value={data.sku}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -717,7 +717,7 @@ class RightSection extends Component {
                     type='text'
                     name='upc'
                     id='upc'
-                    defaultValue={data.upc}
+                    value={data.upc}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -726,7 +726,7 @@ class RightSection extends Component {
                     step="any"
                     name='quantity'
                     id='quantity'
-                    defaultValue={data.quantity}
+                    value={data.quantity}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -735,7 +735,7 @@ class RightSection extends Component {
                     step="any"
                     name='weightLB'
                     id='weightLB'
-                    defaultValue={data.weightLB}
+                    value={data.weightLB}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -744,7 +744,7 @@ class RightSection extends Component {
                     step="any"
                     name='weightOZ'
                     id='weightOZ'
-                    defaultValue={data.weightOZ}
+                    value={data.weightOZ}
                     onChange={handleChange}
                   ></input>
                 </div>
@@ -774,7 +774,7 @@ class RightSection extends Component {
                     step="any"
                     name='profit'
                     id='profit'
-                    defaultValue={data.profit}
+                    value={data.profit}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -782,7 +782,7 @@ class RightSection extends Component {
                     type='text'
                     name='zipCode'
                     id='zipCode'
-                    defaultValue={data.zipCode}
+                    value={data.zipCode}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -791,7 +791,7 @@ class RightSection extends Component {
                     step="any"
                     name='packageLength'
                     id='packageLength'
-                    defaultValue={data.packageLength}
+                    value={data.packageLength}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -800,7 +800,7 @@ class RightSection extends Component {
                     step="any"
                     name='packageWidth'
                     id='packageWidth'
-                    defaultValue={data.packageWidth}
+                    value={data.packageWidth}
                     onChange={handleChange}
                   ></input>
                   <input
@@ -809,7 +809,7 @@ class RightSection extends Component {
                     step="any"
                     name='packageHeight'
                     id='packageHeight'
-                    defaultValue={data.packageHeight}
+                    value={data.packageHeight}
                     onChange={handleChange}
                   ></input>
                 </div>
@@ -833,13 +833,13 @@ class RightSection extends Component {
                   displayEmpty
                   inputProps={{ 'aria-label': 'Without label' }}
                   >
-                  <option defaultValue={data.condition_name} disabled>{data.condition_name}</option>
-                  <option defaultValue='New'>New</option>
-                  <option defaultValue='New (Other/Open Box)'>New (Other/Open Box)</option>
-                  <option defaultValue='New With Defects'>New With Defects</option>
-                  <option defaultValue='Seller Refurbished'>Seller Refurbished</option>
-                  <option defaultValue='Used'>Used</option>
-                  <option defaultValue='Broken/For Repair'>Broken/For Repair</option>
+                  <option value={data.condition_name} disabled>{data.condition_name}</option>
+                  <option value='New'>New</option>
+                  <option value='New (Other/Open Box)'>New (Other/Open Box)</option>
+                  <option value='New With Defects'>New With Defects</option>
+                  <option value='Seller Refurbished'>Seller Refurbished</option>
+                  <option value='Used'>Used</option>
+                  <option value='Broken/For Repair'>Broken/For Repair</option>
                 </select>
               <ToggleButton
                 className='product__togglebtn'
@@ -1068,7 +1068,7 @@ class RightSection extends Component {
                       step="any"
                       name='waist'
                       id='waist'
-                      defaultValue={data.waist}
+                      value={data.waist}
                       onChange={handleChange}
                     ></input>
                   </label>
@@ -1080,7 +1080,7 @@ class RightSection extends Component {
                       step="any"
                       name='rise'
                       id='rise'
-                      defaultValue={data.rise}
+                      value={data.rise}
                       onChange={handleChange}
                     ></input>
                   </label>
@@ -1092,7 +1092,7 @@ class RightSection extends Component {
                       step="any"
                       name='inseam'
                       id='inseam'
-                      defaultValue={data.inseam}
+                      value={data.inseam}
                       onChange={handleChange}
                     ></input>
                   </label>
@@ -1172,7 +1172,7 @@ class RightSection extends Component {
                   <input 
                   className='general__input'
                   name='listingFormatType'
-                  defaultValue={data.listingFormatType}
+                  value={data.listingFormatType}
                   onChange={handleChange}
                   ></input>
                 </label>
@@ -1188,7 +1188,7 @@ class RightSection extends Component {
                   <input 
                   className='general__input'
                   name='givingWorksCharityID'
-                  defaultValue={data.givingWorksCharityID}
+                  value={data.givingWorksCharityID}
                   onChange={handleChange}
                   ></input>
                 </label>
@@ -1200,7 +1200,7 @@ class RightSection extends Component {
                   <input 
                   className='general__input'
                   name='givingWorksDonationPercentage'
-                  defaultValue={data.givingWorksDonationPercentage}
+                  value={data.givingWorksDonationPercentage}
                   onChange={handleChange}
                   ></input>
                 </label>
@@ -1209,7 +1209,7 @@ class RightSection extends Component {
                   <input 
                   className='general__input'
                   name='listingDuration'
-                  defaultValue={data.listingDuration}
+                  value={data.listingDuration}
                   onChange={handleChange}
                   ></input>
                 </label>
@@ -1225,7 +1225,7 @@ class RightSection extends Component {
                   <input 
                   className='general__input'
                   name='storeCategoryOne'
-                  defaultValue={data.storeCategoryOne}
+                  value={data.storeCategoryOne}
                   onChange={handleChange}
                   ></input>
                 </label>
@@ -1237,7 +1237,7 @@ class RightSection extends Component {
                   <input 
                   className='general__input'
                   name='storeCategoryTwo'
-                  defaultValue={data.storeCategoryTwo}
+                  value={data.storeCategoryTwo}
                   onChange={handleChange}
                   ></input>
                 </label>
@@ -1246,7 +1246,7 @@ class RightSection extends Component {
                   <input 
                   className='general__input'
                   name='lotSize'
-                  defaultValue={data.lotSize}
+                  value={data.lotSize}
                   onChange={handleChange}
                   ></input>
                 </label>
@@ -1287,7 +1287,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='domesticShippingCost'
-                  defaultValue={data.domesticShippingCost}
+                  value={data.domesticShippingCost}
                   onChange={handleChange}
                   ></input>
                 </div>
@@ -1303,7 +1303,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='domesticShippingEachAdditional'
-                  defaultValue={data.domesticShippingEachAdditional}
+                  value={data.domesticShippingEachAdditional}
                   onChange={handleChange}
                   ></input>
                 </div>
@@ -1317,7 +1317,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='domesticShippingSurcharge'
-                  defaultValue={data.domesticShippingSurcharge}
+                  value={data.domesticShippingSurcharge}
                   onChange={handleChange}
                   ></input>
                 </div>
@@ -1374,7 +1374,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='internationalShippingCost'
-                  defaultValue={data.internationalShippingCost}
+                  value={data.internationalShippingCost}
                   onChange={handleChange}
                   ></input>
                 </div>
@@ -1390,7 +1390,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='internationalShippingEachAdditional'
-                  defaultValue={data.internationalShippingEachAdditional}
+                  value={data.internationalShippingEachAdditional}
                   onChange={handleChange}
                   ></input>
                 </div>
@@ -1404,7 +1404,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='internationalShippingSurcharge'
-                  defaultValue={data.internationalShippingSurcharge}
+                  value={data.internationalShippingSurcharge}
                   onChange={handleChange}
                   ></input>
                 </div>
@@ -1455,7 +1455,7 @@ class RightSection extends Component {
                   <input 
                   className='inputbox1'
                   name='bestOfferAcceptFloorValue'
-                  defaultValue={data.bestOfferAcceptFloorValue}
+                  value={data.bestOfferAcceptFloorValue}
                   onChange={handleChange}
                   ></input>
                 </div>
@@ -1470,7 +1470,7 @@ class RightSection extends Component {
                   <input 
                   className='inputbox'
                   name='bestOfferDeclineCeilingValue'
-                  defaultValue={data.bestOfferDeclineCeilingValue}
+                  value={data.bestOfferDeclineCeilingValue}
                   onChange={handleChange}
                   ></input>
                 </div>

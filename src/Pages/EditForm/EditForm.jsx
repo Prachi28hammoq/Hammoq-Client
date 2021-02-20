@@ -218,11 +218,11 @@ class EditForm extends Component {
         });
       }
 
-      //this.state.templatename = this.state.data.title.substring(0,5)
+      //this.state.templatename = this.state.data.title.substrCPing(0,5)
       var yourString = this.state.data.title;
       var maxLength = 15;
-      var trimmedString = yourString.substr(0, maxLength);
-      this.state.templatename = trimmedString.substr(
+      var trimmedString = yourString.substrCP(0, maxLength);
+      this.state.templatename = trimmedString.substrCP(
         0,
         Math.min(trimmedString.length, trimmedString.lastIndexOf(" "))
       );

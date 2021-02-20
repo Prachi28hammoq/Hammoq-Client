@@ -115,6 +115,7 @@ const ListingSettings = () => {
   const [cost, setCost] = useState("");
   const [worldwideShip, setWorldwideShip] = useState(false);
   const [shipCountries, setShipCountries] = useState([]);
+  const [enableEbayAutoPay, setEnableEbayAutoPay] = useState(false);
   const [allowPaypal, setAllowPaypal] = useState(false);
   const [paypalEmail, setPaypalEmail] = useState("");
   const [taxes, setTaxes] = useState("");
@@ -221,6 +222,7 @@ const ListingSettings = () => {
 
         savedData = res.data.settings[0].payment[0];
         //console.log("payment data: ", savedData);
+        setAllowPaypal(savedData.enableEbayAutoPay);
         setAllowPaypal(savedData.allowPaypal);
         setPaypalEmail(savedData.paypalEmail);
         setTaxes(savedData.taxes);
@@ -335,6 +337,7 @@ const ListingSettings = () => {
     };
 
     var paymentProfObj = {
+      enableEbayAutoPay: enableEbayAutoPay,
       allowPaypal: allowPaypal,
       paypalEmail: paypalEmail,
       taxes: taxes,
@@ -917,15 +920,7 @@ const ListingSettings = () => {
                   type='checkbox'
                   value='option1'
                   checked={isReturnAccept}
-                  onChange={(e) => {
-                    setIsReturnAccept(e.target.checked);
-                    //console.log("Return accepted?: ", e.target.checked);
-                    if(!e.target.checked){
-                        setReturnedWithin("");
-                        setRefundAs("");
-                        setReturnShipBy("");
-                    }
-                  }}
+                  onChange={(e) => {setIsReturnAccept(e.target.checked);}}
                 ></input>
                 Returns Accepted
               </label>
@@ -937,42 +932,38 @@ const ListingSettings = () => {
                       Items must be returned with in
                     </div>
                     <div className='all_allign_center'>
-                      <label>
-                        <input
-                          type='number'
-                          min='0'
-                          value={returnedWithin}
-                          className='r2_q4_inner_align_input'
-                          placeholder='In days'
-                          onChange={(e) => {
-                            if(isReturnAccept) {
-                                if(Math.sign(e.target.value) === 1){
-                                    setReturnedWithin(e.target.value);
-                                } else setReturnedWithin("")
-                                //console.log("Returned within: ", e.target.value, " days");
-                            }
-                          }}
-                        ></input>{" "}
-                      </label>
+                        <select
+                        disabled={!isReturnAccept}
+                        className='r2_q4_inner_align_input'
+                        value={returnedWithin}
+                        onChange={(e) => {setReturnedWithin(e.target.value);}}
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                        <option value=""></option>
+                        <option value={14}>14 Days</option>
+                        <option value={30}>30 Days</option>
+                        <option value={60}>60 Days</option>
+                      </select>
                     </div>
                   </div>
                   <div>
                     <div className='text_allign'>Refund must be given as</div>
                     <div className='all_allign_center'>
                       {" "}
-                      <label>
-                        <input
-                          type='text'
-                          value={refundAs}
-                          className='r2_q4_inner_align_input'
-                          onChange={(e) => {
-                              if(isReturnAccept) {
-                                  setRefundAs(e.target.value);
-                                  //console.log("Refund given as: ", e.target.value);
-                              }
-                          }}
-                        ></input>{" "}
-                      </label>
+                        <select
+                        disabled={!isReturnAccept}
+                        className='r2_q4_inner_align_input'
+                        value={refundAs}
+                        onChange={(e) => {setRefundAs(e.target.value);}}
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                        <option value=""></option>
+                        <option value='MoneyBack'>Money Back</option>
+                        <option value='MoneyBackOrExchange'>Money Back Or Exchange</option>
+                        <option value='MoneyBackOrReplacement'>Money Back Or Replacement</option>
+                      </select>
                     </div>
                   </div>
                   <div>
@@ -981,19 +972,18 @@ const ListingSettings = () => {
                     </div>
                     <div className='all_allign_center'>
                       {" "}
-                      <label>
-                        <input
-                          type='text'
-                          value={returnShipBy}
-                          className='r2_q4_inner_align_input'
-                          onChange={(e) => {
-                            if(isReturnAccept) {
-                                setReturnShipBy(e.target.value);
-                                //console.log("Return paid by: ", e.target.value);
-                            }
-                          }}
-                        ></input>{" "}
-                      </label>
+                        <select
+                        disabled={!isReturnAccept}
+                        className='r2_q4_inner_align_input'
+                        value={returnShipBy}
+                        onChange={(e) =>{setReturnShipBy(e.target.value);}}
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                        <option value=""></option>
+                        <option value='Buyer'>Buyer</option>
+                        <option value='Seller'>Seller</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -1019,12 +1009,7 @@ const ListingSettings = () => {
                   placeholder='in (%)'
                   value={incrByDomestic}
                   className='input_tag'
-                  onChange={(e) => {
-                      if(Math.sign(e.target.value) === 1){
-                          setIncrByDomestic(e.target.value);
-                      } else setIncrByDomestic("")
-                    //console.log("Incr by Domestic: ", e.target.value);
-                  }}
+                  onChange={(e) => {setIncrByDomestic(e.target.value);}}
                 ></input>
               </label>
             </div>
@@ -1035,10 +1020,7 @@ const ListingSettings = () => {
                   type='text'
                   value={shipService}
                   className='input_tag'
-                  onChange={(e) => {
-                    setShipService(e.target.value);
-                    //console.log("shipping Service: ", e.target.value);
-                  }}
+                  onChange={(e) => {setShipService(e.target.value);}}
                 ></input>
               </label>
             </div>
@@ -1050,15 +1032,7 @@ const ListingSettings = () => {
             <input
               type='checkbox'
               checked={intlReturnAccepted}
-              onChange={(e) => {
-                setIntlReturnAccepted(e.target.checked);
-                //console.log("Intl Return accepted?: ", e.target.checked);
-                if(!e.target.checked){
-                    setIntlReturnedWithin("");
-                    setIntlRefundAs("");
-                    setIntlReturnShipBy("");
-                }
-              }}
+              onChange={(e) => {setIntlReturnAccepted(e.target.checked);}}
             ></input>{" "}
             International returns accepted
           </label>
@@ -1067,56 +1041,54 @@ const ListingSettings = () => {
             <div>
               <label>
                 Items must be returned with in{" "}
-                <input
-                  disabled={!intlReturnAccepted}
-                  type='number'
-                  min='0'
-                  value={intlReturnedWithin}
-                  className='input_tag'
-                  placeholder='in days'
-                  onChange={(e) => {
-                    if(intlReturnAccepted) {
-                        if(Math.sign(e.target.value) === 1){
-                            setIntlReturnedWithin(e.target.value);
-                        } else setIntlReturnedWithin("")
-                        //console.log("Intl Return within: ", e.target.value, " days");
-                    }
-                  }}
-                ></input>
+                <select
+                disabled={!intlReturnAccepted}
+                className='input_tag'
+                value={intlReturnedWithin}
+                onChange={(e) => {setIntlReturnedWithin(e.target.value);}}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+                >
+                <option value=""></option>
+                <option value={14}>14 Days</option>
+                <option value={30}>30 Days</option>
+                <option value={60}>60 Days</option>
+                </select>
               </label>
             </div>
             <div>
               <label>
                 Refund must be given as
-                <input
+                  <select
                   disabled={!intlReturnAccepted}
-                  type='text'
-                  value={intlRefundAs}
                   className='input_tag'
-                  onChange={(e) => {
-                     if(intlReturnAccepted) {
-                         setIntlRefundAs(e.target.value);
-                         //console.log("Intl Refund As: ", e.target.value);
-                     }
-                  }}
-                ></input>
+                  value={intlRefundAs}
+                  onChange={(e) => {setIntlRefundAs(e.target.value);}}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Without label' }}
+                  >
+                  <option value=""></option>
+                  <option value='MoneyBack'>Money Back</option>
+                  <option value='MoneyBackOrExchange'>Money Back Or Exchange</option>
+                  <option value='MoneyBackOrReplacement'>Money Back Or Replacement</option>
+                </select>
               </label>
             </div>
             <div>
               <label>
                 Return shipping will be paid by{" "}
-                <input
-                  disabled={!intlReturnAccepted}
-                  type='text'
-                  value={intlReturnShipBy}
-                  className='input_tag'
-                  onChange={(e) => {
-                      if(intlReturnAccepted) {
-                          setIntlReturnShipBy(e.target.value);
-                          //console.log("Intl Return ship by: ", e.target.value);
-                      }
-                  }}
-                ></input>
+                <select
+                disabled={!intlReturnAccepted}
+                className='input_tag'
+                value={intlReturnShipBy}
+                onChange={(e) => {setIntlReturnShipBy(e.target.value);}}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+                >
+                <option value=""></option>
+                <option value='Buyer'>Buyer</option>
+                <option value='Seller'>Seller</option>
+              </select>
               </label>
             </div>
           </div>
@@ -1565,21 +1537,15 @@ const ListingSettings = () => {
           <div className='sub_head'>Payment Profile</div>
           <div className='r3_q4_body_align'>
             <div className='r3_q4_left_align1'>
-              <div>Paypal Email</div>
-              <label>
+              <label>Use Ebay AutoPay:
+                {" "}
                 <input
-                  type='email'
-                  value={paypalEmail}
-                  onChange={(e) => {
-                    setPaypalEmail(e.target.value);
-                    //console.log("Paypal email: ", e.target.value);
-                  }}
-                  className='input__payprof1'
+                  type='checkbox'
+                  checked={enableEbayAutoPay}
+                  onChange={(e) => {setEnableEbayAutoPay(e.target.checked);}}
                 ></input>
               </label>
-              <div>
-                <label>Account Payments:</label>
-                <label>
+             <label>Use PayPal:
                   {" "}
                   <input
                     type='checkbox'
@@ -1590,13 +1556,18 @@ const ListingSettings = () => {
                     }}
                   ></input>
                 </label>
-                <div className='make_flex'>
-                  Paypal{" "}
-                  <div className='small_font'>
-                    (More Options , not always supported by ebay)
-                  </div>
-                </div>
-              </div>
+              <div>Paypal Email</div>
+              <label>
+                <input
+                  disabled={!allowPaypal}
+                  type='email'
+                  value={paypalEmail}
+                  onChange={(e) => {
+                    setPaypalEmail(e.target.value);
+                  }}
+                  className='input__payprof1'
+                ></input>
+              </label>
             </div>
             <div className='r3_q4_left_align2'>
               <label>

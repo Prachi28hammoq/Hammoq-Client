@@ -71,8 +71,8 @@ class LeftSection extends Component {
           imageIndex: idx,
           fullimg:
             typeof image.img === "string"
-              ? image.img.substring(0, 4) !== "http" &&
-                image.img.substring(0, 5) !== "https"
+              ? image.img.substrCPing(0, 4) !== "http" &&
+                image.img.substrCPing(0, 5) !== "https"
                 ? assetsURL + image.img
                 : image.img
               : image.img !== null
@@ -456,7 +456,7 @@ class LeftSection extends Component {
             id="KeywordsTagsInputField"
             rows="5"
             name="keywords"
-            defaultValue={data.keywords}
+            value={data.keywords}
             onChange={handleChange}
           />
         </div>
@@ -469,7 +469,7 @@ class LeftSection extends Component {
             id="NoteInputField"
             rows="5"
             name="note"
-            defaultValue={data.note}
+            value={data.note}
             onChange={handleChange}
           />
         </div>

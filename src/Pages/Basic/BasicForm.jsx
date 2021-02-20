@@ -505,7 +505,7 @@ class BasicForm extends Component {
     const { images, cid } = this.state;
     //console.log(images);
     const options = {
-      maxSizeMB: 0.3,
+      maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
@@ -573,7 +573,7 @@ class BasicForm extends Component {
     const count = files.length;
 
     const options = {
-      maxSizeMB: 0.3,
+      maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
@@ -738,14 +738,14 @@ class BasicForm extends Component {
                       onChange={this.handleChangepop}
                     >
                       <option>Select Site</option>
-                      {Ebay ? null : <option defaultValue="Ebay">Ebay</option>}
+                      {Ebay ? null : <option value="Ebay">Ebay</option>}
                       {Poshmark ? null : (
-                        <option defaultValue="Poshmark">Poshmark</option>
+                        <option value="Poshmark">Poshmark</option>
                       )}
                       {Mercari ? null : (
-                        <option defaultValue="Mercari">Mercari</option>
+                        <option value="Mercari">Mercari</option>
                       )}
-                      <option defaultValue="other">Others</option>
+                      <option value="other">Others</option>
                     </select>
                     <br />
                     {otherssignal ? (
@@ -755,7 +755,7 @@ class BasicForm extends Component {
                           placeholder="Website"
                           className="form-control mt-3"
                           name="website"
-                          defaultValue=""
+                          value=""
                           onChange={this.handleChangepop}
                         />
                       </>
@@ -995,7 +995,7 @@ class BasicForm extends Component {
                   onChange={(e) => this.change(e)}
                   value={this.state.input3 === 0 ? "" : this.state.input3}
                   name="input3"
-                  defaultValue="1"
+                  value="1"
                   placeholder="Quantity(1)"
                   min="1"
                   className="form-control"
