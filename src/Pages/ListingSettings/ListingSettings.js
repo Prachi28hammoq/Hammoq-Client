@@ -203,7 +203,7 @@ const ListingSettings = () => {
           setIsReturnAccept(savedData.returns[0].accepted);
           setReturnedWithin(savedData.returns[0].returnWithin);
           setRefundAs(savedData.returns[0].refundGivenAs);
-          setReturnShipBy(savedData.returns[0].ReturnShipPaidBy);
+          setReturnShipBy(savedData.returns[0].returnShipPaidBy);
         }
 
         savedData = res.data.settings[0].intlShipping[0];
@@ -213,7 +213,7 @@ const ListingSettings = () => {
         setIntlReturnAccepted(savedData.returns[0].accepted);
         setIntlReturnedWithin(savedData.returns[0].returnWithin);
         setIntlRefundAs(savedData.returns[0].refundGivenAs);
-        setIntlReturnShipBy(savedData.returns[0].ReturnShipPaidBy);
+        setIntlReturnShipBy(savedData.returns[0].returnShipPaidBy);
         setUseEbayGlobal(savedData.globalShipping[0].ebayGlobalShipEnabled);
         setHandlingTime(savedData.globalShipping[0].handlingTime);
         setCost(savedData.globalShipping[0].cost);
@@ -312,7 +312,7 @@ const ListingSettings = () => {
         accepted: isReturnAccept,
         returnWithin: returnedWithin,
         refundGivenAs: refundAs,
-        ReturnShipPaidBy: returnShipBy,
+        returnShipPaidBy: returnShipBy,
       },
     };
 
@@ -325,7 +325,7 @@ const ListingSettings = () => {
         accepted: intlReturnAccepted,
         returnWithin: intlReturnedWithin,
         refundGivenAs: intlRefundAs,
-        ReturnShipPaidBy: intlReturnShipBy,
+        returnShipPaidBy: intlReturnShipBy,
       },
       globalShipping: {
         ebayGlobalShipEnabled: useEbayGlobal,

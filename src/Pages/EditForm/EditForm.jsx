@@ -105,10 +105,10 @@ class EditForm extends Component {
     this.agentid = decoded._doc._id;
   }
 
-  handleChangesTemplate = (e) => {
+/*  handleChangesTemplate = (e) => {
     this.setState({ templateIdd: e.target.value });
     this.setTemplate(e.target.value);
-  };
+  };*/
 
   handelMessageNotSeen() {
     var msgSeenTemp = [];
@@ -123,7 +123,7 @@ class EditForm extends Component {
     }
     this.setState({ messageNotSeen: msgSeenTemp });
   }
-  setTemplate = (tempid) => {
+/*  setTemplate = (tempid) => {
     //const { images } = this.state;
     let { templatename } = this.state;
     // images.forEach((i) => {
@@ -180,13 +180,13 @@ class EditForm extends Component {
         }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  };
+  };*/
 
   componentDidMount = () => {
-    Axios.get("/template")
+/*    Axios.get("/template")
       .then(({ data }) => this.setState({ templates: data.templates }))
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-      const token = localStorage.getItem("token");
+      .catch((err) => console.log(err) || alert(JSON.stringify(err)));*/
+    const token = localStorage.getItem("token");
     Axios.get(`/product/${this.props.match.params.id}`,
       {
         headers: {
@@ -369,7 +369,7 @@ class EditForm extends Component {
     localStorage.setItem("actionmercari", "");
     localStorage.setItem("actionfb", "");
 
-    Axios.get(`/producttemplate/${this.props.match.params.id}`, {
+    /*Axios.get(`/producttemplate/${this.props.match.params.id}`, {
       headers: {
         "x-access-token": localStorage.getItem("token"),
       },
@@ -378,7 +378,7 @@ class EditForm extends Component {
         this.setState({ templateIdd: response.data.templateId });
         this.setTemplate(response.data.templateId);
       }
-    });
+    });*/
 
     Axios.get('ebay/itemSuggestionPopulater').then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
     Axios.get('ebay/shippingPopulater').then((res) => {this.setState({shippingDropDownItems : res.data.data.ShippingServiceDetails.map((item, key) => {return res.data.data.ShippingServiceDetails[key].Description})})});
@@ -1080,7 +1080,7 @@ class EditForm extends Component {
     });
   };
 
-  handleDelete = async () => {
+/*  handleDelete = async () => {
     const id = this.props.match.params.templateid
     
     Axios.delete(`/template/${id}`) 
@@ -1096,7 +1096,7 @@ class EditForm extends Component {
    handleChangesTemplate = (e) => {
      this.setState({templateIdd : e.target.value})
     this.set_c_Template(e.target.value)
-   }
+   }*/
 
   clearExtraDescriptions = () => {
     this.setState({ extraDescriptions: [] });
