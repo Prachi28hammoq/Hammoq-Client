@@ -73,10 +73,18 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(
   };
 
   const getHeight = () => {
-    if (itemCount > 8) {
+    if (itemCount > 8) 
+    {
       return 8 * itemSize;
     }
-    return itemData.forEach(getChildSize).reduce((a, b) => a + b, 0);
+    else if(itemData['.$1'] !== undefined && itemData.length > 1)
+    {
+      return itemData.forEach(getChildSize).reduce((a, b) => a + b, 0);
+    }
+    else
+    {
+      return 0;
+    }
   };
 
   const gridRef = useResetCache(itemCount);
