@@ -85,6 +85,9 @@ class EditForm extends Component {
 
       ebayCategoryDropDownItems: [],
       shippingDropDownItems: [],
+      shippingDomesticDropDownItems: [],
+      shippingInternationalDropDownItems: [],
+
       companyBlurb: "",
       originZipCode: 0,
       calculatedShippingActive: false,
@@ -381,7 +384,19 @@ class EditForm extends Component {
     });*/
 
     Axios.get('ebay/itemSuggestionPopulater').then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
-    Axios.get('ebay/shippingPopulater').then((res) => {this.setState({shippingDropDownItems : res.data.data.ShippingServiceDetails.map((item, key) => {return res.data.data.ShippingServiceDetails[key].Description})})});
+    Axios.get('ebay/shippingPopulater').then((res) => {
+      this.setState({shippingDropDownItems : res.data.data.ShippingServiceDetails.map((item, key) => {return res.data.data.ShippingServiceDetails[key]})})
+      this.setState({shippingDomesticDropDownItems: res.data.data.ShippingServiceDetails
+                                                    .filter(item => item.ValidForSellingFlow === 'true')
+                                                    .filter(item => item.InternationalService === undefined)
+                                                    .map(item => {return item})
+                                                  })
+      this.setState({shippingInternationalDropDownItems: res.data.data.ShippingServiceDetails
+                                                        .filter(item => item.ValidForSellingFlow === 'true')
+                                                        .filter(item => item.InternationalService === 'true')
+                                                        .map(item => {return item})
+                                                  })
+      });
 
 
   };
@@ -637,14 +652,48 @@ class EditForm extends Component {
     dataform.append("compPriceIncreaseMethod", data.compPriceIncreaseMethod);
     dataform.append("mercariHashtags", data.mercariHashtags);
     dataform.append("companyBlurb", data.companyBlurb);
-    dataform.append("ebayCategoryField", data.ebayCategoryField);
-    dataform.append("ebayOptionalFieldsActive", data.ebayOptionalFieldsActive);
-    dataform.append("ebayCategoryID", data.ebayCategoryID);
-    dataform.append("ebayConditionID", data.ebayConditionID); //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
-    dataform.append("ebayListingType", data.ebayListingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ListingTypeCodeType.html
-    dataform.append("ebayListingDuration", data.ebayListingDuration);
-    //dataform.append("ebayPaymentMethod", data.ebayPaymentMethod);
-    //dataform.append("paypalEmail", data.paypalEmail);
+    ////////////////////EBAY////////////////////////////////
+    dataform.append("ebayc", data.ebay.check);
+    dataform.append("ebay", data.ebay.title);
+
+    dataform.append("ebay.ebayCategoryID", data.ebay.ebayCategoryID);
+    dataform.append("ebay.ebayConditionID", data.ebay.ebayConditionID); //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
+
+    dataform.append("ebay.ebayListingType", data.ebay.ebayListingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ListingTypeCodeType.html
+    dataform.append("ebay.ebayListingDuration", data.ebay.ebayListingDuration); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ListingDurationCodeType.html
+
+    dataform.append("ebay.ebayAutoPayActive", data.ebay.ebayAutoPayActive);
+    dataform.append("ebay.ebayPaymentMethod", data.ebay.ebayPaymentMethod); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/BuyerPaymentMethodCodeType.html https://developer.ebay.com/devzone/xml/docs/reference/ebay/extra/additm.rqst.itm.pymntmthds.html Paypal or Autopay.
+    dataform.append("ebay.ebayPayPalEmail", data.ebay.ebayPayPalEmail);
+    dataform.append("ebay.ebayPayPalEmailActive", data.ebay.ebayPayPalEmailActive);
+
+    dataform.append("ebay.ebayGlobalShippingActive", data.ebay.ebayGlobalShippingActive);
+
+    dataform.append("ebay.ebayDomesticShippingType", data.ebay.ebayDomesticShippingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingTypeCodeType.html
+    dataform.append("ebay.ebayDomesticShippingService", data.ebay.ebayDomesticShippingService); // https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingServiceCodeType.html
+    dataform.append("ebay.ebayDomesticShippingCost", data.ebay.ebayDomesticShippingCost);
+    dataform.append("ebay.ebayDomesticShippingEachAdditional", data.ebay.ebayDomesticShippingEachAdditional);
+    dataform.append("ebay.ebayDomesticShippingSurcharge", data.ebay.ebayDomesticShippingSurcharge);
+    dataform.append("ebay.ebayDomesticShippingFreeShippingActive", data.ebay.ebayDomesticShippingFreeShippingActive);
+
+    dataform.append("ebay.ebayInternationalShippingService", data.ebay.ebayInternationalShippingService); // https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingServiceCodeType.html
+    dataform.append("ebay.ebayInternationalShippingType", data.ebay.ebayInternationalShippingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingTypeCodeType.html
+    dataform.append("ebay.ebayInternationalShippingCost", data.ebay.ebayInternationalShippingCost);
+    dataform.append("ebay.ebayInternationalShippingEachAdditional", data.ebay.ebayInternationalShippingEachAdditional);
+    dataform.append("ebay.ebayInternationalShippingSurcharge", data.ebay.ebayInternationalShippingSurcharge);
+    dataform.append("ebay.ebayInternationalShippingFreeShippingActive", data.ebay.ebayInternationalShippingFreeShippingActive);
+
+    dataform.append("ebay.ebayDomesticReturnsShippingCostPaidBy", data.ebay.ebayDomesticReturnsShippingCostPaidBy); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingCostPaidByOptionsCodeType.html
+    dataform.append("ebay.ebayDomesticRefundOption", data.ebay.ebayDomesticRefundOption); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/RefundOptionsCodeType.html
+    dataform.append("ebay.ebayDomesticReturnsAccepted", data.ebay.ebayDomesticReturnsAccepted); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsAcceptedOptionsCodeType.html
+    dataform.append("ebay.ebayDomesticReturnsWithin", data.ebay.ebayDomesticReturnsWithin); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsWithinOptionsCodeType.html
+
+    dataform.append("ebay.ebayInternationalReturnsShippingCostPaidBy", data.ebay.ebayInternationalReturnsShippingCostPaidBy); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingCostPaidByOptionsCodeType.html
+    dataform.append("ebay.ebayInternationalRefundOption", data.ebay.ebayInternationalRefundOption); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/RefundOptionsCodeType.html
+    dataform.append("ebay.ebayInternationalReturnsAccepted", data.ebay.ebayInternationalReturnsAccepted); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsAcceptedOptionsCodeType.html
+    dataform.append("ebay.ebayInternationalReturnsWithin", data.ebay.ebayInternationalReturnsWithin); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsWithinOptionsCodeType.html
+    ////////////////////EBAY///////////////////////////////
+
     if(value === "draft")
     {
       dataform.append("prodStatus", "draft");
