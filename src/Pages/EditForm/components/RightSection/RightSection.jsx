@@ -1491,10 +1491,6 @@ class RightSection extends Component {
               <button className='save_to_draft'
               onClick={(e) => {onSubmit(e, "save");}}>
               Save</button>
-              <button className='submit'
-              onClick={(e) => {onSubmit(e, "submitted");}}>
-              Submit
-              </button>
               </>
             )
             :
