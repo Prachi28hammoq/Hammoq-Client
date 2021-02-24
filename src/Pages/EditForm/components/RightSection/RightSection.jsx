@@ -14,6 +14,8 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -53,10 +55,7 @@ function useResetCache(data) {
 }
 
 // Adapter for react-window
-const ListboxComponent = React.forwardRef(function ListboxComponent(
-  props,
-  ref
-) {
+const ListboxComponent = React.forwardRef(function ListboxComponent(props,ref) {
   const { children, ...other } = props;
   const itemData = React.Children.toArray(children);
   const theme = useTheme();
@@ -295,6 +294,7 @@ class RightSection extends Component {
       handleOtherTitles,
       handleUrl,
       handleCheckboxToggle,
+      handleToggleButton,
       showcat,
       ebayCategoryDropDownItems,
       onSubmit,
@@ -304,7 +304,11 @@ class RightSection extends Component {
       setEbayCategoryField,
       repopulateExtraDescriptions,
       priceCalculation,
-      shippingDropDownItems
+      shippingDropDownItems,
+      shippingDomesticDropDownItems,
+      shippingInternationalDropDownItems,
+      handleShippingChange,
+      handleMarketPlaceDataChange
     } = this.props;
 
     if (custom === false) {
@@ -517,7 +521,10 @@ class RightSection extends Component {
                 Search
               </button>
             </div>
-            <button className='toggle__button'>Un Sold</button>
+            <label>
+            List:{"  "}
+            <ToggleButton size="large" style={data.isListingGood ? ({color:'white', background:'green'}) : ({color:'white', background:'red'})} name='isListingGood' selected={data.isListingGood} onChange={(e) => {handleToggleButton(data.isListingGood, 'isListingGood')}}>{data.isListingGood ? (<CheckIcon fontSize="large"/>) : (<ClearIcon fontSize="large"/>)}</ToggleButton>
+            </label>
           </div>
           {/* ========================================================================================================== */}
 
@@ -551,10 +558,10 @@ class RightSection extends Component {
               id='ebayListingType' 
               name='ebayListingType' 
               className='select__market'
-              value={data.ebayListingType}
-              onChange={handleChange}>
-                <option value='Auction'>Auction</option>
+              value={data.ebay.ebayListingType}
+              onChange={(e) => {handleMarketPlaceDataChange(e,'ebay','ebayListingType')}}>
                 <option value='FixedPriceItem'>Fixed Price Item</option>
+                <option value='Auction'>Auction</option>
               </select>
             </div>
           </div>
@@ -948,7 +955,7 @@ class RightSection extends Component {
                     onChange={handleChange}
                   ></input>
                 </div>
-              </div>
+                </div>
               <div className='segrigate'>
                 <button
                   className={`${
@@ -1271,18 +1278,19 @@ class RightSection extends Component {
                     Shipping Service
                   </label>
                   <Autocomplete
-                        name='domesticShippingService'
+                        name='ebayDomesticShippingService'
                         className='dom__input'
-                        options={shippingDropDownItems}
-                        getOptionLabel={(option) => option.toString()}
                         value={data.domesticShippingService}
+                        options={shippingDomesticDropDownItems}
+                        getOptionLabel={(option) => option.Description.toString()}
                         onChange={(event, value, reason) =>
                           reason === "select-option"
-                            ? handleChange(event)
+                            ? handleShippingChange(event, value, 'domesticShippingService')
                             : null
                         }
                         renderInput={(params) => (
                           <TextField
+                            placeholder={data.domesticShippingService ? data.domesticShippingService.Description : ""}
                             {...params}
                           />
                         )}
@@ -1357,19 +1365,20 @@ class RightSection extends Component {
                     Shipping Service
                   </label>
                   <Autocomplete
-                        name='internationalShippingService'
+                        name='ebayInternationalShippingService'
                         className='dom__input'
-                        options={shippingDropDownItems}
-                        getOptionLabel={(option) => option.toString()}
-                        style={{ width: 300 }}
                         value={data.internationalShippingService}
+                        options={shippingInternationalDropDownItems}
+                        getOptionLabel={(option) => option.Description.toString()}
+                        style={{ width: 300 }}
                         onChange={(event, value, reason) =>
                           reason === "select-option"
-                            ? handleChange(event)
+                            ? handleShippingChange(event, value, 'internationalShippingService')
                             : null
                         }
                         renderInput={(params) => (
                           <TextField
+                            placeholder={data.internationalShippingService ? data.internationalShippingService.Description : ""}
                             {...params}
                           />
                         )}
@@ -1494,7 +1503,7 @@ class RightSection extends Component {
               </>
             )
             :
-            data.prodStatus && data.prodStatus === 'submitted'?
+            data.prodStatus && data.prodStatus === 'submit'?
               (
                 <>
                 <button 
@@ -1503,8 +1512,8 @@ class RightSection extends Component {
                 Save to Draft
                 </button>
                 <button className='submit'
-                onClick={(e) => {onSubmit(e, "submitted");}}>
-                Submit
+                onClick={(e) => {onSubmit(e, "submit");}}>
+                List
                 </button>
                 </>
               )
@@ -1513,20 +1522,20 @@ class RightSection extends Component {
                 <>
                 <button 
                 className='save_to_draft'
-                onClick={(e) => {onSubmit(e, "save");}}>
-                Save
+                onClick={(e) => {onSubmit(e, "draft");}}>
+                Save To Draft
                 </button>
                 <button className='submit'
                 onClick={(e) => {onSubmit(e, "inventory");}}>
-                Submit
+                List
                 </button>
                 </>
             )
             }
-              <button 
-              className='cancel'
-              onClick={() => window.open("/searchcart", "_self")}
-              >Cancel</button>
+            <button 
+            className='cancel'
+            onClick={() => window.open("/searchcart", "_self")}
+            >Cancel</button>
             </div>
           </div>
         </div>

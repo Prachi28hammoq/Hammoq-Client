@@ -270,6 +270,21 @@ class EditForm extends Component {
         //console.log(this.state.othersurl);
       }
 
+      if(res.data.products[0])
+      {
+        if(res.data.products[0].domesticShippingService && res.data.products[0].domesticShippingService.length > 20)
+        {
+          let domesticShippingService = JSON.parse(res.data.products[0].domesticShippingService)
+          this.state.data.domesticShippingService = domesticShippingService;
+        }
+        if(res.data.products[0].internationalShippingService && res.data.products[0].internationalShippingService.length > 20)
+        {
+          console.log(res.data.products[0].internationalShippingService.length);
+          let internationalShippingService = JSON.parse(res.data.products[0].internationalShippingService)
+          this.state.data.internationalShippingService = internationalShippingService;
+        }
+      }
+
       if (res.data.products[0]._id) {
         this.setState({ productid: res.data.products[0]._id });
       }
@@ -412,14 +427,24 @@ class EditForm extends Component {
     {
       data["profit"] = data["price"] - value;
     }
-    //     if (name === "title") {
-    //       data[name] = e.target.value.replace(/[^\w\s]/gi, "");
-    //     } else {
-    //       data[name] = value;
-    //     }
     data[name] = value;
-   // console.log(e.target.value);
-   // console.log(this.state.data.brand);
+    this.setState({ data });
+    this.setState({ editchange: true });
+  };
+
+  handleMarketPlaceDataChange = (event, market, field) =>
+  {
+    const { name, value } = event.target;
+    const { data } = this.state;
+
+    data[market][field] = value;
+    this.setState({ data });
+  }
+
+  handleShippingChange = (e, v, name) => {
+    const { data } = this.state;
+    data['ebay'][e.target.name] = v.ShippingService;
+    data[name] = v;
     this.setState({ data });
     this.setState({ editchange: true });
   };
@@ -652,6 +677,9 @@ class EditForm extends Component {
     dataform.append("compPriceIncreaseMethod", data.compPriceIncreaseMethod);
     dataform.append("mercariHashtags", data.mercariHashtags);
     dataform.append("companyBlurb", data.companyBlurb);
+
+    dataform.append("isListingGood", data.isListingGood);
+
     ////////////////////EBAY////////////////////////////////
     dataform.append("ebayc", data.ebay.check);
     dataform.append("ebay", data.ebay.title);
@@ -784,6 +812,15 @@ class EditForm extends Component {
     }
     this.setState({ isSubmitting: false });
   };
+
+  handleToggleButton = (booleanValue, name) => {
+    const { data } = this.state;
+
+    data[name] = !booleanValue;
+
+    this.setState({ data });
+    this.setState({ editchange: true });
+  }
 
   handleCheckboxToggle = (booleanValue, name) => {
     const { data } = this.state;
@@ -1308,7 +1345,9 @@ class EditForm extends Component {
       labelacc,
       //messageNotSeen,
       ebayCategoryDropDownItems,
-      shippingDropDownItems
+      shippingDropDownItems,
+      shippingDomesticDropDownItems,
+      shippingInternationalDropDownItems
     } = this.state;
     //const {templateid} = this.props.match.params
     return (
@@ -1362,11 +1401,16 @@ class EditForm extends Component {
             setCategory={this.setCategory}
             ebayCategoryDropDownItems={ebayCategoryDropDownItems}
             shippingDropDownItems={shippingDropDownItems}
+            shippingDomesticDropDownItems={shippingDomesticDropDownItems}
+            shippingInternationalDropDownItems={shippingInternationalDropDownItems}
             handleCheckboxToggle={this.handleCheckboxToggle}
+            handleToggleButton={this.handleToggleButton}
             onSubmit={this.onSubmit}
             isSubmitting={this.isSubmitting}
             setEbayCategoryField={this.setEbayCategoryField}
             priceCalculation={this.priceCalculation}
+            handleShippingChange={this.handleShippingChange}
+            handleMarketPlaceDataChange={this.handleMarketPlaceDataChange}
               />
         </div>
       </div>

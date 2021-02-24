@@ -222,7 +222,7 @@ const ListingSettings = () => {
 
         savedData = res.data.settings[0].payment[0];
         //console.log("payment data: ", savedData);
-        setAllowPaypal(savedData.enableEbayAutoPay);
+        setEnableEbayAutoPay(savedData.enableEbayAutoPay);
         setAllowPaypal(savedData.allowPaypal);
         setPaypalEmail(savedData.paypalEmail);
         setTaxes(savedData.taxes);
