@@ -204,8 +204,8 @@ class EditForm extends Component {
 
       this.setState({ data: res.data.products[0] });
 
-      this.state.data['shortDescription'] = decodeURI(res.products[0].shortDescription);
-      
+      this.state.data['shortDescription'] = decodeURI(res.data.products[0].shortDescription);
+
       this.handelMessageNotSeen()
 
       if (res.data.products[0].extraMeasures) {
