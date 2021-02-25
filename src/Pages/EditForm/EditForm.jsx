@@ -561,26 +561,72 @@ class EditForm extends Component {
     });
 
     //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
-    switch(data.condition_name)
+    if(data.ebay.check)
     {
-      case "New":
-        this.state.data['ebayConditionID'] = 1000;
-        break;
-      case "Used":
-        this.state.data['ebayConditionID'] = 3000;
-        break;
-      case "New (Other/Open Box)":
-        this.state.data['ebayConditionID'] = 2750;
-        break;
-      case "Seller Refurbished":
-        this.state.data['ebayConditionID'] = 2500;
-        break;
-      case "Broken/For Repair":
-        this.state.data['ebayConditionID'] = 7000;
-        break;
-    }
+      this.state.data['ebay']['ebayListingType'] = 'FixedPriceItem';
+      
+      switch(data.condition_name)
+      {
+        case "New":
+          this.state.data['ebayConditionID'] = 1000;
+          break;
+        case "Used":
+          this.state.data['ebayConditionID'] = 3000;
+          break;
+        case "New (Other/Open Box)":
+          this.state.data['ebayConditionID'] = 2750;
+          break;
+        case "Seller Refurbished":
+          this.state.data['ebayConditionID'] = 2500;
+          break;
+        case "Broken/For Repair":
+          this.state.data['ebayConditionID'] = 7000;
+          break;
+      }
 
-    this.state.data['ebayListingDuration'] = data.listingDuration;
+      if(data.ebay.ebayListingType === 'FixedPriceItem' && value === "inventory" || value === "submit")
+      {
+        this.state.data['ebay']['ebayListingDuration'] = 'GTC';
+      }
+      else
+      {
+        this.state.data['ebay']['ebayListingDuration'] = data.listingDuration || 0;
+      }
+
+      if(this.state.domesticReturnsAccepted)
+      {
+        this.state.data['ebay']['ebayDomesticReturnsAccepted'] = data.domesticReturnsAccepted;
+        this.state.data['ebay']['ebayDomesticReturnsShippingCostPaidBy'] = data.domesticReturnsPaidBy;
+        this.state.data['ebay']['ebayDomesticRefundOption'] = data.domesticReturnsRefundGivenAs;
+        this.state.data['ebay']['ebayDomesticReturnsWithin'] = data.domesticReturnsWithin;
+      }
+
+      if(this.state.internationalReturnsAccepted)
+      {
+        this.state.data['ebay']['ebayInternationalReturnsAccepted'] = data.internationalReturnsAccepted;
+        this.state.data['ebay']['ebayInternationalReturnsShippingCostPaidBy'] = data.internationalReturnsPaidBy;
+        this.state.data['ebay']['ebayInternationalRefundOption'] = data.internationalReturnsRefundGivenAs;
+        this.state.data['ebay']['ebayInternationalReturnsWithin'] = data.internationalReturnsWithin;
+      }
+
+      if(data.domesticShippingService)
+      {
+        this.state.data['ebay']['ebayDomesticShippingService'] = data.domesticShippingService.ShippingService;
+      }
+
+      if(data.internationalShippingService)
+      {
+        this.state.data['ebay']['ebayInternationalShippingService'] = data.internationalShippingService.ShippingService;
+      }
+
+      if(data.domesticShippingCost) this.state.data['ebay']['ebayDomesticShippingCost'] = data.domesticShippingCost;
+      if(data.domesticShippingEachAdditional) this.state.data['ebay']['domesticShippingEachAdditional'] = data.domesticShippingEachAdditional;
+      if(data.domesticShippingSurcharge) this.state.data['ebay']['ebayDomesticShippingSurcharge'] = data.domesticShippingSurcharge;
+
+      if(data.internationalShippingCost) this.state.data['ebay']['ebayInternationalShippingCost'] = data.internationalShippingCost;
+      if(data.internationalShippingEachAdditional) this.state.data['ebay']['ebayInternationalShippingEachAdditional'] = data.internationalShippingEachAdditional;
+      if(data.internationalShippingSurcharge) this.state.data['ebay']['ebayInternationalShippingSurcharge'] = data.internationalShippingSurcharge;
+    }
 
 
     this.setState({ isSubmitting: true });
