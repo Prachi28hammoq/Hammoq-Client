@@ -1,28 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-//import { HOST } from "../../../../services/Axios";
 import Axios from "../../../../services/Axios";
 import "./RightSection.css";
 import Poshmarkimg from "./images/poshmark.png";
 import Ebayimg from "./images/ebay.png";
 import Mercariimg from "./images/mercari.png";
 import EbayCategoryModal from "../ebayModal";
-//import Popover from '@material-ui/core/Popover';
-import TextField from "@material-ui/core/TextField";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import CheckIcon from '@material-ui/icons/Check';
-import ClearIcon from '@material-ui/icons/Clear';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import { Autocomplete, ToggleButton } from "@material-ui/lab";
 import { useTheme /*makeStyles*/ } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { Typography, useMediaQuery, ListSubheader, TextField, Select, SvgIcon } from "@material-ui/core";
 import { VariableSizeList } from "react-window";
 const max = 5000;
 
@@ -524,7 +511,9 @@ class RightSection extends Component {
             </div>
             <label>
             List:{"  "}
-            <ToggleButton label={data.isListingGood ? (<CheckIcon/>) : (<ClearIcon/>)} style={data.isListingGood ? ({color:'white', background:'green'}) : ({color:'white', background:'red'})} name='isListingGood' selected={data.isListingGood} onClick={(e) => {handleToggleButton(data.isListingGood, 'isListingGood')}}></ToggleButton>
+            <ToggleButton style={data.isListingGood ? ({color:'white', background:'green'}) : ({color:'white', background:'red'})} name='isListingGood' selected={data.isListingGood} onClick={(e) => {handleToggleButton(data.isListingGood, 'isListingGood')}}>
+            {data.isListingGood ? <SvgIcon><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></SvgIcon> : <SvgIcon><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></SvgIcon>}
+            </ToggleButton>
             </label>
           </div>
           {/* ========================================================================================================== */}
