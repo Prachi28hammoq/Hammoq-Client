@@ -14,6 +14,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -523,7 +524,7 @@ class RightSection extends Component {
             </div>
             <label>
             List:{"  "}
-            <ToggleButton size="large" style={data.isListingGood ? ({color:'white', background:'green'}) : ({color:'white', background:'red'})} name='isListingGood' selected={data.isListingGood} onChange={(e) => {handleToggleButton(data.isListingGood, 'isListingGood')}}>{data.isListingGood ? (<CheckIcon fontSize="large"/>) : (<ClearIcon fontSize="large"/>)}</ToggleButton>
+            <ToggleButton label={data.isListingGood ? (<CheckIcon/>) : (<ClearIcon/>)} style={data.isListingGood ? ({color:'white', background:'green'}) : ({color:'white', background:'red'})} name='isListingGood' selected={data.isListingGood} onClick={(e) => {handleToggleButton(data.isListingGood, 'isListingGood')}}></ToggleButton>
             </label>
           </div>
           {/* ========================================================================================================== */}
