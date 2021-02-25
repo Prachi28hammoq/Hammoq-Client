@@ -201,8 +201,11 @@ class EditForm extends Component {
         images, 
         //data 
       } = this.state;
+
       this.setState({ data: res.data.products[0] });
 
+      this.state.data['shortDescription'] = decodeURI(res.products[0].shortDescription);
+      
       this.handelMessageNotSeen()
 
       if (res.data.products[0].extraMeasures) {
@@ -392,8 +395,6 @@ class EditForm extends Component {
         this.setTemplate(response.data.templateId);
       }
     });*/
-
-    this.state.data['extraDescriptions'] = decodeURI(res.products[0].shortDescription);
 
     Axios.get('ebay/itemSuggestionPopulater').then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
     Axios.get('ebay/shippingPopulater').then((res) => {
