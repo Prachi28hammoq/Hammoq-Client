@@ -116,7 +116,6 @@ class EditForm extends Component {
   handelMessageNotSeen() {
     var msgSeenTemp = [];
     var data = this.state.data;
-    console.log(data,'dataaaaaaaaaa')
     if (data.messageSeen) {
       for (let i = 0; i < data.messageSeen.length; i++) {
         if (data.messageSeen[i].client === false) {
@@ -232,15 +231,12 @@ class EditForm extends Component {
 
       if (res.data.products[0].ebay.url !== "") {
         this.state.ebayurl = res.data.products[0].ebay.url;
-        console.log(this.state.ebayurl);
       }
       if (res.data.products[0].poshmark.url !== "") {
         this.state.poshmarkurl = res.data.products[0].poshmark.url;
-        console.log(this.state.poshmarkurl);
       }
       if (res.data.products[0].mercari.url !== "") {
         this.state.mercariurl = res.data.products[0].mercari.url;
-        console.log(this.state.mercariurl);
       }
 
       if (
@@ -279,7 +275,6 @@ class EditForm extends Component {
         }
         if(res.data.products[0].internationalShippingService && res.data.products[0].internationalShippingService.length > 20)
         {
-          console.log(res.data.products[0].internationalShippingService.length);
           let internationalShippingService = JSON.parse(res.data.products[0].internationalShippingService)
           this.state.data.internationalShippingService = internationalShippingService;
         }
@@ -397,6 +392,8 @@ class EditForm extends Component {
         this.setTemplate(response.data.templateId);
       }
     });*/
+
+    this.state.data['extraDescriptions'] = decodeURI(res.products[0].shortDescription);
 
     Axios.get('ebay/itemSuggestionPopulater').then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
     Axios.get('ebay/shippingPopulater').then((res) => {
@@ -641,7 +638,7 @@ class EditForm extends Component {
     dataform.append("model", data.model);
     dataform.append("modelNo", data.modelNo)
     dataform.append("title", data.title);
-    dataform.append("shortDescription", data.shortDescription);
+    dataform.append("shortDescription", encodeURIComponent(data.shortDescription));
     dataform.append("condition_name", data.condition_name);
     dataform.append("ebay", data.ebay.title);
     dataform.append("mercari", data.mercari.title);

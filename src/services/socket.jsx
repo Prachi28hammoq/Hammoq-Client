@@ -22,7 +22,7 @@ else if(process.env.REACT_APP_STAGE === 'production')
 	serverURL = "https://api.hammoq.com/";
 }
 
-let socket = socketIOClient(serverURL, 
+let socket = socketIOClient(serverURL, {path: '/chat/'},
 {
   transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
 });
