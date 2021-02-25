@@ -564,7 +564,7 @@ class EditForm extends Component {
     if(data.ebay.check)
     {
       this.state.data['ebay']['ebayListingType'] = 'FixedPriceItem';
-      
+
       switch(data.condition_name)
       {
         case "New":
@@ -683,12 +683,12 @@ class EditForm extends Component {
     dataform.append("packageHeight", data.packageHeight);
     dataform.append("costOfGoods", data.costOfGoods);
     dataform.append("shippingFees", data.shippingFees);
-    dataform.append("domesticShippingService", data.domesticShippingService);
+    dataform.append("domesticShippingService", JSON.stringify(data.domesticShippingService));
     dataform.append("domesticShippingCost", data.domesticShippingCost);
     dataform.append("domesticShippingEachAdditional", data.domesticShippingEachAdditional);
     dataform.append("domesticShippingSurcharge", data.domesticShippingSurcharge);
     dataform.append("domesticShippingFreeShippingActive", data.domesticShippingFreeShippingActive);
-    dataform.append("internationalShippingService", data.internationalShippingService);
+    dataform.append("internationalShippingService", JSON.stringify(data.internationalShippingService));
     dataform.append("internationalShippingCost", data.internationalShippingCost);
     dataform.append("internationalShippingEachAdditional", data.internationalShippingEachAdditional);
     dataform.append("internationalShippingSurcharge", data.internationalShippingSurcharge);
