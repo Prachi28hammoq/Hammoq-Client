@@ -25,7 +25,6 @@ export default function AlertDialog(props) {
     props.handleClose();
   };
   const callback = (value) => {
-    console.log(value);
     setCaptchaValue(value);
   };
 
@@ -39,7 +38,7 @@ export default function AlertDialog(props) {
         window.alert("Deleted");
         window.location.reload();
       } else {
-        window.alert("Something went wrong");
+        window.alert("Something went wrong.");
       }
     }
   };
@@ -49,7 +48,7 @@ export default function AlertDialog(props) {
     if (stripeId != null) {
       props.updatePayment(amount, stripeId);
     } else {
-      window.alert("Please select any card");
+      window.alert("Please select any card.");
     }
   };
   React.useEffect(() => {

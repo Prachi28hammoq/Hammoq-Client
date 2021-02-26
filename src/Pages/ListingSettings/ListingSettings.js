@@ -1537,7 +1537,7 @@ const ListingSettings = () => {
           <div className='sub_head'>Payment Profile</div>
           <div className='r3_q4_body_align'>
             <div className='r3_q4_left_align1'>
-              <label>Use Ebay AutoPay:
+              <label>Use Ebay Managed Payments:
                 {" "}
                 <input
                   type='checkbox'

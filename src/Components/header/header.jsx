@@ -125,7 +125,7 @@ class header extends Component {
                 Basic Listing
               </Link>
             </li>
-            <li class="nav-item">
+{/*            <li class="nav-item">
               <Link
                 to="/messages"
                 className="nav-link"
@@ -133,9 +133,9 @@ class header extends Component {
               >
                 Messages({this.state.clientMessageSeenCount})
               </Link>
-            </li>
+            </li>*/}
 
-            <li class="nav-item">
+{/*            <li class="nav-item">
               <a
                 href="/templates"
                 className="nav-link"
@@ -143,7 +143,7 @@ class header extends Component {
               >
                 Templates
               </a>
-            </li>
+            </li>*/}
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>

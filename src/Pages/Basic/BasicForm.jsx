@@ -311,7 +311,6 @@ class BasicForm extends Component {
     this.state.othersstate.forEach((os) => {
       if (os == "true") {
         cnt++;
-        console.log(os);
       }
     });
     var rate1 = 0,
@@ -324,7 +323,6 @@ class BasicForm extends Component {
       rate3 = (this.state.rates.list / 100) * (cnt - 1);
     }
     total = rate1 + rate2 + rate3;
-    console.log(this.state.bal);
 
     if (this.state.bal - total < 0) {
       if (this.state.savedCards.length > 0) {
@@ -338,7 +336,6 @@ class BasicForm extends Component {
       }
     }
 
-    console.log(y, "chening y value");
     data.append("sku", this.state.input2);
 
     if (this.state.input3 == 0) {
@@ -405,7 +402,6 @@ class BasicForm extends Component {
     //   return alert("Please Wait! Images are uploading.....");
     // } else {
     //let productId = ''
-    console.log(data)
     Axios.post("/product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -414,7 +410,6 @@ class BasicForm extends Component {
     })
 
       .then((response) => {
-        console.log(response, "data append");
         let productId = response.data.products
           ? response.data.products[response.data.products.length - 1]._id
           : response.data.products;
@@ -428,7 +423,6 @@ class BasicForm extends Component {
               },
             }
           ).then((response) => {
-            console.log(response, "user data user");
           });
         }
         window.open("/basic", "_self");
@@ -995,7 +989,7 @@ class BasicForm extends Component {
                   onChange={(e) => this.change(e)}
                   value={this.state.input3 === 0 ? "" : this.state.input3}
                   name="input3"
-                  value="1"
+                  defaultValue="1"
                   placeholder="Quantity(1)"
                   min="1"
                   className="form-control"

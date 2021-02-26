@@ -72,14 +72,10 @@ class Searchcart extends Component {
         //rates = res.data[res.data.length - 1];
         this.setState({ rates: res.data[res.data.length-1] });
       })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+      .catch((error) => {console.log(error)});
 
     Axios.get(`/product/type/${prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
-        if (data.err) {
-          window.alert("No product, Please add few...");
-          window.open("/basic", "_self");
-        } else {
           this.setState({
             products: data.data.filter((status) => status.status != false),
             totalPage: parseInt(data.pages),
@@ -89,25 +85,29 @@ class Searchcart extends Component {
             submittedCount: data.count.submittedCount,
           });
           this.handelProductMessageSeen();
-        }
-        //console.log(this.state.productMessageSeen, "product msg seen");
-        this.setState({ loading: false });
+          this.setState({ loading: false });
       })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+      .catch((error) => {
+          console.log(error);
+          window.alert("No product, Please add few...");
+          window.open("/basic", "_self");
+        });
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
         this.setState({ bal: data.balance, clientdetails: data });
       })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+      .catch((error) => {console.log(error)});
 
     Axios.get("/password/getstatus").then(({ data }) => {
       this.setState({ Ebay: data.Ebay });
       this.setState({ Poshmark: data.Poshmark });
       this.setState({ Mercari: data.Mercari });
-    });
+    })
+    .catch((error) => {console.log(error)});
 
-    Axios.get("/password/getstatus/others").then(({ data }) => {
+    Axios.get("/password/getstatus/others")
+         .then(({ data }) => {
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
@@ -121,24 +121,20 @@ class Searchcart extends Component {
           this.setState({ othersstate: otherss });
         });
       }
-    });
+    })
+    .catch((error) => {console.log(error)});
   };
 
 
   duplicateHandler = async (itemId) => {
-    const response = await Axios.post(`/product/${itemId}`, {
-      headers: {
-        "x-access-token": localStorage.getItem("token"),
-        "content-type": "application/x-www-form-urlencoded",
-      },
-    });
-    const response1 = await Axios.get(
-      `/product/type/${this.state.prodStatus}`,
-      { params: { page: 1, size: 10 } }
-    );
-    this.setState({
-      products: response1.data.data,
-    });
+    const response = await Axios.post(`/product/${itemId}`, {headers: {"x-access-token": localStorage.getItem("token"),"content-type": "application/x-www-form-urlencoded",},})
+    .catch((error) => {console.log(error)});
+
+    const response1 = await Axios.get(`/product/type/${this.state.prodStatus}`,{ params: { page: 1, size: 10 } })
+                                  .catch((error) => {console.log(error)});
+
+    this.setState({products: response1.data.data,});
+
     window.alert("duplicate has been created");
     window.location.reload();
   };
@@ -146,34 +142,24 @@ class Searchcart extends Component {
   handleSearchChange = (e) => {
     const { value } = e.target;
     const { products } = this.state;
-    this.setState(
-      { searchedProducts: Search(products, value), search: value },
-      () =>
-        this.setState({
-          searchedProducts: this.state.searchedProducts.filter((filtered) => {
-            return filtered.status == true;
-          }),
-        })
-    );
+    this.setState({ searchedProducts: Search(products, value), search: value }, () => this.setState({searchedProducts: this.state.searchedProducts.filter((filtered) => {return filtered.status == true;}),}));
   };
 
 
   handleDelete = async (itemId) => {
     window.confirm("Are You Sure");
-    const data = {
-      status: false,
-    };
+    const data = {status: false,};
+
     try {
-      const response = await Axios.put(`/product/status/${itemId}`, data, {
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": localStorage.getItem("token"),
-        },
-      });
+      const response = await Axios.put(`/product/status/${itemId}`, data, {headers: {"Content-Type": "application/json", "x-access-token": localStorage.getItem("token"),},})
+                                  .catch((error) => {console.log(error)});;
+
       this.setState({ products: response.data.products });
       this.handelProductMessageSeen();
       window.location.reload()
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.log(error);
     }
   };
@@ -181,51 +167,33 @@ class Searchcart extends Component {
   handleChangePage = async (newPage) => {
     if (newPage > 0 && newPage <= this.state.totalPage) {
       this.setState({ page: newPage });
-      await Axios.get(`/product/type/${this.state.prodStatus}`, {
-        params: { page: newPage, size: this.state.rowsPerPage },
-      })
-        .then(({ data }) => {
-          console.log(data, "page chanegs dataaaa");
-          if (data) this.setState({ 
-            products: data.data.filter((status) => status.status != false)
-            ,loading: false });
+      await Axios.get(`/product/type/${this.state.prodStatus}`, {params: { page: newPage, size: this.state.rowsPerPage },}).then(({ data }) => {
+          if (data) this.setState({ products: data.data.filter((status) => status.status != false),loading: false });
           this.handelProductMessageSeen();
         })
-        .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+        .catch((error) => {console.log(error)});
     }
   };
 
   handleChangeRowsPerPage = async (val) => {
-    await Axios.get(`/product/type/${this.state.prodStatus}`, {
-      params: { page: this.state.page, size: val },
-    })
-      .then(({ data }) => {
-        this.setState({
-          products: data.data.filter((status) => status.status != false),
-          rowsPerPage: val,
-          totalPage: data.pages,
-        });
+    await Axios.get(`/product/type/${this.state.prodStatus}`, {params: { page: this.state.page, size: val },})
+               .then(({ data }) => {
+        this.setState({products: data.data.filter((status) => status.status != false), rowsPerPage: val, totalPage: data.pages,});
         this.handelProductMessageSeen();
       })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+      .catch((error) => {console.log(error)});
   };
 
   handleMessageAlert = (e) => {
     e.preventDefault();
-    this.setState({
-      pop_open: !this.state.pop_open,
-      anchorEl: e.currentTarget,
-    });
+    this.setState({pop_open: !this.state.pop_open, anchorEl: e.currentTarget,});
   };
 
   handleRequestClose() {
-    this.setState({
-      pop_open: false,
-    });
+    this.setState({pop_open: false,});
   }
   render() {
     const { comment, addComment } = this.props;
-    // console.log(this.state.products, "products");
     const {
       products,
       rates,
@@ -366,7 +334,6 @@ class Searchcart extends Component {
                   //this.handleInventory()
                   this.props.history.push("/products/inventory");
                   window.location.reload();
-                  //console.log(this.props.history)
                 }}
               >
                 {this.state.inventoryCount}-Inventory
