@@ -24,13 +24,15 @@ import {
   forgotpassword,
   Charts,
   Config,
-  AcceptUrl
+  AcceptUrl,
+  Accounting
 } from "./Pages";
 import Message from './Pages/Messages/message'
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
 import ListingSettings from "./Pages/ListingSettings/ListingSettings";
+import Accounts from "./Pages/Accounts/Accounts";
 
 
 const Routes = withRouter((props) => {
@@ -65,6 +67,8 @@ const Routes = withRouter((props) => {
             <Route exact path="/products" component={Searchcart} />
             <Route exact path="/products/:prodStatus" component={Searchcart} />
             <Route exact path="/transactions" component={Transactions} />
+            <Route path="/accounts" component={Accounts} />
+            <Route path="/accounting" component={Accounting} />
             <Route exact path="/setting" component={Settings} />
             <Route exact path="/client/ebay/:id" component={AcceptUrl} />
             <Route exact path="/messages" component ={Message} />

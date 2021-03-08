@@ -20,6 +20,7 @@ class Signup extends Component {
       phoneno: "",
       password: "",
       confirmPassword: "",
+      referralCode: "",
       term1: false,
       term2: false,
       isSubmitting: false,
@@ -54,6 +55,7 @@ class Signup extends Component {
       lastName,
       email,
       phoneno,
+      referralCode
     } = this.state;
 
     if (!term1) {
@@ -94,10 +96,12 @@ class Signup extends Component {
       })
       .catch((err) => {
         this.setState({ isSubmitting: false });
-        if (err.response.data.err) {
-          return alert(err.response.data.err);
-        }
-        alert("Something went wrong.");
+        console.log(JSON.stringify(err));
+        if (err) {
+          return alert(err);
+      }
+     console.log(err);
+        alert("Something went wrong. Can't SignUp");
         console.log(err);
       });
   };
@@ -117,6 +121,7 @@ class Signup extends Component {
       password,
       confirmPassword,
       isSubmitting,
+      referralCode
     } = this.state;
     return (
       <div className="row col-lg-5 m-auto">
@@ -187,11 +192,14 @@ class Signup extends Component {
             className="form-control mb-4"
             required
           ></input>
-          <label htmlFor="couponcode">COUPON CODE:</label>
+          <label htmlFor="referralCode">REFERRAL CODE:</label>
           <input
             type="text"
-            name="couponcode"
+            name="referralCode"
+            value={referralCode}
+            onChange={this.handleChange}
             className="form-control mb-4"
+            required
           ></input>
           <a href="" target="_blank">
             Terms and Conditions
@@ -217,10 +225,10 @@ class Signup extends Component {
               SIGNING UP...
             </button>
           ) : (
-            <button className="btn btn-primary" onClick={this.handleSubmit}>
-              SIGNUP
-            </button>
-          )}
+              <button className="btn btn-primary" onClick={this.handleSubmit}>
+                SIGNUP
+              </button>
+            )}
         </form>
       </div>
     );

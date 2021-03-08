@@ -8,7 +8,7 @@ import PaymentAlert from "../paymentAlert/PaymentAlert";
 import Popover from "@material-ui/core/Popover";
 import Axios, { assetsURL } from "../../services/Axios";
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
-
+let refreshTokenInterval=null
 class header extends Component {
   constructor() {
     super();
@@ -26,6 +26,10 @@ class header extends Component {
 
   componentDidMount = async () => {
     if (localStorage.getItem("token")) {
+
+      this.refreshUserTokenForAllEbayAccounts();
+      refreshTokenInterval = setInterval(() => this.refreshUserTokenForAllEbayAccounts(), 7100000);
+
       await Axios.get("/payment/rates")
         .then((res) => {
           //rates = res.data[res.data.length - 1];
@@ -52,6 +56,18 @@ class header extends Component {
         }
     }
   };
+
+  componentWillUnmount = async () => {
+
+    clearInterval(refreshTokenInterval);
+
+  }
+
+  refreshUserTokenForAllEbayAccounts = async () => {
+
+    let res = await Axios.post('/ebayAuth/refreshtokens/');
+
+  }
 
   logoutHandler = () => {
     localStorage.removeItem("token");
@@ -124,6 +140,24 @@ class header extends Component {
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
               </Link>
+            </li>            
+            <li class="nav-item">
+              <a
+                href="/accounts"
+                className="nav-link"
+                style={{ color: "white" }}
+              >
+                Accounts
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="/accounting"
+                className="nav-link"
+                style={{ color: "white" }}
+              >
+                Accounting
+              </a>
             </li>
 {/*            <li class="nav-item">
               <Link

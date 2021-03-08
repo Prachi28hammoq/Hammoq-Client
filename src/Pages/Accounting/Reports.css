@@ -1,0 +1,76 @@
+.ebay-reports-datepicker {
+    display: inline-block;
+    margin: 0px 10px;
+}
+
+.ebay-reports-datepicker > label {
+    margin-right: 5px;
+    color: #255C99;
+    font-style: bold;
+}
+
+select {
+    padding: 2px;
+}
+
+.ebay-reports-control-bar {
+    display: inline-block !important;
+    border: 1px solid #9FA2B2;
+}
+
+.ebay-reports-progress-bar {
+    border-bottom: 1px solid #26C485;
+}
+
+.ebay-reports-progress-bar-indicator {
+    background-color: #26C485;
+    padding: 2px 3px;
+    width: 100%;
+}
+
+.ebay-reports-profits-expenses-bar {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    height: 7vh;
+    border: 1px solid grey;
+    background-color: #f0f2f5;
+}
+
+.profit-progress-bar {
+    margin: 0px;
+    display: inline-flex;
+    background-color: #53A548;
+    height: 11px;
+    width: 50%;
+}
+
+.expenses-progress-bar {
+    display: inline-flex;
+    background-color: #B6465F;
+    height: 11px;
+    width: 50%;
+}
+
+.ebay-reports-profit-expenses-labels {
+    flex: 1;
+    flex-flow: row;
+}
+
+.ebay-reports-profit-label {
+    display: inline-flex;
+    height: 100%;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    color: #7E7F9A;
+}
+
+.ebay-reports-expenses-label {
+    display: inline-flex;
+    height: 100%;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    color: #7E7F9A;
+}

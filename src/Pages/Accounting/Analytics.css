@@ -1,0 +1,14 @@
+.ebay-analytics-control-bar {
+    display: inline-block !important;
+    border: 1px solid #9FA2B2;
+}
+
+.ebay-analytics-progress-bar {
+    border-bottom: 1px solid #26C485;
+}
+
+.ebay-analytics-progress-bar-indicator {
+    background-color: #26C485;
+    padding: 2px 3px;
+    width: 100%;
+}
