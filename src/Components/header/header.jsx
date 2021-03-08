@@ -141,7 +141,7 @@ class header extends Component {
                 Basic Listing
               </Link>
             </li>            
-            <li class="nav-item">
+{/*            <li class="nav-item">
               <a
                 href="/accounts"
                 className="nav-link"
@@ -159,7 +159,7 @@ class header extends Component {
                 Accounting
               </a>
             </li>
-{/*            <li class="nav-item">
+            <li class="nav-item">
               <Link
                 to="/messages"
                 className="nav-link"
