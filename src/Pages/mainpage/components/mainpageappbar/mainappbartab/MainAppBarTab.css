@@ -1,0 +1,15 @@
+.main-app-bar-tab {
+    display: inline-block;
+    padding: 16px 10px;
+    margin: 0px 20px;
+    color: white;
+    font-size: 1.2em;
+}
+
+.main-app-bar-tab.active {
+    background-color: rgba(255,255,255,.2);
+}
+
+.main-app-bar-tab:hover {
+    cursor: pointer;
+}

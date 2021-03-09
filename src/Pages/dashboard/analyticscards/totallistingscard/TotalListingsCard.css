@@ -1,0 +1,26 @@
+.total-listings-card {
+    display: inline-block;
+    width: 17%;
+    height: 170px;
+    border: 1px solid grey;
+    vertical-align: top;
+    margin-left: 30px;
+}
+
+.total-listings-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.total-listings-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    font-size: 1.9em;
+    font-weight: bold;
+}

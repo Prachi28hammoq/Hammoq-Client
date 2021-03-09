@@ -1,0 +1,25 @@
+.signup-page-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signup-page-box {
+    padding: 20px 40px;
+    display: inline-flex;
+    border: 1px solid #2185d0;
+    border-radius: 4px;
+    background-color: #F2FDFF;
+}
+
+.signup-page-error-messages {
+    position: absolute;
+    top: 80%;
+}
+
+.signup-page-success-message {
+    position: absolute;
+    top: 80%;
+}

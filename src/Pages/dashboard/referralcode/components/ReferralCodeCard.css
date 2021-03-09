@@ -1,0 +1,32 @@
+.referral-code-card {
+    width: 50%;
+    border: 2px solid #21ba45;
+    border-radius: 4px;
+}
+
+.referral-code-card-label {
+    display: flex;
+    justify-content: center;
+    height: 25px;
+    background-color: #21ba45;
+    color: white;
+    font-size: 1.2em;
+}
+
+.referral-code-card-empty-value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    font-size: 1em;
+    color: #9F9F92;
+    font-style: italic;
+}
+
+.referral-code-card-value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    font-size: 1.2em;
+}

@@ -1,0 +1,26 @@
+.total-earnings-card {
+    display: inline-block;
+    width: 17%;
+    height: 170px;
+    border: 1px solid grey;
+    margin-left: 30px;
+    vertical-align: top;
+}
+
+.total-earnings-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.total-earnings-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    font-size: 1.9em;
+    font-weight: bold;
+}

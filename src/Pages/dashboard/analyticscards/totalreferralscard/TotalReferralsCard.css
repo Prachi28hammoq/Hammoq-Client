@@ -1,0 +1,24 @@
+.total-referrals-card {
+    display: inline-block;
+    width: 17%;
+    height: 170px;
+    border: 1px solid grey;
+}
+
+.total-referrals-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.total-referrals-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    font-size: 1.9em;
+    font-weight: bold;
+}
