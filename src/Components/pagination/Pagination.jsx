@@ -14,10 +14,10 @@ function Pagination({curPage, totalPage, rowPerPage, next, previous, onRowNumber
             <div>
                 {curPage}-{totalPage}
                 <button className="btn btn-link" onClick={() => previous(curPage-1)}>
-                    <i class="fas fa-chevron-left"></i>
+                    <i className="fas fa-chevron-left"></i>
                 </button>
                 <button className="btn btn-link" onClick={() => next(curPage+1)}>
-                    <i class="fas fa-chevron-right"></i>
+                    <i className="fas fa-chevron-right"></i>
                 </button>
             </div>
         </div>

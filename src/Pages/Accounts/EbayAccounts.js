@@ -90,11 +90,14 @@ const EbayAccounts = (props) => {
 
   const openEbayUserAuthorizationWindow = async () => {
 
-    let res = await Axios.get('/ebayAuth/authorizationUrl');
+    Axios.get("/ebay/consent")
+      .then((response) => {
+        var authWindow = window.open(response.data.authURL, "_blank");
+      })
 
-    if (res?.data?.authorizationUrl?.length > 0) {
-      window.open(res?.data?.authorizationUrl, 'ebayAuthorizationAndContentWindow', 'width=1000, height: 400');
-    }
+      .catch((err) => {
+        console.log(err) || alert(JSON.stringify({ err: err }));
+      });
   }
 
   const sendAuthorizationToken = async (location) => {

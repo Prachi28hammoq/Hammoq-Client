@@ -396,7 +396,7 @@ class Searchcart extends Component {
                       });
                     }}
                   >
-                    <i class="fa fa-sort" aria-hidden="true"></i>
+                    <i className="fa fa-sort" aria-hidden="true"></i>
                     <b>DATE</b>
                   </button>
                 </th>
