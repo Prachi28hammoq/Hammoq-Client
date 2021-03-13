@@ -64,9 +64,9 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props,ref) {
     {
       return 8 * itemSize;
     }
-    else if(itemData['.$1'] !== undefined && itemData.length > 1)
+    else if(itemCount > 0 && itemCount < 8)
     {
-      return itemData.forEach(getChildSize).reduce((a, b) => a + b, 0);
+      return itemCount * itemSize;
     }
     else
     {
@@ -277,6 +277,9 @@ class RightSection extends Component {
       handleDescriptionChange,
       handleDescriptionLabel,
       removeDescription,
+      handleMeasureChange,
+      handleMeasureLabel,
+      removeMeasure,
       handleSelectedLeaf,
       handleSelectedEbayCategory,
       handleOtherTitles,
@@ -298,6 +301,15 @@ class RightSection extends Component {
       handleShippingChange,
       handleMarketPlaceDataChange
     } = this.props;
+
+    if(data.isListingGood === undefined)
+    {
+      data.isListingGood = false;
+    }
+    if(data.ebayOptionalFieldsActive === undefined)
+    {
+      data.ebayOptionalFieldsActive = false;
+    }
 
     if (custom === false) {
       data.title = [
@@ -511,7 +523,7 @@ class RightSection extends Component {
             </div>
             <label>
             List:{"  "}
-            <ToggleButton style={data.isListingGood ? ({color:'white', background:'green'}) : ({color:'white', background:'red'})} name='isListingGood' selected={data.isListingGood} onClick={(e) => {handleToggleButton(data.isListingGood, 'isListingGood')}}>
+            <ToggleButton style={data.isListingGood ? ({color:'white', background:'green'}) : ({color:'white', background:'red'})} name='isListingGood' value={data.isListingGood} onClick={(e) => {handleToggleButton(data.isListingGood, 'isListingGood')}}>
             {data.isListingGood ? <SvgIcon><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></SvgIcon> : <SvgIcon><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></SvgIcon>}
             </ToggleButton>
             </label>
@@ -835,8 +847,6 @@ class RightSection extends Component {
                   className='condition__input'
                   value={data.condition_name}
                   onChange={handleChange}
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Without label' }}
                   >
                   <option value={data.condition_name} disabled>{data.condition_name}</option>
                   <option value='New'>New</option>
@@ -849,7 +859,7 @@ class RightSection extends Component {
               <ToggleButton
                 className='product__togglebtn'
                 variant='contained'
-                selected={data.ebayOptionalFieldsActive}
+                value={data.ebayOptionalFieldsActive}
                 onClick={toggleOptional}
               >
                 Optional
@@ -1108,6 +1118,43 @@ class RightSection extends Component {
                     Add new measurement
                   </button>
                 </div>
+                {extraMeasures.length !== 0 ? (
+            extraMeasures
+              .map((extraMeasurement) => {
+                return (
+                  <>
+                  <div className='measurement__body'>
+                    <input
+                      className={`form-control form-control-sm col-4 mr-3`}
+                      type='text'
+                      name='label'
+                      id={extraMeasurement.id}
+                      value={extraMeasurement.label}
+                      onChange={(e) => handleMeasureLabel(extraMeasurement.id, e)}
+                      placeholder='Measurement'
+                    />
+                    :-
+                    <input
+                      className={'form-control form-control-sm col-4 mr-3'}
+                      type='text'
+                      name='value'
+                      id={extraMeasurement.id}
+                      value={extraMeasurement.val}
+                      onChange={(e) => handleMeasureChange(extraMeasurement.id, e)}
+                      placeholder='Value'
+                      />
+                    <button
+                      className='btn'
+                      onClick={(e) => removeMeasure(extraMeasurement.id, e)}
+                    >
+                      <div className='fa fa-minus-square ml-3'></div>
+                    </button>
+                  </div>
+                  </>
+                );
+              })
+          ) : (" ")
+              }
               </div>
             </>
           )}
@@ -1125,10 +1172,10 @@ class RightSection extends Component {
                       ListboxComponent={ListboxComponent}
                       renderGroup={renderGroup}
                       options={ebayCategoryDropDownItems}
-                      getOptionLabel={(option) => option.categoryName}
+                      getOptionLabel={(option) => option.categoryName.toString()}
                       renderInput={(params) => (
                         <TextField
-                          placeholder={data.ebayCategoryField ? data.ebayCategoryField : ""}
+                          value={data.ebayCategoryField ? data.ebayCategoryField : ""}
                           {...params}
                           style={{
                             borderRadius: 7,
@@ -1280,7 +1327,7 @@ class RightSection extends Component {
                         }
                         renderInput={(params) => (
                           <TextField
-                            placeholder={data.domesticShippingService ? data.domesticShippingService.Description : ""}
+                            value={data.domesticShippingService ? data.domesticShippingService.Description : ""}
                             {...params}
                           />
                         )}
@@ -1368,7 +1415,7 @@ class RightSection extends Component {
                         }
                         renderInput={(params) => (
                           <TextField
-                            placeholder={data.internationalShippingService ? data.internationalShippingService.Description : ""}
+                            value={data.internationalShippingService ? data.internationalShippingService.Description : ""}
                             {...params}
                           />
                         )}
@@ -1444,7 +1491,7 @@ class RightSection extends Component {
               <div className='dom__body2'>
               <button
                 type='button'
-                onClick={(e) => {handleCheckboxToggle(!data.bestOfferActive, 'bestOfferActive')}}
+                onClick={(e) => {handleToggleButton(!data.bestOfferActive, 'bestOfferActive')}}
                 className='button__q5'
               >
                 {data.bestOfferActive
@@ -1493,7 +1540,7 @@ class RightSection extends Component {
               </>
             )
             :
-            data.prodStatus && data.prodStatus === 'submit'?
+            data.prodStatus && data.prodStatus === 'draft'?
               (
                 <>
                 <button 
@@ -1502,7 +1549,7 @@ class RightSection extends Component {
                 Save to Draft
                 </button>
                 <button className='submit'
-                onClick={(e) => {onSubmit(e, "submit");}}>
+                onClick={(e) => {onSubmit(e, "inventory");}}>
                 List
                 </button>
                 </>
@@ -1516,8 +1563,8 @@ class RightSection extends Component {
                 Save To Draft
                 </button>
                 <button className='submit'
-                onClick={(e) => {onSubmit(e, "inventory");}}>
-                List
+                onClick={(e) => {onSubmit(e, "save");}}>
+                Save
                 </button>
                 </>
             )

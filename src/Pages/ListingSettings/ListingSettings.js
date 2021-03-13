@@ -276,6 +276,30 @@ const ListingSettings = () => {
       }
     }
 
+    if(!isReturnAccept && !intlReturnAccepted)
+    {
+      alert("Please complete Domestic and/or International Returns Policies.");
+      return
+    }
+
+    else if(!isReturnAccept && intlReturnAccepted)
+    {
+      alert("Please complete the Domestic Return Policy section.");
+      return
+    }
+
+    if(!enableEbayAutoPay && !allowPaypal)
+    {
+      alert("Please select PayPal or Ebay Managed Payments.");
+      return
+    }
+
+    if(allowPaypal && !paypalEmail)
+    {
+      alert("Please fill out the applicable PayPal Email Address.");
+      return
+    }
+
     let mercari_tags = mercariTags.map((e) => e.trim());
 
     var ListSettingsObj = {
@@ -315,8 +339,6 @@ const ListingSettings = () => {
         returnShipPaidBy: returnShipBy,
       },
     };
-
-    console.log(flatShippingRules)
 
     var intlShippingObj = {
       incrFromDomestic: incrByDomestic,
@@ -364,11 +386,6 @@ const ListingSettings = () => {
       basicSettings: basicObj,
       configSettings: configObj,
     };
-
-    //var _id = clientID;
-
-    //console.log("Client ID: " + clientID);
-    //console.log("Posted Object: " + finalObj);
 
     Axios.post("/clientDetails/listingSettings", finalObj)
       .then((res) => {

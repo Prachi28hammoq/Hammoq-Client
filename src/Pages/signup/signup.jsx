@@ -96,13 +96,10 @@ class Signup extends Component {
       })
       .catch((err) => {
         this.setState({ isSubmitting: false });
-        console.log(JSON.stringify(err));
         if (err) {
           return alert(err);
       }
-     console.log(err);
         alert("Something went wrong. Can't SignUp");
-        console.log(err);
       });
   };
 

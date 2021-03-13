@@ -292,7 +292,7 @@ class BasicForm extends Component {
     ) {
       flag = 1;
     }
-    if (mplace == "true" && flag == 0) {
+    if (mplace && flag == 0) {
       return alert("Please choose any marketplace to list the product");
     }
 

@@ -4,21 +4,14 @@ import Axios from "../../../services/Axios";
 //import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-
-//const customStyles = 
-//{
-//  content : 
-//  {
-//    top                   : '50%',
-//    left                  : '50%',
-//    right                 : 'auto',
-//    bottom                : 'auto',
-//    marginRight           : '-50%',
-//    transform             : 'translate(-50%, -50%)'
-//  }
-//};
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 
 export default class EbayCategoryModal extends Component {
 	elRefs = React.createRef([]);
@@ -115,14 +108,15 @@ export default class EbayCategoryModal extends Component {
 	{
 		const { itemCategoryList, categorySelected } = this.state;
 		this.state.renderMap.push(<React.Fragment key="BaseMenuFragment">
-					<FormControl className="BaseMenu" key = 'BaseMenuFormControl'>
+					<FormControl className="BaseMenu" key = 'BaseMenuFormControl' style={{'width':'auto', 'height':'100%'}}>
 				    <Select
 				        multiple
 				        native
 				        ref={this.elRefs}
 				        value={categorySelected}
 				        onChange={(e) => this.handleChange(itemCategoryList.data.rootCategoryNode.childCategoryTreeNodes, e)}
-				        inputProps={{id: 'select-multiple-native',}}>
+				        style={{'height':'100%'}}
+				        inputProps={{id: 'select-multiple-native', style:{'height':'95%'}}}>
 				        {Object.keys(itemCategoryList.data.rootCategoryNode.childCategoryTreeNodes).map((childCategoryTreeNodes, index) => (
 				            <option key={itemCategoryList.data.rootCategoryNode.childCategoryTreeNodes[index].category.categoryId} value={index}>
 				              {itemCategoryList.data.rootCategoryNode.childCategoryTreeNodes[index].category.categoryName}
@@ -152,13 +146,14 @@ export default class EbayCategoryModal extends Component {
 		const currentCategory = newCurrentCategory;
 		const { categorySelected } = this.state;
 		this.state.renderMap.push(<React.Fragment key={newCurrentCategory.category.categoryName}>
-			<FormControl className="categorySelected" key = {newCurrentCategory.category.categoryName}>
+			<FormControl className="categorySelected" key = {newCurrentCategory.category.categoryName} style={{'width':'auto', 'height':'100%'}}>
 		        <Select
 		          multiple
 		          native
 		          value={categorySelected}
 		          onChange={(e) => this.handleChange(currentCategory.childCategoryTreeNodes, e)}
-		          inputProps={{id: 'select-multiple-native',}}>
+		          style={{'height':'100%'}}
+		          inputProps={{id: 'select-multiple-native', style:{'height':'95%'}}}>
 		          {Object.keys(currentCategory.childCategoryTreeNodes).map((childCategoryTreeNodes, index) => (
 		            <option key={currentCategory.childCategoryTreeNodes[index].category.categoryId} value={index}>
 		              {currentCategory.childCategoryTreeNodes[index].category.categoryName}
@@ -173,23 +168,28 @@ export default class EbayCategoryModal extends Component {
   	{
   		const { 
   			//renderMap, 
-  			showModal, 
+  			showModal,
   			isLeafSelected } = this.state;
         return(
 		<div>
-        	<Modal show={showModal} size='xl'>
-		        <Modal.Header closeButton>
-          			<Modal.Title>Ebay Category Selector</Modal.Title>
-        		</Modal.Header>
-        		<Modal.Body>
+        	<Dialog open={showModal}>
+		        <DialogTitle closeButton>
+          			<DialogTitle>Ebay Category Selector</DialogTitle>
+      			      {!showModal ? (
+				        <IconButton aria-label="close" onClick={this.closeModal}>
+				          <CloseIcon />
+				        </IconButton>
+				      ) : null}
+        		</DialogTitle>
+        		<DialogContent dividers style={{'min-height':'60vh', 'max-height':'60vh'}}>
 			        <>
 				    {this.state.renderMap.map(item => (
 				    <React.Fragment key={item.id}>{item}</React.Fragment>
 				    ))}
 				    </>
-			    </Modal.Body>
+			    </DialogContent>
 
-				<Modal.Footer>
+				<DialogActions>
 				    <Button variant="secondary" onClick={this.resetSelection}>
             			Reset Selection
           			</Button>
@@ -199,8 +199,8 @@ export default class EbayCategoryModal extends Component {
           			<Button variant="primary" onClick={this.selectedLeafModalClose} disabled={!isLeafSelected}>
            				Select Category
           			</Button>
-        		</Modal.Footer>
-	        </Modal>
+        		</DialogActions>
+	        </Dialog>
       	</div>
         );
 	}

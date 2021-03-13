@@ -9,10 +9,14 @@ import { evaluateTree } from "../utils/parser";
 //import $ from "jquery";
 //import imageDataURI from "image-data-uri";
 import jwt_decode from "jwt-decode";
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import IconButton from '@material-ui/core/IconButton';
+import { nanoid } from 'nanoid';
+import { useHistory } from "react-router-dom";
 
 class EditForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       data: {
         line1: { line1: "", value1: "" },
@@ -416,10 +420,15 @@ class EditForm extends Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    const { data } = this.state;
+    const { data, bestOfferSettings } = this.state;
     if (name === "price")
     {
       data["profit"] = value - data["costOfGoods"];
+      if(bestOfferSettings)
+      {
+        if(bestOfferSettings.acceptOfferOf) data['bestOfferAcceptFloorValue'] = value * (bestOfferSettings.acceptOfferOf/100);
+        if(bestOfferSettings.declineOfferOf) data['bestOfferDeclineCeilingValue'] =  value * (bestOfferSettings.declineOfferOf/100);
+      }
     }
     if (name === "costOfGoods")
     {
@@ -808,7 +817,7 @@ class EditForm extends Component {
     const { images } = this.state;
 
     const options = {
-      maxSizeMB: 0.3,
+      maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
@@ -835,7 +844,7 @@ class EditForm extends Component {
     const count = files.length;
 
     const options = {
-      maxSizeMB: 0.3,
+      maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
@@ -1255,7 +1264,7 @@ class EditForm extends Component {
     const url = "/ebay/itemAspects/" + category.categoryId;
     var { data } = this.state;
 
-    data['categoryID'] = category.categoryId;
+    data['ebay']['ebayCategoryID'] = category.categoryId;
     Axios.get(url)
       .then((response) => response.data)
       .then((data) => {
@@ -1361,6 +1370,10 @@ class EditForm extends Component {
     this.setState({data});
   };
 
+  goToPreviousPath = () => {
+    this.props.history.goBack();
+  }
+
   render = () => {
     const {
       data,
@@ -1373,12 +1386,12 @@ class EditForm extends Component {
       Poshmark,
       Mercari,
       //templatename,
-      //othersbool,
-      //others,
-      //othersstate,
-      //otherfromdb,
-      //othertolist,
-      //othersurl,
+      othersbool,
+      others,
+      othersstate,
+      otherfromdb,
+      othertolist,
+      othersurl,
       //ebayurl,
       //poshmarkurl,
       //mercariurl,
@@ -1397,12 +1410,20 @@ class EditForm extends Component {
     return (
       <div className='app'>
         <div className='app__body'>
+        <div style={{'display':'flex', 'alignItems': 'flex-start'}}>
+        <IconButton aria-label="close" onClick={this.goToPreviousPath}>
+          <KeyboardBackspaceIcon />
+        </IconButton>
+        </div>
           <LeftSection
+            key='LeftSection'
+            nanoid={nanoid}
             data={data}
             images={images}
             Ebay={Ebay}
             Poshmark={Poshmark}
             Mercari={Mercari}
+            others={others}
             isSubmitting={isSubmitting}
             handleChange={this.handleChange}
             removeImg={this.removeImg}
@@ -1414,8 +1435,11 @@ class EditForm extends Component {
             productid = {this.state.productid}
             clientid = {this.state.clientid}
             extraDescriptions={this.state.extraDescriptions}
+            extraMeasures={extraMeasures}
               />
           <RightSection
+            key='RightSection'
+            nanoid={nanoid}
             data={data}
             handleChange={this.handleChange}
             brandacc={brandacc}

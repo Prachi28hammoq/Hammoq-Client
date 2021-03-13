@@ -108,15 +108,18 @@ class LeftSection extends Component {
       data,
       handleChange,
       images,
+      extraMeasures,
       //Ebay,
       //Poshmark,
       //Mercari,
+      others,
       handleBulkUpload,
       handleImageChange,
       removeImg,
       extraDescriptions,
       //toggleSelectedOthersWebsite,
-      toggleSelectedWebsite
+      toggleSelectedWebsite,
+      nanoid
     } = this.props;
 
     if (customdesc === false) {
@@ -251,6 +254,14 @@ class LeftSection extends Component {
         }
       }
 
+      for (let i = 0; i < extraMeasures.length; i++) {
+          if(extraMeasures[i].value !== "" && extraMeasures[i].value !== null && extraMeasures[i].value !== undefined && extraMeasures[i].value !== "No Suggested Values" && extraMeasures[i].value !== "undefined")
+          {
+            data.shortDescription +=
+            extraMeasures[i].label + ": " + extraMeasures[i].val + "\n";
+          }
+        }
+
       if(data.companyBlurb !== undefined)
       {
         data.shortDescription+=
@@ -270,7 +281,7 @@ class LeftSection extends Component {
           <div className="row m-auto">
             {images.map((image, idx) => {
               return (
-                <div className="col-12 col-lg-4 px-2">
+                <div className="col-12 col-lg-4 px-2" key={nanoid(4)}>
                   <div
                     className="modal fade bd-example-modal-sm"
                     id="addTemplateModal1"
@@ -408,6 +419,24 @@ class LeftSection extends Component {
                   >Poshmark</button>
           <button className='outline__button'>Other</button>
         </div>
+        {others && others.length !== 0 ?
+        (
+          others.map((other) => {
+                return (
+                  <>
+                  <div className='store__buttons'>
+                  <button 
+                    className="fill__button"
+                    id={nanoid(3)}
+                  >{other}</button>
+                  </div>
+                  </>
+                  )})
+        ) 
+        : 
+        (
+        " "
+        )}
         <div className='store__buttons'>
           <button className={`${data["delist"]["check"] ? "fill__button_red" : "outline__button_red"} w-100`}
                   onClick={() => {toggleSelectedWebsite("delist");}}

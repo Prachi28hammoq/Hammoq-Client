@@ -24,8 +24,8 @@ let socket = socketIOClient(serverURL, {path: '/chat/'},
 
 if(process.env.REACT_APP_STAGE === 'devlocal')
 {
-    URL = "http://localhost:8000/";
-    socket = socketIOClient(URL, {
+    let url = "http://localhost:8000/";
+    socket = socketIOClient(url, {
     transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
     });
 }
