@@ -44,7 +44,7 @@ export default class EbayCategoryModal extends Component {
     {
 	    //const agentid = localStorage.getItem("agent");
 	    //const url = `/ebay/testDraw/${agentid}`;
-	    const url = '/ebay/categoryTree/';
+	    const url = '/ebay/categoryTree';
 	    Axios.get(url)
 	    .then(response => response.data)
 	    .then((data) => {
