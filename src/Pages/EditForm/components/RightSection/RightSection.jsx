@@ -1172,7 +1172,7 @@ class RightSection extends Component {
                       ListboxComponent={ListboxComponent}
                       renderGroup={renderGroup}
                       options={ebayCategoryDropDownItems}
-                      getOptionLabel={(option) => option.categoryName.toString()}
+                      getOptionLabel={(option) => option.categoryName}
                       renderInput={(params) => (
                         <TextField
                           value={data.ebayCategoryField ? data.ebayCategoryField : ""}
@@ -1319,7 +1319,7 @@ class RightSection extends Component {
                         className='dom__input'
                         value={data.domesticShippingService}
                         options={shippingDomesticDropDownItems}
-                        getOptionLabel={(option) => option.Description.toString()}
+                        getOptionLabel={(option) => option.Description}
                         onChange={(event, value, reason) =>
                           reason === "select-option"
                             ? handleShippingChange(event, value, 'domesticShippingService')
@@ -1406,7 +1406,7 @@ class RightSection extends Component {
                         className='dom__input'
                         value={data.internationalShippingService}
                         options={shippingInternationalDropDownItems}
-                        getOptionLabel={(option) => option.Description.toString()}
+                        getOptionLabel={(option) => option.Description}
                         style={{ width: 300 }}
                         onChange={(event, value, reason) =>
                           reason === "select-option"
