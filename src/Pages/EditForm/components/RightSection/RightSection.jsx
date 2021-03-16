@@ -361,7 +361,7 @@ class RightSection extends Component {
         val === undefined || val === "" ? title : title + " " + val
       );
     }
-   if(data.domesticShippingService!=null)
+   if(data.ebayCategoryField != null)
    {
      console.log(data.activity)
     
