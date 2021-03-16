@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 var baseURL = "";
-var assetsURL = "https://storage.googleapis.com/hammoq-assets/assets/";
+var assetsURL = "https:///hammoq-assets.storage.googleapis.com/assets/";
 
 if(process.env.REACT_APP_STAGE === 'devlocal')
 {
