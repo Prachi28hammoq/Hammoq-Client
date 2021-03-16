@@ -63,6 +63,7 @@ class EditForm extends Component {
       othersstate: [],
       otherfromdb: [],
       othertolist: [],
+
       othersurl: [],
       ebayurl: "",
       poshmarkurl: "",
@@ -90,6 +91,7 @@ class EditForm extends Component {
       shippingDropDownItems: [],
       shippingDomesticDropDownItems: [],
       shippingInternationalDropDownItems: [],
+
       companyBlurb: "",
       originZipCode: 0,
       calculatedShippingActive: false,
@@ -201,7 +203,7 @@ class EditForm extends Component {
     ).then((res) => {
       const { 
         images, 
-        data 
+        //data 
       } = this.state;
       
       console.log(res.data.products[0])
@@ -276,8 +278,8 @@ class EditForm extends Component {
       {
         if(res.data.products[0].domesticShippingService && res.data.products[0].domesticShippingService.length > 20)
         {
-           let domesticShippingService =  JSON.parse(res.data.products[0].domesticShippingService)
-           this.state.data.domesticShippingService =  domesticShippingService;
+          let domesticShippingService = JSON.parse(res.data.products[0].domesticShippingService)
+          this.state.data.domesticShippingService = domesticShippingService;
         }
         if(res.data.products[0].internationalShippingService && res.data.products[0].internationalShippingService.length > 20)
         {
@@ -567,10 +569,8 @@ class EditForm extends Component {
     });
 
     //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
-    
     if(data.ebay.check)
     {
-      console.log(data.ebay)
       this.state.data['ebay']['ebayListingType'] = 'FixedPriceItem';
 
       switch(data.condition_name)
@@ -616,10 +616,9 @@ class EditForm extends Component {
         this.state.data['ebay']['ebayInternationalRefundOption'] = data.internationalReturnsRefundGivenAs;
         this.state.data['ebay']['ebayInternationalReturnsWithin'] = data.internationalReturnsWithin;
       }
-      console.log(data.domesticShippingService.ShippingService)
+
       if(data.domesticShippingService)
       {
-        
         this.state.data['ebay']['ebayDomesticShippingService'] = data.domesticShippingService.ShippingService;
       }
 
