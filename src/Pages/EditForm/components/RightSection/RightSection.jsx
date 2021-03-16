@@ -267,7 +267,7 @@ class RightSection extends Component {
       showOtherTitles,
       gtin,
     } = this.state;
-
+    
     const {
       data,
       handleChange,
@@ -301,7 +301,7 @@ class RightSection extends Component {
       handleShippingChange,
       handleMarketPlaceDataChange
     } = this.props;
-
+    console.log(data.domesticShippingService)
     if(data.isListingGood === undefined)
     {
       data.isListingGood = false;
@@ -361,7 +361,10 @@ class RightSection extends Component {
         val === undefined || val === "" ? title : title + " " + val
       );
     }
-
+   if(data.domesticShippingService!=null)
+   {
+     console.log(data.activity)
+    
     return (
       <div className='right__app'>
         <EbayCategoryModal
@@ -1173,6 +1176,7 @@ class RightSection extends Component {
                       renderGroup={renderGroup}
                       options={ebayCategoryDropDownItems}
                       getOptionLabel={(option) => option.categoryName}
+                      
                       renderInput={(params) => (
                         <TextField
                           value={data.ebayCategoryField ? data.ebayCategoryField : ""}
@@ -1578,6 +1582,11 @@ class RightSection extends Component {
         </div>
       </div>
     );
+   }
+   else
+   {
+     return null;
+   }
   };
 }
 
