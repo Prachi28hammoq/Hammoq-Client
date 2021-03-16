@@ -1175,6 +1175,7 @@ class RightSection extends Component {
                       ListboxComponent={ListboxComponent}
                       renderGroup={renderGroup}
                       options={ebayCategoryDropDownItems}
+                      value={data.ebayCategoryField}
                       getOptionLabel={(option) => option.categoryName}
                       
                       renderInput={(params) => (
