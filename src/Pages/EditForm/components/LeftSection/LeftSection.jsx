@@ -123,121 +123,83 @@ class LeftSection extends Component {
     } = this.props;
 
     if (customdesc === false) {
-      data.shortDescription =
-        (data.title !== undefined
-          ? data.title !== ""
-            ? data.title + "\n" + "\n"
-            : ""
-          : "") +
-        (data.brand !== undefined
-          ? data.brand !== ""
-            ? "Brand: " + data.brand + "\n"
-            : ""
-          : "") +
-        (data.model !== undefined
-          ? data.model !== ""
-            ? "Model: " + data.model + "\n"
-            : ""
-          : "") +
-        (data.category !== undefined
-          ? data.category !== ""
-            ? "Category: " + data.category + "\n"
-            : ""
-          : "") +
-        (data.colorShade !== undefined
-          ? data.colorShade !== ""
-            ? "Color: " + data.colorShade + "\n"
-            : ""
-          : "") +
-        (data.material !== undefined
-          ? data.material !== ""
-            ? "Material: " + data.material + "\n"
-            : ""
-          : "") +
-        (data.style !== undefined
-          ? data.style !== ""
-            ? "Style: " + data.style + "\n"
-            : ""
-          : "") +
-        (data.pattern !== undefined
-          ? data.pattern !== ""
-            ? "Pattern: " + data.pattern + "\n"
-            : ""
-          : "") +
-        (data.size !== undefined
-          ? data.size !== ""
-            ? "Size: " + data.size + "\n"
-            : ""
-          : "") +
-        (data.seasonOrWeather !== undefined
-          ? data.seasonOrWeather !== ""
-            ? "Season/Weather: " + data.seasonOrWeather + "\n"
-            : ""
-          : "") +
-        (data.care !== undefined
-          ? data.care !== ""
-            ? "Care: " + data.care + "\n"
-            : ""
-          : "") +
-        (data.madeIn !== undefined
-          ? data.madeIn !== ""
-            ? "Made in: " + data.madeIn + "\n"
-            : ""
-          : "") +
-        (data.line1 !== undefined
-          ? data.line1 !== ""
-            ? data.line1 + ": " + data.value1 + "\n"
-            : ""
-          : "") +
-        (data.line2 !== undefined
-          ? data.line2 !== ""
-            ? data.line2 + ": " + data.value2 + "\n"
-            : ""
-          : "") +
-        (data.line3 !== undefined
-          ? data.line3 !== ""
-            ? data.line3 + ": " + data.value3 + "\n"
-            : ""
-          : "") +
-        (data.line4 !== undefined
-          ? data.line4 !== ""
-            ? data.line4 + ": " + data.value4 + "\n"
-            : ""
-          : "") +
-        (data.line5 !== undefined
-          ? data.line5 !== ""
-            ? data.line5 + ": " + data.value5 + "\n"
-            : ""
-          : "") +
-        (data.line6 !== undefined
-          ? data.line6 !== ""
-            ? data.line6 + ": " + data.value6 + "\n"
-            : ""
-          : "") +
-        (data.line7 !== undefined
-          ? data.line7 !== ""
-            ? data.line7 + ": " + data.value7 + "\n"
-            : ""
-          : "") +
-        (data.line8 !== undefined
-          ? data.line8 !== ""
-            ? data.line8 + ": " + data.value8 + "\n"
-            : ""
-          : "");
+      if(data !== null && data !== undefined && data !== "undefined")
+      {
+        data.shortDescription = "";
+          if(data.title !== undefined && data.title !== "" && data.title !== null && data.title !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + data.title + "\n" + "\n";
+          }
 
-        if(extraDescriptions.length <= 0 && data['waist'] > 0)
-        {
-          data.shortDescription += 'Waist: ' + data['waist'] + "\n";
-        }
+          if(data.brand !== undefined && data.brand !== "" && data.brand !== null && data.brand !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Brand: " + data.brand + "\n"
+          }
 
-        if(extraDescriptions.length <= 0 && data['rise'] > 0)
-        {
-          data.shortDescription += 'Rise: ' + data['rise'] + "\n";
-        }
+          if(data.model !== undefined  && data.model !== "" && data.model !== null && data.model !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Model: " + data.model + "\n"
+          }
 
-        if(extraDescriptions.length <= 0 && data['inseam'] > 0)
-        {
-          data.shortDescription += 'Inseam: ' + data['inseam'] + "\n";
+          if(data.category !== undefined  && data.category !== "" && data.category !== null && data.category !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Category: " + data.category + "\n"
+          }
+
+          if(data.colorShade !== undefined  && data.colorShade !== "" && data.colorShade !== null && data.colorShade !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Color: " + data.colorShade + "\n"
+          }
+
+          if(data.material !== undefined  && data.material !== "" && data.material !== null && data.material !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Material: " + data.material + "\n"
+          }
+
+          if(data.style !== undefined  && data.style !== "" && data.style !== null && data.style !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Style: " + data.style + "\n"
+          }
+
+          if(data.pattern !== undefined  && data.pattern !== "" && data.pattern !== null && data.pattern !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Pattern: " + data.pattern + "\n"
+          }
+
+          if(data.size !== undefined  && data.size !== "" && data.size !== null && data.size !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Size: " + data.size + "\n"
+          }
+
+          if(data.seasonOrWeather !== undefined  && data.seasonOrWeather !== "" && data.seasonOrWeather !== null && data.seasonOrWeather !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Season/Weather: " + data.seasonOrWeather + "\n"
+          }
+
+          if(data.care !== undefined  && data.care !== "" && data.care !== null && data.care !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Care: " + data.care + "\n"
+          }
+
+          if(data.madeIn !== undefined  && data.madeIn !== "" && data.madeIn !== null && data.madeIn !== 'undefined')
+          {
+            data.shortDescription = data.shortDescription + "Made in: " + data.madeIn + "\n"
+          }
+
+          if(extraDescriptions.length <= 0 && data['waist'] > 0)
+          {
+            data.shortDescription += 'Waist: ' + data['waist'] + "\n";
+          }
+
+          if(extraDescriptions.length <= 0 && data['rise'] > 0)
+          {
+            data.shortDescription += 'Rise: ' + data['rise'] + "\n";
+          }
+
+          if(extraDescriptions.length <= 0 && data['inseam'] > 0)
+          {
+            data.shortDescription += 'Inseam: ' + data['inseam'] + "\n";
+          }
         }
 
       for (let i = 0; i < extraDescriptions.length; i++) {
