@@ -287,10 +287,10 @@ class EditForm extends Component {
           this.state.data.internationalShippingService = internationalShippingService;
         }
         if(res.data.products[0].ebayCategoryField && res.data.products[0].ebayCategoryField.length > 20)
-              {
-                let ebayCategoryField = JSON.parse(res.data.products[0].ebayCategoryField)
-                data["ebayCategoryField"] = ebayCategoryField;
-              }
+        {
+          let ebayCategoryField = JSON.parse(res.data.products[0].ebayCategoryField)
+          this.state.data.ebayCategoryField = ebayCategoryField;
+        }
       }
 
       if (res.data.products[0]._id) {
