@@ -286,6 +286,11 @@ class EditForm extends Component {
           let internationalShippingService = JSON.parse(res.data.products[0].internationalShippingService)
           this.state.data.internationalShippingService = internationalShippingService;
         }
+        if(res.data.products[0].ebayCategoryField && res.data.products[0].ebayCategoryField.length > 20)
+        {
+          let ebayCategoryField = JSON.parse(res.data.products[0].ebayCategoryField)
+          this.state.data.ebayCategoryField = ebayCategoryField;
+        }
       }
 
       if (res.data.products[0]._id) {
@@ -731,7 +736,7 @@ class EditForm extends Component {
     dataform.append("compPriceIncreaseMethod", data.compPriceIncreaseMethod);
     dataform.append("mercariHashtags", data.mercariHashtags);
     dataform.append("companyBlurb", data.companyBlurb);
-
+    dataform.append("ebayCategoryField", JSON.stringify(data.ebayCategoryField));
     dataform.append("isListingGood", data.isListingGood);
 
     ////////////////////EBAY////////////////////////////////
@@ -1273,7 +1278,7 @@ class EditForm extends Component {
       })
       .catch((err) => console.log(err));
 
-      data['ebayCategoryField'] = category.categoryName;
+      data['ebayCategoryField'] = category;
       this.setState({ data });
   };
 
