@@ -731,7 +731,7 @@ class EditForm extends Component {
     dataform.append("compPriceIncreaseMethod", data.compPriceIncreaseMethod);
     dataform.append("mercariHashtags", data.mercariHashtags);
     dataform.append("companyBlurb", data.companyBlurb);
-
+    dataform.appent("ebayCategoryField",data["ebayCategoryField"]);
     dataform.append("isListingGood", data.isListingGood);
 
     ////////////////////EBAY////////////////////////////////
