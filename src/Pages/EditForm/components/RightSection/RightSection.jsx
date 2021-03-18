@@ -141,7 +141,7 @@ class RightSection extends Component {
       productMessage: [],
       field: "",
       currentSuggestion: [],
-      gtin: "",
+      gtin: ""
     };
     this.ebayRef = React.createRef();
   }
@@ -266,8 +266,11 @@ class RightSection extends Component {
       custom,
       showOtherTitles,
       gtin,
+      didEbayCategoryLoad,
+      didDomesticshippingLoad,
+      didInternationalShippingLoad
     } = this.state;
-    
+
     const {
       data,
       handleChange,
@@ -301,11 +304,12 @@ class RightSection extends Component {
       handleShippingChange,
       handleMarketPlaceDataChange
     } = this.props;
-    console.log(data.domesticShippingService)
+
     if(data.isListingGood === undefined)
     {
       data.isListingGood = false;
     }
+
     if(data.ebayOptionalFieldsActive === undefined)
     {
       data.ebayOptionalFieldsActive = false;
@@ -361,10 +365,7 @@ class RightSection extends Component {
         val === undefined || val === "" ? title : title + " " + val
       );
     }
-   if(data.ebayCategoryField != null)
-   {
-     console.log(data.activity)
-    
+
     return (
       <div className='right__app'>
         <EbayCategoryModal
@@ -1170,17 +1171,22 @@ class RightSection extends Component {
                 <label htmlFor='Category' className='label__style_general'>
                   Ebay Category 1
                   <div className='category__alignment'>
+                    <button
+                      className='brz__btn '
+                      onClick={(e) => {handleSelectedEbayCategory('')}}
+                    >
+                      Clear
+                    </button>
                     <Autocomplete
                       disableListWrap
                       ListboxComponent={ListboxComponent}
                       renderGroup={renderGroup}
-                      options={ebayCategoryDropDownItems}
                       value={data.ebayCategoryField}
+                      options={ebayCategoryDropDownItems}
                       getOptionLabel={(option) => option.categoryName}
-                      
                       renderInput={(params) => (
                         <TextField
-                          value={data.ebayCategoryField ? data.ebayCategoryField : ""}
+                          placeholder={data.ebayCategoryField ? data.ebayCategoryField.categoryName : ""}
                           {...params}
                           style={{
                             borderRadius: 7,
@@ -1332,12 +1338,18 @@ class RightSection extends Component {
                         }
                         renderInput={(params) => (
                           <TextField
-                            value={data.domesticShippingService ? data.domesticShippingService.Description : ""}
+                            placeholder={data.domesticShippingService ? data.domesticShippingService.Description : ""}
                             {...params}
                           />
                         )}
                       />
                 </div>
+                <button
+                  className='brz__btn '
+                  onClick={(e) => {handleShippingChange(e, '', 'domesticShippingService')}}
+                >
+                  Clear
+                </button>
                 <div className='arrange__col_dom'>
                   <label htmlFor='CostDom' className='label__style'>
                     Cost
@@ -1420,12 +1432,18 @@ class RightSection extends Component {
                         }
                         renderInput={(params) => (
                           <TextField
-                            value={data.internationalShippingService ? data.internationalShippingService.Description : ""}
+                            placeholder={data.internationalShippingService ? data.internationalShippingService.Description : ""}
                             {...params}
                           />
                         )}
                       />
                 </div>
+                <button
+                  className='brz__btn '
+                  onClick={(e) => {handleShippingChange(e, '', 'internationalShippingService')}}
+                >
+                  Clear
+                </button>
                 <div className='arrange__col_dom'>
                   <label htmlFor='CostInt' className='label__style'>
                     Cost
@@ -1496,7 +1514,7 @@ class RightSection extends Component {
               <div className='dom__body2'>
               <button
                 type='button'
-                onClick={(e) => {handleToggleButton(!data.bestOfferActive, 'bestOfferActive')}}
+                onClick={(e) => {handleToggleButton(data.bestOfferActive, 'bestOfferActive')}}
                 className='button__q5'
               >
                 {data.bestOfferActive
@@ -1583,11 +1601,6 @@ class RightSection extends Component {
         </div>
       </div>
     );
-   }
-   else
-   {
-     return null;
-   }
   };
 }
 
