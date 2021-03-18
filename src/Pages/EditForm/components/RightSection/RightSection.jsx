@@ -1186,7 +1186,7 @@ class RightSection extends Component {
                       getOptionLabel={(option) => option.categoryName}
                       renderInput={(params) => (
                         <TextField
-                          placeholder={data.ebayCategoryField ? data.ebayCategoryField.categoryName : ""}
+                          placeholder={data.ebayCategoryField ? data.ebayCategoryField : ""}
                           {...params}
                           style={{
                             borderRadius: 7,
