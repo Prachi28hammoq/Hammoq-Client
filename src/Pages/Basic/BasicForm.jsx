@@ -98,9 +98,7 @@ class BasicForm extends Component {
         //console.log(data, "template data");
         this.setState({ templates: data.data.templates });
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      
     Axios.get("/password/getstatus/others").then(({ data }) => {
       //console.log(data, "other data");
       if (data.length > 0) {
@@ -157,7 +155,6 @@ class BasicForm extends Component {
         // socket.emit("cidinit", { cid: this.state.cid });
         // console.log(this.state.cid);
       })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
       Axios.get("/clientdetails/listingSettings")
       .then(({ data }) => {
@@ -171,7 +168,6 @@ class BasicForm extends Component {
         // socket.emit("cidinit", { cid: this.state.cid });
         // console.log(this.state.cid);
       })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
     // var uploader = new SocketIOFileUpload(socket);
     // uploader.listenOnInput(document.getElementById("bulk"));
