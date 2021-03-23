@@ -77,6 +77,7 @@ class BasicForm extends Component {
       templateId: "",
       productId: "",
       zipCode:"",
+      domesticShippingFreeShippingActive:false
       
       
     };
@@ -161,9 +162,10 @@ class BasicForm extends Component {
       Axios.get("/clientdetails/listingSettings")
       .then(({ data }) => {
        
-        
+        console.log(data)
         this.setState({
-          zipCode: data.settings[0].listing[0].zipCode
+          zipCode: data.settings[0].listing[0].zipCode,
+          domesticShippingFreeShippingActive: data.settings[0].shipping[0].freeShipping
         });
        
         // socket.emit("cidinit", { cid: this.state.cid });
@@ -400,6 +402,7 @@ class BasicForm extends Component {
     data.append("rate2", rate2);
     data.append("rate3", rate3);
     data.append("zipCode",this.state.zipCode)
+    data.append("domesticShippingFreeShippingActive",this.state.domesticShippingFreeShippingActive)
     data.append("profit",this.state.input4 - this.state.costOfGoods)
     data.append("prodStatus", "submitted");
 
