@@ -76,6 +76,9 @@ class BasicForm extends Component {
       templates: [],
       templateId: "",
       productId: "",
+      zipCode:"",
+      
+      
     };
     this.handleChange.bind(this);
   }
@@ -131,8 +134,6 @@ class BasicForm extends Component {
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        console.log({ data }, "client user value check");
-        console.log(data, "client detail");
         if (parseInt(data.balance) < 5 && data.savedCards.length > 0) {
           this.setState({ open: true });
         }else if(parseInt(data.balance) < 5 && data.savedCards.length == 0) {
@@ -147,11 +148,11 @@ class BasicForm extends Component {
           savedCards: data.savedCards,
           cid: data._id,
           offeredRate: data.offeredRate || {},
+          zipCode: data.zip
         });
         this.setState({ cid: data._id }, () =>
           localStorage.setItem("cid", this.state.cid)
         );
-
         // socket.emit("cidinit", { cid: this.state.cid });
         // console.log(this.state.cid);
       })
@@ -385,6 +386,7 @@ class BasicForm extends Component {
     data.append("rate1", rate1);
     data.append("rate2", rate2);
     data.append("rate3", rate3);
+    data.append("zipCode",this.state.zipCode)
     data.append("prodStatus", "submitted");
 
     localStorage.setItem("ebay", this.state.ebay);
