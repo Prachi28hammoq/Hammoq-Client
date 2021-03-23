@@ -387,6 +387,7 @@ class BasicForm extends Component {
     data.append("rate2", rate2);
     data.append("rate3", rate3);
     data.append("zipCode",this.state.zipCode)
+    data.append("profit",this.state.input4 - this.state.costOfGoods)
     data.append("prodStatus", "submitted");
 
     localStorage.setItem("ebay", this.state.ebay);
