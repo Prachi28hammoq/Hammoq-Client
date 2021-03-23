@@ -148,11 +148,24 @@ class BasicForm extends Component {
           savedCards: data.savedCards,
           cid: data._id,
           offeredRate: data.offeredRate || {},
-          zipCode: data.zip
+          
         });
         this.setState({ cid: data._id }, () =>
           localStorage.setItem("cid", this.state.cid)
         );
+        // socket.emit("cidinit", { cid: this.state.cid });
+        // console.log(this.state.cid);
+      })
+      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+
+      Axios.get("/clientdetails/listingSettings")
+      .then(({ data }) => {
+       
+        
+        this.setState({
+          zipCode: data.settings[0].listing[0].zipCode
+        });
+       
         // socket.emit("cidinit", { cid: this.state.cid });
         // console.log(this.state.cid);
       })
