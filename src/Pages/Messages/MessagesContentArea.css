@@ -1,0 +1,6 @@
+.messages-content-area {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(75% - 1px);
+    height: 100%;    
+}

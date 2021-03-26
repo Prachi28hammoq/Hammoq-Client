@@ -1,0 +1,17 @@
+.sent-message {
+    padding: 10px 10px;
+    margin: 20px 10px;
+    border: 1px solid #1B9AAA;
+    min-width: 45%;
+    max-width: 45%;
+    background-color: #1B9AAA;
+    border-radius: 4px;
+    color: white;
+}
+
+.sent-message-username-and-date {
+    margin-top: 7px;
+    font-size: 0.7em;
+    color: white;
+    font-weight: 600;
+}

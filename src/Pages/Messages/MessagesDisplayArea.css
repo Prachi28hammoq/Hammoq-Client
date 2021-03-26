@@ -1,0 +1,6 @@
+.messages-display-area {
+    width: 60%;
+    margin: 0 auto;
+    height: calc(75% - 35px - 2px);
+    overflow-y: auto;    
+}

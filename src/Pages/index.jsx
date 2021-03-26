@@ -15,6 +15,7 @@ import Config from "./config/title";
 import AcceptUrl from "./AcceptUrl/AcceptUrl";
 import ListingSettings from "./ListingSettings/ListingSettings";
 import Accounting from "./Accounting/Accounting";
+import Messages from "./Messages/Messages";
 
 export {
   Signup,
@@ -33,5 +34,6 @@ export {
   Config,
   AcceptUrl,
   ListingSettings,
-  Accounting
+  Accounting,
+  Messages
 };
