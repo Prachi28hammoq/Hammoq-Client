@@ -45,11 +45,14 @@
     "typescript": "^4.2.3"
   },
   "scripts": {
-    "optimize": "npm --depth 18 update && npm --depth 18 audit fix && npm --depth 18 prune && npm --depth 18 dedupe",
+    "optimize": "npm --depth 18 update && npm --depth 15 audit fix && npm --depth 15 prune && npm --depth 15 dedupe",
     "startdevlocal": "REACT_APP_NAME=APP REACT_APP_STAGE=devlocal REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000 react-scripts start",
+    "StartDevWinPS": "($env:REACT_APP_NAME='APP' REACT_APP_STAGE='devlocal' REACT_APP_STRIPE='pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w' PORT='3000') -and (react-scripts start)",
+    "StartDevWinCMD": "set \"REACT_APP_NAME=APP REACT_APP_STAGE=devlocal REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000\" && react-scripts start",
     "startdevhost": "REACT_APP_NAME=APP REACT_APP_STAGE=devhost REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000 react-scripts start",
     "startstage": "REACT_APP_NAME=APP REACT_APP_STAGE=staging REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w react-scripts build && serve -l 3000 -s build",
-    "startproduction": "REACT_APP_NAME=APP REACT_APP_STAGE=production REACT_APP_STRIPE=pk_live_eHRa9qUfyNNMG2lgJVYOj9Js00hCyttVfu react-scripts build && serve -l 3000 -s build"
+    "startproduction": "REACT_APP_NAME=APP REACT_APP_STAGE=production REACT_APP_STRIPE=pk_live_eHRa9qUfyNNMG2lgJVYOj9Js00hCyttVfu react-scripts build && serve -l 3000 -s build",
+    "globaldepen": "npm install react-scripts -g"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -28,6 +28,7 @@ import {
   Accounting,
   Messages
 } from "./Pages";
+import Message from './Pages/Messages/message'
 import Header from "./Components/header/header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";

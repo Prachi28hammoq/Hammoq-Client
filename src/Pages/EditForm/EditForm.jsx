@@ -206,7 +206,6 @@ class EditForm extends Component {
         //data 
       } = this.state;
       
-      console.log(res.data.products[0])
       this.setState({ data: res.data.products[0] });
 
       this.state.data['shortDescription'] = decodeURIComponent(res.data.products[0].shortDescription);
