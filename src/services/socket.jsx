@@ -6,9 +6,7 @@ let socket = undefined;
 if(process.env.REACT_APP_STAGE === 'devlocal')
 {
     let url = "http://localhost:8000/";
-    socket = socketIOClient(url, {
-    transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-    });
+    socket = socketIOClient(url, {transports: [ "websocket", "polling" ]});
 }
 
 else if(process.env.REACT_APP_STAGE === 'devhost')
@@ -28,10 +26,7 @@ else if(process.env.REACT_APP_STAGE === 'production')
 
 if(process.env.REACT_APP_STAGE !== 'devlocal')
 {
-	socket = socketIOClient(serverURL, {path: '/chat/'},
-	{
-	  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-	});
+	socket = socketIOClient(serverURL, {path: '/chat/'}, {transports: ["websocket", "polling"]});
 }
 
 export default socket;
