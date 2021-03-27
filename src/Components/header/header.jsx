@@ -159,7 +159,7 @@ class header extends Component {
                 Accounting
               </a>
             </li>
-{/*<li className="nav-item">
+            <li className="nav-item">
               <Link
                 to="/messages"
                 className="nav-link"
@@ -167,7 +167,7 @@ class header extends Component {
               >
                 Messages({this.state.clientMessageSeenCount})
               </Link>
-            </li>*/}
+            </li>
 
 {/*            <li class="nav-item">
               <a
