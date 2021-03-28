@@ -82,6 +82,11 @@
 }
 .market {
   margin-top: 5px;
+  margin-right: 25px;
+}
+
+.ebayListingType {
+  margin-top: 5px;
 }
 
 .select__account {
@@ -226,6 +231,7 @@
 }
 .productdetails_adjust {
   padding-left: 10px;
+  flex-grow: 1;
 }
 .gen_settings {
   padding-left: 10px;
@@ -550,7 +556,7 @@
   justify-content: space-around;
   flex-direction: column;
   font-weight: 400;
-  padding-top: 40px;
+  padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -571,7 +577,7 @@
 .best_offer {
   display: flex;
 }
-.decition_buttons {
+.decision_buttons {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
