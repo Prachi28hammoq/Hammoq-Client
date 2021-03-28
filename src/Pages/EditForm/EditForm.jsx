@@ -92,6 +92,11 @@ class EditForm extends Component {
       shippingDomesticDropDownItems: [],
       shippingInternationalDropDownItems: [],
 
+      clientEbayShippingDropDownItems: [],
+      clientEbayShippingDomesticDropDownItems: [],
+      clientEbayShippingInternationalDropDownItems: [],
+      clientEbayADCampaign: [],
+
       companyBlurb: "",
       originZipCode: 0,
       calculatedShippingActive: false,
@@ -275,21 +280,37 @@ class EditForm extends Component {
 
       if(res.data.products[0])
       {
+        const {data} = this.state;
         if(res.data.products[0].domesticShippingService && res.data.products[0].domesticShippingService.length > 20)
         {
           let domesticShippingService = JSON.parse(res.data.products[0].domesticShippingService)
-          this.state.data.domesticShippingService = domesticShippingService;
+          data["domesticShippingService"] = domesticShippingService;
         }
+
         if(res.data.products[0].internationalShippingService && res.data.products[0].internationalShippingService.length > 20)
         {
           let internationalShippingService = JSON.parse(res.data.products[0].internationalShippingService)
-          this.state.data.internationalShippingService = internationalShippingService;
+          data["internationalShippingService"] = internationalShippingService;
         }
+
         if(res.data.products[0].ebayCategoryField && res.data.products[0].ebayCategoryField.length > 20)
         {
           let ebayCategoryField = JSON.parse(res.data.products[0].ebayCategoryField)
-          this.state.data.ebayCategoryField = ebayCategoryField;
+          data["ebayCategoryField"] = ebayCategoryField;
         }
+
+        if(res.data.products[0].domesticClientShippingPolicy && res.data.products[0].domesticClientShippingPolicy.length > 20)
+        {
+          let domesticClientShippingPolicy = JSON.parse(res.data.products[0].domesticClientShippingPolicy)
+          data["domesticClientShippingPolicy"] = domesticClientShippingPolicy;
+        }
+
+        if(res.data.products[0].internationalClientShippingPolicy && res.data.products[0].internationalClientShippingPolicy.length > 20)
+        {
+          let internationalClientShippingPolicy = JSON.parse(res.data.products[0].internationalClientShippingPolicy)
+          data["internationalClientShippingPolicy"] = internationalClientShippingPolicy;
+        }
+        this.setState({data});
       }
 
       if (res.data.products[0]._id) {
@@ -451,6 +472,112 @@ class EditForm extends Component {
 
     data[market][field] = value;
     this.setState({ data });
+  }
+
+  handleEbayClientShippingChange = (e, v) => {
+    const { data } = this.state;
+
+    if(v === 'CLEARDOM')
+    {
+      data['domesticClientShippingPolicy'] = '';
+    }
+
+    if(v === 'CLEARINT')
+    {
+      data['internationalClientShippingPolicy'] = '';
+    }
+
+    if(v.shippingOptions)
+    {
+      if((v.shippingOptions[0] !== undefined) && (v.shippingOptions[1] !== undefined) && (v.shippingOptions[0].optionType === "DOMESTIC") && (v.shippingOptions[1].optionType === "INTERNATIONAL"))
+      {
+        data['domesticClientShippingPolicy'] = v;
+        data['internationalClientShippingPolicy'] = v;
+
+        if(!data.domesticClientShippingPoliciesActive) data['domesticClientShippingPoliciesActive'] = true;
+        if(!data.internationalClientShippingPoliciesActive) data['internationalClientShippingPoliciesActive'] = true;
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined)
+        {
+          data['domesticShippingFreeShippingActive'] = v.shippingOptions[0].shippingServices[0].freeShipping;
+          data['domesticShippingCost'] = 0.0;
+        }
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined) data['domesticShippingFreeShippingActive'] = v.shippingOptions[0].shippingServices[0].freeShipping;
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] !== undefined)
+        {
+          data['internationalShippingFreeShippingActive'] = v.shippingOptions[1].shippingServices[0].freeShipping;
+          data['internationalShippingCost'] = 0.0;
+        }
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] !== undefined) data['internationalShippingFreeShippingActive'] = v.shippingOptions[1].shippingServices[0].freeShipping;
+
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].shippingCost && v.shippingOptions[0].shippingServices[0].shippingCost.value) data['domesticShippingCost'] = v.shippingOptions[0].shippingServices[0].shippingCost.value;
+
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] !== undefined && v.shippingOptions[1].shippingServices[0].shippingCost && v.shippingOptions[1].shippingServices[0].shippingCost.value) data['internationalShippingCost'] = v.shippingOptions[1].shippingServices[0].shippingCost.value;
+
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].additionalShippingCost && v.shippingOptions[0].shippingServices[0].additionalShippingCost.value) data['domesticShippingEachAdditional'] = v.shippingOptions[0].shippingServices[0].additionalShippingCost.value;
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] !== undefined && v.shippingOptions[1].shippingServices[0].additionalShippingCost && v.shippingOptions[1].shippingServices[0].additionalShippingCost.value) data['internationalShippingEachAdditional'] = v.shippingOptions[1].shippingServices[0].additionalShippingCost.value;
+
+        data['ebay']['ebaySellerShippingPolicyID'] = v.fulfillmentPolicyId;
+        data['ebay']['ebaySellerShippingPolicyName'] = v.name;
+      }
+
+      else if((v.shippingOptions[0] !== undefined) && (v.shippingOptions[1] === undefined) && (v.shippingOptions[0].optionType === "DOMESTIC"))
+      {
+        data['domesticClientShippingPolicy'] = v;
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].shippingCost && v.shippingOptions[0].shippingServices[0].shippingCost.value) data['domesticShippingCost'] = v.shippingOptions[0].shippingServices[0].shippingCost.value;
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].additionalShippingCost && v.shippingOptions[0].shippingServices[0].additionalShippingCost.value) data['domesticShippingEachAdditional'] = v.shippingOptions[0].shippingServices[0].additionalShippingCost.value;
+
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].freeShipping)
+        {
+          data['domesticShippingFreeShippingActive'] = true;
+          data['domesticShippingCost'] = 0.0;
+        }
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && !v.shippingOptions[0].shippingServices[0].freeShipping) data['domesticShippingFreeShippingActive'] = false;
+
+        data['ebay']['ebaySellerShippingPolicyID'] = v.fulfillmentPolicyId;
+        data['ebay']['ebaySellerShippingPolicyName'] = v.name;
+      }
+
+      else if((v.shippingOptions[0] === undefined) && (v.shippingOptions[1] !== undefined) && (v.shippingOptions[1].optionType === "INTERNATIONAL"))
+      {
+        data['internationalClientShippingPolicy'] = v;
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] && v.shippingOptions[1].shippingServices[0].shippingCost && v.shippingOptions[1].shippingServices[0].shippingCost.value) data['internationalShippingCost'] = v.shippingOptions[1].shippingServices[0].shippingCost.value;
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] && v.shippingOptions[1].shippingServices[0].additionalShippingCost && v.shippingOptions[1].shippingServices[0].additionalShippingCost.value) data['internationalShippingEachAdditional'] = v.shippingOptions[1].shippingServices[0].additionalShippingCost.value;
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] && v.shippingOptions[1].shippingServices[0].freeShipping)
+        {
+          data['internationalShippingFreeShippingActive'] = true;
+          data['internationalShippingCost'] = 0.0;
+        }
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] && !v.shippingOptions[1].shippingServices[0].freeShipping) data['internationalShippingFreeShippingActive'] = false;
+
+        data['ebay']['ebaySellerShippingPolicyID'] = v.fulfillmentPolicyId;
+        data['ebay']['ebaySellerShippingPolicyName'] = v.name;
+      }
+    }
+
+    this.setState({data}); 
+  }
+
+  handleCampaignSelect = (e, v) =>
+  {
+    const { data } = this.state
+
+    data['ebayCampaign'] = v;
+
+    this.setState({data});
   }
 
   handleShippingChange = (e, v, name) => {
@@ -655,11 +782,9 @@ class EditForm extends Component {
     dataform.append("title", data.title);
     dataform.append("shortDescription", encodeURIComponent(data.shortDescription));
     dataform.append("condition_name", data.condition_name);
-    dataform.append("ebay", data.ebay.title);
     dataform.append("mercari", data.mercari.title);
     dataform.append("poshmark", data.poshmark.title);
     dataform.append("delist", data.delist.title);
-    dataform.append("ebayc", data.ebay.check);
     dataform.append("mercaric", data.mercari.check);
     dataform.append("poshmarkc", data.poshmark.check);
     dataform.append("delistc", data.delist.check);
@@ -694,12 +819,17 @@ class EditForm extends Component {
     dataform.append("packageWidth", data.packageWidth);
     dataform.append("packageHeight", data.packageHeight);
     dataform.append("costOfGoods", data.costOfGoods);
+
     dataform.append("shippingFees", data.shippingFees);
+    dataform.append("domesticClientShippingPoliciesActive", data.domesticClientShippingPoliciesActive);
+    dataform.append("domesticClientShippingPolicy", JSON.stringify(data.domesticClientShippingPolicy));
     dataform.append("domesticShippingService", JSON.stringify(data.domesticShippingService));
     dataform.append("domesticShippingCost", data.domesticShippingCost);
     dataform.append("domesticShippingEachAdditional", data.domesticShippingEachAdditional);
     dataform.append("domesticShippingSurcharge", data.domesticShippingSurcharge);
     dataform.append("domesticShippingFreeShippingActive", data.domesticShippingFreeShippingActive);
+    dataform.append("internationalClientShippingPoliciesActive", data.internationalClientShippingPoliciesActive);
+    dataform.append("internationalClientShippingPolicy", JSON.stringify(data.internationalClientShippingPolicy));
     dataform.append("internationalShippingService", JSON.stringify(data.internationalShippingService));
     dataform.append("internationalShippingCost", data.internationalShippingCost);
     dataform.append("internationalShippingEachAdditional", data.internationalShippingEachAdditional);
@@ -707,17 +837,12 @@ class EditForm extends Component {
     dataform.append("internationalShippingFreeShippingActive", data.internationalShippingFreeShippingActive);
     dataform.append("calculatedShippingActive", data.calculatedShippingActive);
     dataform.append("calculatedShipping", data.calculatedShipping);
+
+
     dataform.append("profit", data.profit);
     dataform.append("status", true);
     dataform.append("line", JSON.stringify(extraDescriptions));
     dataform.append("note", data.note)
-    // dataform.append("line2", { line2: data.line2, value2: data.value2 });
-    // dataform.append("line3", { line3: data.line3, value3: data.value3 });
-    // dataform.append("line4", { line4: data.line4, value4: data.value4 });
-    // dataform.append("line6", { line6: data.line6, value6: data.value6 });
-    // dataform.append("line7", { line7: data.line7, value7: data.value7 });
-    // dataform.append("line8", { line8: data.line8, value8: data.value8 });
-    // dataform.append("line5", { line5: data.line5, value5: data.value5 });
     dataform.append("madeIn", data.madeIn);
     dataform.append("gender", data.gender || "");
     dataform.append("others", JSON.stringify(y));
@@ -736,6 +861,13 @@ class EditForm extends Component {
     dataform.append("mercariHashtags", data.mercariHashtags);
     dataform.append("companyBlurb", data.companyBlurb);
     dataform.append("ebayCategoryField", JSON.stringify(data.ebayCategoryField));
+    dataform.append("ebayOptionalFieldsActive", data.ebayOptionalFieldsActive);
+    dataform.append("promotedListingActive", data.promotedListingActive);
+    dataform.append("promotedListingPercentage", data.promotedListingPercentage);
+    dataform.append("ebayCampaign", JSON.stringify(data.ebayCampaign));
+
+    dataform.append("clientSettingsLoaded", data.clientSettingsLoaded);
+
     dataform.append("isListingGood", data.isListingGood);
 
     ////////////////////EBAY////////////////////////////////
@@ -754,6 +886,8 @@ class EditForm extends Component {
     dataform.append("ebay.ebayPayPalEmailActive", data.ebay.ebayPayPalEmailActive);
 
     dataform.append("ebay.ebayGlobalShippingActive", data.ebay.ebayGlobalShippingActive);
+    dataform.append("ebay.ebaySellerShippingPolicyID", data.ebay.ebaySellerShippingPolicyID);
+    dataform.append("ebay.ebaySellerShippingPolicyName", data.ebay.ebaySellerShippingPolicyName);
 
     dataform.append("ebay.ebayDomesticShippingType", data.ebay.ebayDomesticShippingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingTypeCodeType.html
     dataform.append("ebay.ebayDomesticShippingService", data.ebay.ebayDomesticShippingService); // https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingServiceCodeType.html
@@ -778,6 +912,10 @@ class EditForm extends Component {
     dataform.append("ebay.ebayInternationalRefundOption", data.ebay.ebayInternationalRefundOption); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/RefundOptionsCodeType.html
     dataform.append("ebay.ebayInternationalReturnsAccepted", data.ebay.ebayInternationalReturnsAccepted); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsAcceptedOptionsCodeType.html
     dataform.append("ebay.ebayInternationalReturnsWithin", data.ebay.ebayInternationalReturnsWithin); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsWithinOptionsCodeType.html
+
+    dataform.append("ebay.ebayPromotedListingActive", data.ebay.ebayPromotedListingActive);
+    dataform.append("ebay.ebayPromotedListingPercentage", data.ebay.ebayPromotedListingPercentage);
+    dataform.append("ebay.ebayADCampaign", data.ebay.ebayADCampaign);
     ////////////////////EBAY///////////////////////////////
 
     if(value === "draft")
@@ -1409,7 +1547,10 @@ class EditForm extends Component {
       ebayCategoryDropDownItems,
       shippingDropDownItems,
       shippingDomesticDropDownItems,
-      shippingInternationalDropDownItems
+      shippingInternationalDropDownItems,
+      clientEbayShippingDomesticDropDownItems,
+      clientEbayShippingInternationalDropDownItems,
+      clientEbayADCampaign
     } = this.state;
     
     //const {templateid} = this.props.match.params
@@ -1485,6 +1626,11 @@ class EditForm extends Component {
             priceCalculation={this.priceCalculation}
             handleShippingChange={this.handleShippingChange}
             handleMarketPlaceDataChange={this.handleMarketPlaceDataChange}
+            clientEbayShippingDomesticDropDownItems={clientEbayShippingDomesticDropDownItems}
+            clientEbayShippingInternationalDropDownItems={clientEbayShippingInternationalDropDownItems}
+            handleEbayClientShippingChange={this.handleEbayClientShippingChange}
+            clientEbayADCampaign={clientEbayADCampaign}
+            handleCampaignSelect={this.handleCampaignSelect}
               />
         </div>
       </div>

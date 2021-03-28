@@ -301,8 +301,13 @@ class RightSection extends Component {
       shippingDropDownItems,
       shippingDomesticDropDownItems,
       shippingInternationalDropDownItems,
+      clientEbayShippingInternationalDropDownItems,
+      clientEbayShippingDomesticDropDownItems,
       handleShippingChange,
-      handleMarketPlaceDataChange
+      handleMarketPlaceDataChange,
+      handleEbayClientShippingChange,
+      clientEbayADCampaign,
+      handleCampaignSelect
     } = this.props;
 
     if(data.isListingGood === undefined)
@@ -723,6 +728,15 @@ class RightSection extends Component {
                   <label htmlFor='SWOZG' className='label__style'>
                     Shipping weight Oz/G
                   </label>
+                  <label htmlFor='PromotedListingsActive' className='label__style'>
+                  <input
+                  type='checkbox'
+                  name='promotedListingActive'
+                  checked={data.promotedListingActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'promotedListingActive')}}
+                  ></input>
+                    {" "}Promoted Listing(%)
+                  </label>
                 </div>
                 <div className='details__input_header'>
                   <input
@@ -768,6 +782,16 @@ class RightSection extends Component {
                     value={data.weightOZ}
                     onChange={handleChange}
                   ></input>
+                  <input
+                    className='details__input'
+                    type='number'
+                    step="any"
+                    name='promotedListingPercentage'
+                    id='promotedListingPercentage'
+                    disabled={!data.promotedListingActive}
+                    value={data.promotedListingPercentage}
+                    onChange={handleChange}
+                  ></input>
                 </div>
               </div>
               <div className='arrange__details'>
@@ -786,6 +810,9 @@ class RightSection extends Component {
                   </label>
                   <label htmlFor='SPH' className='label__style'>
                     Shipping Package Height
+                  </label>
+                  <label htmlFor='SWOZG' className='label__style'>
+                    Ebay Campaign List
                   </label>
                 </div>
                 <div className='details__input_header'>
@@ -833,6 +860,30 @@ class RightSection extends Component {
                     value={data.packageHeight}
                     onChange={handleChange}
                   ></input>
+                   <Autocomplete
+                        name='ebayCampaign'
+                        className='details__input'
+                        value={data.ebayCampaign}
+                        options={clientEbayADCampaign}
+                        getOptionLabel={(option) => option.campaignName}
+                        onChange={(event, value, reason) =>
+                          reason === "select-option"
+                            ? handleCampaignSelect(event, value)
+                            : null
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            placeholder={data.ebayCampaign ? data.ebayCampaign.campaignName : ""}
+                            {...params}
+                          />
+                        )}
+                      />
+                    <button
+                    className='brz__btn '
+                    onClick={(e) => {handleChange(e)}}
+                    >
+                      Clear
+                    </button>
                 </div>
               </div>
             </div>
@@ -1171,12 +1222,6 @@ class RightSection extends Component {
                 <label htmlFor='Category' className='label__style_general'>
                   Ebay Category 1
                   <div className='category__alignment'>
-                    <button
-                      className='brz__btn '
-                      onClick={(e) => {handleSelectedEbayCategory('')}}
-                    >
-                      Clear
-                    </button>
                     <Autocomplete
                       disableListWrap
                       ListboxComponent={ListboxComponent}
@@ -1215,6 +1260,12 @@ class RightSection extends Component {
                       }}
                     >
                       Browse
+                    </button>
+                    <button
+                      className='brz__btn '
+                      onClick={(e) => {handleSelectedEbayCategory('')}}
+                    >
+                      Clear
                     </button>
                   </div>
                 </label>
@@ -1321,19 +1372,56 @@ class RightSection extends Component {
             <div className='Dom_ship'> Domestic Shipping Service</div>
             <div className='dom__body'>
               <div className='arrange__main'>
-                <div className='arrange__col_dom'>
+                {data.domesticClientShippingPoliciesActive ?
+                  (<div className='arrange__col_dom'>
+                   <label htmlFor='ShippingServiceDom' className='label__style'>
+                      Ebay (Client) Shipping Service
+                   </label>
+                   <div style={{'display':'flex'}}>
+                   <Autocomplete
+                        name='domesticClientShippingPolicy'
+                        className='dom__input'
+                        value={data.domesticClientShippingPolicy}
+                        options={clientEbayShippingDomesticDropDownItems}
+                        getOptionLabel={(option) => option.name}
+                        style={{ width: 300 }}
+                        onChange={(event, value, reason) =>
+                          reason === "select-option"
+                            ? handleEbayClientShippingChange(event, value)
+                            : null
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            placeholder={data.domesticClientShippingPolicy ? data.domesticClientShippingPolicy.name : ""}
+                            {...params}
+                          />
+                        )}
+                      />
+                    <button
+                    className='brz__btn '
+                    onClick={(e) => {handleEbayClientShippingChange(e, 'CLEARDOM')}}
+                    >
+                      Clear
+                    </button>
+                    </div>
+                    </div>)
+                  :
+                  (
+                  <div className='arrange__col_dom'>
                   <label htmlFor='ShippingServiceDom' className='label__style'>
-                    Shipping Service
+                    Ebay (Default) Shipping Service
                   </label>
+                  <div style={{'display':'flex'}}>
                   <Autocomplete
                         name='ebayDomesticShippingService'
                         className='dom__input'
                         value={data.domesticShippingService}
                         options={shippingDomesticDropDownItems}
                         getOptionLabel={(option) => option.Description}
+                        style={{ width: 300 }}
                         onChange={(event, value, reason) =>
                           reason === "select-option"
-                            ? handleShippingChange(event, value, 'domesticShippingService')
+                            ? handleShippingChange(event, value)
                             : null
                         }
                         renderInput={(params) => (
@@ -1343,13 +1431,14 @@ class RightSection extends Component {
                           />
                         )}
                       />
-                </div>
                 <button
-                  className='brz__btn '
-                  onClick={(e) => {handleShippingChange(e, '', 'domesticShippingService')}}
+                className='brz__btn '
+                onClick={(e) => {handleShippingChange(e, '', 'domesticShippingService')}}
                 >
                   Clear
                 </button>
+                </div>
+                </div>)}
                 <div className='arrange__col_dom'>
                   <label htmlFor='CostDom' className='label__style'>
                     Cost
@@ -1357,6 +1446,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='domesticShippingCost'
+                  disabled={data.domesticShippingFreeShippingActive}
                   value={data.domesticShippingCost}
                   onChange={handleChange}
                   ></input>
@@ -1373,6 +1463,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='domesticShippingEachAdditional'
+                  disabled={data.domesticShippingFreeShippingActive}
                   value={data.domesticShippingEachAdditional}
                   onChange={handleChange}
                   ></input>
@@ -1387,6 +1478,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='domesticShippingSurcharge'
+                  disabled={data.domesticShippingFreeShippingActive}
                   value={data.domesticShippingSurcharge}
                   onChange={handleChange}
                   ></input>
@@ -1396,13 +1488,32 @@ class RightSection extends Component {
               {/* ==================================================================================== */}
               <div className='arrange__col_dom'>
                 <div className='free__ship'>
-                  <label>
+                  <input 
+                  type='checkbox' 
+                  className='dom__input'
+                  name='domesticClientShippingPoliciesActive'
+                  checked={data.domesticClientShippingPoliciesActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'domesticClientShippingPoliciesActive')}}
+                  ></input>
+                  <label
+                    htmlFor='FreeShippingInt'
+                    className='label__style_free'
+                  >
+                    Use Ebay Client Shipping List?
+                  </label>
+                </div>
+                <div className='free__ship'>
                   <input 
                   type='checkbox'
                   className='dom__input'
+                  name='domesticShippingFreeShippingActive'
                   checked={data.domesticShippingFreeShippingActive}
                   onChange={(e) => {handleCheckboxToggle(e.target.checked, 'domesticShippingFreeShippingActive')}}
                   ></input>
+                  <label
+                    htmlFor='FreeShippingInt'
+                    className='label__style_free'
+                  >
                     Free Shipping?
                   </label>
                 </div>
@@ -1414,36 +1525,72 @@ class RightSection extends Component {
             <div className='int_ship'> International Shipping Service</div>
             <div className='dom__body'>
               <div className='arrange__main'>
-                <div className='arrange__col_dom'>
-                  <label htmlFor='ShippingServiceInt' className='label__style'>
-                    Shipping Service
-                  </label>
-                  <Autocomplete
+                {data.internationalClientShippingPoliciesActive ?
+                  (<div className='arrange__col_dom'>
+                   <label htmlFor='ShippingServiceInt' className='label__style'>
+                      Ebay (Client) Shipping Service
+                   </label>
+                  <div style={{'display':'flex'}}>
+                   <Autocomplete
                         name='ebayInternationalShippingService'
                         className='dom__input'
-                        value={data.internationalShippingService}
-                        options={shippingInternationalDropDownItems}
-                        getOptionLabel={(option) => option.Description}
+                        value={data.internationalClientShippingPolicy}
+                        options={clientEbayShippingInternationalDropDownItems}
+                        getOptionLabel={(option) => option.name}
                         style={{ width: 300 }}
                         onChange={(event, value, reason) =>
                           reason === "select-option"
-                            ? handleShippingChange(event, value, 'internationalShippingService')
+                            ? handleEbayClientShippingChange(event, value)
                             : null
                         }
                         renderInput={(params) => (
                           <TextField
-                            placeholder={data.internationalShippingService ? data.internationalShippingService.Description : ""}
+                            placeholder={data.internationalClientShippingPolicy ? data.internationalClientShippingPolicy.name : ""}
                             {...params}
                           />
                         )}
                       />
-                </div>
-                <button
+                    <button
+                    className='brz__btn '
+                    onClick={(e) => {handleEbayClientShippingChange(e, 'CLEARINT')}}
+                    >
+                      Clear
+                    </button>
+                    </div>
+                    </div>)
+                  :
+                  (<div className='arrange__col_dom'>
+                   <label htmlFor='ShippingServiceInt' className='label__style'>
+                      Ebay (Default) Shipping Service
+                   </label>
+                   <div style={{'display':'flex'}}>
+                   <Autocomplete
+                          name='ebayInternationalShippingService'
+                          className='dom__input'
+                          value={data.internationalShippingService}
+                          options={shippingInternationalDropDownItems}
+                          getOptionLabel={(option) => option.Description}
+                          style={{ width: 300 }}
+                          onChange={(event, value, reason) =>
+                            reason === "select-option"
+                              ? handleShippingChange(event, value, 'internationalShippingService')
+                              : null
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              placeholder={data.internationalShippingService ? data.internationalShippingService.Description : ""}
+                              {...params}
+                            />
+                          )}
+                        />
+                  <button
                   className='brz__btn '
                   onClick={(e) => {handleShippingChange(e, '', 'internationalShippingService')}}
-                >
-                  Clear
-                </button>
+                  >
+                    Clear
+                  </button>
+                  </div>
+                  </div>)}
                 <div className='arrange__col_dom'>
                   <label htmlFor='CostInt' className='label__style'>
                     Cost
@@ -1451,6 +1598,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='internationalShippingCost'
+                  disabled={data.internationalShippingFreeShippingActive}
                   value={data.internationalShippingCost}
                   onChange={handleChange}
                   ></input>
@@ -1467,6 +1615,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='internationalShippingEachAdditional'
+                  disabled={data.internationalShippingFreeShippingActive}
                   value={data.internationalShippingEachAdditional}
                   onChange={handleChange}
                   ></input>
@@ -1481,6 +1630,7 @@ class RightSection extends Component {
                   <input 
                   className='dom__input'
                   name='internationalShippingSurcharge'
+                  disabled={data.internationalShippingFreeShippingActive}
                   value={data.internationalShippingSurcharge}
                   onChange={handleChange}
                   ></input>
@@ -1489,6 +1639,21 @@ class RightSection extends Component {
 
               {/* ==================================================================================== */}
               <div className='arrange__col_dom'>
+                <div className='free__ship'>
+                  <input 
+                  type='checkbox' 
+                  className='dom__input'
+                  name='internationalClientShippingPoliciesActive'
+                  checked={data.internationalClientShippingPoliciesActive}
+                  onChange={(e) => {handleCheckboxToggle(e.target.checked, 'internationalClientShippingPoliciesActive')}}
+                  ></input>
+                  <label
+                    htmlFor='FreeShippingInt'
+                    className='label__style_free'
+                  >
+                    Use Ebay Client Shipping List?
+                  </label>
+                </div>
                 <div className='free__ship'>
                   <input 
                   type='checkbox' 
@@ -1512,19 +1677,22 @@ class RightSection extends Component {
             <div className='dom__header2'>
               <div className='int_ship2'> Best Offer</div>
               <div className='dom__body2'>
-              <button
-                type='button'
-                onClick={(e) => {handleToggleButton(data.bestOfferActive, 'bestOfferActive')}}
+              <div className='option_div'>
+              <input
+                type='checkbox'
+                name='bestOfferActive'
+                checked={data.bestOfferActive}
+                onChange={(e) => {handleCheckboxToggle(e.target.checked, 'bestOfferActive')}}
                 className='button__q5'
               >
-                {data.bestOfferActive
-                  ? "Yes, best offer enabled"
-                  : "No, best offer disabled"}
-              </button>
+              </input>{" "}
+              <label>Best Offer Enabled?</label>{" "}
+              </div>
                 <div className='option_div'>
                   <input 
                   type='checkbox'
                   name='bestOfferAcceptFloorActive'
+                  disabled={!data.bestOfferActive}
                   checked={data.bestOfferAcceptFloorActive}
                   onChange={(e) => {handleCheckboxToggle(e.target.checked, 'bestOfferAcceptFloorActive')}}
                   ></input>{" "}
@@ -1532,6 +1700,7 @@ class RightSection extends Component {
                   <input 
                   className='inputbox1'
                   name='bestOfferAcceptFloorValue'
+                  disabled={!data.bestOfferActive || !data.bestOfferAcceptFloorActive}
                   value={data.bestOfferAcceptFloorValue}
                   onChange={handleChange}
                   ></input>
@@ -1540,6 +1709,7 @@ class RightSection extends Component {
                   <input 
                   type='checkbox'
                   name='bestOfferDeclineCeilingActive'
+                  disabled={!data.bestOfferActive}
                   checked={data.bestOfferDeclineCeilingActive}
                   onChange={(e) => {handleCheckboxToggle(e.target.checked, 'bestOfferDeclineCeilingActive')}}
                   ></input>{" "}
@@ -1547,13 +1717,14 @@ class RightSection extends Component {
                   <input 
                   className='inputbox'
                   name='bestOfferDeclineCeilingValue'
+                  disabled={!data.bestOfferActive || !data.bestOfferDeclineCeilingActive}
                   value={data.bestOfferDeclineCeilingValue}
                   onChange={handleChange}
                   ></input>
                 </div>
               </div>
             </div>
-            <div className='decition_buttons'>
+            <div className='decision_buttons'>
             {process.env.REACT_APP_NAME === 'APP' ?
             (
               <>
