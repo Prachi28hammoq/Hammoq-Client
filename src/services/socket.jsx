@@ -26,7 +26,7 @@ else if(process.env.REACT_APP_STAGE === 'production')
 
 if(process.env.REACT_APP_STAGE !== 'devlocal')
 {
-	socket = socketIOClient(serverURL, {path: '/chat/'}, {transports: ["websocket", "polling"]});
+	socket = socketIOClient(serverURL, {transports: ["websocket", "polling"]});
 }
 
 export default socket;
