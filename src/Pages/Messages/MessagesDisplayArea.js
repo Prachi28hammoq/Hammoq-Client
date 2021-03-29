@@ -40,7 +40,7 @@ const MessagesDisplayArea = (props) => {
                 res = await Axios.get('/messagesNeo/getAgentsAllocatedToClient/' + res?.data?.clientId);
 
                 if (res?.data?.agentsAllocatedToClient) {
-                    props.setAgentsAllocatedToClient([...res?.data?.agentsAllocatedToClient])
+                    props.setAgentsAllocatedToClient([...res?.data?.agentsAllocatedToClient.filter(agentId => agentId!= "undefined")])
                 }
             }
         }
