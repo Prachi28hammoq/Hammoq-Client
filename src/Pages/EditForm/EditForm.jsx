@@ -440,8 +440,24 @@ class EditForm extends Component {
                                                         .map(item => {return item})
                                                   })
       });
-
-
+    Axios.get('ebay/sellerShippingPolicies', {params: {userID: this.props.match.params.clientid}}).then((res) => {
+      this.setState({clientEbayShippingDropDownItems : res.data.data.fulfillmentPolicies.map((item, key) => {return res.data.data.fulfillmentPolicies[key]})})
+      this.setState({clientEbayShippingDomesticDropDownItems: res.data.data.fulfillmentPolicies
+                                                    .filter(item => (item.shippingOptions && item.shippingOptions[0]) ? (item.shippingOptions[0].optionType === "DOMESTIC") : false)
+                                                    .map(item => {
+                                                      return item})
+                                                  });
+      this.setState({clientEbayShippingInternationalDropDownItems: res.data.data.fulfillmentPolicies
+                                                        .filter(item => (item.shippingOptions && item.shippingOptions[1]) ? (item.shippingOptions[1].optionType === "INTERNATIONAL") : false)
+                                                        .map(item => {
+                                                          return item})
+                                                  });
+    });
+    Axios.get('ebay/getCampaigns', {params: {userID: this.props.match.params.clientid}}).then((res) => {
+      let campaignList = res.data.data.campaigns.map((item, key) => {return res.data.data.campaigns[key]})
+      campaignList.unshift({campaignName: 'None', campaignId:0})
+      this.setState({clientEbayADCampaign : campaignList})
+    });
   };
 
   handleChange = (e) => {
