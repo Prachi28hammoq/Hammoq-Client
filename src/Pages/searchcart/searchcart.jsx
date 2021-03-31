@@ -74,7 +74,7 @@ class Searchcart extends Component {
       })
       .catch((error) => {console.log(error)});
 
-    Axios.get(`/product/web/type/${prodStatus}`, { params: { page: 1, size: 10 } })
+    Axios.get(`/product/type/${prodStatus}`, { params: { page: 1, size: 10 } })
       .then(({ data }) => {
           this.setState({
             products: data.data.filter((status) => status.status != false),
@@ -130,7 +130,7 @@ class Searchcart extends Component {
     const response = await Axios.post(`/product/${itemId}`, {headers: {"x-access-token": localStorage.getItem("token"),"content-type": "application/x-www-form-urlencoded",},})
     .catch((error) => {console.log(error)});
 
-    const response1 = await Axios.get(`/product/web/type/${this.state.prodStatus}`,{ params: { page: 1, size: 10 } })
+    const response1 = await Axios.get(`/product/type/${this.state.prodStatus}`,{ params: { page: 1, size: 10 } })
                                   .catch((error) => {console.log(error)});
 
     this.setState({products: response1.data.data,});
@@ -167,7 +167,7 @@ class Searchcart extends Component {
   handleChangePage = async (newPage) => {
     if (newPage > 0 && newPage <= this.state.totalPage) {
       this.setState({ page: newPage });
-      await Axios.get(`/product/web/type/${this.state.prodStatus}`, {params: { page: newPage, size: this.state.rowsPerPage },}).then(({ data }) => {
+      await Axios.get(`/product/type/${this.state.prodStatus}`, {params: { page: newPage, size: this.state.rowsPerPage },}).then(({ data }) => {
           if (data) this.setState({ products: data.data.filter((status) => status.status != false),loading: false });
           this.handelProductMessageSeen();
         })
@@ -176,7 +176,7 @@ class Searchcart extends Component {
   };
 
   handleChangeRowsPerPage = async (val) => {
-    await Axios.get(`/product/web/type/${this.state.prodStatus}`, {params: { page: this.state.page, size: val },})
+    await Axios.get(`/product/type/${this.state.prodStatus}`, {params: { page: this.state.page, size: val },})
                .then(({ data }) => {
         this.setState({products: data.data.filter((status) => status.status != false), rowsPerPage: val, totalPage: data.pages,});
         this.handelProductMessageSeen();
