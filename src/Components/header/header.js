@@ -108,7 +108,7 @@ class header extends Component {
               </Link>
             </li>
 
-            <li class="nav-item">
+{/*<li class="nav-item">
               <a
                 href="/templates"
                 className="nav-link"
@@ -116,7 +116,7 @@ class header extends Component {
               >
                 Templates
               </a>
-            </li>
+            </li>*/}
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>
