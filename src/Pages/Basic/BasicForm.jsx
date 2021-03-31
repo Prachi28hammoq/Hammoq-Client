@@ -93,14 +93,15 @@ class BasicForm extends Component {
       this.setState({ Mercari: data.Mercari });
     });
 
-    Axios.get("/template")
+/*    Axios.get("/template")
       .then((data) => {
-        //console.log(data, "template data");
+        console.log(data, "template data");
         this.setState({ templates: data.data.templates });
       })
       .catch((err) => {
         console.log(err);
-      });
+      });*/
+
     Axios.get("/password/getstatus/others").then(({ data }) => {
       //console.log(data, "other data");
       if (data.length > 0) {
@@ -166,11 +167,13 @@ class BasicForm extends Component {
         this.setState({
           zipCode: data.settings[0].listing[0].zipCode,
           domesticShippingFreeShippingActive: data.settings[0].shipping[0].freeShipping
-        });
+        })
+        .catch((err) => console.log(err));
        
         // socket.emit("cidinit", { cid: this.state.cid });
         // console.log(this.state.cid);
       })
+      .catch((err) => console.log(err));
 
     // var uploader = new SocketIOFileUpload(socket);
     // uploader.listenOnInput(document.getElementById("bulk"));

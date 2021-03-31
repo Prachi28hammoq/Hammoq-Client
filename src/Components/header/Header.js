@@ -159,7 +159,7 @@ const Header = (props) => {
               </Link>
             </li>
 
-            <li class="nav-item">
+{/*<li class="nav-item">
               <a
                 href="/templates"
                 className="nav-link"
@@ -167,7 +167,7 @@ const Header = (props) => {
               >
                 Templates
               </a>
-            </li>
+            </li>*/}
             <li class="nav-item">
               <a
                 href="/accounts"
