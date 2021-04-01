@@ -135,7 +135,7 @@ class Searchcart extends Component {
 
     this.setState({products: response1.data.data,});
 
-    window.alert("duplicate has been created");
+    window.alert("Duplicate has been created.");
     window.location.reload();
   };
 
@@ -147,7 +147,7 @@ class Searchcart extends Component {
 
 
   handleDelete = async (itemId) => {
-    window.confirm("Are You Sure");
+    window.confirm("Are You Sure?");
     const data = {status: false,};
 
     try {
