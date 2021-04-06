@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-var baseURL = "";
+var baseURL = "http://localhost:8000/api";
 var assetsURL = "https://hammoq-assets.storage.googleapis.com/assets/";
 
 if(process.env.REACT_APP_STAGE === 'devlocal')
@@ -24,6 +24,7 @@ else if(process.env.REACT_APP_STAGE === 'production')
 }
 
 Axios.defaults.baseURL = baseURL + "/client";
+Axios.defaults.withCredentials = true
 
 export default Axios;
 export { baseURL, assetsURL };
