@@ -983,11 +983,11 @@ class EditForm extends Component {
     const idx = images.findIndex((image) => image.key === event.target.name);
     try {
       this.setState({ isSubmitting: true });
-      let compressedFile = await imageCompression(
+/*      let compressedFile = await imageCompression(
         event.target.files[0],
         options
-      );
-      images[idx].img = compressedFile;
+      );*/
+      images[idx].img = event.target.files[0];
       this.setState({
         images,
       });
@@ -1002,20 +1002,20 @@ class EditForm extends Component {
     const files = e.target.files;
     const count = files.length;
 
-    const options = {
+/*    const options = {
       maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
-    };
+    };*/
     this.setState({ isSubmitting: true });
     for (let i = 0; i < count; i++) {
       const idx = images.findIndex((image) => !image.img);
       if (idx > -1) {
         try {
-         // console.log(files[i]);
-          let compressedFile = await imageCompression(files[i], options);
-        //  console.log(compressedFile);
-          images[idx].img = compressedFile;
+        // console.log(files[i]);
+        // let compressedFile = await imageCompression(files[i], options);
+        // console.log(compressedFile);
+          images[idx].img = files[i];
           this.setState({ images }, () => console.log(this.state.images));
         } catch (error) {
           console.log(error);
