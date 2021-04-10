@@ -86,7 +86,7 @@ class EditForm extends Component {
       messageNotSeen : [],
       agentName : '',
       templateIdd: '',
-
+      price:0,
       ebayCategoryDropDownItems: [],
       shippingDropDownItems: [],
       shippingDomesticDropDownItems: [],
@@ -465,7 +465,8 @@ class EditForm extends Component {
     const { data, bestOfferSettings } = this.state;
     if (name === "price")
     {
-      data["profit"] = value - data["costOfGoods"];
+      
+      data["profit"] = value - data["costOfGoods"]  ;
       if(bestOfferSettings)
       {
         if(bestOfferSettings.acceptOfferOf) data['bestOfferAcceptFloorValue'] = value * (bestOfferSettings.acceptOfferOf/100);
@@ -474,7 +475,7 @@ class EditForm extends Component {
     }
     if (name === "costOfGoods")
     {
-      data["profit"] = data["price"] - value;
+      data["profit"] = data["price"] - value ;
     }
     data[name] = value;
     this.setState({ data });
