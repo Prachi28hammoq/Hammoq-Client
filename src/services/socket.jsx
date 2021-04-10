@@ -26,7 +26,7 @@ else if(process.env.REACT_APP_STAGE === 'production')
 
 if(process.env.REACT_APP_STAGE !== 'devlocal')
 {
-	socket = socketIOClient(serverURL, {transports: ["websocket", "polling"]});
+	socket = socketIOClient(serverURL, {transports: ["websocket"],withCredentials: true});
 }
 
 export default socket;

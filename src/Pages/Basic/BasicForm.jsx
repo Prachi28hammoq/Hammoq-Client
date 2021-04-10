@@ -519,19 +519,19 @@ class BasicForm extends Component {
   handleChange = async (event) => {
     const { images, cid } = this.state;
     //console.log(images);
-    const options = {
+/*    const options = {
       maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
-    };
+    };*/
     const idx = images.findIndex((image) => image.key === event.target.name);
     try {
       this.setState({ isSubmitting: true });
-      let compressedFile = await imageCompression(
+/*      let compressedFile = await imageCompression(
         event.target.files[0],
         options
-      );
-      images[idx].img = compressedFile;
+      );*/
+      images[idx].img = event.target.files[0];
       this.setState({
         images,
       });
