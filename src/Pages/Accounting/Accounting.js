@@ -5,6 +5,7 @@ import { Route, useHistory } from 'react-router-dom';
 import Reports from './Reports';
 import Analytics from './Analytics';
 import Axios from "../../services/Axios";
+import AddIcon from '@material-ui/icons/Add';
 
 const Accounting = () => {
 
@@ -46,6 +47,7 @@ const Accounting = () => {
                     </Route>
                 </div>
             </div>
+            
         </div>
     );
 }

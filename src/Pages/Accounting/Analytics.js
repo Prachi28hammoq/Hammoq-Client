@@ -6,8 +6,10 @@ import Axios from "../../services/Axios";
 import socket from "../../../src/services/socket.jsx";
 import './Analytics.css';
 import _ from 'lodash';
+import { NavLink  } from 'react-router-dom'
 import { nanoid } from 'nanoid';
 //const { v4: uuidv4 } = require('uuid');
+import AddIcon from '@material-ui/icons/Add';
 
 //uuidv4();
 
@@ -172,7 +174,7 @@ const Analytics = (props) => {
     return (
         <div className="container-fluid">
             <div className="row">
-                <div className="col-9"></div>
+                <div className="col-9"><NavLink   class="btn btn-success" style={{ height:'40px', 'text-align':'center'}}  to="/accounts/ebayAccounts"><AddIcon />&nbsp;Add Ebay Account</NavLink ></div>
                 <div className="col-3">
                     <div className="ebay-analytics-control-bar">
                         <div className="ebay-analytics-progress-bar">

@@ -161,7 +161,7 @@ class settings extends Component {
 
         <a href="/transactions" className="row" id="settingsBackground2">
           <div className="col-3">
-            <i className="fa fa-user-circle fa-2x" id="backgroundIt"></i>
+            <i className="fa fa-user-circle fa-2x" id=""></i>
           </div>
           <div className="col-6">
             <h6 className="paddingfornames">Payment Details</h6>
@@ -177,8 +177,8 @@ class settings extends Component {
         <Link to="/addpayment" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              className="fa fa-credit-card fa-2x colorIt"
-              id="backgroundIt"
+              className="fa fa-credit-card fa-2x "
+              id=""
             ></i>
           </div>
           <div className="col-6">
@@ -191,8 +191,7 @@ class settings extends Component {
         <Link className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              className="fa fa-money fa-2x colorIt"
-              id="backgroundIt"
+              className="fa fa-money fa-2x "
             ></i>
           </div>
           <div className="col-6">
@@ -206,7 +205,7 @@ class settings extends Component {
         </Link>
         <Link to="/resetpassword" className="row" id="settingsBackground2">
           <div className="col-3">
-            <i className="fa fa-lock fa-2x colorIt" id="backgroundIt"></i>
+            <i className="fa fa-lock fa-2x " id=""></i>
           </div>
           <div className="col-6 p-0">
             <h6 className="paddingfornames">Change Password</h6>
@@ -218,8 +217,8 @@ class settings extends Component {
         <Link to="/passwords" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              class="fa fa-envelope-o  fa-2x colorIt"
-              id="backgroundIt"
+              class="fa fa-envelope-o  fa-2x "
+              id=""
               aria-hidden="true"
             ></i>
           </div>
@@ -234,8 +233,8 @@ class settings extends Component {
         <Link to="/config" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              class="fa fa-envelope-o  fa-2x colorIt"
-              id="backgroundIt"
+              class="fa fa-cogs  fa-2x "
+              id=""
               aria-hidden="true"
             ></i>
           </div>
@@ -246,12 +245,27 @@ class settings extends Component {
             <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
+        <Link to="/accounts/ebayAccounts" className="row" id="settingsBackground2">
+          <div className="col-3">
+            <i
+              class="fa fa-at  fa-2x "
+              id=""
+              aria-hidden="true"
+            ></i>
+          </div>
+          <div className="col-6">
+            <h6 className="paddingfornames">Accounts</h6>
+          </div>
+          <div className="col-3">
+            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+          </div>
+        </Link>
 
         <Link to="/listingsettings" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              class="fa fa-envelope-o  fa-2x colorIt"
-              id="backgroundIt"
+              class="fa fa-list  fa-2x "
+              id=""
               aria-hidden="true"
             ></i>
           </div>
@@ -285,7 +299,7 @@ class settings extends Component {
           onClick={this.logoutHandler}
         >
           <div className="col-12">
-            <h6 className="paddingfornames logout">LOGOUT</h6>
+            <h6 className="paddingfornames ">LOGOUT</h6>
           </div>
         </button>
       </div>

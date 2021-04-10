@@ -9,18 +9,18 @@ body {
 }
 
 #settingsBackground2 {
-  border: 2px solid #4db0cc;
-  background-color: #cdcdcd;
+  background-color: #52c4d3;
   border-radius: 5px;
   text-align: center;
   height: 65px;
   width: 300px;
+  color:#ffffff;
   padding-top: 10px;
 }
 
 @media (max-width: 411px) {
   #settingsBackground2 {
-    border: 2px solid #4db0cc;
+    border: 2px solid #e0e0e0;
     border-radius: 5px;
     text-align: center;
     height: 75px;
@@ -64,6 +64,6 @@ body {
   padding-right: 5px;
 }
 
-.logout {
-  color: #007bff;
+#logout {
+  
 }

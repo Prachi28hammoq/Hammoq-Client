@@ -5,6 +5,8 @@ import socket from "../../../src/services/socket.jsx";
 import './Reports.css';
 import _ from 'lodash';
 import { nanoid } from 'nanoid';
+import AddIcon from '@material-ui/icons/Add';
+import { NavLink  } from 'react-router-dom'
 //const { v4: uuidv4 } = require('uuid');
 
 const Reports = (props) => {
@@ -156,7 +158,9 @@ const Reports = (props) => {
     return (
         <>
             <div className="row">
+            <NavLink   class="btn btn-success" style={{ height:'40px', 'text-align':'center'}}  to="/accounts/ebayAccounts"><AddIcon />&nbsp;Add Ebay Account</NavLink >
                 <div style={{ display: 'inline-block', float: 'right', margin: '7px 0px' }} className="ml-auto">
+                
                     <div className="ebay-reports-control-bar">
                         <div className="ebay-reports-progress-bar">
                             <div className="ebay-reports-progress-bar-indicator" style={{ width: isLoading ? progressIndicatorPercentage + '%' : '100%' }}>
