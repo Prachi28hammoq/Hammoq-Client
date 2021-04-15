@@ -8,7 +8,7 @@ import Ebayimg from "./images/ebay.png";
 import Mercariimg from "./images/mercari.png";
 import EbayCategoryModal from "../ebayModal";
 import { Autocomplete, ToggleButton } from "@material-ui/lab";
-import { useTheme /*makeStyles*/ } from "@material-ui/core/styles";
+import { useTheme } from "@material-ui/core/styles";
 import { Typography, useMediaQuery, ListSubheader, TextField, Select, SvgIcon } from "@material-ui/core";
 import { VariableSizeList } from "react-window";
 const max = 5000;
@@ -141,7 +141,14 @@ class RightSection extends Component {
       productMessage: [],
       field: "",
       currentSuggestion: [],
-      gtin: ""
+      gtin: "",
+      shippingDropDownItemsLOADED: false,
+      shippingDomesticDropDownItemsLOADED: false,
+      shippingInternationalDropDownItemsLOADED: false,
+      clientEbayShippingInternationalDropDownItemsLOADED: false,
+      clientEbayShippingDomesticDropDownItemsLOADED: false,
+      ebayCategoryDropDownItemsLOADED: false,
+      clientEbayADCampaignDropDownItemsLOADED: false
     };
     this.ebayRef = React.createRef();
   }
@@ -153,72 +160,15 @@ class RightSection extends Component {
     }
   }
 
-/*  handleMessage = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  handleMessageSubmit = async () => {
-    const productId = this.props.productid;
-    const clientId = this.props.clientid;
-    const formData = {
-      msgformTitle: this.state.msgFormTitle,
-      senderName: `agent: ${localStorage.getItem("agentName")}`,
-      msgFormDescription: this.state.msgFormDescription,
-      field: this.state.field,
-    };
-    try {
-      const response = await Axios.post(
-        `/message/${clientId}/${productId}`,
-        formData,
-        {
-          headers: {
-            "content-type": "application/json",
-            headers: localStorage.getItem("agent"),
-          },
-        }
-      );
-      console.log(response);
-      this.setState({ anchorEl: null });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-    handleMessageData = async (value, event) => {
-    //console.log(value,"value")
-    const productId = this.props.productid;
-    const clientId = this.props.clientid;
-    const msgFormToggle = this.state.msgFormToggle;
-    const anchorEl = event.currentTarget;
-    //console.log(anchorEl)
-    try {
-      const response = await Axios.get(
-        `/message/${clientId}/${productId}/${value}`,
-        {
-          headers: {
-            "content-type": "application/json",
-            headers: localStorage.getItem("agent"),
-          },
-        }
-      );
-      this.setState({
-        productMessage: response.data.message,
-        msgFormToggle: !msgFormToggle,
-        msgFormTitle: `was : ${this.props.data[value]}`,
-        field: value,
-        anchorEl,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };*/
-
   setCategory = (str) => {
     const { data } = this.props;
-    if (this.state.category === str) {
+    if (this.state.category === str) 
+    {
       data["category"] = "";
       this.setState({ category: "" });
-    } else {
+    } 
+    else 
+    {
       data["category"] = str;
       this.setState({ category: str });
     }
@@ -237,7 +187,8 @@ class RightSection extends Component {
     const { data } = this.props;
     localStorage.setItem("custom", !custom);
     this.setState({ custom: !custom });
-    if (data.title) {
+    if (data.title) 
+    {
       let title = data.title;
       this.setState({ title });
       data.title = title.trim();
@@ -268,7 +219,14 @@ class RightSection extends Component {
       gtin,
       didEbayCategoryLoad,
       didDomesticshippingLoad,
-      didInternationalShippingLoad
+      didInternationalShippingLoad,
+      shippingDropDownItemsLOADED,
+      shippingDomesticDropDownItemsLOADED,
+      shippingInternationalDropDownItemsLOADED,
+      clientEbayShippingInternationalDropDownItemsLOADED,
+      clientEbayShippingDomesticDropDownItemsLOADED,
+      ebayCategoryDropDownItemsLOADED,
+      clientEbayADCampaignDropDownItemsLOADED
     } = this.state;
 
     const {
@@ -290,7 +248,6 @@ class RightSection extends Component {
       handleCheckboxToggle,
       handleToggleButton,
       showcat,
-      ebayCategoryDropDownItems,
       onSubmit,
       extraDescriptions,
       toggleOptional,
@@ -298,17 +255,54 @@ class RightSection extends Component {
       setEbayCategoryField,
       repopulateExtraDescriptions,
       priceCalculation,
+      handleShippingChange,
+      handleMarketPlaceDataChange,
+      handleEbayClientShippingChange,
+      handleCampaignSelect,
       shippingDropDownItems,
       shippingDomesticDropDownItems,
       shippingInternationalDropDownItems,
       clientEbayShippingInternationalDropDownItems,
       clientEbayShippingDomesticDropDownItems,
-      handleShippingChange,
-      handleMarketPlaceDataChange,
-      handleEbayClientShippingChange,
-      clientEbayADCampaign,
-      handleCampaignSelect
+      ebayCategoryDropDownItems,
+      clientEbayADCampaignDropDownItems
     } = this.props;
+
+    if(!shippingDropDownItemsLOADED && !shippingDropDownItems.length)
+    {
+      shippingDropDownItems.push({'Description':'Domestic Shipping Services Are Missing'})
+      this.setState({shippingDropDownItemsLOADED:true})
+    }
+    if(!shippingDomesticDropDownItemsLOADED && !shippingDomesticDropDownItems.length)
+    {
+      shippingDomesticDropDownItems.push({'Description':'Domestic Shipping Services Are Missing'})
+      this.setState({shippingDomesticDropDownItemsLOADED:true})
+    }
+    if(!shippingInternationalDropDownItemsLOADED && !shippingInternationalDropDownItems.length)
+    {
+      shippingInternationalDropDownItems.push({'Description':'International Shipping Services Are Missing'})
+      this.setState({shippingInternationalDropDownItemsLOADED:true})
+    }
+    if(!clientEbayShippingInternationalDropDownItemsLOADED && !clientEbayShippingInternationalDropDownItems.length)
+    {
+      clientEbayShippingInternationalDropDownItems.push({'name':'Client International Shipping Services Are Missing'})
+      this.setState({clientEbayShippingInternationalDropDownItemsLOADED:true})
+    }
+    if(!clientEbayShippingDomesticDropDownItemsLOADED && !clientEbayShippingDomesticDropDownItems.length)
+    {
+      clientEbayShippingDomesticDropDownItems.push({'name':'Client Domestic Shipping Services Are Missing'})
+      this.setState({clientEbayShippingDomesticDropDownItemsLOADED:true})
+    }
+    if(!ebayCategoryDropDownItemsLOADED && !ebayCategoryDropDownItems.length)
+    {
+      ebayCategoryDropDownItems.push({'categoryName':'Ebay Categories Are Missing'})
+      this.setState({ebayCategoryDropDownItemsLOADED:true})
+    }
+    if(!clientEbayADCampaignDropDownItemsLOADED && !clientEbayADCampaignDropDownItems.length) 
+    {
+      clientEbayADCampaignDropDownItems.push({'campaignName':'Client Ebay Campaigns Are Missing'})
+      this.setState({clientEbayADCampaignDropDownItemsLOADED:true})
+    }
 
     if(data.isListingGood === undefined)
     {
@@ -323,49 +317,25 @@ class RightSection extends Component {
     if (custom === false) {
       data.title = [
         data.brand,
-        data.colorShade,
-        data.material,
         data.size,
-        data.style,
-        data.pattern,
-        data.seasonOrWeather,
-        data.care,
-        data.madeIn,
       ].reduce((title, val) =>
         val === undefined || val === "" ? title : title + " " + val
       );
       data.ebay.title = [
         data.brand,
-        data.colorShade,
-        data.material,
         data.size,
-        data.style,
-        data.pattern,
-        data.seasonOrWeather,
-        data.care,
-        data.madeIn,
       ].reduce((title, val) =>
         val === undefined || val === "" ? title : title + " " + val
       );
       data.poshmark.title = [
         data.brand,
-        data.colorShade,
-        data.material,
         data.size,
-        data.seasonOrWeather,
-        data.care,
-        data.madeIn,
       ].reduce((title, val) =>
         val === undefined || val === "" ? title : title + " " + val
       );
       data.mercari.title = [
         data.brand,
-        data.colorShade,
-        data.material,
         data.size,
-        data.seasonOrWeather,
-        data.care,
-        data.madeIn,
       ].reduce((title, val) =>
         val === undefined || val === "" ? title : title + " " + val
       );
@@ -864,7 +834,7 @@ class RightSection extends Component {
                         name='ebayCampaign'
                         className='details__input'
                         value={data.ebayCampaign}
-                        options={clientEbayADCampaign}
+                        options={clientEbayADCampaignDropDownItems}
                         getOptionLabel={(option) => option.campaignName}
                         onChange={(event, value, reason) =>
                           reason === "select-option"

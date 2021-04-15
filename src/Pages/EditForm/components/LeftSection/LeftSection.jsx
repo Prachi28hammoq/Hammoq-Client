@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import "./LeftSection.css";
-//import Imagebtn from "../Imagebtn";
-//import { Link } from "react-router-dom";
 import { assetsURL } from "../../../../services/Axios";
-//import Popover from '@material-ui/core/Popover';
-//import Axios from '../../../../services/Axios';
-//import Badge from '@material-ui/core/Badge';
 import LoadingSpinner from "../../../utils/loader";
-//import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 const max = 5000;
 const $ = window.$;
 
@@ -27,7 +21,6 @@ class LeftSection extends Component {
     super();
     this.state = {
       shortDescCharCount: 0,
-      messageFormToggle: false,
       modalImage: "",
       imageIndex: 0,
       anchorEl: null,
@@ -58,14 +51,12 @@ class LeftSection extends Component {
   };
   
   handleImageModal = (idx) => {
-    //console.log(idx ,'idx')
     if (
       idx >= 0 &&
       idx < this.props.images.length &&
       this.props.images[idx].img !== null
     ) {
       let image = this.props.images[idx];
-      // console.log(image, 'index check')
       this.setState(
         {
           imageIndex: idx,
@@ -100,8 +91,7 @@ class LeftSection extends Component {
   };
 
   render = () => {
-    const { 
-      //suggestTitles, 
+    const {
       customdesc 
     } = this.state;
     const {
@@ -109,15 +99,12 @@ class LeftSection extends Component {
       handleChange,
       images,
       extraMeasures,
-      //Ebay,
-      //Poshmark,
-      //Mercari,
       others,
       handleBulkUpload,
       handleImageChange,
       removeImg,
       extraDescriptions,
-      //toggleSelectedOthersWebsite,
+      toggleSelectedOthersWebsite,
       toggleSelectedWebsite,
       nanoid
     } = this.props;
@@ -146,46 +133,6 @@ class LeftSection extends Component {
             data.shortDescription = data.shortDescription + "Category: " + data.category + "\n"
           }
 
-          if(data.colorShade !== undefined  && data.colorShade !== "" && data.colorShade !== null && data.colorShade !== 'undefined')
-          {
-            data.shortDescription = data.shortDescription + "Color: " + data.colorShade + "\n"
-          }
-
-          if(data.material !== undefined  && data.material !== "" && data.material !== null && data.material !== 'undefined')
-          {
-            data.shortDescription = data.shortDescription + "Material: " + data.material + "\n"
-          }
-
-          if(data.style !== undefined  && data.style !== "" && data.style !== null && data.style !== 'undefined')
-          {
-            data.shortDescription = data.shortDescription + "Style: " + data.style + "\n"
-          }
-
-          if(data.pattern !== undefined  && data.pattern !== "" && data.pattern !== null && data.pattern !== 'undefined')
-          {
-            data.shortDescription = data.shortDescription + "Pattern: " + data.pattern + "\n"
-          }
-
-          if(data.size !== undefined  && data.size !== "" && data.size !== null && data.size !== 'undefined')
-          {
-            data.shortDescription = data.shortDescription + "Size: " + data.size + "\n"
-          }
-
-          if(data.seasonOrWeather !== undefined  && data.seasonOrWeather !== "" && data.seasonOrWeather !== null && data.seasonOrWeather !== 'undefined')
-          {
-            data.shortDescription = data.shortDescription + "Season/Weather: " + data.seasonOrWeather + "\n"
-          }
-
-          if(data.care !== undefined  && data.care !== "" && data.care !== null && data.care !== 'undefined')
-          {
-            data.shortDescription = data.shortDescription + "Care: " + data.care + "\n"
-          }
-
-          if(data.madeIn !== undefined  && data.madeIn !== "" && data.madeIn !== null && data.madeIn !== 'undefined')
-          {
-            data.shortDescription = data.shortDescription + "Made in: " + data.madeIn + "\n"
-          }
-
           if(extraDescriptions.length <= 0 && data['waist'] > 0)
           {
             data.shortDescription += 'Waist: ' + data['waist'] + "\n";
@@ -202,36 +149,30 @@ class LeftSection extends Component {
           }
         }
 
-      for (let i = 0; i < extraDescriptions.length; i++) {
+      for (let i = 0; i < extraDescriptions.length; i++) 
+      {
         if((extraDescriptions[i].value !== "" && extraDescriptions[i].value !== null && extraDescriptions[i].value !== undefined && extraDescriptions[i].value !== "No Suggested Values" && extraDescriptions[i].value !== "undefined") && 
-          (extraDescriptions[i].value.localizedValue !== "" && extraDescriptions[i].value.localizedValue !== null && extraDescriptions[i].value.localizedValue !== undefined && extraDescriptions[i].value.localizedValue !== "No Suggested Values" && extraDescriptions[i].value.localizedValue !== "undefined"))
+           (extraDescriptions[i].value.localizedValue !== "" && extraDescriptions[i].value.localizedValue !== null && extraDescriptions[i].value.localizedValue !== undefined && extraDescriptions[i].value.localizedValue !== "No Suggested Values" && extraDescriptions[i].value.localizedValue !== "undefined"))
         {
-          data.shortDescription +=
-            extraDescriptions[i].key + ": " + extraDescriptions[i].value.localizedValue + "\n";
+          data.shortDescription += extraDescriptions[i].key + ": " + extraDescriptions[i].value.localizedValue + "\n";
         }
         else if(extraDescriptions[i].value !== "" && extraDescriptions[i].value !== null && extraDescriptions[i].value !== undefined && extraDescriptions[i].value !== "No Suggested Values" && extraDescriptions[i].value !== "undefined")
         {
-          data.shortDescription +=
-            extraDescriptions[i].key + ": " + extraDescriptions[i].value + "\n";
+          data.shortDescription += extraDescriptions[i].key + ": " + extraDescriptions[i].value + "\n";
         }
       }
 
-      for (let i = 0; i < extraMeasures.length; i++) {
+        for (let i = 0; i < extraMeasures.length; i++) 
+        {
           if(extraMeasures[i].value !== "" && extraMeasures[i].value !== null && extraMeasures[i].value !== undefined && extraMeasures[i].value !== "No Suggested Values" && extraMeasures[i].value !== "undefined")
           {
-            data.shortDescription +=
-            extraMeasures[i].label + ": " + extraMeasures[i].val + "\n";
+            data.shortDescription += extraMeasures[i].label + ": " + extraMeasures[i].val + "\n";
           }
         }
 
-      if(data.companyBlurb !== undefined)
+      if(data.companyBlurb !== undefined && data.companyBlurb !== "")
       {
-        data.shortDescription+=
-        (data.companyBlurb !== undefined
-          ? data.companyBlurb !== ""
-            ? "\n" + data.companyBlurb + "\n"
-            : ""
-          : "");
+        data.shortDescription += "\n" + data.companyBlurb + "\n";
       }
     }
 
@@ -254,7 +195,7 @@ class LeftSection extends Component {
                   >
                     <div
                       className="modal-dialog modal-lg modal-dialog-centered"
-                      //style={{ width: "500px", height: "10px" }}
+                      style={{ width: "80vh", height: "80vh" }}
                     >
                       <div className="modal-content">
                         <div className="modal-header">
@@ -269,7 +210,7 @@ class LeftSection extends Component {
                         </div>
                         <img
                           src={this.state.fullimg}
-                          style={{ height: "500px" }}
+                          style={{ height: "80vh", width: "80vh" }}
                           alt="+"
                         />
                       </div>
@@ -286,7 +227,7 @@ class LeftSection extends Component {
                                 ? assetsURL + image.img
                                 : URL.createObjectURL(image.img)
                             }
-                            style={{ width: "100%", height: "90px" }}
+                            style={{ width: "90px", height: "90px" }}
                             alt="+"
                             onClick={() => {
                               this.setState(
@@ -316,7 +257,7 @@ class LeftSection extends Component {
                       ) : (
                         <div
                           style={{
-                            width: "40px",
+                            width: "90px",
                             height: "90px",
                             margin: "0px!important",
                           }}
@@ -388,7 +329,8 @@ class LeftSection extends Component {
                   <>
                   <div className='store__buttons'>
                   <button 
-                    className="fill__button"
+                    className={`${other.status ? "fill__button" : "outline__button"}`}
+                    onClick={() => {toggleSelectedOthersWebsite(other.name)}}
                     id={nanoid(3)}
                   >{other}</button>
                   </div>
