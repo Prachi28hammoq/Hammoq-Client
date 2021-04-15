@@ -24,7 +24,11 @@ else if(process.env.REACT_APP_STAGE === 'production')
 }
 
 Axios.defaults.baseURL = baseURL + "/client";
-Axios.defaults.withCredentials = true
+
+if(process.env.REACT_APP_STAGE !== 'devlocal')
+{
+	Axios.defaults.withCredentials = true
+}
 
 export default Axios;
 export { baseURL, assetsURL };
