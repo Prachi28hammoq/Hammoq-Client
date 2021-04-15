@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import "./settingsmin.css";
-//import imageresponse from "../../Components/images/imagebackgroud.jpg";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import { Link } from "react-router-dom";
 import Axios from "../../services/Axios";
-//import { Button } from "@material-ui/core";
-
-//import ListingSettings from "../ListingSettings/ListingSettings";
 
 class settings extends Component {
   constructor() {
@@ -15,7 +11,6 @@ class settings extends Component {
       username: "",
       email: "",
       open: false,
-      client_id: "",
       client_id: "",
       savedCards: [],
     };

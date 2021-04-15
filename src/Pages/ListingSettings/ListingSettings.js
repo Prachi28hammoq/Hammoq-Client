@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, createRef } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Axios from "../../services/Axios";
 import "./ListingSettings.css";
@@ -12,7 +12,7 @@ const Rules = (props) => {
     setChildItemType(props.item.itemType);
     setChildItemPrice(props.item.itemPrice);
     setChildItemShipService(props.item.itemShipServ);
-  }, []);
+  }, [props.item.itemType, props.item.itemPrice, props.item.itemShipServ]);
 
   const handleChange = (e) => 
   {
@@ -96,7 +96,6 @@ const ListingSettings = () => {
   const [freeShipping, setFreeShipping] = useState(false);
   const [flatShippingRulesStatus, setFlatShippingRulesStatus] = useState(false);
   const [flatShippingRules, setFlatShippingRules] = useState([]);
-  const [testIdea, setTestIdea] = useState([]);
   const [calculatedShipping, setCalculatedShipping] = useState(false);
   const [isReturnAccept, setIsReturnAccept] = useState(false);
   const [returnedWithin, setReturnedWithin] = useState("");
@@ -207,7 +206,7 @@ const ListingSettings = () => {
         }
 
         savedData = res.data.settings[0].intlShipping[0];
-        console.log("intlShipping data: ", savedData);
+        
         setIncrByDomestic(savedData.incrFromDomestic);
         setShipService(savedData.shippingService);
         setIntlReturnAccepted(savedData.returns[0].accepted);

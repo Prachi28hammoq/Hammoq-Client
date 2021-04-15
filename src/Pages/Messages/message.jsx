@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import moment from 'moment'
-
-//import { makeStyles } from '@material-ui/core/styles';
-//import Popover from '@material-ui/core/Popover';
-
-//import $ from "jquery";
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import Axios from "../../services/Axios";
 import socket from "../../services/socket";
 
 //let socket = require.main.exports.socket;
@@ -20,7 +14,6 @@ class message extends Component {
       messages : [],
       message: '',
       customerName : localStorage.getItem('customerName'),
-       
     }
     socket.on('messages', (data) => {if(data){this.setState({messages : data.messages})}} )
     socket.on('newmessage', (data) => {var messages = this.state.messages 

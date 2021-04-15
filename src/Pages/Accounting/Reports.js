@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-date-picker';
 import Axios from "../../services/Axios";
 import socket from "../../../src/services/socket.jsx";
 import './Reports.css';
-import _ from 'lodash';
 import { nanoid } from 'nanoid';
 import AddIcon from '@material-ui/icons/Add';
 import { NavLink  } from 'react-router-dom'
-//const { v4: uuidv4 } = require('uuid');
 
 const Reports = (props) => {
 
@@ -55,7 +53,7 @@ const Reports = (props) => {
             });
 
             socket.on('updateReportsProgress', function (data) {
-                if (data.room == room)
+                if (data.room === room)
                     setProgressIndicatorPercentage(data.percentage);
             });
         }
@@ -119,11 +117,9 @@ const Reports = (props) => {
 
     const updateCostOfGoods = async (index, orderId, value) => {
 
-        let re = /^[0-9\b]+$/;
-
         if (!isNaN(value)) {
             setOrders(orders => orders.map((order, idx) => {
-                if (idx == index) return { ...orders[index], costOfGoods: value };
+                if (idx === index) return { ...orders[index], costOfGoods: value };
                 return order;
             }))
 

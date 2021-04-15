@@ -11,9 +11,9 @@ const MessagesDisplayArea = (props) => {
 
     const [messages, setMessages] = useState([]);
     const [offsetReverse, setOffsetReverse] = useState(0);
-    const [limitReverse, setLimitReverse] = useState(7);
-    const [offsetNormal, setOffsetNormal] = useState(0);
-    const [limitNormal, setLimitNormal] = useState(1);
+    const [limitReverse] = useState(7);
+    const [offsetNormal] = useState(0);
+    const [limitNormal] = useState(1);
     const [scrollLock, setScrollLock] = useState(false);
     const [unreadMessagesList, setUnreadMessagesList] = useState([]);
 
@@ -40,7 +40,7 @@ const MessagesDisplayArea = (props) => {
                 res = await Axios.get('/messagesNeo/getAgentsAllocatedToClient/' + res?.data?.clientId);
 
                 if (res?.data?.agentsAllocatedToClient) {
-                    props.setAgentsAllocatedToClient([...res?.data?.agentsAllocatedToClient.filter(agentId => agentId!= "undefined")])
+                    props.setAgentsAllocatedToClient([...res?.data?.agentsAllocatedToClient.filter(agentId => agentId !== "undefined")])
                 }
             }
         }
@@ -99,7 +99,7 @@ const MessagesDisplayArea = (props) => {
 
     useEffect(() => {
 
-        if (props.refreshDisplayArea == true)
+        if (props.refreshDisplayArea === true)
             getMessagesInNormalOrder();
 
     }, [props.refreshDisplayArea])
@@ -116,7 +116,7 @@ const MessagesDisplayArea = (props) => {
         setMessages(messages => [...tempMessages.concat(messages) || []]);
 
         for (let tempMessage of tempMessages) {
-            if (unreadMessagesList.includes(tempMessage.messageId) == false) {
+            if (unreadMessagesList.includes(tempMessage.messageId) === false) {
                 markMessageAsRead(tempMessage);
                 setUnreadMessagesList([...unreadMessagesList, tempMessage.messageId]);
             }
@@ -134,7 +134,7 @@ const MessagesDisplayArea = (props) => {
         setMessages(messages => [...messages, ...tempMessages]);
 
         for (let tempMessage of tempMessages) {
-            if (tempMessage.messageStatus == 'UNREAD')
+            if (tempMessage.messageStatus === 'UNREAD')
                 markMessageAsRead(tempMessage);
         }
 
@@ -152,7 +152,7 @@ const MessagesDisplayArea = (props) => {
 
     const handleScroll = (e) => {
 
-        if (e.target.scrollTop == 0 && scrollLock == false && messages.length > 0) {
+        if (e.target.scrollTop === 0 && scrollLock === false && messages.length > 0) {
             setScrollLock(true);
             setOffsetReverse(offsetReverse => offsetReverse + limitReverse);
             e.target.scrollTop += 180;
@@ -161,20 +161,20 @@ const MessagesDisplayArea = (props) => {
 
     const markMessageAsRead = async (message) => {
 
-        if (message?.fromUser?.userType == 'ADMIN' || message?.fromUser?.userType == 'AGENT') {
+        if (message?.fromUser?.userType === 'ADMIN' || message?.fromUser?.userType === 'AGENT') {
             socket.emit('markMessageAsRead', { message, roomId: localStorage.getItem("token") });
         }
     }
 
     return (
         <div className="messages-display-area" ref={messageDisplayAreaRef} onScroll={handleScroll}>
-            { messages.map(message => {
+            { messages.forEach(message => {
 
-                if (message.fromUser.userType == 'ADMIN' || message.fromUser.userType == 'AGENT') {
+                if (message.fromUser.userType === 'ADMIN' || message.fromUser.userType === 'AGENT') {
                     return <ReceivedMessage message={message} />
                 }
 
-                if (message.fromUser.userType == 'CLIENT') {
+                if (message.fromUser.userType === 'CLIENT') {
                     return <SentMessage message={message} />
                 }
 

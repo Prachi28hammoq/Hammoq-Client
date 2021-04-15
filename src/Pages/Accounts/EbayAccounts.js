@@ -35,11 +35,11 @@ const EbayAccounts = (props) => {
 
   useEffect(() => {
 
-    if (areAccountsLoading == true)
+    if (areAccountsLoading === true)
       setShowNoAccountsFoundMessage(false);
 
-    if (areAccountsLoading == false) {
-      if (ebayAccounts.length == 0)
+    if (areAccountsLoading === false) {
+      if (ebayAccounts.length === 0)
         setShowNoAccountsFoundMessage(true);
       else
         setShowNoAccountsFoundMessage(false);
@@ -63,12 +63,12 @@ const EbayAccounts = (props) => {
 
       setEbayAccounts(ebayAccounts => {
 
-        if (!ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName == data.ebayUserName).length > 0) {
+        if (!ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName === data.ebayUserName).length > 0) {
           return [...ebayAccounts, { ebayUserName: data.ebayUserName, ebayUserTokenStatus: data.ebayUserTokenStatus }];
         } else {
           return ebayAccounts.map(ebayAccount => {
 
-            if (ebayAccount.ebayUserName == data.ebayUserName)
+            if (ebayAccount.ebayUserName === data.ebayUserName)
               return { ...ebayAccount, ebayUserName: data.ebayUserName, ebayUserTokenStatus: data.ebayUserTokenStatus };
 
             return ebayAccount;
@@ -92,7 +92,7 @@ const EbayAccounts = (props) => {
 
     Axios.get("/ebay/consent")
       .then((response) => {
-        var authWindow = window.open(response.data.authURL, "_blank");
+        window.open(response.data.authURL, "_blank");
       })
 
       .catch((err) => {
@@ -102,7 +102,7 @@ const EbayAccounts = (props) => {
 
   const sendAuthorizationToken = async (location) => {
 
-    if (location.pathname == '/accounts/ebayAccounts' && location.search && location.search?.length > 0) {
+    if (location.pathname === '/accounts/ebayAccounts' && location.search && location.search?.length > 0) {
       let res = await Axios.post('/ebayAuth/ebayaccounts' + location.search);
       if (res.data)
         setTimeout(() => { window.close() }, 100);
@@ -111,21 +111,21 @@ const EbayAccounts = (props) => {
 
   const refreshEbayUserToken = async (ebayUserName) => {
 
-    let res = await Axios.post('/ebayAuth/refreshtokens/' + ebayUserName);
+    await Axios.post('/ebayAuth/refreshtokens/' + ebayUserName);
 
   }
 
   const removeEbayAccountFromHammoqAccount = async (ebayUserName) => {
 
-    let res = await Axios.delete('/ebayAuth/ebayaccounts/' + ebayUserName);
+    await Axios.delete('/ebayAuth/ebayaccounts/' + ebayUserName);
 
-    setEbayAccounts(ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName != ebayUserName));
+    setEbayAccounts(ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName !== ebayUserName));
 
   }
 
   const refreshUserTokenForAllEbayAccounts = async () => {
 
-    let res = await Axios.post('/ebayAuth/refreshtokens/');
+    await Axios.post('/ebayAuth/refreshtokens/');
 
   }
 

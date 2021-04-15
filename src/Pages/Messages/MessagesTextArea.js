@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Axios from "../../services/Axios";
 import './MessagesTextArea.css';
 
@@ -14,7 +14,7 @@ const MessagesTextArea = (props) => {
            return;
 
         if (uploadedFile.trim().length > 0) {
-            let res = await Axios.post('/messagesNeo/sendMessage', {
+            await Axios.post('/messagesNeo/sendMessage', {
                 "message": { "messageType": "File", "messageBody": uploadedFile.trim() },
                 "fromUserId": props.clientId,
                 "toUserIds": [...props.agentsAllocatedToClient]
@@ -26,7 +26,7 @@ const MessagesTextArea = (props) => {
         }
 
         if (message.trim().length > 0) {
-            let res = await Axios.post('/messagesNeo/sendMessage', {
+            await Axios.post('/messagesNeo/sendMessage', {
                 "message": { "messageType": "Text", "messageBody": message.trim() },
                 "fromUserId": props.clientId,
                 "toUserIds": [...props.agentsAllocatedToClient]
@@ -72,8 +72,8 @@ const MessagesTextArea = (props) => {
                             
                         </span>
                     </button>
-                    {uploadedFile.trim().length > 0 ? <img src={uploadedFile} height={35} width={35} style={{marginLeft: '10px'}}></img>:null}
-                    {uploadingFile == true ? <i class="fa fa-upload" aria-hidden="true" style={{marginLeft: '10px', color: '#8E7DBE'}} /> : null}
+                    {uploadedFile.trim().length > 0 ? <img alt="uploadedPhoto" src={uploadedFile} height={35} width={35} style={{marginLeft: '10px'}}></img>:null}
+                    {uploadingFile === true ? <i class="fa fa-upload" aria-hidden="true" style={{marginLeft: '10px', color: '#8E7DBE'}} /> : null}
                 </span>
             </div>
         </div>

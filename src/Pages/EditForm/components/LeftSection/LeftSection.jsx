@@ -115,7 +115,7 @@ class LeftSection extends Component {
         data.shortDescription = "";
           if(data.title !== undefined && data.title !== "" && data.title !== null && data.title !== 'undefined')
           {
-            data.shortDescription = data.shortDescription + data.title + "\n" + "\n";
+            data.shortDescription = data.shortDescription + data.title + "\n\n";
           }
 
           if(data.brand !== undefined && data.brand !== "" && data.brand !== null && data.brand !== 'undefined')

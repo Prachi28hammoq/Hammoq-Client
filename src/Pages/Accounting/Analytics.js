@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import LineChart from './Components/LineChart';
 import BarChart from './Components/BarChart';
 import DoughnutChart from './Components/DoughnutChart';
 import Axios from "../../services/Axios";
@@ -8,10 +7,7 @@ import './Analytics.css';
 import _ from 'lodash';
 import { NavLink  } from 'react-router-dom'
 import { nanoid } from 'nanoid';
-//const { v4: uuidv4 } = require('uuid');
 import AddIcon from '@material-ui/icons/Add';
-
-//uuidv4();
 
 const Analytics = (props) => {
 
@@ -22,7 +18,7 @@ const Analytics = (props) => {
     const [income, setIncome] = useState(-1);
     const [expenses, setExpenses] = useState(-1);
     const [incomeExpenseRatio, setIncomeExpenseRatio] = useState([1, 1])
-    const [profitLoss, setProfitLoss] = useState(0);
+    const [setProfitLoss] = useState(0);
     const [orders, setOrders] = useState([]);
     const [currentMonthOrders, setCurrentMonthOrders] = useState([]);
     const [previousMonthOrders, setPreviousMonthOrders] = useState([]);
@@ -76,7 +72,7 @@ const Analytics = (props) => {
             });
 
             socket.on('updateAnalyticsProgress', function (data) {
-                if (data.room == room)
+                if (data.room === room)
                     setProgressIndicatorPercentage(data.percentage);
             });
         }

@@ -3,16 +3,10 @@ import LeftSection from "./components/LeftSection/LeftSection";
 import RightSection from "./components/RightSection/RightSection";
 import "./EditForm.css";
 import Axios from "../../services/Axios";
-//import LoadingSpinner from "../utils/loader";
-import imageCompression from "browser-image-compression";
-import { evaluateTree } from "../utils/parser";
-//import $ from "jquery";
-//import imageDataURI from "image-data-uri";
 import jwt_decode from "jwt-decode";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import IconButton from '@material-ui/core/IconButton';
 import { nanoid } from 'nanoid';
-import { useHistory } from "react-router-dom";
 
 class EditForm extends Component {
   constructor(props) {
@@ -311,7 +305,7 @@ class EditForm extends Component {
 
   handleMarketPlaceDataChange = (event, market, field) =>
   {
-    const { name, value } = event.target;
+    const { value } = event.target;
     const { data } = this.state;
 
     data[market][field] = value;
@@ -541,9 +535,11 @@ class EditForm extends Component {
         case "Broken/For Repair":
           this.state.data['ebayConditionID'] = 7000;
           break;
+        default:
+          break;
       }
 
-      if(data.ebay.ebayListingType === 'FixedPriceItem' && value === "inventory" || value === "submit")
+      if((data.ebay.ebayListingType === 'FixedPriceItem' && value === "inventory") || value === "submit")
       {
         this.state.data['ebay']['ebayListingDuration'] = 'GTC';
       }
@@ -998,12 +994,7 @@ class EditForm extends Component {
       Ebay,
       Poshmark,
       Mercari,
-      othersbool,
       others,
-      othersstate,
-      otherfromdb,
-      othertolist,
-      othersurl,
       ebayCategoryDropDownItems,
       shippingDropDownItems,
       shippingDomesticDropDownItems,

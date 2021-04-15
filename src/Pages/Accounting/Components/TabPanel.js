@@ -10,10 +10,10 @@ const TabPanel = (props) => {
     <div className="ebay-accounting-tab-panel">
       <Tab tabName="Analytics"
         onClick={(tabName) => { setSelectedTab(tabName); props.onTabSelect(tabName); }}
-        isSelected={selectedTab == 'Analytics'} />
+        isSelected={selectedTab === 'Analytics'} />
       <Tab tabName="Reports"
         onClick={(tabName) => { setSelectedTab(tabName); props.onTabSelect(tabName); }}
-        isSelected={selectedTab == 'Reports'} />
+        isSelected={selectedTab === 'Reports'} />
     </div>
   );
 }

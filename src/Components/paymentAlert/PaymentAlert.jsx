@@ -14,10 +14,7 @@ export default function AlertDialog(props) {
   const [amount, setAmount] = React.useState(null);
   const [captchaValue, setCaptchaValue] = React.useState(null);
   const [stripeId, setStripeIdValue] = React.useState(null);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  //console.log(props, "propss");
+
   const handleClose = () => {
     setAmount(null);
     setCaptchaValue(null);
@@ -34,7 +31,7 @@ export default function AlertDialog(props) {
     );
     if (confirm) {
       const response = await Axios.delete(`/payment/card/${cardId}`);
-      if (response.data.success == true) {
+      if (response.data.success === true) {
         window.alert("Deleted");
         window.location.reload();
       } else {
@@ -45,7 +42,7 @@ export default function AlertDialog(props) {
   // specifying verify callback
   const updatePayment = () => {
     setOpen(true);
-    if (stripeId != null) {
+    if (stripeId !== null) {
       props.updatePayment(amount, stripeId);
     } else {
       window.alert("Please select any card.");
@@ -103,7 +100,7 @@ export default function AlertDialog(props) {
               <div className="col">
                 <Button
                   variant="outlined"
-                  color={amount == 100 ? "secondary" : "primary"}
+                  color={amount === 100 ? "secondary" : "primary"}
                   onClick={() => setAmount(100)}
                 >
                   $ 100.00
@@ -112,7 +109,7 @@ export default function AlertDialog(props) {
               <div className="col">
                 <Button
                   variant="outlined"
-                  color={amount == 500 ? "secondary" : "primary"}
+                  color={amount === 500 ? "secondary" : "primary"}
                   onClick={() => setAmount(500)}
                 >
                   $ 500.00
@@ -127,7 +124,7 @@ export default function AlertDialog(props) {
                 ></Input>
               </div>
             </div>
-            {amount != null && (
+            {amount !== null && (
               <div className="row d-flex justify-content-center">
                 {" "}
                 <ReCAPTCHA

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './MessagesContentArea.css';
 import MessagesDisplayArea from './MessagesDisplayArea';
 import MessagesTextArea from './MessagesTextArea';

@@ -9,9 +9,8 @@ import Mercariimg from "./images/mercari.png";
 import EbayCategoryModal from "../ebayModal";
 import { Autocomplete, ToggleButton } from "@material-ui/lab";
 import { useTheme } from "@material-ui/core/styles";
-import { Typography, useMediaQuery, ListSubheader, TextField, Select, SvgIcon } from "@material-ui/core";
+import { Typography, useMediaQuery, ListSubheader, TextField, SvgIcon } from "@material-ui/core";
 import { VariableSizeList } from "react-window";
-const max = 5000;
 
 const LISTBOX_PADDING = 8; // px
 
@@ -217,9 +216,6 @@ class RightSection extends Component {
       custom,
       showOtherTitles,
       gtin,
-      didEbayCategoryLoad,
-      didDomesticshippingLoad,
-      didInternationalShippingLoad,
       shippingDropDownItemsLOADED,
       shippingDomesticDropDownItemsLOADED,
       shippingInternationalDropDownItemsLOADED,
@@ -233,7 +229,6 @@ class RightSection extends Component {
       data,
       handleChange,
       addMeasure,
-      addDescription,
       extraMeasures,
       handleDescriptionChange,
       handleDescriptionLabel,

@@ -42,20 +42,12 @@ class Signup extends Component {
     e.preventDefault();
     const {
       term1,
-      term2,
-      address1,
-      address2,
       password,
       confirmPassword,
-      country,
-      city,
-      state,
-      zip,
       firstName,
       lastName,
       email,
-      phoneno,
-      referralCode
+      phoneno
     } = this.state;
 
     if (!term1) {
@@ -63,17 +55,17 @@ class Signup extends Component {
       return alert("Accept all the terms.");
     }
 
-    if (email == "") {
+    if (email === "") {
       this.setState({ isSubmitting: false });
       return alert("Email field is required.");
     }
 
-    if (phoneno == "") {
+    if (phoneno === "") {
       this.setState({ isSubmitting: false });
       return alert("Phone.no field is required.");
     }
 
-    if (firstName == "" || lastName == "") {
+    if (firstName === "" || lastName === "") {
       this.setState({ isSubmitting: false });
       return alert("Name field is required.");
     }
@@ -107,14 +99,8 @@ class Signup extends Component {
     const {
       firstName,
       lastName,
-      address1,
-      address2,
-      country,
-      state,
-      zip,
       email,
       phoneno,
-      city,
       password,
       confirmPassword,
       isSubmitting,
@@ -198,7 +184,7 @@ class Signup extends Component {
             className="form-control mb-4"
             required
           ></input>
-          <a href="" target="_blank">
+          <a href="#bottom" target="_blank">
             Terms and Conditions
           </a>
           <div className="form-check">

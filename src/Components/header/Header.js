@@ -1,11 +1,8 @@
-import React, { Component, useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-//import {Helmet} from "react-helmet";
 import "./headermin.css";
 import Logo from "../images/hammock.svg";
-import PaymentAlert from "../paymentAlert/PaymentAlert";
-import Popover from "@material-ui/core/Popover";
-import Axios, { assetsURL } from "../../services/Axios";
+import Axios from "../../services/Axios";
 import { ClientMessagesContext } from '../../ContextProviders/ClientMessagesProvider';
 
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
@@ -16,11 +13,9 @@ const Header = (props) => {
 
   const { contextUnreadMessagesCount, setContextClientId } = useContext(ClientMessagesContext);
 
-  const [rates, setRates] = useState({});
+  const [setRates] = useState({});
   const [bal, setBal] = useState(0);
-  const [basicCheck, setBasicCheck] = useState(true);
-  const [advanceCheck, setAdvanceCheck] = useState(true);
-  const [open, setOpen] = useState(false);
+  const [setOpen] = useState(false);
   const [clientId, setClientId] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [clientMessageSeenCount, setClientMessageSeenCount] = useState(0);
@@ -66,7 +61,7 @@ const Header = (props) => {
       clearInterval(refreshTokenInterval);
     };
 
-  }, []);
+  }, [bal, contextUnreadMessagesCount, customerName, setContextClientId, setOpen, setRates]);
 
   useEffect(() => {
     setClientMessageSeenCount(contextUnreadMessagesCount);
@@ -74,9 +69,7 @@ const Header = (props) => {
 
 
   const refreshUserTokenForAllEbayAccounts = async () => {
-
-    let res = await Axios.post('/ebayAuth/refreshtokens/');
-
+    await Axios.post('/ebayAuth/refreshtokens/');
   }
 
   const logoutHandler = () => {
@@ -84,7 +77,7 @@ const Header = (props) => {
     window.open("/login", "_self");
   };
 
-  const handleClose = () => {
+/*  const handleClose = () => {
     setOpen(false);
   };
 
@@ -100,7 +93,7 @@ const Header = (props) => {
         else alert("Error");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  };
+  };*/
 
   return(
     <nav

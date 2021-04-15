@@ -96,7 +96,7 @@ class Passwords extends Component {
   handleeBaySubmit = () => {
     Axios.get("/ebay/consent")
       .then((response) => {
-        var authWindow = window.open(response.data.authURL, "_blank");
+        window.open(response.data.authURL, "_blank");
       })
 
       .catch((err) => {

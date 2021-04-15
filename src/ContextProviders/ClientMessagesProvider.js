@@ -1,6 +1,6 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import socket from "../services/socket";
-import Axios, { assetsURL } from "../services/Axios";
+import Axios from "../services/Axios";
 import { useHistory } from "react-router";
 export const ClientMessagesContext = React.createContext();
 

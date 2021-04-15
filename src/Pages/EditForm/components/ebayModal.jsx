@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Axios from "../../../services/Axios";
-//import Input from '@material-ui/core/Input';
-//import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
@@ -11,7 +9,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
 
 export default class EbayCategoryModal extends Component {
 	elRefs = React.createRef([]);
