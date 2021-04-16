@@ -18,7 +18,7 @@ const Analytics = (props) => {
     const [income, setIncome] = useState(-1);
     const [expenses, setExpenses] = useState(-1);
     const [incomeExpenseRatio, setIncomeExpenseRatio] = useState([1, 1])
-    const [setProfitLoss] = useState(0);
+    const [profitLoss, setProfitLoss] = useState(0);
     const [orders, setOrders] = useState([]);
     const [currentMonthOrders, setCurrentMonthOrders] = useState([]);
     const [previousMonthOrders, setPreviousMonthOrders] = useState([]);
@@ -72,7 +72,7 @@ const Analytics = (props) => {
             });
 
             socket.on('updateAnalyticsProgress', function (data) {
-                if (data.room === room)
+                if (data.room == room)
                     setProgressIndicatorPercentage(data.percentage);
             });
         }

@@ -53,7 +53,7 @@ const Reports = (props) => {
             });
 
             socket.on('updateReportsProgress', function (data) {
-                if (data.room === room)
+                if (data.room == room)
                     setProgressIndicatorPercentage(data.percentage);
             });
         }
@@ -119,7 +119,7 @@ const Reports = (props) => {
 
         if (!isNaN(value)) {
             setOrders(orders => orders.map((order, idx) => {
-                if (idx === index) return { ...orders[index], costOfGoods: value };
+                if (idx == index) return { ...orders[index], costOfGoods: value };
                 return order;
             }))
 

@@ -13,7 +13,7 @@ const Accounting = () => {
 
         history.push('/accounting/analytics');
 
-    }, [history]);
+    }, []);
 
     const onTabSelect = (tabName) => {
 

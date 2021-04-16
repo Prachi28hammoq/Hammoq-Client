@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-//import Chart from 'chart.js';
+import Chart from 'chart.js';
 
 const DoughnutChart = (props) => {
 
@@ -7,7 +7,7 @@ const DoughnutChart = (props) => {
 
     useEffect(() => {
 
-/*        var myDoughnutChart = new Chart(chartRef.current, {
+        var myDoughnutChart = new Chart(chartRef.current, {
             type: 'doughnut',
             data: {                
                 datasets: [{
@@ -23,7 +23,7 @@ const DoughnutChart = (props) => {
                 responsive: true,
                 maintainAspectRatio: true
               }
-            })*/
+            })
     }, [props.data]);
 
     return(

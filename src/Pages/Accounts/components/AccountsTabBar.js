@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import AccountsTab from './AccountsTab';
 import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const AccountsTabBar = () => {
 
     let history = useHistory();
+    const location = useLocation();
     const [selectedTab, setSelectedTab] = useState('Ebay Accounts');
 
     useEffect(() => {

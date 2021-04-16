@@ -13,9 +13,9 @@ const Header = (props) => {
 
   const { contextUnreadMessagesCount, setContextClientId } = useContext(ClientMessagesContext);
 
-  const [setRates] = useState({});
+  const [rates, setRates] = useState({});
   const [bal, setBal] = useState(0);
-  const [setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [clientId, setClientId] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [clientMessageSeenCount, setClientMessageSeenCount] = useState(0);
