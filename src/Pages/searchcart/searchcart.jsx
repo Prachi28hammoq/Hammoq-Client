@@ -6,6 +6,7 @@ import LoadingSpinner from "../utils/loader";
 import Pagination from "../../Components/pagination/Pagination";
 import Badge from "@material-ui/core/Badge";
 import MailIcon from "@material-ui/icons/Mail";
+import { nanoid } from "nanoid";
 
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
@@ -19,7 +20,6 @@ class Searchcart extends Component {
       rates: {},
       search: "",
       searchedProducts: [],
-      productMessageSeen: [],
       bal: 0,
       Ebay: false,
       Poshmark: false,
@@ -35,52 +35,30 @@ class Searchcart extends Component {
       clientdetails: [],
       totalPage: "",
       filteredProducts: [],
-      message: "",
       pop_open: false,
-      inventoryCount: "",
-      draftCount: "",
-      submittedCount: "",
+      inventoryCount: 0,
+      draftCount: 0,
+      submittedCount: 0,
       prodStatus: "",
     };
   }
 
-  handelProductMessageSeen() {
-    var data = this.state.products.filter((status) => status.status !== false);
-    var prodMsgSeen = true
-    var tempProdMsgSeen = []
-    for (var i = 0; i < data.length; i++) {
-        prodMsgSeen = true;
-        for (var j = 0; j < data[i].messageSeen.length; j++) {
-          if (data[i].messageSeen[j].client === false) {
-            prodMsgSeen = false;
-          }
-        }
-        tempProdMsgSeen.push(prodMsgSeen);
-    }
-    this.setState({ productMessageSeen: tempProdMsgSeen });
-  }
   componentDidMount = () => {
     const prodStatus = this.props.match.params.prodStatus;
     this.setState({ prodStatus: this.props.match.params.prodStatus });
     this.setState({ loading: true });
     Axios.get("/payment/rates")
-      .then((res) => {
-        //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length-1] });
-      })
+      .then((res) => {this.setState({ rates: res.data[res.data.length-1] });})
       .catch((error) => {console.log(error)});
 
     Axios.get(`/product/type/${prodStatus}`, { params: { page: 1, size: 10 } })
-      .then(({ data }) => {
-          this.setState({
-            products: data.data.filter((status) => status.status !== false),
-            totalPage: parseInt(data.pages),
-            page: parseInt(data.currPage),
-            inventoryCount: data.count.inventoryCount,
-            draftCount: data.count.draftCount,
-            submittedCount: data.count.submittedCount,
-          });
-          this.handelProductMessageSeen();
+         .then(({ data }) => {this.setState({products: data.data.filter((status) => status.status !== false),
+                                             totalPage: parseInt(data.pages),
+                                             page: parseInt(data.currPage),
+                                             inventoryCount: data.count.inventoryCount,
+                                             draftCount: data.count.draftCount,
+                                             submittedCount: data.count.submittedCount                                        
+                                            });
           this.setState({ loading: false });
       })
       .catch((error) => {
@@ -90,9 +68,7 @@ class Searchcart extends Component {
         });
 
     Axios.get("/clientdetails")
-      .then(({ data }) => {
-        this.setState({ bal: data.balance, clientdetails: data });
-      })
+      .then(({ data }) => {this.setState({ bal: data.balance, clientdetails: data });})
       .catch((error) => {console.log(error)});
 
     Axios.get("/password/getstatus").then(({ data }) => {
@@ -110,10 +86,8 @@ class Searchcart extends Component {
           const others = [...this.state.others];
           others.push(d);
           this.setState({ others });
-
           const otherss = [...this.state.othersstate];
           otherss.push(false);
-
           this.setState({ othersstate: otherss });
         });
       }
@@ -126,11 +100,10 @@ class Searchcart extends Component {
     await Axios.post(`/product/${itemId}`, {headers: {"x-access-token": localStorage.getItem("token"),"content-type": "application/x-www-form-urlencoded",},})
                .catch((error) => {console.log(error)});
 
-    const response1 = await Axios.get(`/product/type/${this.state.prodStatus}`,{ params: { page: 1, size: 10 } })
+    const response1 = await Axios.get(`/product/type/${this.state.prodStatus}`,{params: {page: 1, size: 10}})
                                   .catch((error) => {console.log(error)});
 
     this.setState({products: response1.data.data,});
-
     window.alert("Duplicate has been created.");
     window.location.reload();
   };
@@ -151,7 +124,6 @@ class Searchcart extends Component {
                                   .catch((error) => {console.log(error)});;
 
       this.setState({ products: response.data.products });
-      this.handelProductMessageSeen();
       window.location.reload()
     } 
     catch (error) 
@@ -165,7 +137,6 @@ class Searchcart extends Component {
       this.setState({ page: newPage });
       await Axios.get(`/product/type/${this.state.prodStatus}`, {params: { page: newPage, size: this.state.rowsPerPage },}).then(({ data }) => {
           if (data) this.setState({ products: data.data.filter((status) => status.status !== false),loading: false });
-          this.handelProductMessageSeen();
         })
         .catch((error) => {console.log(error)});
     }
@@ -175,19 +146,23 @@ class Searchcart extends Component {
     await Axios.get(`/product/type/${this.state.prodStatus}`, {params: { page: this.state.page, size: val },})
                .then(({ data }) => {
         this.setState({products: data.data.filter((status) => status.status !== false), rowsPerPage: val, totalPage: data.pages,});
-        this.handelProductMessageSeen();
       })
       .catch((error) => {console.log(error)});
-  };
-
-  handleMessageAlert = (e) => {
-    e.preventDefault();
-    this.setState({pop_open: !this.state.pop_open, anchorEl: e.currentTarget,});
   };
 
   handleRequestClose() {
     this.setState({pop_open: false,});
   }
+
+  datesort = () =>
+  {
+    let { products, searchedProducts, filteredProducts } = this.state;
+    if(products.length > 0) products = products.reverse().map((product, idx) => {return product});
+    if(searchedProducts.length > 0) searchedProducts = searchedProducts.reverse().map((product, idx) => {return product});
+    if(filteredProducts.length > 0) filteredProducts = filteredProducts.reverse().map((product, idx) => {return product});
+    this.setState({products, searchedProducts, filteredProducts});
+  }
+
   render() {
     const {
       products,
@@ -202,15 +177,9 @@ class Searchcart extends Component {
       rowsPerPage,
       page,
       totalPage,
-      filteredProducts,
-      productMessageSeen,
+      filteredProducts
     } = this.state;
-    const newproducts =
-      searchedProducts.length > 0 || search.length > 0
-        ? searchedProducts
-        : filteredProducts.length
-        ? filteredProducts
-        : products;
+    const newproducts = searchedProducts.length > 0 || search.length > 0 ? searchedProducts : filteredProducts.length ? filteredProducts : products;
     return (
       <div>
         <div className="cartIt" style={{ minHeight: "75vh" }}>
@@ -263,7 +232,6 @@ class Searchcart extends Component {
             </div>
           </div>
           <div className="row">
-            {/* <h5 className="ml-4 mt-2">Balance: $ {bal.toFixed(2)}</h5> */}
             <div
               className="btn btn-secondary d-flex col-2 col-lg-1 ml-auto justify-content-center mr-4 mb-2"
               style={{ position: "absolute", top: "75px", right: "0px" }}
@@ -272,490 +240,123 @@ class Searchcart extends Component {
               Rates
             </div>
           </div>
-          {/* <div className="row">
-        
-          <div
-            className=" d-flex  ml-auto justify-content-center mr-4 mb-2"
-            style={{ position: "absolute", top: "85px", right: "135px" }}
-          >
-            Unlisted products :{" "}
-            {clientdetails.noOfProducts - clientdetails.noOfListings > 0 ? clientdetails.noOfProducts - clientdetails.noOfListings : 0} , Listed
-            products: {clientdetails.noOfListings}
-          </div>
-        </div> */}
           <div className="product__info">
-            {/* <div>
-            <button type="text" onClick = {this.handleMessageAlert} className="btn btn-primary d-incline mr-4 mb-3" >Message</button>
-            <Popover
-              open={this.state.pop_open}
-              anchorEl={this.state.anchorEl}
-              onRequestClose={this.handleRequestClose}
-              anchorOrigin={{
-              vertical: "top",
-              horizontal: "left",
-              }}
-              transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
-              }}
-            ></Popover> 
-            <Popover
-              id={chatid}
-               open={open}
-              anchorEl={anchorEl}
-              onClose={this.commentClose}
-              anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-              }}
-              transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
-                }}
-                />
-            <Message addComment={this.addComment} comment={comment} />
-          </div> */}
 
             <div style={{ justifyContent: "space-evenly" }}>
               <button
                 type="button"
                 className="btn btn-primary d-inline mr-3 mb-3"
-                onClick={() => {
-                  //this.handleInventory()
-                  this.props.history.push("/products/inventory");
-                  window.location.reload();
-                }}
+                onClick={() => {this.props.history.push("/products/inventory"); window.location.reload();}}
               >
-                {this.state.inventoryCount}-Inventory
+                {this.state.inventoryCount} - Inventory
               </button>
               <button
                 className="btn btn-primary d-inline mr-3 mb-3"
-                onClick={() => {
-                  // this.handleDrafts();
-
-                  this.props.history.push("/products/draft");
-                  window.location.reload();
-                }}
+                onClick={() => {this.props.history.push("/products/draft"); window.location.reload();}}
               >
-                {this.state.draftCount}-Drafts
+                {this.state.draftCount} - Drafts
               </button>
               <button
                 className="btn btn-primary d-inline mr-3 mb-3"
-                onClick={() => {
-                  //this.handleSubmitted();
-                  this.props.history.push("/products/submitted");
-                  window.location.reload();
-                }}
+                onClick={() => {this.props.history.push("/products/submitted"); window.location.reload();}}
               >
-                {this.state.submittedCount} -Submitted
+                {this.state.submittedCount} - Submitted
               </button>
             </div>
           </div>
-
+          {!this.state.loading ? 
+            (
+          <React.Fragment key={nanoid(4)}>
           <table className="table">
-            <thead>
-              <tr>
-                <th scope="col" className="imageIt">
-                  No
-                </th>
-                <th scope="col" className="imageIt">
-                  Photos
-                </th>
-                <th scope="col" className="title">
-                  TITLE
-                </th>
-                <th scope="col" className="sku">
-                  SKU
-                </th>
-                <th scope="col" className="price">
-                  PRICE
-                </th>
-                <th scope="col" className="status">
-                  STATUS
-                </th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col" className="date">
+          <thead>
+          <tr>
+          <th scope="col" className="imageIt">No</th>
+          <th scope="col" className="imageIt">Photos</th>
+          <th scope="col" className="title">TITLE</th>
+          <th scope="col" className="sku">SKU</th>
+          <th scope="col" className="price">PRICE</th>
+          <th scope="col" className="status">STATUS</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col" className="date"><button className="btn btn-sm" onClick={() => {this.datesort()}}><i className="fa fa-sort" aria-hidden="true"></i><b>DATE</b></button></th>
+          <th scope="col" className="notes">NOTES</th>
+          </tr>
+          </thead>
+          <tbody>            
+            {(newproducts && newproducts.length > 0) ? (newproducts.map((product, idx) => {
+             return(
+             <React.Fragment key={nanoid(4)}>
+             <tr>
+               <td>{idx + 1 + (page - 1) * rowsPerPage}</td>
+               <td>
+                <img
+                  src={product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "http" && 
+                       product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "https" ? 
+                       assetsURL + product.images.default_image : product.images.default_image}
+                  className="product-img"
+                  alt="prod"
+                />
+                </td>
+                <td>
+                  {product.title ? product.title : product.brand + " " + product.model}
+                </td>
+                <td>{product.sku}</td>
+                <td>
+                  <div>{product.price}</div>
+                </td>
+                <td>
+                  {product.ebay.check && Ebay ? (<div><small>{product.ebay.url === "" || product.ebay.url === null ? (<p className="text-danger">Ebay</p>) : product.ebay.url === "d" ? ("Ebay") : (<a href={product.ebay.url} target="_blank" rel="noreferrer">Ebay</a>)}</small></div>
+                  ) : null}
+                  {product.poshmark.check && Poshmark ? (<div><small>{product.poshmark.url === "" || product.poshmark.url === null ? (<p className="text-danger">Poshmark</p>) : product.poshmark.url === "d" ? ("Poshmark") : (<a href={product.poshmark.url} target="_blank" rel="noreferrer"> Poshmark </a>)}</small></div>
+                  ) : null}
+                  {product.mercari.check && Mercari ? (<div><small>{product.mercari.url === "" || product.mercari.url === null ? (<p className="text-danger">Mercari</p>) : product.mercari.url === "d" ? ("Mercari") : ( <a href={product.mercari.url} target="_blank" rel="noreferrer"> Mercari </a>)}</small></div>
+                  ) : null}
+                  {product.delist.check ? (<div><small> Delist - {product.delist.url === "" ? "false" : "true"}</small></div>
+                  ) : null}
+                  {(othersbool && product.others) && JSON.parse(product.others).forEach((items) => {if (items.status) {return (<div><small>{items.name} - {items.url === "" ? "false" : "true"}</small></div>);}})}
+                </td>
+                <td>
+                  <a href={`/edit/${product._id}`}>
+                    <button className="btn btn-primary d-inline btn-sm">
+                      Edit/List
+                    </button>
+                  </a>
+                </td>
+                <td>
                   <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                      this.setState({
-                        datesort: !datesort,
-                        productMessageSeen: productMessageSeen.reverse(),
-                      });
-                    }}
+                    className="btn btn-primary d-inline btn-sm"
+                    onClick={() => this.duplicateHandler(product._id)}
                   >
-                    <i className="fa fa-sort" aria-hidden="true"></i>
-                    <b>DATE</b>
+                    Duplicate
                   </button>
-                </th>
-                <th scope="col" className="message">
-                  Message
-                </th>
-                <th scope="col" className="notes">
-                  NOTES
-                </th>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-danger d-inline btn-sm"
+                    onClick={() => this.handleDelete(product._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+                <td>
+                  <small>{product.date.split("T")[0]}</small>
+                </td>
+                <td>
+                  <small>{product.note}</small>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {datesort ? (
-                <>
-                  {newproducts && newproducts.length > 0 ? (
-                    newproducts.reverse().map((product, idx) => {
-                      return (
-                        <tr>
-                          <td>{idx + 1 + (page - 1) * rowsPerPage}</td>
-                          <td>
-                            <img
-                              src={
-                                product.images.default_image.substring(
-                                  0,
-                                  product.images.default_image.indexOf(":")
-                                ) !== "http" &&
-                                product.images.default_image.substring(
-                                  0,
-                                  product.images.default_image.indexOf(":")
-                                ) !== "https"
-                                  ? assetsURL + product.images.default_image
-                                  : product.images.default_image
-                              }
-                              className="product-img"
-                              alt="prod"
-                            />
-                          </td>
-                          <td>
-                            {product.title
-                              ? product.title
-                              : product.brand + " " + product.model}
-                          </td>
-                          <td>{product.sku}</td>
-                          <td>
-                            <div>{product.price}</div>
-                          </td>
-                          <td>
-                            {product.ebay.check && Ebay ? (
-                              <div>
-                                <small>
-                                  {product.ebay.url === "" ||
-                                  product.ebay.url === null ? (
-                                    <p className="text-danger">Ebay</p>
-                                  ) : product.ebay.url === "d" ? (
-                                    "Ebay"
-                                  ) : (
-                                    <a href={product.ebay.url} target="_blank" rel="noreferrer">
-                                      Ebay
-                                    </a>
-                                  )}
-                                </small>
-                              </div>
-                            ) : null}
-                            {product.poshmark.check && Poshmark ? (
-                              <div>
-                                <small>
-                                  {product.poshmark.url === "" ||
-                                  product.poshmark.url === null ? (
-                                    <p className="text-danger">Poshmark</p>
-                                  ) : product.poshmark.url === "d" ? (
-                                    "Poshmark"
-                                  ) : (
-                                    <a
-                                      href={product.poshmark.url}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      Poshmark
-                                    </a>
-                                  )}
-                                </small>
-                              </div>
-                            ) : null}
-                            {product.mercari.check && Mercari ? (
-                              <div>
-                                <small>
-                                  {product.mercari.url === "" ||
-                                  product.mercari.url === null ? (
-                                    <p className="text-danger">Mercari</p>
-                                  ) : product.mercari.url === "d" ? (
-                                    "Mercari"
-                                  ) : (
-                                    <a
-                                      href={product.mercari.url}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      Mercari
-                                    </a>
-                                  )}
-                                </small>
-                              </div>
-                            ) : null}
-                            {product.delist.check ? (
-                              <div>
-                                <small>
-                                  Delist -
-                                  {product.delist.url === "" ? "false" : "true"}
-                                </small>
-                              </div>
-                            ) : null}
-                            {othersbool &&
-                              product.others &&
-                              JSON.parse(product.others).forEach((items) => {
-                                console.log(
-                                  items,
-                                  "checking values for status"
-                                );
-                                if (items.status) {
-                                  return (
-                                    <div>
-                                      <small>
-                                        {items.name}-
-                                        {items.url === "" ? "false" : "true"}
-                                      </small>
-                                    </div>
-                                  );
-                                }
-                              })}
-                          </td>
-                          <td>
-                            <a href={`/edit/${product._id}`}>
-                              <button className="btn btn-primary d-inline btn-sm">
-                                Edit/List
-                              </button>
-                            </a>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-primary d-inline btn-sm"
-                              onClick={() => this.duplicateHandler(product._id)}
-                            >
-                              Duplicate
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-danger d-inline btn-sm"
-                              onClick={() => this.handleDelete(product._id)}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                          <td>
-                            <small>{product.date.split("T")[0]}</small>
-                          </td>
-                          <td>
-                            {productMessageSeen[idx] ? (
-                              <Badge
-                                color="secondary"
-                                invisible="true"
-                                variant="dot"
-                              >
-                                <MailIcon />
-                              </Badge>
-                            ) : (
-                              <Badge color="secondary" variant="dot">
-                                <MailIcon />
-                              </Badge>
-                            )}
-                          </td>
-                          <td>
-                            <small>{product.note}</small>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <h4>
-                        No products submitted for listings, please submit some
-                      </h4>
-                      {this.state.loading ? (
-                        <div className="center">
-                          <LoadingSpinner asOverlay />
-                        </div>
-                      ) : null}
-                    </>
+              </React.Fragment>
+                  );})
+              ) : (<React.Fragment key={nanoid(4)}>
+                   <tr><td style={{'display': 'block', 'fontSize': '1em', 'marginTop': '1.33em', 'marginBottom': '1.33em', 'marginLeft': '0', 'marginRight': '0', 'fontWeight': 'bold'}}>No products submitted for listings, please submit some</td></tr>
+                   </React.Fragment>
                   )}
-                </>
-              ) : (
-                <>
-                  {newproducts && newproducts.length > 0 ? (
-                    newproducts.map((product, idx) => {
-                      return (
-                        <tr>
-                          <td>{idx + 1 + (page - 1) * rowsPerPage}</td>
-                          <td>
-                            <img
-                              src={
-                                product.images.default_image != null &&
-                                product.images.default_image.substring(
-                                  0,
-                                  product.images.default_image.indexOf(":")
-                                ) !== "http" &&
-                                product.images.default_image.substring(
-                                  0,
-                                  product.images.default_image.indexOf(":")
-                                ) !== "https"
-                                  ? assetsURL + product.images.default_image
-                                  : product.images.default_image
-                              }
-                              className="product-img"
-                              alt="prod"
-                            />
-                          </td>
-                          <td>
-                            {product.title
-                              ? product.title
-                              : product.brand + " " + product.model}
-                          </td>
-                          <td>{product.sku}</td>
-                          <td>
-                            <div>{product.price}</div>
-                          </td>
-                          <td>
-                            {product.ebay.check && Ebay ? (
-                              <div>
-                                <small>
-                                  {product.ebay.url === "" ||
-                                  product.ebay.url === null ? (
-                                    <p className="text-danger">Ebay</p>
-                                  ) : product.ebay.url === "d" ? (
-                                    "Ebay"
-                                  ) : (
-                                    <a href={product.ebay.url} target="_blank" rel="noreferrer">
-                                      Ebay
-                                    </a>
-                                  )}
-                                </small>
-                              </div>
-                            ) : null}
-                            {product.poshmark.check && Poshmark ? (
-                              <div>
-                                <small>
-                                  {product.poshmark.url === "" ||
-                                  product.poshmark.url === null ? (
-                                    <p className="text-danger">Poshmark</p>
-                                  ) : product.poshmark.url === "d" ? (
-                                    "Poshmark"
-                                  ) : (
-                                    <a
-                                      href={product.poshmark.url}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      Poshmark
-                                    </a>
-                                  )}
-                                </small>
-                              </div>
-                            ) : null}
-                            {product.mercari.check && Mercari ? (
-                              <div>
-                                <small>
-                                  {product.mercari.url === "" ||
-                                  product.mercari.url === null ? (
-                                    <p className="text-danger">Mercari</p>
-                                  ) : product.mercari.url === "d" ? (
-                                    "Mercari"
-                                  ) : (
-                                    <a
-                                      href={product.mercari.url}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      Mercari
-                                    </a>
-                                  )}
-                                </small>
-                              </div>
-                            ) : null}
-                            {product.delist.check ? (
-                              <div>
-                                <small>
-                                  Delist -
-                                  {product.delist.url === "" ? "false" : "true"}
-                                </small>
-                              </div>
-                            ) : null}
-                            {othersbool &&
-                              product.others &&
-                              JSON.parse(product.others).forEach((items) => {
-                                if (items && items.status) {
-                                  return (
-                                    <div>
-                                      <small>
-                                        {items.name}-
-                                        {items.url === "" ? "false" : "true"}
-                                      </small>
-                                    </div>
-                                  );
-                                }
-                              })}
-                          </td>
-                          <td>
-                            <a href={`/edit/${product._id}`}>
-                              <button className="btn btn-primary d-inline btn-sm">
-                                Edit/List
-                              </button>
-                            </a>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-primary d-inline btn-sm"
-                              onClick={() => this.duplicateHandler(product._id)}
-                            >
-                              Duplicate
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-danger d-inline btn-sm"
-                              onClick={() => this.handleDelete(product._id)}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                          <td>
-                            <small>{product.date.split("T")[0]}</small>
-                          </td>
-                          <td>
-                            {productMessageSeen[idx] ? (
-                              <Badge
-                                color="secondary"
-                                invisible="true"
-                                variant="dot"
-                              >
-                                <MailIcon />
-                              </Badge>
-                            ) : (
-                              <Badge color="secondary" variant="dot">
-                                <MailIcon />
-                              </Badge>
-                            )}
-                          </td>
-
-                          <td>
-                            <small>{product.note}</small>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <h4>
-                        No products submitted for listings, please submit some
-                      </h4>
-                      {this.state.loading ? (
-                        <div className="center">
-                          <LoadingSpinner asOverlay />
-                        </div>
-                      ) : null}
-                    </>
-                  )}
-                </>
-              )}
-            </tbody>
-          </table>
+        </tbody>
+        </table>
+        </React.Fragment>
+        ) : (<div className="center"><LoadingSpinner asOverlay /></div>)
+        }
         </div>
         <div className="w-100 mx-auto py-2">
           <Pagination

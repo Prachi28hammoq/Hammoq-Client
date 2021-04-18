@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
 import { assetsURL } from "../../services/Axios";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
+import { nanoid } from "nanoid";
 
 const $ = window.$;
 
@@ -139,13 +140,10 @@ class BasicForm extends Component {
 
       Axios.get("/clientdetails/listingSettings")
       .then(({ data }) => {
-       
-        console.log(data)
         this.setState({
           zipCode: data.settings[0].listing[0].zipCode,
           domesticShippingFreeShippingActive: data.settings[0].shipping[0].freeShipping
         })
-        .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   };
@@ -342,6 +340,7 @@ class BasicForm extends Component {
   handleSubmit = (e) => {
     const { website, username, password } = this.state;
     e.preventDefault();
+
     if (website !== "" && username !== "" && password !== "") {
       this.setState({ loading: true });
 
@@ -351,7 +350,6 @@ class BasicForm extends Component {
         password: password,
       })
         .then((response) => {
-          //this.setState({ loading: false });
           alert("Login details has been added");
           if (website === "Ebay") {
             this.setState({ Ebay: true });
@@ -503,7 +501,7 @@ class BasicForm extends Component {
           savedCards={this.state.savedCards}
         />
         <Link to="/products/submitted">
-          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          <i className="fa fa-arrow-left" aria-hidden="true"></i>
         </Link>
         <div className="row">
           <div
@@ -611,7 +609,7 @@ class BasicForm extends Component {
             <div className="row m-auto">
               {images.map((image, idx) => {
                 return (
-                  <div className="col-4 col-md-3 px-1 ">
+                  <div className="col-4 col-md-3 px-1 " key={nanoid(4)}>
                     <div
                       className="modal fade bd-example-modal-sm"
                       id="addTemplateModal1"
@@ -808,7 +806,6 @@ class BasicForm extends Component {
                   onChange={(e) => this.change(e)}
                   value={this.state.input3 === 0 ? "" : this.state.input3}
                   name="input3"
-                  defaultValue="1"
                   placeholder="Quantity(1)"
                   min="1"
                   className="form-control"

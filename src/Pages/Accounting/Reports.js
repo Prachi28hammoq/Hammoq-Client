@@ -45,7 +45,6 @@ const Reports = (props) => {
     }, []);
 
     useEffect(() => {
-        console.log(room);
         if (room.length > 0) {
             socket.connect();
             socket.on('connect', function () {
@@ -154,7 +153,7 @@ const Reports = (props) => {
     return (
         <>
             <div className="row">
-            <NavLink   class="btn btn-success" style={{ height:'40px', 'text-align':'center'}}  to="/accounts/ebayAccounts"><AddIcon />&nbsp;Add Ebay Account</NavLink >
+            <NavLink   className="btn btn-success" style={{ height:'40px', 'textAlign':'center'}}  to="/accounts/ebayAccounts"><AddIcon />&nbsp;Add Ebay Account</NavLink >
                 <div style={{ display: 'inline-block', float: 'right', margin: '7px 0px' }} className="ml-auto">
                 
                     <div className="ebay-reports-control-bar">
@@ -166,9 +165,9 @@ const Reports = (props) => {
                         <div style={{ padding: '10px 7px' }}>
                             <div style={{ display: 'inline-block' }}>
                                 <select id="inputState" value={selectedEbayAccount} onChange={(event) => setSelectedEbayAccount(event.target.value)}>
-                                    <option selected>Choose Ebay Account</option>
+                                    <option defaultValue>Choose Ebay Account</option>
                                     <option value="All accounts">All accounts</option>
-                                    {ebayAccounts.map(ebayAccount => <option value={ebayAccount.ebayUserName}>{ebayAccount.ebayUserName}</option>)}
+                                    {ebayAccounts.map(ebayAccount => <option value={ebayAccount.ebayUserName} key={nanoid(3)}>{ebayAccount.ebayUserName}</option>)}
                                 </select>
                             </div>
                             <div style={{ display: 'inline-block' }}>
@@ -197,7 +196,7 @@ const Reports = (props) => {
                 </div>
             </div>
             <div className="row" style={{ height: '60vh', overflow: 'scroll' }}>
-                <table class="table table-hover">
+                <table className="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">#</th>

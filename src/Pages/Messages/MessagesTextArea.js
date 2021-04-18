@@ -68,12 +68,12 @@ const MessagesTextArea = (props) => {
                     <button className="message-attachment-button" style={{marginTop: '10px', marginLeft: '10px'}} disabled={uploadingFile}>
                         <span style={{ position: 'relative' }}>
                             <input type="file" name="file" accept="image/*" onChange={onChangeHandler} onClick={(event) => event.target.value = ''} style={{ opacity: 0, position: 'absolute' }} />
-                            <i class="fas fa-paperclip" style={{ margin: '5px', color: 'white' }} />
+                            <i className="fas fa-paperclip" style={{ margin: '5px', color: 'white' }} />
                             
                         </span>
                     </button>
                     {uploadedFile.trim().length > 0 ? <img alt="uploadedPhoto" src={uploadedFile} height={35} width={35} style={{marginLeft: '10px'}}></img>:null}
-                    {uploadingFile === true ? <i class="fa fa-upload" aria-hidden="true" style={{marginLeft: '10px', color: '#8E7DBE'}} /> : null}
+                    {uploadingFile === true ? <i className="fa fa-upload" aria-hidden="true" style={{marginLeft: '10px', color: '#8E7DBE'}} /> : null}
                 </span>
             </div>
         </div>

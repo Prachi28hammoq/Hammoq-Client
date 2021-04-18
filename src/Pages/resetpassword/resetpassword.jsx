@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import "./resetpasswordmin.css";
 import Axios from "../../services/Axios";
@@ -56,7 +57,7 @@ class resetpassword extends Component {
             Show/Hide
             <form onSubmit={this.reset} className="modal-body">
               <div className="row">
-                <i class="fa fa-user col-2 mt-2" aria-hidden="true"></i>
+                <i className="fa fa-user col-2 mt-2" aria-hidden="true"></i>
 
                 <input
                   type={this.state.hidden ? "password" : "text"}
@@ -71,7 +72,7 @@ class resetpassword extends Component {
                 ></input>
               </div>
               <div className="row">
-                <i class="fa fa-lock col-2" aria-hidden="true"></i>
+                <i className="fa fa-lock col-2" aria-hidden="true"></i>
                 <input
                   type={this.state.hidden ? "password" : "text"}
                   className="form-control border-1 col-10 w-100 rounded-1-right mb-2 align-middle pl-2 bg-white"
@@ -85,7 +86,7 @@ class resetpassword extends Component {
                 ></input>
               </div>
               <div className="row">
-                <i class="fa fa-lock col-2" aria-hidden="true"></i>
+                <i className="fa fa-lock col-2" aria-hidden="true"></i>
                 <input
                   type={this.state.hidden ? "password" : "text"}
                   className="form-control border-1 col-10 w-100 rounded-1-right mb-2 align-middle pl-2 bg-white"

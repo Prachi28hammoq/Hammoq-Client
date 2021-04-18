@@ -953,8 +953,6 @@ const ListingSettings = () => {
                         className='r2_q4_inner_align_input'
                         value={returnedWithin}
                         onChange={(e) => {setReturnedWithin(e.target.value);}}
-                        displayEmpty
-                        inputProps={{ 'aria-label': 'Without label' }}
                         >
                         <option value=""></option>
                         <option value={14}>14 Days</option>
@@ -972,8 +970,6 @@ const ListingSettings = () => {
                         className='r2_q4_inner_align_input'
                         value={refundAs}
                         onChange={(e) => {setRefundAs(e.target.value);}}
-                        displayEmpty
-                        inputProps={{ 'aria-label': 'Without label' }}
                         >
                         <option value=""></option>
                         <option value='MoneyBack'>Money Back</option>
@@ -993,8 +989,6 @@ const ListingSettings = () => {
                         className='r2_q4_inner_align_input'
                         value={returnShipBy}
                         onChange={(e) =>{setReturnShipBy(e.target.value);}}
-                        displayEmpty
-                        inputProps={{ 'aria-label': 'Without label' }}
                         >
                         <option value=""></option>
                         <option value='Buyer'>Buyer</option>
@@ -1062,8 +1056,7 @@ const ListingSettings = () => {
                 className='input_tag'
                 value={intlReturnedWithin}
                 onChange={(e) => {setIntlReturnedWithin(e.target.value);}}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
+               
                 >
                 <option value=""></option>
                 <option value={14}>14 Days</option>
@@ -1080,8 +1073,6 @@ const ListingSettings = () => {
                   className='input_tag'
                   value={intlRefundAs}
                   onChange={(e) => {setIntlRefundAs(e.target.value);}}
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Without label' }}
                   >
                   <option value=""></option>
                   <option value='MoneyBack'>Money Back</option>
@@ -1098,8 +1089,6 @@ const ListingSettings = () => {
                 className='input_tag'
                 value={intlReturnShipBy}
                 onChange={(e) => {setIntlReturnShipBy(e.target.value);}}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
                 >
                 <option value=""></option>
                 <option value='Buyer'>Buyer</option>

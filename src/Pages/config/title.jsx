@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./title.css";
-//import Axios from "../../services/Axios";
 
 class resetpassword extends Component {
   constructor() {
@@ -22,7 +21,6 @@ class resetpassword extends Component {
 
   submit = async (e) => {
     e.preventDefault();
-    console.log(this.state.type);
     localStorage.setItem("titletype", this.state.type);
     window.open("/setting", "_self");
     return alert("Changes saved successfully");
@@ -41,7 +39,7 @@ class resetpassword extends Component {
                 value="type1"
                 onChange={this.handleChange}
               />
-              <label for="type1">brand + category + model</label>
+              <label htmlFor="type1">brand + category + model</label>
               <br />
               <input
                 type="radio"
@@ -50,7 +48,7 @@ class resetpassword extends Component {
                 value="type2"
                 onChange={this.handleChange}
               />
-              <label for="type2">brand + model + category</label>
+              <label htmlFor="type2">brand + model + category</label>
               <br />
 
               <br />

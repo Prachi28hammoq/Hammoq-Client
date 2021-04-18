@@ -4,6 +4,7 @@ import './MessagesDisplayArea.css';
 import ReceivedMessage from './ReceivedMessage';
 import SentMessage from './SentMessage';
 import socket from "../../services/socket";
+import { nanoid } from "nanoid";
 
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
 
@@ -111,8 +112,6 @@ const MessagesDisplayArea = (props) => {
 
         let tempMessages = res.data?.messages?.map(message => message.messages).reverse() || [];
 
-        console.log(tempMessages);
-
         setMessages(messages => [...tempMessages.concat(messages) || []]);
 
         for (let tempMessage of tempMessages) {
@@ -168,16 +167,9 @@ const MessagesDisplayArea = (props) => {
 
     return (
         <div className="messages-display-area" ref={messageDisplayAreaRef} onScroll={handleScroll}>
-            { messages.forEach(message => {
-
-                if (message.fromUser.userType === 'ADMIN' || message.fromUser.userType === 'AGENT') {
-                    return <ReceivedMessage message={message} />
-                }
-
-                if (message.fromUser.userType === 'CLIENT') {
-                    return <SentMessage message={message} />
-                }
-
+            { messages.map(message => {
+                if (message.fromUser.userType === 'ADMIN' || message.fromUser.userType === 'AGENT') return (<ReceivedMessage message={message} key={nanoid(3)}/>)
+                if (message.fromUser.userType === 'CLIENT') return (<SentMessage message={message} key={nanoid(3)}/>)
             })}
         </div>
     );

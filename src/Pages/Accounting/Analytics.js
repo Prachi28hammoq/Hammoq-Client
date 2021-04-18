@@ -170,7 +170,7 @@ const Analytics = (props) => {
     return (
         <div className="container-fluid">
             <div className="row">
-                <div className="col-9"><NavLink   class="btn btn-success" style={{ height:'40px', 'text-align':'center'}}  to="/accounts/ebayAccounts"><AddIcon />&nbsp;Add Ebay Account</NavLink ></div>
+                <div className="col-9"><NavLink   className="btn btn-success" style={{ height:'40px', textAlign:'center'}}  to="/accounts/ebayAccounts"><AddIcon />&nbsp;Add Ebay Account</NavLink ></div>
                 <div className="col-3">
                     <div className="ebay-analytics-control-bar">
                         <div className="ebay-analytics-progress-bar">
@@ -180,9 +180,9 @@ const Analytics = (props) => {
                         </div>
                         <div style={{ padding: '10px 7px' }}>
                             <select id="inputState" value={selectedEbayAccount} onChange={(event) => setSelectedEbayAccount(event.target.value)}>
-                                <option selected>Choose Ebay Account</option>
+                                <option defaultValue>Choose Ebay Account</option>
                                 <option value="All accounts">All accounts</option>
-                                {ebayAccounts.map(ebayAccount => <option value={ebayAccount.ebayUserName}>{ebayAccount.ebayUserName}</option>)}
+                                {ebayAccounts.map(ebayAccount => <option value={ebayAccount.ebayUserName} key={nanoid(3)}>{ebayAccount.ebayUserName}</option>)}
                             </select>
                             <button type="button" className="btn btn-success btn-sm" style={{ marginLeft: '10px' }} onClick={() => getAnalyticsData()} disabled={isLoading}>
                                 Load Data

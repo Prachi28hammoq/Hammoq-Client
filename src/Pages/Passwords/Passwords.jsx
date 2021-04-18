@@ -25,7 +25,6 @@ class Passwords extends Component {
     });
 
     Axios.get("/password/getstatus").then(({ data }) => {
-      console.log(data);
       this.setState({ Ebay: !data.Ebay });
       this.setState({ Poshmark: !data.Poshmark });
       this.setState({ Mercari: !data.Mercari });
@@ -59,7 +58,6 @@ class Passwords extends Component {
         password: password,
       })
         .then((response) => {
-          console.log(response,'ebay response')
           // let user = {
           //   website: website,
           //   username: username,
@@ -87,7 +85,7 @@ class Passwords extends Component {
         })
         .catch((err) => {
           this.setState({ isSubmitting: true });
-          console.log(err) || alert(JSON.stringify({ err: err }));
+          console.log(err);
         });
     } else {
       alert("Fill up the details");
@@ -100,7 +98,7 @@ class Passwords extends Component {
       })
 
       .catch((err) => {
-        console.log(err) || alert(JSON.stringify({ err: err }));
+        console.log(err);
       });
   };
 
@@ -248,11 +246,9 @@ class Passwords extends Component {
                               Edit
                             </button>
                           </Link>
-                          <Link>
-                            <button className="btn btn-danger body-text custom-edit-btn mt-3 ml-3 btn-sm" onClick = {() => {this.handleDelete(user._id)}}>
-                              Delete
-                            </button>
-                          </Link>
+                          <button className="btn btn-danger body-text custom-edit-btn mt-3 ml-3 btn-sm" onClick = {() => {this.handleDelete(user._id)}}>
+                            Delete
+                          </button>
                         </div>
                       </div>
                     );

@@ -96,12 +96,12 @@ class message extends Component {
                 })
               }
             </div>
-          <div class="type_msg">
-            <div class="input_msg_write">
+          <div className="type_msg">
+            <div className="input_msg_write">
               <TextareaAutosize
                 rowsMax={2}
                 aria-label="maximum height"
-                class="write_msg"
+                className="write_msg"
                 placeholder="Type a message"
                 value = {this.state.message}
                 id="msg"
@@ -110,11 +110,11 @@ class message extends Component {
               />
 
               <button
-                class="msg_send_btn"
+                className="msg_send_btn"
                 type="button"
                 onClick={this.handleMessageSend}
               >
-                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
               </button>
             </div>
           </div>

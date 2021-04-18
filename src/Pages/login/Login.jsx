@@ -72,7 +72,7 @@ class Login extends Component {
                     <div className="col d-flex justify-content-center">
                       <div className="row">
                         <i
-                          class="fa fa-times-circle text-danger"
+                          className="fa fa-times-circle text-danger"
                           aria-hidden="true"
                           style={{ width: "50" }}
                         ></i>
@@ -82,18 +82,18 @@ class Login extends Component {
                       </div>
                     </div>
                   )}
-                  <div class="input-group input-group-lg mt-3">
-                    <div class="input-group-prepend">
+                  <div className="input-group input-group-lg mt-3">
+                    <div className="input-group-prepend">
                       <span
-                        class="input-group-text bg-white border-0 rounded-1-left pr-1"
+                        className="input-group-text bg-white border-0 rounded-1-left pr-1"
                         id="inputGroup-sizing-lg"
                       >
-                        <div class="fas fa-envelope" aria-hidden="true"></div>
+                        <div className="fas fa-envelope" aria-hidden="true"></div>
                       </span>
                     </div>
                     <input
                       type="email"
-                      class="form-control border-0 rounded-1-right pl-3 bg-white"
+                      className="form-control border-0 rounded-1-right pl-3 bg-white"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-lg"
                       placeholder="Email"
@@ -103,13 +103,13 @@ class Login extends Component {
                       required
                     ></input>
                   </div>
-                  <div class="input-group input-group-lg mt-3">
-                    <div class="input-group-prepend mb-2">
+                  <div className="input-group input-group-lg mt-3">
+                    <div className="input-group-prepend mb-2">
                       <span
-                        class="input-group-text bg-white border-0 rounded-1-left pr-1"
+                        className="input-group-text bg-white border-0 rounded-1-left pr-1"
                         id="inputGroup-sizing-lg"
                       >
-                        <div class="fas fa-lock" aria-hidden="true"></div>
+                        <div className="fas fa-lock" aria-hidden="true"></div>
                       </span>
                     </div>
                     <input
@@ -146,14 +146,14 @@ class Login extends Component {
                   )}
                   <hr />
                 </form>
-                <div class="d-flex justify-content-center mb-4">
+                <div className="d-flex justify-content-center mb-4">
                   <a href="/signup">
                     <button className="btn btn-primary">
                       Create new account
                     </button>
                   </a>
                 </div>
-                <div class="d-flex justify-content-center mb-4">
+                <div className="d-flex justify-content-center mb-4">
                   <a href="/forgotpassword">
                     <button className="btn btn-warning">Forgot password</button>
                   </a>

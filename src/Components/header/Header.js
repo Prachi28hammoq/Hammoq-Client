@@ -124,9 +124,9 @@ const Header = (props) => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-            {/* <li class="nav-item dropdown">
-              <li class="nav-item">
+          <ul className="navbar-nav ml-auto">
+            {/* <li className="nav-item dropdown">
+              <li className="nav-item">
                 <a
                   href="/basic"
                   className="nav-link"
@@ -137,12 +137,12 @@ const Header = (props) => {
               </li>
             </li> */}
 
-            <li class="nav-item">
+            <li className="nav-item">
               <Link to="/basic" className="nav-link" style={{ color: "white" }}>
                 Basic Listing
               </Link>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <Link
                 to="/messages"
                 className="nav-link"
@@ -152,7 +152,7 @@ const Header = (props) => {
               </Link>
             </li>
 
-{/*<li class="nav-item">
+{/*<li className="nav-item">
               <a
                 href="/templates"
                 className="nav-link"
@@ -161,7 +161,7 @@ const Header = (props) => {
                 Templates
               </a>
             </li>*/}
-            {/* <li class="nav-item">
+            {/* <li className="nav-item">
               <a
                 href="/accounts"
                 className="nav-link"
@@ -170,7 +170,7 @@ const Header = (props) => {
                 Accounts
               </a>
             </li> */}
-            <li class="nav-item">
+            <li className="nav-item">
               <a
                 href="/accounting"
                 className="nav-link"
@@ -182,7 +182,7 @@ const Header = (props) => {
             <a href="/setting" className="nav-link" style={{ color: "white" }}>
               Setting
             </a>
-            <li class="nav-item">
+            <li className="nav-item">
               <span
                 onClick={logoutHandler}
                 className="nav-link c-pointer text-danger"

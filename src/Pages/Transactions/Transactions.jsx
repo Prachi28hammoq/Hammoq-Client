@@ -1,41 +1,31 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Transactions.css";
-//import Header from "../../Components/header/header";
-//import imageresponse from "../../Components/images/hammock.svg";
 import Axios from "../../services/Axios";
+import { nanoid } from "nanoid";
+import LoadingSpinner from "../utils/loader";
 
 class previoustransaction extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showComponent: false,
+      isLoading: false,
       boxdata: [],
     };
-    this._onButtonClick = this._onButtonClick.bind(this);
-  }
-  _onButtonClick() {
-    if (this.state.showComponent) {
-      this.setState({
-        showComponent: false,
-      });
-    } else {
-      this.setState({
-        showComponent: true,
-      });
-    }
   }
 
   componentDidMount(prevProps) {
+    this.setState({isLoading: true});
     Axios.get("/clientdetails/trans")
-      .then(({ data }) => {
-        console.log(data.length);
-        this.setState({ boxdata: data });
-      })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+      .then(({ data }) => {this.setState({ boxdata: data});
+                           this.setState({ isLoading: false});
+                         })
+      .catch((err) => {console.log(err); 
+                       this.setState({isLoading:true})});
   }
 
   render() {
+    const { boxdata } = this.state;
     return (
       <div className="paymentIt">
         <div className="pay">
@@ -43,7 +33,9 @@ class previoustransaction extends React.Component {
         </div>
         <h5 id="fontIt">Previous Transaction</h5>
         <div className="row">
-          <div className={`${this.state.showComponent ? "col-6" : "col-12"}`}>
+        {!this.state.isLoading ?
+          (
+          <React.Fragment key={nanoid(4)}>
             <table className="table adjustIt">
               <thead>
                 <tr>
@@ -53,9 +45,11 @@ class previoustransaction extends React.Component {
                   <th scope="col">Receipt URL</th>
                 </tr>
               </thead>
-
-              {this.state.boxdata.map((data) => (
-                <tr>
+              <tbody>
+              {boxdata.length > 0 ? 
+                (boxdata.map((data) => {
+                  return(
+                <tr key={nanoid(3)}>
                   <td>{data.amount.toFixed(2)}</td>
                   <td>{data.date.split("T")[0]}</td>
                   <td>{data.date.split("T")[1]}</td>
@@ -69,9 +63,18 @@ class previoustransaction extends React.Component {
                     )}
                   </td>
                 </tr>
-              ))}
-            </table>
-          </div>
+              );}
+              ))
+                :
+                (<React.Fragment key={nanoid(4)}>
+                 <tr><td style={{'display': 'block', 'fontSize': '1em', 'marginTop': '1.33em', 'marginBottom': '1.33em', 'marginLeft': '0', 'marginRight': '0', 'fontWeight': 'bold'}}>There is no transaction history found...</td></tr>
+                 </React.Fragment>)}
+              </tbody>
+              </table>
+              </React.Fragment>
+              ) : 
+              (<div className="center"><LoadingSpinner asOverlay /></div>)
+              }
         </div>
       </div>
     );

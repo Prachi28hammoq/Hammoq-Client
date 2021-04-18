@@ -4,6 +4,7 @@ import socket from "../../../src/services/socket.jsx";
 import Axios from "../../services/Axios";
 import { useLocation } from 'react-router-dom';
 import './EbayAccounts.css';
+import { nanoid } from "nanoid";
 
 const $ = window.$;
 
@@ -135,14 +136,14 @@ const EbayAccounts = (props) => {
         <div className="row">
           <div className="col-2"></div>
           <div className="col-8 d-flex justify-content-end">
-            <button type="button" class="btn btn-success" disabled={ebayAccounts.length >= 1} onClick={openEbayUserAuthorizationWindow}><AddIcon />&nbsp;Add Ebay Account</button>
+            <button type="button" className="btn btn-success" disabled={ebayAccounts.length >= 1} onClick={openEbayUserAuthorizationWindow}><AddIcon />&nbsp;Add Ebay Account</button>
           </div>
         </div>
         <div className="row">
           <div className="col-2"></div>
           <div className="col-8">
             <table className="table">
-              <thead class="thead-light">
+              <thead className="thead-light">
                 <tr>
                   <th scope="col">Ebay Username</th>
                   <th scope="col">Status</th>
@@ -152,7 +153,7 @@ const EbayAccounts = (props) => {
               <tbody>
                 {ebayAccounts.map(ebayAccount => {
                   return (
-                    <tr>
+                    <tr key={nanoid(3)}>
                       <th scope="col">{ebayAccount?.ebayUserName}</th>
                       <th scope="col">
                         {ebayAccount?.ebayUserTokenStatus ?
@@ -189,24 +190,24 @@ const EbayAccounts = (props) => {
           <div className="col-2"></div>
         </div>
 
-        <div class="modal fade" id="removeEbayAccountModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Remove Ebay Account?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div className="modal fade" id="removeEbayAccountModal" data-backdrop="static" tabIndex="-1" role="dialog" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Remove Ebay Account?</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 Do you wish to remove the Ebay account : <span style={{ color: '#FF5A5F' }}>{accountToBeRemoved}</span> ?
                             </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-danger"
+              <div className="modal-footer">
+                <button type="button" className="btn btn-danger"
                   onClick={() => { removeEbayAccountFromHammoqAccount(accountToBeRemoved); $("#removeEbayAccountModal").modal("hide"); }}>
                   Yes, please delete
                                 </button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
 
               </div>
             </div>
