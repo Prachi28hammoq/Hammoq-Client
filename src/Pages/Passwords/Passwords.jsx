@@ -106,7 +106,7 @@ class Passwords extends Component {
 
   handleDelete =  async (id) => {
     try {
-      const response = await Axios.delete(`/password/${id}`})
+      const response = await Axios.delete(`/password/${id}`);
       window.confirm("Are You Sure?")
       window.open("/passwords", "_self")
       this.setState({users: response.data.Passwords})
