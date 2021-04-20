@@ -16,6 +16,7 @@ import AcceptUrl from "./AcceptUrl/AcceptUrl";
 import ListingSettings from "./ListingSettings/ListingSettings";
 import Accounting from "./Accounting/Accounting";
 import Subscription from "./Subscription/Subscription";
+import Messages from "./Messages/Messages";
 export {
   Signup,
   Searchcart,
@@ -35,4 +36,5 @@ export {
   ListingSettings,
   Accounting,
   Subscription,
+  Messages
 };

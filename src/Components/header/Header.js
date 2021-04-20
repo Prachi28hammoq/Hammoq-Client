@@ -5,7 +5,7 @@ import Logo from "../images/hammock.svg";
 import Axios from "../../services/Axios";
 import { ClientMessagesContext } from '../../ContextProviders/ClientMessagesProvider';
 
-Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
+Axios.defaults.headers["authorization"] = `bearer ${localStorage.getItem("token")}`;
 
 let refreshTokenInterval;
 
@@ -32,11 +32,13 @@ const Header = (props) => {
         await Axios.get("/clientdetails/headerinfo")
           .then(({ data }) => {
             if (parseInt(data.balance) < 5) setOpen(true);
-            setBal(data.balance);
-            setClientId(data._id);
-            setContextClientId(data._id);
-            setCustomerName(data.firstName);
-            setClientMessageSeenCount(data.clientMessageSeenCount);
+                setBal(data.balance);
+                setClientId(data._id);
+                setContextClientId(data._id);
+                setCustomerName(data.firstName);
+                setClientMessageSeenCount(data.clientMessageSeenCount);
+                localStorage.setItem("cid", data._id);
+                localStorage.setItem("customerName", data.firstName);
           })
           .catch((err) => console.log(err));
 

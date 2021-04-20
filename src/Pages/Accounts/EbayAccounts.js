@@ -19,7 +19,7 @@ const EbayAccounts = (props) => {
   useEffect(() => {
 
     const init = async () => {
-      registerListenerForNewlyCreatedEbayAccounts();
+      //registerListenerForNewlyCreatedEbayAccounts();
 
       setAreAccountsLoading(true);
 

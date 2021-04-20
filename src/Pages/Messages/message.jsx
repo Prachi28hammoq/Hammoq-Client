@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import moment from 'moment'
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import { messageSocket } from "../../../src/services/socket.jsx";
+import socket from "../../../src/services/socket";
 
 //let socket = require.main.exports.socket;
 
@@ -22,16 +22,6 @@ class message extends Component {
    })
   }
 
-  
-
-  // componentDidMount = async () => {
-  //   const response = await Axios.get(`/globalmessage/agent`, {
-  //       headers : {
-  //         'x-access-token' : localStorage.getItem('token')
-  //       }
-  //   })
-  //   this.setState({agents : response.data}) 
-  // }
   componentDidMount = () => {
     socket.emit('user-connected', {roomId:this.state.clientId,tag:'client'})
   }

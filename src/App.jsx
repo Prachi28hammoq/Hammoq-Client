@@ -27,13 +27,14 @@ import {
   AcceptUrl,
   Accounting,
   Subscription,
+  Messages
 } from "./Pages";
-import Message from "./Pages/Messages/message";
-import Header from "./Components/header/header";
+import Header from "./Components/header/Header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
 import ListingSettings from "./Pages/ListingSettings/ListingSettings";
 import Accounts from "./Pages/Accounts/Accounts";
+import ClientMessagesProvider from '../src/ContextProviders/ClientMessagesProvider';
 
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;
@@ -41,8 +42,9 @@ const Routes = withRouter((props) => {
     <div>
       {!["/signup", "/signin"].includes(pathname) && (
         <div className="fixed-top">
-          {" "}
+          <ClientMessagesProvider>
           <Header />
+          </ClientMessagesProvider>
         </div>
       )}
       <div className="container-fluid px-5 py-5 admin my-5">
@@ -85,7 +87,7 @@ const Routes = withRouter((props) => {
               <Route path="/accounting" component={Accounting} />
               <Route exact path="/setting" component={Settings} />
               <Route exact path="/client/ebay/:id" component={AcceptUrl} />
-              <Route exact path="/messages" component={Message} />
+              <Route exact path="/messages" component={Messages} />
               <Route
                 path="/"
                 component={() => <Redirect to="/products/submitted" />}
@@ -93,10 +95,8 @@ const Routes = withRouter((props) => {
             </Switch>
           ) : (
             <Switch>
-            <Route exact path="/subscription" component={Subscription} />
-            <Route exact path="/messages" component={Messages} />
-            <Route path="/"                component={() => <Redirect to="/subscription" />}
- />
+              <Route exact path="/subscription" component={Subscription} />
+              <Route path="/" component={() => <Redirect to="/subscription" />}/>
             </Switch>
           )
         ) : (

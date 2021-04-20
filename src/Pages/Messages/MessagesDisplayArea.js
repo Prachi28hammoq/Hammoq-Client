@@ -6,7 +6,7 @@ import SentMessage from './SentMessage';
 import socket from "../../../src/services/socket";
 import { nanoid } from "nanoid";
 
-Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
+Axios.defaults.headers["authorization"] = `bearer ${localStorage.getItem("token")}`;
 
 const MessagesDisplayArea = (props) => {
 
@@ -48,7 +48,7 @@ const MessagesDisplayArea = (props) => {
 
         getClientIdAndAgentsAllocatedToClient();
 
-        //socket.disconnect();
+        socket.disconnect();
         socket.connect();
 
         socket.on('connect', function () {
@@ -60,7 +60,7 @@ const MessagesDisplayArea = (props) => {
         })
 
         return () => {
-            //socket.disconnect();
+            socket.disconnect();
         };
 
     }, [])
@@ -107,39 +107,48 @@ const MessagesDisplayArea = (props) => {
 
     const getMessagesInReverseOrder = async () => {
 
+        let url = getUrlForMessagesInReverseOrder();
 
-        const res = await Axios.get(getUrlForMessagesInReverseOrder());
+        if(url)
+        {
+            const res = await Axios.get(url);
 
-        let tempMessages = res.data?.messages?.map(message => message.messages).reverse() || [];
+            let tempMessages = res.data?.messages?.map(message => message.messages).reverse() || [];
 
-        setMessages(messages => [...tempMessages.concat(messages) || []]);
+            setMessages(messages => [...tempMessages.concat(messages) || []]);
 
-        for (let tempMessage of tempMessages) {
-            if (unreadMessagesList.includes(tempMessage.messageId) === false) {
-                markMessageAsRead(tempMessage);
-                setUnreadMessagesList([...unreadMessagesList, tempMessage.messageId]);
+            for (let tempMessage of tempMessages) {
+                if (unreadMessagesList.includes(tempMessage.messageId) === false) {
+                    markMessageAsRead(tempMessage);
+                    setUnreadMessagesList([...unreadMessagesList, tempMessage.messageId]);
+                }
             }
-        }
 
-        setScrollLock(false);
+            setScrollLock(false);
+        }
     }
 
     const getMessagesInNormalOrder = async () => {
 
-        const res = await Axios.get(getUrlForMessagesInNormalOrder());
+        let url = getUrlForMessagesInNormalOrder();
 
-        let tempMessages = res.data?.messages?.map(message => message.messages) || [];
+        if(url)
+        {
+            const res = await Axios.get(url);
 
-        setMessages(messages => [...messages, ...tempMessages]);
+            let tempMessages = res.data?.messages?.map(message => message.messages) || [];
 
-        for (let tempMessage of tempMessages) {
-            if (tempMessage.messageStatus === 'UNREAD')
-                markMessageAsRead(tempMessage);
+            setMessages(messages => [...messages, ...tempMessages]);
+
+            for (let tempMessage of tempMessages) {
+                if (tempMessage.messageStatus === 'UNREAD')
+                    markMessageAsRead(tempMessage);
+            }
+
+            props.setRefreshDisplayArea(false);
+
+            setScrollLock(false);
         }
-
-        props.setRefreshDisplayArea(false);
-
-        setScrollLock(false);
 
     }
 

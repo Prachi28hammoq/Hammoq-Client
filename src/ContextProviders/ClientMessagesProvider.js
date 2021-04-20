@@ -4,7 +4,7 @@ import Axios from "../services/Axios";
 import { useHistory } from "react-router";
 export const ClientMessagesContext = React.createContext();
 
-Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
+Axios.defaults.headers["authorization"] = `bearer ${localStorage.getItem("token")}`;
 
 
 const ClientMessagesProvider = (props) => {
@@ -19,7 +19,7 @@ const ClientMessagesProvider = (props) => {
         mountContext();
 
         return () => {
-            //socket.disconnect();
+            socket.disconnect();
         };
 
     }, [contextClientId])
@@ -29,7 +29,7 @@ const ClientMessagesProvider = (props) => {
         mountContext();
 
         return () => {
-            //socket.disconnect();
+            socket.disconnect();
         };
 
     }, [history.location.pathname])
@@ -38,7 +38,7 @@ const ClientMessagesProvider = (props) => {
 
         if (localStorage.getItem("token") && contextClientId.length > 0) {
             
-            //socket.disconnect();
+            socket.disconnect();
             socket.connect();
 
             socket.on('connect', function () {
