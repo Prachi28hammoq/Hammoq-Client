@@ -106,11 +106,7 @@ class Passwords extends Component {
 
   handleDelete =  async (id) => {
     try {
-      const response = await Axios.delete(`/password/${id}`, {
-       headers: {
-        "authorization": `bearer ${localStorage.getItem("token")}`,
-       },
-      })
+      const response = await Axios.delete(`/password/${id}`})
       window.confirm("Are You Sure?")
       window.open("/passwords", "_self")
       this.setState({users: response.data.Passwords})

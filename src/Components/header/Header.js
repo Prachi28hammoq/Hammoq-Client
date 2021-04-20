@@ -5,8 +5,6 @@ import Logo from "../images/hammock.svg";
 import Axios from "../../services/Axios";
 import { ClientMessagesContext } from '../../ContextProviders/ClientMessagesProvider';
 
-Axios.defaults.headers["authorization"] = `bearer ${localStorage.getItem("token")}`;
-
 let refreshTokenInterval;
 
 const Header = (props) => {

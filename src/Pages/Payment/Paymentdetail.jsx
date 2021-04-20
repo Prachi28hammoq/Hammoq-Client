@@ -24,17 +24,7 @@ class AddPayment extends Component {
 
   async componentDidMount() {
     try {
-      const response = await axios.get(
-        API_URL + `user/payment/getpaymentdetail`,
-        (axios.defaults.headers.common[
-          "authorization"
-        ] = `bearer ${localStorage.getItem("token")}`),
-        {
-          headers: {
-            "content-type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
+      const response = await axios.get(API_URL + `user/payment/getpaymentdetail`);
       if (response.data.success) {
         this.setState(
           {

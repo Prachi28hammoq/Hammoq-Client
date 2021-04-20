@@ -6,8 +6,6 @@ import SentMessage from './SentMessage';
 import socket from "../../../src/services/socket";
 import { nanoid } from "nanoid";
 
-Axios.defaults.headers["authorization"] = `bearer ${localStorage.getItem("token")}`;
-
 const MessagesDisplayArea = (props) => {
 
     const [messages, setMessages] = useState([]);

@@ -4,9 +4,6 @@ import Axios from "../services/Axios";
 import { useHistory } from "react-router";
 export const ClientMessagesContext = React.createContext();
 
-Axios.defaults.headers["authorization"] = `bearer ${localStorage.getItem("token")}`;
-
-
 const ClientMessagesProvider = (props) => {
 
     const [contextUnreadMessagesCount, setContextUnreadMessagesCount] = useState(0);

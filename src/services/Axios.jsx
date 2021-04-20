@@ -25,6 +25,11 @@ else if(process.env.REACT_APP_STAGE === 'production')
 
 Axios.defaults.baseURL = baseURL + "/client";
 
+if ('token' in localStorage) 
+{
+    Axios.defaults.headers["x-access-token"] = `bearer ${localStorage.getItem("token")}`;
+}
+
 if(process.env.REACT_APP_STAGE !== 'devlocal')
 {
 	Axios.defaults.withCredentials = true

@@ -13,8 +13,7 @@ class AcceptUrl extends Component {
 
     await Axios.get("/ebay/acceptURL" + url, {
       headers: {
-        "Content-Type": "application/json",
-        "authorization": `bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json"
       },
     })
       .then((res) => {

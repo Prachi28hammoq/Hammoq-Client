@@ -8,8 +8,6 @@ import Badge from "@material-ui/core/Badge";
 import MailIcon from "@material-ui/icons/Mail";
 import { nanoid } from "nanoid";
 
-Axios.defaults.headers["authorization"] = `bearer ${localStorage.getItem("token")}`;
-
 const $ = window.$;
 
 class Searchcart extends Component {
@@ -101,7 +99,7 @@ class Searchcart extends Component {
 
 
   duplicateHandler = async (itemId) => {
-    await Axios.post(`/product/${itemId}`, {headers: {"authorization": `bearer ${localStorage.getItem("token")}`,"content-type": "application/x-www-form-urlencoded",},})
+    await Axios.post(`/product/${itemId}`, {headers: {"content-type": "application/x-www-form-urlencoded",},})
                .catch((error) => {console.log(error)});
 
     const response1 = await Axios.get(`/product/type/${this.state.prodStatus}`,{params: {page: 1, size: 10}})
@@ -124,7 +122,7 @@ class Searchcart extends Component {
     const data = {status: false,};
 
     try {
-      const response = await Axios.put(`/product/status/${itemId}`, data, {headers: {"Content-Type": "application/json", "authorization": `bearer ${localStorage.getItem("token")}`,},})
+      const response = await Axios.put(`/product/status/${itemId}`, data, {headers: {"Content-Type": "application/json"},})
                                   .catch((error) => {console.log(error)});;
 
       this.setState({ products: response.data.products });
