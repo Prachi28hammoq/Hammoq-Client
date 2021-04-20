@@ -47,7 +47,6 @@ class AddPayment extends Component {
     });
   };
   handleSubmit = async (event) => {
-    localStorage.setItem("status", "1");
     event.preventDefault();
     let check = {
       listing_on_eBay: this.state.listing_on_eBay,

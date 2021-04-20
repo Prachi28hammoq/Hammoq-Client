@@ -39,10 +39,6 @@ const Header = (props) => {
                 localStorage.setItem("customerName", data.firstName);
           })
           .catch((err) => console.log(err));
-
-        if (bal >= 5.0) {
-          localStorage.setItem("paymentadded", true);
-        }
       }
     }
 

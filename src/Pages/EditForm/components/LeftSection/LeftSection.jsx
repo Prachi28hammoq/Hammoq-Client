@@ -80,7 +80,6 @@ class LeftSection extends Component {
   customdescription = (e) => {
     const { data } = this.props;
     const { customdesc } = this.state
-    localStorage.setItem('customdesc', !customdesc);
     this.setState({ customdesc: !customdesc });
 
     if (data.shortDescription) {

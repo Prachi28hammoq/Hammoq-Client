@@ -70,7 +70,7 @@ class Signup extends Component {
 
     if (phoneno == "") {
       this.setState({ isSubmitting: false });
-      return alert("Phone.no field is required.");
+      return alert("Phone Number field is required.");
     }
 
     if (firstName == "" || lastName == "") {
@@ -85,21 +85,22 @@ class Signup extends Component {
 
     const body = { ...this.state };
     Axios.post("/signup", body)
-      .then((res) => {
-        if (res.data.errors) {
+      .then((response) => {
+        if (response.err) {
           this.setState({ isSubmitting: false });
-          return alert(res.data.errors);
+          return alert(response.err);
         }
-        localStorage.setItem("token", res.data.token);
-        // localStorage.setItem("paymentadded", false);
+        localStorage.setItem("token", response.data.token);
         window.open("/subscription", "_self");
       })
-      .catch((err) => {
+      .catch((error) => {
         this.setState({ isSubmitting: false });
-        if (err) {
-          return alert(err);
+        if (error.response.data.err) 
+        {
+          console.log(error.response);
+          return alert(error.response.data.err);
         }
-        alert("Something went wrong. Can't SignUp");
+        alert("Something went wrong. Can't Sign Up");
       });
   };
 

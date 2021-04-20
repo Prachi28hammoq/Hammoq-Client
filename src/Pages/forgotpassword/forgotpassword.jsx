@@ -58,7 +58,6 @@ class Login extends Component {
         )
           .then(({ data }) => {
             if (data.assert === true) {
-              //console.log(data);
               localStorage.setItem("token", data.token);
               alert(
                 "Code verified : Change new password or goto Products page"
@@ -76,7 +75,6 @@ class Login extends Component {
     if (this.state.codesent === false) {
       await Axios.get(`/forgotpassword/${this.state.email}`)
         .then(({ data }) => {
-          console.log(data,'sdfhkjsdhfj');
           if (data.assert === true) {
             alert(data.data);
             this.setState({ codesent: true });

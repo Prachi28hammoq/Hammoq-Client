@@ -184,7 +184,6 @@ class RightSection extends Component {
   customtitle = (e) => {
     const { custom } = this.state;
     const { data } = this.props;
-    localStorage.setItem("custom", !custom);
     this.setState({ custom: !custom });
     if (data.title) 
     {

@@ -72,14 +72,6 @@ class AddPayment extends Component {
       .then(({ data }) => {
         this.setState({ email: data.email });
         this.setState({ name: data.firstName });
-
-        if (
-          data.paymentStatus === true &&
-          !localStorage.getItem("paymentadded")
-        ) {
-          localStorage.setItem("paymentadded", data.paymentStatus);
-          window.open("/basic", "_self");
-        }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   }

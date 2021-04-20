@@ -17,9 +17,9 @@ class RightSection extends Component {
       showMoreLines: false,
       value: "",
       count: 0,
-      custom: localStorage.getItem("customformtitle") || "false",
+      custom: "false",
       title: "",
-      customdesc: localStorage.getItem("customformdesc") || "false",
+      customdesc: "false",
       desc: "",
     };
   }
@@ -32,7 +32,6 @@ class RightSection extends Component {
   customtitle = (e) => {
     const { custom } = this.state;
     const { data } = this.props;
-    localStorage.setItem("customformtitle", !custom);
     this.setState({ custom: !custom });
 
     if (data.title) {
@@ -45,7 +44,6 @@ class RightSection extends Component {
   customdescription = (e) => {
     const { customdesc } = this.state;
     const { data } = this.props;
-    localStorage.setItem("customformdesc", !customdesc);
     this.setState({ customdesc: !this.state.customdesc });
 
     if (data.shortDescription) {

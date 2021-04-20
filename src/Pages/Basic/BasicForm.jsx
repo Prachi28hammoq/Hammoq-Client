@@ -10,8 +10,6 @@ import io from "socket.io-client";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import imageCompression from "browser-image-compression";
 
-// const socket = io(socketCon);
-
 const $ = window.$;
 
 class BasicForm extends Component {
@@ -26,7 +24,7 @@ class BasicForm extends Component {
       otherssignal: false,
       loading: false,
       offeredRate: {},
-      input1: localStorage.getItem("condition") || "",
+      input1: "",
       input2: "",
       input3: 0,
       input4: 0,
@@ -83,22 +81,16 @@ class BasicForm extends Component {
   componentDidMount = () => {
     const { cid, images } = this.state;
     Axios.get("/password/getstatus").then(({ data }) => {
-      //console.log(data);
       this.setState({ Ebay: data.Ebay });
       this.setState({ Poshmark: data.Poshmark });
       this.setState({ Mercari: data.Mercari });
     });
 
-    Axios.get("/template")
-      .then((data) => {
-        //console.log(data, "template data");
-        this.setState({ templates: data.data.templates });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+/*    Axios.get("/template")
+         .then((data) => {this.setState({ templates: data.data.templates });})
+         .catch((err) => {console.log(err);});*/
+
     Axios.get("/password/getstatus/others").then(({ data }) => {
-      //console.log(data, "other data");
       if (data.length > 0) {
         this.setState({ othersbool: true });
         data.map((d, i) => {
@@ -106,41 +98,29 @@ class BasicForm extends Component {
           others.push(d);
 
           this.setState({ others });
-
           const otherss = [...this.state.othersstate];
-
           otherss.push(localStorage.getItem(d) || false);
-          // console.log(otherss, "otherssssssssssssssssssssssss");
-
           this.setState({ othersstate: otherss });
-          // if (!localStorage.getItem(d)) {
-          //   localStorage.setItem(d, false);
-          // }
 
-          //console.log(this.state.othersstate)
         });
       }
     });
 
     Axios.get("/payment/rates")
-      .then((res) => {
-        //rates = res.data[res.data.length - 1];
-        this.setState({ rates: res.data[res.data.length - 1] });
-      })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+         .then((res) => {this.setState({ rates: res.data[res.data.length - 1] });})
+         .catch((err) => console.log(err));
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        if (!data.isSubscribed) {
+        if (!data.isSubscribed) 
+        {
           alert("You are not subscribed, kindly subscribe to hammoq services");
           window.open("/subscription", "_self");
         }
-        if (parseInt(data.balance) < 5 && data.savedCards.length > 0) {
-          this.setState({ open: true });
-        } else if (parseInt(data.balance) < 5 && data.savedCards.length == 0) {
-          window.alert(
-            "Low Payment and No card added, Please add a card and then add payment.."
-          );
+        else if(parseInt(data.balance) < 5 && data.savedCards.length > 0) this.setState({ open: true });
+        else if (parseInt(data.balance) < 5 && data.savedCards.length == 0) 
+        {
+          window.alert("Low Payment and No card added, Please add a card and then add payment..");
           window.open("/subscription", "_self");
         }
         this.setState({
@@ -150,92 +130,23 @@ class BasicForm extends Component {
           cid: data._id,
           offeredRate: data.offeredRate || {},
         });
-        this.setState({ cid: data._id }, () =>
-          localStorage.setItem("cid", this.state.cid)
-        );
-
-        // socket.emit("cidinit", { cid: this.state.cid });
-        // console.log(this.state.cid);
+        this.setState({ cid: data._id }, () => localStorage.setItem("cid", this.state.cid));
       })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-
-    // var uploader = new SocketIOFileUpload(socket);
-    // uploader.listenOnInput(document.getElementById("bulk"));
-    // uploader.addEventListener("start", function (event) {
-    //   event.file.meta.cid = localStorage.getItem("cid");
-    // });
-    // socket.on("server2clientimg", (i) => {
-    //   //console.log(i);
-    //   i.img.map((imgi) => {
-    //     if (imgi.cid == localStorage.getItem("cid"))
-    //       images[imgi.index].img = imgi.name;
-    //   });
-
-    //   this.setState({
-    //     images,
-    //   });
-    // });
+      .catch((err) => console.log(err)));
   };
-
-  // imgStatusHandler = () => {
-  //   const { cid } = this.state;
-  //   console.log("called imgStatusHandler");
-  //   socket.emit("getuploadstatus", { cid: cid });
-  //   socket.on("imgupload", (i) => {
-  //     console.log("imgcnt:" + i.imgcnt);
-  //     var imglen = this.state.images.filter((i) => {
-  //       if (i.img != "") {
-  //         return true;
-  //       }
-  //     });
-  //     console.log(imglen.length);
-  //     if (i.cid == cid && imglen.length == i.imgcnt) {
-  //       return false;
-  //     } else {
-  //       return true;
-  //     }
-  //   });
-  // };
 
   fetchimg = (src) => {
     const { cid } = this.state;
-    this.setState({ fullimg: src }, () => {
-      $("#addTemplateModal1").modal("show");
-    });
-    // socket.emit("getimg", { cid: cid });
-    // socket.on("reimg", (re) => {
-    //   //this.setState({ img: "" });
-    //   console.log(re.id);
-    //   console.log("this");
-    //   console.log(re);
-    //   this.setState({ img: re.img }, () => {
-    //     this.state.img.forEach((i) => {
-    //       if (i.key == this.state.fullimg) {
-    //         // this.setState({ fullimg: src }, () => {
-    //         //   $("#addTemplateModal1").modal("show");
-    //         // });
-    //       }
-    //     });
-    //   });
-    //   console.log(this.state.img);
-    // });
+    this.setState({ fullimg: src }, () => {$("#addTemplateModal1").modal("show");});
   };
 
   change = (e) => {
-    if (e.target.name === "input1") {
-      localStorage.setItem("condition", e.target.value);
-    }
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+    this.setState({[e.target.name]: e.target.value});
   };
 
   setCategory = (str) => {
-    if (this.state.category === str) {
-      this.setState({ category: "" });
-    } else {
-      this.setState({ category: str });
-    }
+    if (this.state.category === str) this.setState({ category: "" });
+    else this.setState({ category: str });
   };
 
   onSubmit = () => {
@@ -243,17 +154,10 @@ class BasicForm extends Component {
     const { images, cid } = this.state;
     const data = new FormData();
 
-    images.forEach((image) => {
-      if (!!image.img) data.append(image.key, image.img);
-    });
+    images.forEach((image) => {if (!!image.img) data.append(image.key, image.img);});
 
-    if (images[0].img == "") {
-      return alert("Atleast first image is required");
-    }
-
-    if (this.state.input1 == "Select Condition *" || this.state.input1 == "") {
-      return alert("Condition is required");
-    }
+    if (images[0].img == "") return alert("Atleast first image is required");
+    if (this.state.input1 == "Select Condition *" || this.state.input1 == "") return alert("Condition is required");
 
     var y = [];
     this.state.others.map((o, i) => {
@@ -264,76 +168,47 @@ class BasicForm extends Component {
       };
       y.push(obj);
     });
-    //console.log(y);
 
     var mplace = true;
 
-    if (
-      this.state.Ebay == true ||
-      this.state.Poshmark == true ||
-      this.state.Mercari == true ||
-      this.state.others.length != 0
-    ) {
-      mplace = true;
-    } else {
+    if (this.state.Ebay == true || this.state.Poshmark == true || this.state.Mercari == true || this.state.others.length != 0) mplace = true;
+    else 
+    {
       mplace = false;
       return $("#addTemplateModal").modal("show");
-      //return alert("Please have marketplace logins atleast")
+      return alert("Please Have At Least One Marketplace Login Entered")
     }
 
     var flag = 0;
-    this.state.othersstate.forEach((os) => {
-      if (os == "true") {
-        flag = 1;
-      }
-    });
-    if (
-      (this.state.Ebay == true && this.state.ebay == true) ||
-      (this.state.Poshmark == true && this.state.poshmark == true) ||
-      (this.state.Mercari == true && this.state.mercari == true)
-    ) {
-      flag = 1;
-    }
-    if (mplace && flag == 0) {
-      return alert("Please choose any marketplace to list the product");
-    }
+    this.state.othersstate.forEach((os) => {if (os == "true") flag = 1;});
+    if ((this.state.Ebay == true && this.state.ebay == true) || (this.state.Poshmark == true && this.state.poshmark == true) || (this.state.Mercari == true && this.state.mercari == true)) flag = 1;
+    if (mplace && flag == 0) return alert("Please Have At Least One Marketplace Login Selected");
 
     //bal check routine
     var cnt = 0;
 
-    if (this.state.Ebay && this.state.ebay == true) {
-      cnt++;
-    }
-    if (this.state.Poshmark && this.state.poshmark == true) {
-      cnt++;
-    }
-    if (this.state.Mercari && this.state.mercari == true) {
-      cnt++;
-    }
-    this.state.othersstate.forEach((os) => {
-      if (os == "true") {
-        cnt++;
-      }
-    });
-    var rate1 = 0,
-      rate2 = 0,
-      rate3 = 0;
+    if (this.state.Ebay && this.state.ebay == true) cnt++;
+    if (this.state.Poshmark && this.state.poshmark == true) cnt++;
+    if (this.state.Mercari && this.state.mercari == true) cnt++;
+
+    this.state.othersstate.forEach((os) => {if (os == "true") cnt++;});
+    var rate1 = 0, rate2 = 0, rate3 = 0;
     var total = 0;
     rate1 = (this.state.rates.basic / 100) * 1;
     rate2 = (this.state.rates.advance / 100) * (cnt - 1);
-    if (this.state.delist == true) {
-      rate3 = (this.state.rates.list / 100) * (cnt - 1);
-    }
+    if (this.state.delist == true) rate3 = (this.state.rates.list / 100) * (cnt - 1);
     total = rate1 + rate2 + rate3;
 
-    if (this.state.bal - total < 0) {
-      if (this.state.savedCards.length > 0) {
+    if (this.state.bal - total < 0) 
+    {
+      if (this.state.savedCards.length > 0) 
+      {
         this.setState({ open: true });
         window.alert("Insufficient balance");
-      } else {
-        window.alert(
-          "Low Payment and No card added, Please add a card and then add payment.."
-        );
+      } 
+      else 
+      {
+        window.alert("Low Payment and No card added, Please add a card and then add payment..");
         window.open("/subscription", "_self");
       }
     }
@@ -389,61 +264,32 @@ class BasicForm extends Component {
     data.append("rate3", rate3);
     data.append("prodStatus", "submitted");
 
-    localStorage.setItem("ebay", this.state.ebay);
-    localStorage.setItem("mercari", this.state.mercari);
-    localStorage.setItem("poshmark", this.state.poshmark);
-    localStorage.setItem("delist", this.state.delist);
     this.setState({ isSubmitting: true });
 
-    // var object = {};
-    // data.forEach(function (value, key) {
-    //   object[key] = value;
-    // });
-    // if (this.imgStatusHandler()) {
-    //   this.setState({ isSubmitting: false });
-    //   return alert("Please Wait! Images are uploading.....");
-    // } else {
-    //let productId = ''
-    Axios.post("/product", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization: `bearer ${localStorage.getItem("token")}`,
-      },
-    })
-
-      .then((response) => {
-        let productId = response.data.products
-          ? response.data.products[response.data.products.length - 1]._id
-          : response.data.products;
-        if (this.state.templateId) {
-          Axios.post(
-            "/producttemplate",
-            { productId: productId, templateId: this.state.templateId },
-            {
-              headers: {
-                authorization: `bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          ).then((response) => {});
+    Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}})
+          .then((response) => {
+            let productId = response.data.products
+                          ? response.data.products[response.data.products.length - 1]._id
+                          : response.data.products;
+        if (this.state.templateId) 
+        {
+          Axios.post("/producttemplate", { productId: productId, templateId: this.state.templateId })
+               .then((response) => {});
         }
         window.open("/basic", "_self");
       })
-      .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
-    //}
+      .catch((err) => console.log(err));
   };
 
   handleSubmit = (e) => {
     const { website, username, password } = this.state;
     e.preventDefault();
-    if (website != "" && username != "" && password != "") {
+    if (website != "" && username != "" && password != "") 
+    {
       this.setState({ loading: true });
 
-      Axios.post("/password", {
-        website: website,
-        username: username,
-        password: password,
-      })
-        .then((response) => {
+      Axios.post("/password", {website: website, username: username, password: password})
+           .then((response) => {
           //this.setState({ loading: false });
           alert("Login details has been added");
           if (website == "Ebay") {
@@ -498,43 +344,17 @@ class BasicForm extends Component {
 
   handleChange = async (event) => {
     const { images, cid } = this.state;
-    //console.log(images);
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
     const idx = images.findIndex((image) => image.key === event.target.name);
     try {
       this.setState({ isSubmitting: true });
-      let compressedFile = await imageCompression(
-        event.target.files[0],
-        options
-      );
-      images[idx].img = compressedFile;
-      this.setState({
-        images,
-      });
+      images[idx].img = event.target.files[0];
+      this.setState({images});
       this.setState({ isSubmitting: false });
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.log(error);
     }
-
-    // console.log(event.target.files[0]);
-    // var reader = new FileReader();
-    // reader.readAsDataURL(event.target.files[0]);
-    // reader.onload = function () {
-    //   //console.log(reader.result);
-    //   socket.emit("img", {
-    //     key: images[idx].key,
-    //     base64: reader.result,
-    //     cid: cid,
-    //   });
-    // };
-    // reader.onerror = function (error) {
-    //   console.log("Error: ", error);
-    // };
-    // console.log(this.state.images);
   };
 
   handleChangepop = (e) => {
@@ -550,14 +370,11 @@ class BasicForm extends Component {
   };
 
   handleOnClick = (o, i) => {
-    // const ot = [...othersstate];
-    // ot[i] = !ot[i];
     if (this.state.othersstate[i] == "false") {
       this.state.othersstate[i] = "true";
     } else if (this.state.othersstate[i] == "true") {
       this.state.othersstate[i] = "false";
     }
-    localStorage.setItem(o, this.state.othersstate[i]);
     this.setState({ othersstate: this.state.othersstate });
   };
 
@@ -567,56 +384,21 @@ class BasicForm extends Component {
     const files = e.target.files;
     const count = files.length;
 
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
     this.setState({ isSubmitting: true });
     for (let i = 0; i < count; i++) {
       const idx = images.findIndex((image) => !image.img);
       if (idx > -1) {
         try {
-          console.log(files[i]);
-          let compressedFile = await imageCompression(files[i], options);
-          console.log(compressedFile);
-          images[idx].img = compressedFile;
+          images[idx].img = files[i];
           this.setState({ images }, () => console.log(this.state.images));
-        } catch (error) {
+        } 
+        catch (error) 
+        {
           console.log(error);
         }
       }
     }
     this.setState({ isSubmitting: false });
-    //this.setState({ images }, () => console.log(this.state.images));
-
-    // images.map((i) => {
-    //   var reader = new FileReader();
-    //   if (i.img != "") {
-    //     reader.readAsDataURL(i.img);
-    //     reader.onload = function () {
-    //       //console.log(reader.result);
-    //       imgobj.push({ base64: reader.result, cid: cid, key: i.key });
-    //       setTimeout(() => {
-    //         socket.emit("img", {
-    //           key: i.key,
-    //           base64: reader.result,
-    //           cid: cid,
-    //         });
-    //       }, 1000);
-    //     };
-    //     reader.onerror = function (error) {
-    //       console.log("Error: ", error);
-    //     };
-    //   }
-    // });
-
-    // setTimeout(() => {
-    //   socket.emit("bimg", {
-    //     bimg: imgobj,
-    //     cid: cid,
-    //   });
-    // }, 2000);
   };
 
   handleChangesTemplate = (e) => {
@@ -636,23 +418,19 @@ class BasicForm extends Component {
     this.setState({ open: false });
   };
   updatePayment = async (amount, stripeId) => {
-    let body = {
-      customer_id: this.state.client_id,
-      amount: amount,
-      stripeId: stripeId,
-    };
+    let body = {customer_id: this.state.client_id, amount: amount, stripeId: stripeId};
     this.setState({ open: false });
     await Axios.post("/payment/payment", body)
-      .then(({ data }) => {
-        if (data.success) {
-          alert(data.msg);
-          window.open("/basic", "_self");
-        } else {
-          alert("Credit Card is Not added");
-          window.open("/subscription", "_self");
-        }
-      })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+               .then(({ data }) => {
+                if (data.success) {
+                  alert(data.msg);
+                  window.open("/basic", "_self");
+                } else {
+                  alert("Credit Card is Not added");
+                  window.open("/subscription", "_self");
+                }
+              })
+              .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
   render() {
     const {
@@ -661,7 +439,6 @@ class BasicForm extends Component {
       password,
       users,
       otherssignal,
-
       images,
       isSubmitting,
       Ebay,
@@ -674,8 +451,6 @@ class BasicForm extends Component {
       img,
       templates,
     } = this.state;
-    //console.log(document.getElementById('bulk'),'dgmt')
-    //document.getElementById('bulk').addEventListener( 'click', onMouse, false );
     return (
       <div className="container mt-5">
         <PaymentAlert
