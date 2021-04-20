@@ -23,7 +23,6 @@ import {
   TemplateForm,
   forgotpassword,
   Charts,
-  Config,
   AcceptUrl,
   Accounting,
   Subscription,
@@ -53,7 +52,6 @@ const Routes = withRouter((props) => {
             <Switch>
               <Route exact path="/passwords" component={Passwords} />
               <Route exact path="/charts" component={Charts} />
-              <Route exact path="/config" component={Config} />
               <Route exact path="/resetpassword" component={ResetPassword} />
               <Route
                 exact

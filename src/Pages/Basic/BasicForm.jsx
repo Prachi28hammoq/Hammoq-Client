@@ -132,7 +132,7 @@ class BasicForm extends Component {
         });
         this.setState({ cid: data._id }, () => localStorage.setItem("cid", this.state.cid));
       })
-      .catch((err) => console.log(err)));
+      .catch((err) => console.log(err));
   };
 
   fetchimg = (src) => {
