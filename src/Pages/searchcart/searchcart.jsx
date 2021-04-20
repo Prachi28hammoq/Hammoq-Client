@@ -59,12 +59,16 @@ class Searchcart extends Component {
                                              draftCount: data.count.draftCount,
                                              submittedCount: data.count.submittedCount                                        
                                             });
+                              if(!data.data || (data.count.inventoryCount === 0 && data.count.draftCount === 0 && data.count.submittedCount === 0))
+                              {
+                                window.open("No Products, Please Add One....");
+                                window.open("/basic", "_self");
+                              }
+
           this.setState({ loading: false });
       })
       .catch((error) => {
           console.log(error);
-          window.alert("No product, Please add few...");
-          window.open("/basic", "_self");
         });
 
     Axios.get("/clientdetails")
@@ -291,11 +295,12 @@ class Searchcart extends Component {
                <td>{idx + 1 + (page - 1) * rowsPerPage}</td>
                <td>
                 <img
-                  src={product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "http" && 
+                  src={product.images.default_image ?
+                       (product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "http" && 
                        product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "https" ? 
-                       assetsURL + product.images.default_image : product.images.default_image}
+                       assetsURL + product.images.default_image : product.images.default_image) : ("")}
                   className="product-img"
-                  alt="prod"
+                  alt="Default Image Missing"
                 />
                 </td>
                 <td>
