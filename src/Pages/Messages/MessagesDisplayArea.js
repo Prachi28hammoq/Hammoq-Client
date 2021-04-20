@@ -3,7 +3,7 @@ import Axios from "../../services/Axios";
 import './MessagesDisplayArea.css';
 import ReceivedMessage from './ReceivedMessage';
 import SentMessage from './SentMessage';
-import socket from "../../services/socket";
+import socket from "../../../src/services/socket";
 import { nanoid } from "nanoid";
 
 Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
@@ -48,7 +48,7 @@ const MessagesDisplayArea = (props) => {
 
         getClientIdAndAgentsAllocatedToClient();
 
-        socket.disconnect();
+        //socket.disconnect();
         socket.connect();
 
         socket.on('connect', function () {
@@ -60,7 +60,7 @@ const MessagesDisplayArea = (props) => {
         })
 
         return () => {
-            socket.disconnect();
+            //socket.disconnect();
         };
 
     }, [])

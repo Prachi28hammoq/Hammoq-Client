@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BarChart from './Components/BarChart';
 import DoughnutChart from './Components/DoughnutChart';
 import Axios from "../../services/Axios";
-import socket from "../../../src/services/socket.jsx";
+//import { accountingSocket as socket} from "../../../src/services/socket";
 import './Analytics.css';
 import _ from 'lodash';
 import { NavLink  } from 'react-router-dom'
@@ -56,15 +56,15 @@ const Analytics = (props) => {
             setEbayAccounts(await getAllEbayAccountsLinkedToThisHammoqUser());
         })();
 
-        return () => {
-            socket.disconnect();
+/*        return () => {
+            //socket.disconnect();
             socket.off('connect');
             socket.off("updateAnalyticsProgress");
-        };
+        };*/
 
     }, [])
 
-    useEffect(() => {
+/*    useEffect(() => {
         if (room.length > 0) {
             socket.connect();
             socket.on('connect', function () {
@@ -77,7 +77,7 @@ const Analytics = (props) => {
             });
         }
 
-    }, [room])
+    }, [room])*/
 
     useEffect(() => {
 
@@ -128,12 +128,15 @@ const Analytics = (props) => {
         setExpenses(currentMonthOrders.reduce((acc, item) => acc
             + (parseFloat(item.deliveryCost) || 0)
             + (parseFloat(item.tax) || 0)
+            + (parseFloat(item.totalMarketplaceFee) || 0), 0) + previousMonthOrders.reduce((acc, item) => acc
+            + (parseFloat(item.deliveryCost) || 0)
+            + (parseFloat(item.tax) || 0)
             + (parseFloat(item.totalMarketplaceFee) || 0), 0))
         setProfitLoss(currentMonthOrders.reduce((acc, item) => acc
             + (isNaN(item.costOfGoods) ? 0 : (parseInt(item.totalDueSeller) || 0)
                 - (parseInt(item.costOfGoods) || 0)), 0))
 
-    }, [currentMonthOrders])
+    }, [currentMonthOrders, previousMonthOrders])
 
 
     useEffect(() => {
@@ -144,9 +147,9 @@ const Analytics = (props) => {
 
     useEffect(() => {
 
-        setIncome(currentMonthRevenue.reduce((acc, item) => acc + item, 0));
+        setIncome(currentMonthRevenue.reduce((acc, item) => acc + item, 0) + previousMonthRevenue.reduce((acc, item) => acc + item, 0));
 
-    }, [currentMonthRevenue])
+    }, [currentMonthRevenue, previousMonthRevenue])
 
     useEffect(() => {
 

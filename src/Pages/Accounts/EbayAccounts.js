@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AddIcon from '@material-ui/icons/Add';
-import socket from "../../../src/services/socket.jsx";
+//import { ebaySocket as socket } from "../../../src/services/socket";
 import Axios from "../../services/Axios";
 import { useLocation } from 'react-router-dom';
 import './EbayAccounts.css';
@@ -58,7 +58,7 @@ const EbayAccounts = (props) => {
 
   }, [location]);
 
-  const registerListenerForNewlyCreatedEbayAccounts = () => {
+/*  const registerListenerForNewlyCreatedEbayAccounts = () => {
 
     socket.on("newebayaccount", data => {
 
@@ -80,7 +80,7 @@ const EbayAccounts = (props) => {
 
     });
 
-  }
+  }*/
 
   const getAllEbayAccountsLinkedToThisHammoqUser = async () => {
 

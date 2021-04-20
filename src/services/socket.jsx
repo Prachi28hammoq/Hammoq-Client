@@ -6,7 +6,7 @@ let socket = undefined;
 if(process.env.REACT_APP_STAGE === 'devlocal')
 {
     let url = "http://localhost:8000/";
-    socket = socketIOClient(url, {transports: [ "websocket", "polling" ]});
+    socket = socketIOClient(url, {transports: [ "websocket" ]});
 }
 
 else if(process.env.REACT_APP_STAGE === 'devhost')
@@ -26,7 +26,7 @@ else if(process.env.REACT_APP_STAGE === 'production')
 
 if(process.env.REACT_APP_STAGE !== 'devlocal')
 {
-	socket = socketIOClient(serverURL, {transports: ["websocket"],withCredentials: true});
+	socket = socketIOClient(serverURL, {transports: ["websocket"], withCredentials: true});
 }
 
 export default socket;

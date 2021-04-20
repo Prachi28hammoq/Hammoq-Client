@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import moment from 'moment'
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import socket from "../../services/socket";
+import { messageSocket } from "../../../src/services/socket.jsx";
 
 //let socket = require.main.exports.socket;
 

@@ -3,13 +3,9 @@ import LeftSection from "./Components/LeftSection";
 import RightSection from "./Components/RightSection";
 import "./Template.css";
 import Axios from "../../services/Axios";
-//import { socketCon } from "../../services/Axios";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
-//import io from "socket.io-client";
 import imageCompression from "browser-image-compression";
-
-// const socket = io(socketCon);
 
 const $ = window.$;
 

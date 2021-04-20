@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-date-picker';
 import Axios from "../../services/Axios";
-import socket from "../../../src/services/socket.jsx";
+//import { accountingSocket as socket} from "../../../src/services/socket";
 import './Reports.css';
 import { nanoid } from 'nanoid';
 import AddIcon from '@material-ui/icons/Add';
@@ -36,15 +36,15 @@ const Reports = (props) => {
 
         loadEbayAccounts();
 
-        return () => {
-            socket.disconnect();
+/*        return () => {
+            //socket.disconnect();
             socket.off('connect');
             socket.off("updateAnalyticsProgress");
-        };
+        };*/
 
     }, []);
 
-    useEffect(() => {
+/*    useEffect(() => {
         if (room.length > 0) {
             socket.connect();
             socket.on('connect', function () {
@@ -57,7 +57,7 @@ const Reports = (props) => {
             });
         }
 
-    }, [room])
+    }, [room])*/
 
     useEffect(() => {
 

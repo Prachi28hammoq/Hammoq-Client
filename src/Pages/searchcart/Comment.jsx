@@ -1,8 +1,5 @@
 import React, { Component, Fragment } from "react";
-// import { socket } from "../../services/socket";
-// import $ from "jquery";
 import { Divider, Avatar, Grid, Paper } from "@material-ui/core";
-// import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 
 class Comment extends Component {

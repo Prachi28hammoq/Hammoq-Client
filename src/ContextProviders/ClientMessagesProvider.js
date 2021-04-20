@@ -19,7 +19,7 @@ const ClientMessagesProvider = (props) => {
         mountContext();
 
         return () => {
-            socket.disconnect();
+            //socket.disconnect();
         };
 
     }, [contextClientId])
@@ -29,7 +29,7 @@ const ClientMessagesProvider = (props) => {
         mountContext();
 
         return () => {
-            socket.disconnect();
+            //socket.disconnect();
         };
 
     }, [history.location.pathname])
@@ -38,7 +38,7 @@ const ClientMessagesProvider = (props) => {
 
         if (localStorage.getItem("token") && contextClientId.length > 0) {
             
-            socket.disconnect();
+            //socket.disconnect();
             socket.connect();
 
             socket.on('connect', function () {

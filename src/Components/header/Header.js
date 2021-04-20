@@ -29,13 +29,7 @@ const Header = (props) => {
         refreshUserTokenForAllEbayAccounts();
         refreshTokenInterval = setInterval(() => refreshUserTokenForAllEbayAccounts(), 7100000);
 
-        await Axios.get("/payment/rates")
-          .then((res) => {
-            setRates(res.data[res.data.length - 1]);
-          })
-          .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-
-        await Axios.get("/clientdetails")
+        await Axios.get("/clientdetails/headerinfo")
           .then(({ data }) => {
             if (parseInt(data.balance) < 5) setOpen(true);
             setBal(data.balance);
@@ -43,9 +37,8 @@ const Header = (props) => {
             setContextClientId(data._id);
             setCustomerName(data.firstName);
             setClientMessageSeenCount(data.clientMessageSeenCount);
-            localStorage.setItem("customerName", customerName);
           })
-          .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+          .catch((err) => console.log(err));
 
         if (bal >= 5.0) {
           localStorage.setItem("paymentadded", true);
@@ -61,7 +54,7 @@ const Header = (props) => {
       clearInterval(refreshTokenInterval);
     };
 
-  }, [bal, contextUnreadMessagesCount, customerName, setContextClientId, setOpen, setRates]);
+  }, []);
 
   useEffect(() => {
     setClientMessageSeenCount(contextUnreadMessagesCount);
@@ -76,24 +69,6 @@ const Header = (props) => {
     localStorage.removeItem("token");
     window.open("/login", "_self");
   };
-
-/*  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const updatePayment = async (amount) => {
-    let body = {
-      customer_id: clientId,
-      amount: amount,
-    };
-    setOpen(false);
-    await Axios.post("/payment/payment", body)
-      .then(({ data }) => {
-        if (data.success) alert(data.msg);
-        else alert("Error");
-      })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  };*/
 
   return(
     <nav
