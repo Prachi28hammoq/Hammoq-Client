@@ -25,6 +25,7 @@ class Passwords extends Component {
     });
 
     Axios.get("/password/getstatus").then(({ data }) => {
+      console.log(data);
       this.setState({ Ebay: !data.Ebay });
       this.setState({ Poshmark: !data.Poshmark });
       this.setState({ Mercari: !data.Mercari });
@@ -58,6 +59,7 @@ class Passwords extends Component {
         password: password,
       })
         .then((response) => {
+          console.log(response,'ebay response')
           // let user = {
           //   website: website,
           //   username: username,
@@ -85,7 +87,7 @@ class Passwords extends Component {
         })
         .catch((err) => {
           this.setState({ isSubmitting: true });
-          console.log(err);
+          console.log(err) || alert(JSON.stringify({ err: err }));
         });
     } else {
       alert("Fill up the details");
@@ -94,11 +96,11 @@ class Passwords extends Component {
   handleeBaySubmit = () => {
     Axios.get("/ebay/consent")
       .then((response) => {
-        window.open(response.data.authURL, "_blank");
+        var authWindow = window.open(response.data.authURL, "_blank");
       })
 
       .catch((err) => {
-        console.log(err);
+        console.log(err) || alert(JSON.stringify({ err: err }));
       });
   };
 
@@ -106,7 +108,7 @@ class Passwords extends Component {
     try {
       const response = await Axios.delete(`/password/${id}`, {
        headers: {
-         "x-access-token": `${localStorage.getItem("token")}`,
+        "authorization": `bearer ${localStorage.getItem("token")}`,
        },
       })
       window.confirm("Are You Sure?")
@@ -246,9 +248,11 @@ class Passwords extends Component {
                               Edit
                             </button>
                           </Link>
-                          <button className="btn btn-danger body-text custom-edit-btn mt-3 ml-3 btn-sm" onClick = {() => {this.handleDelete(user._id)}}>
-                            Delete
-                          </button>
+                          <Link>
+                            <button className="btn btn-danger body-text custom-edit-btn mt-3 ml-3 btn-sm" onClick = {() => {this.handleDelete(user._id)}}>
+                              Delete
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     );

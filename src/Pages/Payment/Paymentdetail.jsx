@@ -23,11 +23,12 @@ class AddPayment extends Component {
   }
 
   async componentDidMount() {
-    const tokenvalue = localStorage.getItem("usertoken");
     try {
       const response = await axios.get(
         API_URL + `user/payment/getpaymentdetail`,
-        (axios.defaults.headers.common["x-access-token"] = tokenvalue),
+        (axios.defaults.headers.common[
+          "authorization"
+        ] = `bearer ${localStorage.getItem("token")}`),
         {
           headers: {
             "content-type": "application/x-www-form-urlencoded",
@@ -92,10 +93,11 @@ class AddPayment extends Component {
       let response = await axios.post(
         `${API_URL}user/payment/addpayment`,
         body,
-        (axios.defaults.headers.common["x-access-token"] = tokenvalue)
+        (axios.defaults.headers.common[
+          "authorization"
+        ] = `bearer ${localStorage.getItem(token)}`)
       );
       if (response.data.success) {
-
         alert(response.data.msg);
         this.props.history.push("/addpassword");
       } else {

@@ -42,12 +42,20 @@ class Signup extends Component {
     e.preventDefault();
     const {
       term1,
+      term2,
+      address1,
+      address2,
       password,
       confirmPassword,
+      country,
+      city,
+      state,
+      zip,
       firstName,
       lastName,
       email,
-      phoneno
+      phoneno,
+      referralCode,
     } = this.state;
 
     if (!term1) {
@@ -55,17 +63,17 @@ class Signup extends Component {
       return alert("Accept all the terms.");
     }
 
-    if (email === "") {
+    if (email == "") {
       this.setState({ isSubmitting: false });
       return alert("Email field is required.");
     }
 
-    if (phoneno === "") {
+    if (phoneno == "") {
       this.setState({ isSubmitting: false });
       return alert("Phone.no field is required.");
     }
 
-    if (firstName === "" || lastName === "") {
+    if (firstName == "" || lastName == "") {
       this.setState({ isSubmitting: false });
       return alert("Name field is required.");
     }
@@ -83,14 +91,14 @@ class Signup extends Component {
           return alert(res.data.errors);
         }
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("paymentadded", false);
-        window.open("/addpayment", "_self");
+        // localStorage.setItem("paymentadded", false);
+        window.open("/subscription", "_self");
       })
       .catch((err) => {
         this.setState({ isSubmitting: false });
         if (err) {
           return alert(err);
-      }
+        }
         alert("Something went wrong. Can't SignUp");
       });
   };
@@ -99,12 +107,18 @@ class Signup extends Component {
     const {
       firstName,
       lastName,
+      address1,
+      address2,
+      country,
+      state,
+      zip,
       email,
       phoneno,
+      city,
       password,
       confirmPassword,
       isSubmitting,
-      referralCode
+      referralCode,
     } = this.state;
     return (
       <div className="row col-lg-5 m-auto">
@@ -184,7 +198,7 @@ class Signup extends Component {
             className="form-control mb-4"
             required
           ></input>
-          <a href="#bottom" target="_blank">
+          <a href="" target="_blank">
             Terms and Conditions
           </a>
           <div className="form-check">
@@ -208,10 +222,10 @@ class Signup extends Component {
               SIGNING UP...
             </button>
           ) : (
-              <button className="btn btn-primary" onClick={this.handleSubmit}>
-                SIGNUP
-              </button>
-            )}
+            <button className="btn btn-primary" onClick={this.handleSubmit}>
+              SIGNUP
+            </button>
+          )}
         </form>
       </div>
     );

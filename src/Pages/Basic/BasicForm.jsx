@@ -5,9 +5,12 @@ import ButtonGroup from "./ButtonGroup";
 import "./BasicForm.css";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
-import { assetsURL } from "../../services/Axios";
+import { assetsURL, socketCon } from "../../services/Axios";
+import io from "socket.io-client";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
-import { nanoid } from "nanoid";
+import imageCompression from "browser-image-compression";
+
+// const socket = io(socketCon);
 
 const $ = window.$;
 
@@ -73,25 +76,32 @@ class BasicForm extends Component {
       templates: [],
       templateId: "",
       productId: "",
-      zipCode:"",
-      domesticShippingFreeShippingActive:false
-      
-      
     };
     this.handleChange.bind(this);
   }
 
   componentDidMount = () => {
+    const { cid, images } = this.state;
     Axios.get("/password/getstatus").then(({ data }) => {
+      //console.log(data);
       this.setState({ Ebay: data.Ebay });
       this.setState({ Poshmark: data.Poshmark });
       this.setState({ Mercari: data.Mercari });
     });
 
+    Axios.get("/template")
+      .then((data) => {
+        //console.log(data, "template data");
+        this.setState({ templates: data.data.templates });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     Axios.get("/password/getstatus/others").then(({ data }) => {
+      //console.log(data, "other data");
       if (data.length > 0) {
         this.setState({ othersbool: true });
-        data.forEach((d, i) => {
+        data.map((d, i) => {
           const others = [...this.state.others];
           others.push(d);
 
@@ -100,30 +110,38 @@ class BasicForm extends Component {
           const otherss = [...this.state.othersstate];
 
           otherss.push(localStorage.getItem(d) || false);
+          // console.log(otherss, "otherssssssssssssssssssssssss");
 
           this.setState({ othersstate: otherss });
+          // if (!localStorage.getItem(d)) {
+          //   localStorage.setItem(d, false);
+          // }
+
+          //console.log(this.state.othersstate)
         });
       }
     });
 
     Axios.get("/payment/rates")
       .then((res) => {
+        //rates = res.data[res.data.length - 1];
         this.setState({ rates: res.data[res.data.length - 1] });
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        if (parseInt(data.balance) < 5 && data.savedCards.length > 0) 
-        {
-          this.setState({ open: true });
+        if (!data.isSubscribed) {
+          alert("You are not subscribed, kindly subscribe to hammoq services");
+          window.open("/subscription", "_self");
         }
-        else if(parseInt(data.balance) < 5 && data.savedCards.length === 0) 
-        {
+        if (parseInt(data.balance) < 5 && data.savedCards.length > 0) {
+          this.setState({ open: true });
+        } else if (parseInt(data.balance) < 5 && data.savedCards.length == 0) {
           window.alert(
             "Low Payment and No card added, Please add a card and then add payment.."
           );
-          window.open("/addpayment", "_self");
+          window.open("/subscription", "_self");
         }
         this.setState({
           bal: data.balance,
@@ -131,32 +149,80 @@ class BasicForm extends Component {
           savedCards: data.savedCards,
           cid: data._id,
           offeredRate: data.offeredRate || {},
-          
         });
         this.setState({ cid: data._id }, () =>
           localStorage.setItem("cid", this.state.cid)
         );
-      })
 
-      Axios.get("/clientdetails/listingSettings")
-      .then(({ data }) => {
-        this.setState({
-          zipCode: data.settings[0].listing[0].zipCode,
-          domesticShippingFreeShippingActive: data.settings[0].shipping[0].freeShipping
-        })
+        // socket.emit("cidinit", { cid: this.state.cid });
+        // console.log(this.state.cid);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+
+    // var uploader = new SocketIOFileUpload(socket);
+    // uploader.listenOnInput(document.getElementById("bulk"));
+    // uploader.addEventListener("start", function (event) {
+    //   event.file.meta.cid = localStorage.getItem("cid");
+    // });
+    // socket.on("server2clientimg", (i) => {
+    //   //console.log(i);
+    //   i.img.map((imgi) => {
+    //     if (imgi.cid == localStorage.getItem("cid"))
+    //       images[imgi.index].img = imgi.name;
+    //   });
+
+    //   this.setState({
+    //     images,
+    //   });
+    // });
   };
 
+  // imgStatusHandler = () => {
+  //   const { cid } = this.state;
+  //   console.log("called imgStatusHandler");
+  //   socket.emit("getuploadstatus", { cid: cid });
+  //   socket.on("imgupload", (i) => {
+  //     console.log("imgcnt:" + i.imgcnt);
+  //     var imglen = this.state.images.filter((i) => {
+  //       if (i.img != "") {
+  //         return true;
+  //       }
+  //     });
+  //     console.log(imglen.length);
+  //     if (i.cid == cid && imglen.length == i.imgcnt) {
+  //       return false;
+  //     } else {
+  //       return true;
+  //     }
+  //   });
+  // };
+
   fetchimg = (src) => {
+    const { cid } = this.state;
     this.setState({ fullimg: src }, () => {
       $("#addTemplateModal1").modal("show");
     });
+    // socket.emit("getimg", { cid: cid });
+    // socket.on("reimg", (re) => {
+    //   //this.setState({ img: "" });
+    //   console.log(re.id);
+    //   console.log("this");
+    //   console.log(re);
+    //   this.setState({ img: re.img }, () => {
+    //     this.state.img.forEach((i) => {
+    //       if (i.key == this.state.fullimg) {
+    //         // this.setState({ fullimg: src }, () => {
+    //         //   $("#addTemplateModal1").modal("show");
+    //         // });
+    //       }
+    //     });
+    //   });
+    //   console.log(this.state.img);
+    // });
   };
 
   change = (e) => {
-    if (e.target.name === "input1") 
-    {
+    if (e.target.name === "input1") {
       localStorage.setItem("condition", e.target.value);
     }
     this.setState({
@@ -173,23 +239,24 @@ class BasicForm extends Component {
   };
 
   onSubmit = () => {
-    const { images } = this.state;
+    //e.preventDefault();
+    const { images, cid } = this.state;
     const data = new FormData();
 
     images.forEach((image) => {
       if (!!image.img) data.append(image.key, image.img);
     });
 
-    if (images[0].img === "") {
+    if (images[0].img == "") {
       return alert("Atleast first image is required");
     }
 
-    if (this.state.input1 === "Select Condition *" || this.state.input1 === "") {
+    if (this.state.input1 == "Select Condition *" || this.state.input1 == "") {
       return alert("Condition is required");
     }
 
     var y = [];
-    this.state.others.forEach((o, i) => {
+    this.state.others.map((o, i) => {
       let obj = {
         name: o,
         status: this.state.othersstate[i],
@@ -197,52 +264,54 @@ class BasicForm extends Component {
       };
       y.push(obj);
     });
+    //console.log(y);
 
     var mplace = true;
 
     if (
-      this.state.Ebay === true ||
-      this.state.Poshmark === true ||
-      this.state.Mercari === true ||
-      this.state.others.length !== 0
+      this.state.Ebay == true ||
+      this.state.Poshmark == true ||
+      this.state.Mercari == true ||
+      this.state.others.length != 0
     ) {
       mplace = true;
     } else {
       mplace = false;
       return $("#addTemplateModal").modal("show");
+      //return alert("Please have marketplace logins atleast")
     }
 
     var flag = 0;
     this.state.othersstate.forEach((os) => {
-      if (os === "true") {
+      if (os == "true") {
         flag = 1;
       }
     });
     if (
-      (this.state.Ebay === true && this.state.ebay === true) ||
-      (this.state.Poshmark === true && this.state.poshmark === true) ||
-      (this.state.Mercari === true && this.state.mercari === true)
+      (this.state.Ebay == true && this.state.ebay == true) ||
+      (this.state.Poshmark == true && this.state.poshmark == true) ||
+      (this.state.Mercari == true && this.state.mercari == true)
     ) {
       flag = 1;
     }
-    if (mplace && flag === 0) {
+    if (mplace && flag == 0) {
       return alert("Please choose any marketplace to list the product");
     }
 
     //bal check routine
     var cnt = 0;
 
-    if (this.state.Ebay && this.state.ebay === true) {
+    if (this.state.Ebay && this.state.ebay == true) {
       cnt++;
     }
-    if (this.state.Poshmark && this.state.poshmark === true) {
+    if (this.state.Poshmark && this.state.poshmark == true) {
       cnt++;
     }
-    if (this.state.Mercari && this.state.mercari === true) {
+    if (this.state.Mercari && this.state.mercari == true) {
       cnt++;
     }
     this.state.othersstate.forEach((os) => {
-      if (os === "true") {
+      if (os == "true") {
         cnt++;
       }
     });
@@ -252,7 +321,7 @@ class BasicForm extends Component {
     var total = 0;
     rate1 = (this.state.rates.basic / 100) * 1;
     rate2 = (this.state.rates.advance / 100) * (cnt - 1);
-    if (this.state.delist === true) {
+    if (this.state.delist == true) {
       rate3 = (this.state.rates.list / 100) * (cnt - 1);
     }
     total = rate1 + rate2 + rate3;
@@ -260,18 +329,18 @@ class BasicForm extends Component {
     if (this.state.bal - total < 0) {
       if (this.state.savedCards.length > 0) {
         this.setState({ open: true });
-        window.alert('Insufficient balance')
-      }else{
+        window.alert("Insufficient balance");
+      } else {
         window.alert(
           "Low Payment and No card added, Please add a card and then add payment.."
         );
-        window.open("/addpayment", "_self");
+        window.open("/subscription", "_self");
       }
     }
 
     data.append("sku", this.state.input2);
 
-    if (this.state.input3 === 0) {
+    if (this.state.input3 == 0) {
       data.append("quantity", 1);
     } else {
       data.append("quantity", this.state.input3);
@@ -297,6 +366,11 @@ class BasicForm extends Component {
     } else {
       data.append("poshmarkc", false);
     }
+    // if(this.state.others){
+    //     for(let i = 0 ; i < this.state.others.length ; i++){
+    //     data.append(this.state.others[i],false)
+    // }
+    // }
 
     data.append("waist", this.state.input8);
     data.append("inseam", this.state.input9);
@@ -313,9 +387,6 @@ class BasicForm extends Component {
     data.append("rate1", rate1);
     data.append("rate2", rate2);
     data.append("rate3", rate3);
-    data.append("zipCode",this.state.zipCode)
-    data.append("domesticShippingFreeShippingActive",this.state.domesticShippingFreeShippingActive)
-    data.append("profit",this.state.input4 - this.state.costOfGoods)
     data.append("prodStatus", "submitted");
 
     localStorage.setItem("ebay", this.state.ebay);
@@ -324,24 +395,47 @@ class BasicForm extends Component {
     localStorage.setItem("delist", this.state.delist);
     this.setState({ isSubmitting: true });
 
+    // var object = {};
+    // data.forEach(function (value, key) {
+    //   object[key] = value;
+    // });
+    // if (this.imgStatusHandler()) {
+    //   this.setState({ isSubmitting: false });
+    //   return alert("Please Wait! Images are uploading.....");
+    // } else {
+    //let productId = ''
     Axios.post("/product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
-        "x-access-token": `${localStorage.getItem("token")}`,
+        authorization: `bearer ${localStorage.getItem("token")}`,
       },
     })
 
       .then((response) => {
+        let productId = response.data.products
+          ? response.data.products[response.data.products.length - 1]._id
+          : response.data.products;
+        if (this.state.templateId) {
+          Axios.post(
+            "/producttemplate",
+            { productId: productId, templateId: this.state.templateId },
+            {
+              headers: {
+                authorization: `bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          ).then((response) => {});
+        }
         window.open("/basic", "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify({ err: err })));
+    //}
   };
 
   handleSubmit = (e) => {
     const { website, username, password } = this.state;
     e.preventDefault();
-
-    if (website !== "" && username !== "" && password !== "") {
+    if (website != "" && username != "" && password != "") {
       this.setState({ loading: true });
 
       Axios.post("/password", {
@@ -350,23 +444,31 @@ class BasicForm extends Component {
         password: password,
       })
         .then((response) => {
+          //this.setState({ loading: false });
           alert("Login details has been added");
-          if (website === "Ebay") {
+          if (website == "Ebay") {
             this.setState({ Ebay: true });
             this.setState({ loading: false });
-          } else if (website === "Poshmark") {
+          } else if (website == "Poshmark") {
             this.setState({ Poshmark: true });
             this.setState({ loading: false });
-          } else if (website === "Mercari") {
+          } else if (website == "Mercari") {
             this.setState({ Mercari: true });
             this.setState({ loading: false });
           } else {
+            // const others = [...this.state.others];
+            // others.push(website);
+            // this.setState({ others });
+            // const otherss = [...this.state.othersstate];
+            // otherss.push(true);
+            // this.setState({ othersstate: otherss });
 
             Axios.get("/password/getstatus/others").then(({ data }) => {
+              //console.log(data);
               this.setState({ loading: false });
               if (data.length > 0) {
                 this.setState({ othersbool: true });
-                data.forEach((d, i) => {
+                data.map((d, i) => {
                   const others = [...this.state.others];
                   others.push(d);
                   this.setState({ others });
@@ -378,6 +480,12 @@ class BasicForm extends Component {
               }
             });
           }
+          //  Axios.get("/password/getstatus").then(({ data }) => {
+          //   //console.log(data);
+          //   this.setState({ Ebay: data.Ebay });
+          //   this.setState({ Poshmark: data.Poshmark });
+          //   this.setState({ Mercari: data.Mercari });
+          // });
         })
         .catch((err) => {
           this.setState({ isSubmitting: true });
@@ -389,12 +497,21 @@ class BasicForm extends Component {
   };
 
   handleChange = async (event) => {
-    const { images } = this.state;
-
+    const { images, cid } = this.state;
+    //console.log(images);
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
     const idx = images.findIndex((image) => image.key === event.target.name);
     try {
       this.setState({ isSubmitting: true });
-      images[idx].img = event.target.files[0];
+      let compressedFile = await imageCompression(
+        event.target.files[0],
+        options
+      );
+      images[idx].img = compressedFile;
       this.setState({
         images,
       });
@@ -402,14 +519,30 @@ class BasicForm extends Component {
     } catch (error) {
       console.log(error);
     }
+
+    // console.log(event.target.files[0]);
+    // var reader = new FileReader();
+    // reader.readAsDataURL(event.target.files[0]);
+    // reader.onload = function () {
+    //   //console.log(reader.result);
+    //   socket.emit("img", {
+    //     key: images[idx].key,
+    //     base64: reader.result,
+    //     cid: cid,
+    //   });
+    // };
+    // reader.onerror = function (error) {
+    //   console.log("Error: ", error);
+    // };
+    // console.log(this.state.images);
   };
 
   handleChangepop = (e) => {
     const { name, value } = e.target;
-    if (value === "Others") {
+    if (value == "Others") {
       this.setState({ otherssignal: true });
     } else {
-      if (value === "Ebay" || value === "Poshmark" || value === "Mercari") {
+      if (value == "Ebay" || value == "Poshmark" || value == "Mercari") {
         this.setState({ otherssignal: false });
       }
       this.setState({ [name]: value });
@@ -417,9 +550,11 @@ class BasicForm extends Component {
   };
 
   handleOnClick = (o, i) => {
-    if (this.state.othersstate[i] === "false") {
+    // const ot = [...othersstate];
+    // ot[i] = !ot[i];
+    if (this.state.othersstate[i] == "false") {
       this.state.othersstate[i] = "true";
-    } else if (this.state.othersstate[i] === "true") {
+    } else if (this.state.othersstate[i] == "true") {
       this.state.othersstate[i] = "false";
     }
     localStorage.setItem(o, this.state.othersstate[i]);
@@ -427,25 +562,69 @@ class BasicForm extends Component {
   };
 
   handleBulkUpload = async (e) => {
-    const { images } = this.state;
+    const { images, cid } = this.state;
+    var imgobj = [];
     const files = e.target.files;
     const count = files.length;
 
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
     this.setState({ isSubmitting: true });
     for (let i = 0; i < count; i++) {
       const idx = images.findIndex((image) => !image.img);
       if (idx > -1) {
         try {
-          images[idx].img = files[i];
+          console.log(files[i]);
+          let compressedFile = await imageCompression(files[i], options);
+          console.log(compressedFile);
+          images[idx].img = compressedFile;
           this.setState({ images }, () => console.log(this.state.images));
-        } 
-        catch (error) 
-        {
+        } catch (error) {
           console.log(error);
         }
       }
     }
     this.setState({ isSubmitting: false });
+    //this.setState({ images }, () => console.log(this.state.images));
+
+    // images.map((i) => {
+    //   var reader = new FileReader();
+    //   if (i.img != "") {
+    //     reader.readAsDataURL(i.img);
+    //     reader.onload = function () {
+    //       //console.log(reader.result);
+    //       imgobj.push({ base64: reader.result, cid: cid, key: i.key });
+    //       setTimeout(() => {
+    //         socket.emit("img", {
+    //           key: i.key,
+    //           base64: reader.result,
+    //           cid: cid,
+    //         });
+    //       }, 1000);
+    //     };
+    //     reader.onerror = function (error) {
+    //       console.log("Error: ", error);
+    //     };
+    //   }
+    // });
+
+    // setTimeout(() => {
+    //   socket.emit("bimg", {
+    //     bimg: imgobj,
+    //     cid: cid,
+    //   });
+    // }, 2000);
+  };
+
+  handleChangesTemplate = (e) => {
+    this.setTemplate(e.target.value);
+  };
+
+  setTemplate = (id) => {
+    this.setState({ templateId: id });
   };
 
   removeImg = (idx) => {
@@ -465,13 +644,12 @@ class BasicForm extends Component {
     this.setState({ open: false });
     await Axios.post("/payment/payment", body)
       .then(({ data }) => {
-        console.log(data, "update mpadfjafjk");
         if (data.success) {
           alert(data.msg);
           window.open("/basic", "_self");
         } else {
           alert("Credit Card is Not added");
-          window.open("/addpayment", "_self");
+          window.open("/subscription", "_self");
         }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
@@ -481,7 +659,9 @@ class BasicForm extends Component {
       website,
       username,
       password,
+      users,
       otherssignal,
+
       images,
       isSubmitting,
       Ebay,
@@ -489,9 +669,13 @@ class BasicForm extends Component {
       Mercari,
       othersbool,
       others,
+      othersstate,
       fullimg,
-      img
+      img,
+      templates,
     } = this.state;
+    //console.log(document.getElementById('bulk'),'dgmt')
+    //document.getElementById('bulk').addEventListener( 'click', onMouse, false );
     return (
       <div className="container mt-5">
         <PaymentAlert
@@ -501,7 +685,7 @@ class BasicForm extends Component {
           savedCards={this.state.savedCards}
         />
         <Link to="/products/submitted">
-          <i className="fa fa-arrow-left" aria-hidden="true"></i>
+          <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </Link>
         <div className="row">
           <div
@@ -609,7 +793,7 @@ class BasicForm extends Component {
             <div className="row m-auto">
               {images.map((image, idx) => {
                 return (
-                  <div className="col-4 col-md-3 px-1 " key={nanoid(4)}>
+                  <div className="col-4 col-md-3 px-1 ">
                     <div
                       className="modal fade bd-example-modal-sm"
                       id="addTemplateModal1"
@@ -634,7 +818,7 @@ class BasicForm extends Component {
                             </button>
                           </div>
 
-                          <img alt='placeholder' src={fullimg} style={{ height: "500px" }} />
+                          <img src={fullimg} style={{ height: "500px" }} />
                         </div>
                       </div>
                     </div>
@@ -644,7 +828,6 @@ class BasicForm extends Component {
                         {image.img ? (
                           <div className="container p-0 m-0">
                             <img
-                              alt='placeholder'
                               src={
                                 typeof image.img === "string"
                                   ? assetsURL + image.img
@@ -732,7 +915,7 @@ class BasicForm extends Component {
 
               <div className="row">
                 <div className="col-12 px-1 ml-3">
-{/*                  <select
+                  <select
                     value={this.state.templateId}
                     className="form-control"
                     id="template"
@@ -745,7 +928,7 @@ class BasicForm extends Component {
                           <option value={template._id}>{template.name}</option>
                         );
                       })}
-                  </select>*/}
+                  </select>
                 </div>
               </div>
             </div>
@@ -763,7 +946,9 @@ class BasicForm extends Component {
                   <option>Select Condition *</option>
                   <option value="New">New</option>
                   <option value="New With Tags">New With Tags</option>
-                  <option value="New (Other/Open Box)">New (Other/Open Box)</option>
+                  <option value="New (Other/Open Box)">
+                    New (Other/Open Box)
+                  </option>
                   <option value="New With Defects">New With Defects</option>
                   <option value="Seller Refurbished">Seller Refurbished</option>
                   <option value="Used">Used</option>
@@ -806,6 +991,7 @@ class BasicForm extends Component {
                   onChange={(e) => this.change(e)}
                   value={this.state.input3 === 0 ? "" : this.state.input3}
                   name="input3"
+                  defaultValue="1"
                   placeholder="Quantity(1)"
                   min="1"
                   className="form-control"
@@ -983,18 +1169,13 @@ class BasicForm extends Component {
                 ) : null}
                 {othersbool
                   ? others.map((o, i) => {
-                      console.log(
-                        this.state.othersstate[i],
-                        i,
-                        "othherbadkjfkjb"
-                      );
                       return (
                         <div
                           className="col-12 col-lg-6"
                           onClick={() => this.handleOnClick(o, i)}
                         >
                           <div className="form-check">
-                            {this.state.othersstate[i] === "true" ? (
+                            {this.state.othersstate[i] == "true" ? (
                               <input
                                 className="form-check-input"
                                 type="checkbox"

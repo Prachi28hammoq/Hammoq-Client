@@ -14,22 +14,21 @@ class Login extends Component {
   }
 
   handleSubmit = async (e) => {
-    this.setState({ isSubmitting: true });
-    e.preventDefault();
-    await Axios.get("/signin", { params: this.state })
-      .then(({ data }) => {
-        if (data.err) {
-          this.setState({ isSubmitting: false });
-          this.setState({ loginError: true });
-          return;
-        }
-        localStorage.setItem("token", data.token);
-        window.open("/basic", "_self");
-      })
-      .catch((err) => {
-        this.setState({ isSubmitting: false });
-        this.setState({ loginError: true });
-      });
+    try {
+      e.preventDefault();
+      this.setState({ isSubmitting: true });
+      const { email, password } = this.state;
+      if (email == "" || password == "") {
+        return alert("Email and password is required");
+      }
+      const res = await Axios.post("/signin", { email, password });
+      // console.log(res);
+      localStorage.setItem("token", res.data.token);
+      window.open("/basic", "_self");
+    } catch (err) {
+      alert(`Error in login: ${err?.response?.data?.err[0]}`);
+      this.setState({ isSubmitting: false, loginError: true });
+    }
   };
 
   handleChange = (e) => {
@@ -72,7 +71,7 @@ class Login extends Component {
                     <div className="col d-flex justify-content-center">
                       <div className="row">
                         <i
-                          className="fa fa-times-circle text-danger"
+                          class="fa fa-times-circle text-danger"
                           aria-hidden="true"
                           style={{ width: "50" }}
                         ></i>
@@ -82,18 +81,18 @@ class Login extends Component {
                       </div>
                     </div>
                   )}
-                  <div className="input-group input-group-lg mt-3">
-                    <div className="input-group-prepend">
+                  <div class="input-group input-group-lg mt-3">
+                    <div class="input-group-prepend">
                       <span
-                        className="input-group-text bg-white border-0 rounded-1-left pr-1"
+                        class="input-group-text bg-white border-0 rounded-1-left pr-1"
                         id="inputGroup-sizing-lg"
                       >
-                        <div className="fas fa-envelope" aria-hidden="true"></div>
+                        <div class="fas fa-envelope" aria-hidden="true"></div>
                       </span>
                     </div>
                     <input
                       type="email"
-                      className="form-control border-0 rounded-1-right pl-3 bg-white"
+                      class="form-control border-0 rounded-1-right pl-3 bg-white"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-lg"
                       placeholder="Email"
@@ -103,13 +102,13 @@ class Login extends Component {
                       required
                     ></input>
                   </div>
-                  <div className="input-group input-group-lg mt-3">
-                    <div className="input-group-prepend mb-2">
+                  <div class="input-group input-group-lg mt-3">
+                    <div class="input-group-prepend mb-2">
                       <span
-                        className="input-group-text bg-white border-0 rounded-1-left pr-1"
+                        class="input-group-text bg-white border-0 rounded-1-left pr-1"
                         id="inputGroup-sizing-lg"
                       >
-                        <div className="fas fa-lock" aria-hidden="true"></div>
+                        <div class="fas fa-lock" aria-hidden="true"></div>
                       </span>
                     </div>
                     <input
@@ -146,14 +145,14 @@ class Login extends Component {
                   )}
                   <hr />
                 </form>
-                <div className="d-flex justify-content-center mb-4">
+                <div class="d-flex justify-content-center mb-4">
                   <a href="/signup">
                     <button className="btn btn-primary">
                       Create new account
                     </button>
                   </a>
                 </div>
-                <div className="d-flex justify-content-center mb-4">
+                <div class="d-flex justify-content-center mb-4">
                   <a href="/forgotpassword">
                     <button className="btn btn-warning">Forgot password</button>
                   </a>

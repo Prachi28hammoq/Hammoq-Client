@@ -15,8 +15,7 @@ import Config from "./config/title";
 import AcceptUrl from "./AcceptUrl/AcceptUrl";
 import ListingSettings from "./ListingSettings/ListingSettings";
 import Accounting from "./Accounting/Accounting";
-import Messages from "./Messages/Messages";
-
+import Subscription from "./Subscription/Subscription";
 export {
   Signup,
   Searchcart,
@@ -35,5 +34,5 @@ export {
   AcceptUrl,
   ListingSettings,
   Accounting,
-  Messages
+  Subscription,
 };
