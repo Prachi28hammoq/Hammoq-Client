@@ -184,6 +184,7 @@ class RightSection extends Component {
   customtitle = (e) => {
     const { custom } = this.state;
     const { data } = this.props;
+    localStorage.setItem("custom", !custom);
     this.setState({ custom: !custom });
     if (data.title) 
     {
@@ -1693,7 +1694,7 @@ class RightSection extends Component {
             (
               <>
               <button className='save_to_draft'
-              onClick={(e) => {onSubmit(e, "save");}}>
+              onClick={(e) => {onSubmit(e, "current");}}>
               Save</button>
               </>
             )
@@ -1721,7 +1722,7 @@ class RightSection extends Component {
                 Save To Draft
                 </button>
                 <button className='submit'
-                onClick={(e) => {onSubmit(e, "save");}}>
+                onClick={(e) => {onSubmit(e, "current");}}>
                 Save
                 </button>
                 </>
