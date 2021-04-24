@@ -22,6 +22,7 @@ class Login extends Component {
         return alert("Email and password is required");
       }
       const res = await Axios.post("/signin", { email, password });
+      console.log(res.data);
       localStorage.setItem("token", res.data.token);
       window.open("/basic", "_self");
     } catch (err) {

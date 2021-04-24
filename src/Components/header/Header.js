@@ -37,6 +37,7 @@ const Header = (props) => {
                 setClientMessageSeenCount(data.clientMessageSeenCount);
                 localStorage.setItem("cid", data._id);
                 localStorage.setItem("customerName", data.firstName);
+                localStorage.setItem("isSubscribed", data.isSubscribed);
           })
           .catch((err) => console.log(err));
       }

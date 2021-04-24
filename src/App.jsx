@@ -53,43 +53,23 @@ const Routes = withRouter((props) => {
               <Route exact path="/passwords" component={Passwords} />
               <Route exact path="/charts" component={Charts} />
               <Route exact path="/resetpassword" component={ResetPassword} />
-              <Route
-                exact
-                path="/editpasswords/:website"
-                component={Editdomain}
-              />
+              <Route exact path="/editpasswords/:website" component={Editdomain}/>
               <Route exact path="/addpayment" component={AddPayment} />
               <Route exact path="/templates" component={Templates} />
               <Route exact path="/subscription" component={Subscription} />
-              <Route
-                exact
-                path="/template/:templateid"
-                component={TemplateForm}
-              />
-
+              <Route exact path="/template/:templateid" component={TemplateForm}/>
               <Route exact path="/basic" component={BasicForm} />
               <Route exact path="/edit/:id" component={EditForm} />
-              <Route
-                exact
-                path="/listingsettings"
-                component={ListingSettings}
-              />
+              <Route exact path="/listingsettings" component={ListingSettings}/>
               <Route exact path="/products" component={Searchcart} />
-              <Route
-                exact
-                path="/products/:prodStatus"
-                component={Searchcart}
-              />
+              <Route exact path="/products/:prodStatus" component={Searchcart}/>
               <Route exact path="/transactions" component={Transactions} />
               <Route path="/accounts" component={Accounts} />
               <Route path="/accounting" component={Accounting} />
               <Route exact path="/setting" component={Settings} />
               <Route exact path="/client/ebay/:id" component={AcceptUrl} />
               <Route exact path="/messages" component={Messages} />
-              <Route
-                path="/"
-                component={() => <Redirect to="/products/submitted" />}
-              />
+              <Route path="/" component={() => <Redirect to="/products/submitted" />}/>
             </Switch>
           ) : (
             <Switch>
@@ -99,8 +79,8 @@ const Routes = withRouter((props) => {
           )
         ) : (
           <Switch>
-            <Route exact path="/signup" component={Signup} />
             <Route exact path="/signin" component={Login} />
+            <Route exact path="/signup" component={Signup} /> 
             <Route exact path="/forgotpassword" component={forgotpassword} />
             <Route path="/" component={() => <Redirect to="/signin" />} />
           </Switch>
