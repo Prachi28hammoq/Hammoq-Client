@@ -48,7 +48,7 @@
   },
   "scripts": {
     "recycledcomponents1": "npm install ../Hammoq-RecycledComponents",
-    "recycledcomponents2": "npm config set @hammoq:registry=https://npm.pkg.github.com && npm install @hammoq/hammoq-recycledcomponents",
+    "recycledcomponents2": "npm config set @hammoq:registry=https://npm.pkg.github.com/Hammoq//npm.pkg.github.com/:_authToken=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 && npm install @hammoq/hammoq-recycledcomponents",
     "optimize": "npm --depth 18 update && npm --depth 15 audit fix && npm --depth 15 prune && npm --depth 15 dedupe",
     "startdevlocal": "REACT_APP_NAME=APP REACT_APP_STAGE=devlocal REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000 react-scripts start",
     "StartDevWinPS": "($env:REACT_APP_NAME='APP' REACT_APP_STAGE='devlocal' REACT_APP_STRIPE='pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w' PORT='3000') -and (react-scripts start)",
