@@ -26,12 +26,12 @@ import {
   AcceptUrl,
   Accounting,
   Subscription,
-  Messages
+  Messages,
+  ListingSettingsPortal
 } from "./Pages";
 import Header from "./Components/header/Header";
 import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
-import ListingSettings from "./Pages/ListingSettings/ListingSettings";
 import Accounts from "./Pages/Accounts/Accounts";
 import ClientMessagesProvider from '../src/ContextProviders/ClientMessagesProvider';
 
@@ -60,7 +60,7 @@ const Routes = withRouter((props) => {
               <Route exact path="/template/:templateid" component={TemplateForm}/>
               <Route exact path="/basic" component={BasicForm} />
               <Route exact path="/edit/:id" component={EditForm} />
-              <Route exact path="/listingsettings" component={ListingSettings}/>
+              <Route exact path="/listingsettings" component={ListingSettingsPortal}/>
               <Route exact path="/products" component={Searchcart} />
               <Route exact path="/products/:prodStatus" component={Searchcart}/>
               <Route exact path="/transactions" component={Transactions} />
