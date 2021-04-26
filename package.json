@@ -7,6 +7,7 @@
     "url": "https://github.com/Hammoq/Hammoq-Client.git"
   },
   "dependencies": {
+    "@hammoq/hammoq-recycledcomponents": "^1.0.4",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
@@ -46,6 +47,8 @@
     "typescript": "^4.2.3"
   },
   "scripts": {
+    "recycledcomponents1": "npm install ../Hammoq-RecycledComponents",
+    "recycledcomponents2": "npm config set @hammoq:registry=https://npm.pkg.github.com && npm install @hammoq/hammoq-recycledcomponents",
     "optimize": "npm --depth 18 update && npm --depth 15 audit fix && npm --depth 15 prune && npm --depth 15 dedupe",
     "startdevlocal": "REACT_APP_NAME=APP REACT_APP_STAGE=devlocal REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000 react-scripts start",
     "StartDevWinPS": "($env:REACT_APP_NAME='APP' REACT_APP_STAGE='devlocal' REACT_APP_STRIPE='pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w' PORT='3000') -and (react-scripts start)",

@@ -28,23 +28,31 @@ const Header = (props) => {
         refreshTokenInterval = setInterval(() => refreshUserTokenForAllEbayAccounts(), 7100000);
 
         await Axios.get("/clientdetails/headerinfo")
-          .then(({ data }) => {
-            if (parseInt(data.balance) < 5) setOpen(true);
-                setBal(data.balance);
-                setClientId(data._id);
-                setContextClientId(data._id);
-                setCustomerName(data.firstName);
-                setClientMessageSeenCount(data.clientMessageSeenCount);
-                localStorage.setItem("cid", data._id);
-                localStorage.setItem("customerName", data.firstName);
-                localStorage.setItem("isSubscribed", data.isSubscribed);
-          })
-          .catch((err) => console.log(err));
+                   .then(({ data }) => {
+                      if (parseInt(data.balance) < 5) setOpen(true);
+                          setBal(data.balance);
+                          setClientId(data._id);
+                          setContextClientId(data._id);
+                          setCustomerName(data.firstName);
+                          setClientMessageSeenCount(data.clientMessageSeenCount);
+                          localStorage.setItem("cid", data._id);
+                          localStorage.setItem("customerName", data.firstName);
+                          localStorage.setItem("isSubscribed", data.isSubscribed);
+                    })
+                    .catch((err) => console.log(err));
+
+        await Axios.get("/tokenversion")
+                   .then(({ data }) => {
+                     if(!data.valid)
+                     {
+                       logoutHandler();
+                     }
+                    })
+                    .catch((err) => console.log(err));
       }
     }
 
     mountComponent();
-
     setClientMessageSeenCount(contextUnreadMessagesCount);
 
     return () => {
@@ -64,6 +72,9 @@ const Header = (props) => {
 
   const logoutHandler = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("isSubscribed");
+    localStorage.removeItem("customerName");
+    localStorage.removeItem("cid");
     window.open("/login", "_self");
   };
 
