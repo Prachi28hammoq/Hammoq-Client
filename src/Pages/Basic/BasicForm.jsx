@@ -12,6 +12,7 @@ import imageCompression from "browser-image-compression";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const $ = window.$;
 
@@ -478,15 +479,27 @@ class BasicForm extends Component {
     } = this.state;
     return (
       <div className="container mt-5">
+         
+      
+        
         <PaymentAlert
           open={this.state.open}
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
           savedCards={this.state.savedCards}
         />
+
+            {this.state.isSubmitting ? (
+                    
+                      
+                    <LinearProgress variant="determinate" value={this.state.progress}  />
+                    
+                 
+                ) : null}
         <Link to="/products/submitted">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </Link>
+        
         <div className="row">
           <div
             className="modal fade  bd-example-modal-sm"
@@ -684,25 +697,7 @@ class BasicForm extends Component {
               })}
               <div className="col-12 px-1">
                 <div className="input-group mb-3">
-                  {this.state.isSubmitting ? (
-                    <div className="center">
-                      <Box position="relative" display="inline-flex">
-                      <CircularProgress variant="determinate" value={this.state.progress}  />
-                      <Box
-                        top={0}
-                        left={0}
-                        bottom={0}
-                        right={0}
-                        position="absolute"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Typography variant="caption" component="div" color="textSecondary">{`${this.state.progress}%`}</Typography>
-                      </Box>
-                      </Box>
-                    </div>
-                  ) : null}
+                 
                   <div className="custom-file">
                     <input
                       id="bulk"
@@ -1034,15 +1029,27 @@ class BasicForm extends Component {
               <div className="col-6 px-1 mt-2">
                 {isSubmitting ? (
                   <button
-                    className="btn btn-success btn-block d-flex align-items-center justify-content-center"
-                    disabled
+                    className="btn btn-block d-flex align-items-center justify-content-center"
+                    
                   >
-                    <span
-                      className="spinner-border spinner-border-sm mr-2"
-                      role="status"
-                      aria-hidden="true"
-                    />
-                    Submit
+                   <div className="center">
+                      <Box position="relative" display="inline-flex">
+                      <CircularProgress variant="determinate" value={this.state.progress}  />
+                      <Box
+                        top={0}
+                        left={0}
+                        bottom={0}
+                        right={0}
+                        position="absolute"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Typography variant="caption" component="div" color="textSecondary">{`${this.state.progress}%`}</Typography>
+                      </Box>
+                      </Box>
+                    </div>
+                    
                   </button>
                 ) : (
                   <button
@@ -1062,6 +1069,7 @@ class BasicForm extends Component {
                   className="btn btn-danger mb-4 btn-block"
                 />
               </div>
+              
             </div>
           </div>
         </div>
