@@ -41,14 +41,9 @@ const Header = (props) => {
                     })
                     .catch((err) => console.log(err));
 
-        await Axios.get("/tokenversion")
-                   .then(({ data }) => {
-                     if(!data.valid)
-                     {
-                       logoutHandler();
-                     }
-                    })
-                    .catch((err) => console.log(err));
+      await Axios.get("/tokenversion")
+                 .then(({ data }) => {if(!data.valid) logoutHandler()})
+                 .catch((err) => console.log(err));
       }
     }
 
@@ -81,7 +76,7 @@ const Header = (props) => {
   return(
     <nav
         className="navbar navbar-expand-lg navbar-dark"
-        style={{ backgroundColor: "#4db0cc" }}
+        style={{ backgroundColor: "#007bff" }}
       >
         {/* <PaymentAlert
           open={this.state.open}

@@ -7,10 +7,10 @@ const ListingSettingsPortal = (props) => {
   
   return (
         <>
-          <ListingSettings
-            Axios={Axios}
-            clientid={clientid}
-          />
+				<ListingSettings
+				Axios={Axios}
+				clientid={clientid}
+				/>
         </>
     );
 }
