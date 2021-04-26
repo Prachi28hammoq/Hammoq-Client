@@ -128,7 +128,8 @@ export default function AlertDialog(props) {
               <div className="row d-flex justify-content-center">
                 {" "}
                 <ReCAPTCHA
-                  sitekey="6Lc6LMgZAAAAADLubDJkLQMTfnmLKbhcZjzJfdGa"
+                  sitekey="6LeB67kaAAAAAD6pFtXtvzLRqE6VXuyT6uCfIzAq"
+                  //sitekey="6Lc6LMgZAAAAADLubDJkLQMTfnmLKbhcZjzJfdGa"
                   onChange={callback}
                 />
               </div>

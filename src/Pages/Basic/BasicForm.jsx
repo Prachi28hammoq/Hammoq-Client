@@ -114,7 +114,7 @@ class BasicForm extends Component {
       .then(({ data }) => {
         if (!data.isSubscribed) 
         {
-          alert("You are not subscribed, kindly subscribe to hammoq services");
+          alert("You are not subscribed, Kindly Subscribe To Hammoq Listing Services To Continue.");
           window.open("/subscription", "_self");
         }
         else if(parseInt(data.balance) < 5 && data.savedCards.length > 0) this.setState({ open: true });
@@ -266,19 +266,23 @@ class BasicForm extends Component {
 
     this.setState({ isSubmitting: true });
 
-    Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}})
-          .then((response) => {
-            let productId = response.data.products
-                          ? response.data.products[response.data.products.length - 1]._id
-                          : response.data.products;
-        if (this.state.templateId) 
-        {
-          Axios.post("/producttemplate", { productId: productId, templateId: this.state.templateId })
-               .then((response) => {});
-        }
-        window.open("/basic", "_self");
-      })
-      .catch((err) => console.log(err));
+    if(localStorage.getItem("isSubscribed") === false || localStorage.getItem("isSubscribed") === "false")
+    {
+      alert("You are not subscribed, Kindly Subscribe To Hammoq Listing Services To Continue.");
+      return;
+    }
+    else
+    {
+      Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}})
+            .then((response) => {
+              let productId = response.data.products
+                            ? response.data.products[response.data.products.length - 1]._id
+                            : response.data.products;
+          if (this.state.templateId) Axios.post("/producttemplate", { productId: productId, templateId: this.state.templateId }).then((response) => {});
+          window.open("/basic", "_self");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   handleSubmit = (e) => {

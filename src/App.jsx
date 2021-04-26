@@ -48,7 +48,6 @@ const Routes = withRouter((props) => {
       )}
       <div className="container-fluid px-5 py-5 admin my-5">
         {localStorage.getItem("token") ? (
-          localStorage.getItem("isSubscribed") === "true" ? (
             <Switch>
               <Route exact path="/passwords" component={Passwords} />
               <Route exact path="/charts" component={Charts} />
@@ -62,6 +61,7 @@ const Routes = withRouter((props) => {
               <Route exact path="/edit/:id" component={EditForm} />
               <Route exact path="/listingsettings" component={ListingSettingsPortal}/>
               <Route exact path="/products" component={Searchcart} />
+              <Route exact path="/subscription" component={Subscription} />
               <Route exact path="/products/:prodStatus" component={Searchcart}/>
               <Route exact path="/transactions" component={Transactions} />
               <Route path="/accounts" component={Accounts} />
@@ -71,12 +71,6 @@ const Routes = withRouter((props) => {
               <Route exact path="/messages" component={Messages} />
               <Route path="/" component={() => <Redirect to="/products/submitted" />}/>
             </Switch>
-          ) : (
-            <Switch>
-              <Route exact path="/subscription" component={Subscription} />
-              <Route path="/" component={() => <Redirect to="/subscription" />}/>
-            </Switch>
-          )
         ) : (
           <Switch>
             <Route exact path="/signin" component={Login} />
