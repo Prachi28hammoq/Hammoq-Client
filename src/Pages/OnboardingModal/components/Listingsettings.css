@@ -1,0 +1,42 @@
+.listing_settings {
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  padding: 10px;
+  border: 1px solid rgb(231, 231, 231);
+}
+
+.listing_settings_header {
+  font-size: 1.65em;
+}
+
+.listing_settings_form {
+  /* border: 1px solid pink; */
+  margin: 10px;
+  padding: 10px;
+  display: flex;
+  flex-flow: row;
+}
+
+.listing_settings_form_left {
+  /* border: 1px solid blue; */
+  width: 45%;
+  flex-grow: 4;
+  justify-content: center;
+  flex-flow: column;
+}
+.listing_settings_form_right {
+  /* border: 1px solid green; */
+  width: 45%;
+  flex-grow: 4;
+  justify-content: center;
+  flex-flow: column;
+}
+.listingsettings_question_one {
+  /* border: 1px solid blue; */
+  margin: 5px;
+}
+
+.listingsettings_question_two {
+  /* border: 1px solid blue; */
+  margin-top: 20px;
+}

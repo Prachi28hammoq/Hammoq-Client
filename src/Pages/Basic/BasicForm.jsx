@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
 import { assetsURL } from "../../services/Axios";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
+import Onboardingmodal from "../OnboardingModal/Onboardingmodal";
 
 const $ = window.$;
 
@@ -74,8 +75,8 @@ class BasicForm extends Component {
       productId: "",
       zipCode:"",
       domesticShippingFreeShippingActive:false
-      
-      
+
+
     };
     this.handleChange.bind(this);
   }
@@ -113,16 +114,16 @@ class BasicForm extends Component {
 
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        if (parseInt(data.balance) < 5 && data.savedCards.length > 0) 
+        if (parseInt(data.balance) < 5 && data.savedCards.length > 0)
         {
           this.setState({ open: true });
         }
-        else if(parseInt(data.balance) < 5 && data.savedCards.length === 0) 
+        else if(parseInt(data.balance) < 5 && data.savedCards.length === 0)
         {
           window.alert(
             "Low Payment and No card added, Please add a card and then add payment.."
           );
-          window.open("/addpayment", "_self");
+          // window.open("/addpayment", "_self");
         }
         this.setState({
           bal: data.balance,
@@ -130,7 +131,7 @@ class BasicForm extends Component {
           savedCards: data.savedCards,
           cid: data._id,
           offeredRate: data.offeredRate || {},
-          
+
         });
         this.setState({ cid: data._id }, () =>
           localStorage.setItem("cid", this.state.cid)
@@ -139,7 +140,7 @@ class BasicForm extends Component {
 
       Axios.get("/clientdetails/listingSettings")
       .then(({ data }) => {
-       
+
         console.log(data)
         this.setState({
           zipCode: data.settings[0].listing[0].zipCode,
@@ -157,7 +158,7 @@ class BasicForm extends Component {
   };
 
   change = (e) => {
-    if (e.target.name === "input1") 
+    if (e.target.name === "input1")
     {
       localStorage.setItem("condition", e.target.value);
     }
@@ -440,8 +441,8 @@ class BasicForm extends Component {
         try {
           images[idx].img = files[i];
           this.setState({ images }, () => console.log(this.state.images));
-        } 
-        catch (error) 
+        }
+        catch (error)
         {
           console.log(error);
         }
@@ -502,6 +503,7 @@ class BasicForm extends Component {
           updatePayment={this.updatePayment}
           savedCards={this.state.savedCards}
         />
+      <Onboardingmodal />
         <Link to="/products/submitted">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </Link>

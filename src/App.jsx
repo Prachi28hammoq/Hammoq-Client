@@ -26,7 +26,8 @@ import {
   Config,
   AcceptUrl,
   Accounting,
-  Messages
+  Messages,
+  Onboardingmodal
 } from "./Pages";
 import Header from "./Components/header/Header";
 import BasicForm from "./Pages/Basic/BasicForm";
@@ -74,6 +75,7 @@ const Routes = withRouter((props) => {
             <Route exact path="/setting" component={Settings} />
             <Route exact path="/client/ebay/:id" component={AcceptUrl} />
             <Route exact path="/messages" component ={Messages} />
+            <Route exact path="/onboarding" component ={Onboardingmodal} />
             <Route path="/" component={() => <Redirect to="/products/submitted" />} />
           </Switch>
         ) : (
@@ -92,7 +94,7 @@ const Routes = withRouter((props) => {
         </Switch>
       )}
       </div>
-      
+
     </div>
   );
 });
@@ -108,5 +110,3 @@ function App() {
 }
 
 export default App;
-
-

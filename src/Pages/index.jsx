@@ -16,6 +16,7 @@ import AcceptUrl from "./AcceptUrl/AcceptUrl";
 import ListingSettings from "./ListingSettings/ListingSettings";
 import Accounting from "./Accounting/Accounting";
 import Messages from "./Messages/Messages";
+import Onboardingmodal from "./OnboardingModal/Onboardingmodal";
 
 export {
   Signup,
@@ -35,5 +36,6 @@ export {
   AcceptUrl,
   ListingSettings,
   Accounting,
-  Messages
+  Messages,
+  Onboardingmodal
 };

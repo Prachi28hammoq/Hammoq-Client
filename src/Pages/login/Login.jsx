@@ -25,6 +25,7 @@ class Login extends Component {
         }
         localStorage.setItem("token", data.token);
         window.open("/basic", "_self");
+        // window.open("/onboarding", "_self");
       })
       .catch((err) => {
         this.setState({ isSubmitting: false });

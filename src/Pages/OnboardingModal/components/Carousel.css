@@ -1,0 +1,17 @@
+.carousel_dot_inactive {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(167, 166, 166);
+  margin-right: 5px;
+}
+
+.carousel_dot_active {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #0094ff;
+  margin-right: 5px;
+}

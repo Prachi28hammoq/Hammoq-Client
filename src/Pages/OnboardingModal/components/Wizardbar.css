@@ -1,0 +1,32 @@
+.onboarding_wizard_bar {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  flex-flow: column;
+}
+
+.onboarding_buttons {
+}
+
+.onboarding_modal_back_button {
+  background: transparent;
+  border: 2px solid #0094ff;
+  outline: none;
+  /* background-color: rgb(226, 224, 224); */
+  font-weight: 600;
+  padding: 7px 30px;
+  border-radius: 4px;
+  color: #0094ff;
+  margin-right: 10px;
+}
+
+.onboarding_modal_next_button {
+  background: transparent;
+  border: 2px solid #0094ff;
+  outline: none;
+  background-color: #0094ff;
+  font-weight: 600;
+  padding: 7px 30px;
+  border-radius: 4px;
+  color: white;
+}

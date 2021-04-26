@@ -1,0 +1,33 @@
+.account_details {
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  padding: 10px;
+  border: 1px solid rgb(231, 231, 231);
+}
+
+.account_details_header {
+  font-size: 1.65em;
+}
+
+.account_details_form {
+  /* border: 1px solid pink; */
+  margin: 10px;
+  padding: 10px;
+  display: flex;
+  flex-flow: row;
+}
+
+.account_details_form_left {
+  /* border: 1px solid blue; */
+  width: 45%;
+  flex-grow: 4;
+  justify-content: center;
+  flex-flow: column;
+}
+.account_details_form_right {
+  /* border: 1px solid blue; */
+  width: 45%;
+  flex-grow: 4;
+  justify-content: center;
+  flex-flow: column;
+}
