@@ -9,6 +9,10 @@ import { assetsURL, socketCon } from "../../services/Axios";
 import io from "socket.io-client";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import imageCompression from "browser-image-compression";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const $ = window.$;
 
@@ -37,6 +41,7 @@ class BasicForm extends Component {
       input11: 0,
       input12: 0,
       costOfGoods: 0,
+      progress: 10,
       category: "",
       isSubmitting: false,
       ebay: localStorage.getItem("ebay") === "true", //for selection presence
@@ -149,12 +154,13 @@ class BasicForm extends Component {
     else this.setState({ category: str });
   };
 
-  onSubmit = () => {
+  onSubmit = async () => {
     //e.preventDefault();
     const { images, cid } = this.state;
     const data = new FormData();
-
-    images.forEach((image) => {if (!!image.img) data.append(image.key, image.img);});
+    var imagedata = new FormData();
+    var imageid={}
+  
 
     if (images[0].img == "") return alert("Atleast first image is required");
     if (this.state.input1 == "Select Condition *" || this.state.input1 == "") return alert("Condition is required");
@@ -273,18 +279,34 @@ class BasicForm extends Component {
     }
     else
     {
-      Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}})
-            .then((response) => {
-              let productId = response.data.products
-                            ? response.data.products[response.data.products.length - 1]._id
-                            : response.data.products;
-          if (this.state.templateId) Axios.post("/producttemplate", { productId: productId, templateId: this.state.templateId }).then((response) => {});
-          window.open("/basic", "_self");
-        })
-        .catch((err) => console.log(err));
-    }
-  };
+      
+       await Promise.all(images.filter(image => !!image.img).map( async (image) => { if (!!image.img) {
+        imagedata = new FormData();
+        imagedata.append(image.key, image.img);
+        let response = await Axios.post("/product/images", imagedata, {headers: {"Content-Type": "multipart/form-data"}})
+        imageid[image.key] = response.data.imageid
+        this.setState({ progress : this.state.progress + 7 })
+      }}))
 
+   
+      this.setState({ progress : 90})
+      data.append("images",JSON.stringify(imageid))
+      Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}})
+          .then((response) => {
+            this.setState({ progress : 98})
+            let productId = response.data.products
+                          ? response.data.products[response.data.products.length - 1]._id
+                          : response.data.products;
+        if (this.state.templateId) Axios.post("/producttemplate", { productId: productId, templateId: this.state.templateId }).then((response) => {});
+        window.open("/basic", "_self");
+      })
+      .catch((err) => console.log(err));
+      
+      
+        
+  }
+  };
+  
   handleSubmit = (e) => {
     const { website, username, password } = this.state;
     e.preventDefault();
@@ -457,15 +479,27 @@ class BasicForm extends Component {
     } = this.state;
     return (
       <div className="container mt-5">
+         
+      
+        
         <PaymentAlert
           open={this.state.open}
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
           savedCards={this.state.savedCards}
         />
+
+            {this.state.isSubmitting ? (
+                    
+                      
+                    <LinearProgress variant="determinate" value={this.state.progress}  />
+                    
+                 
+                ) : null}
         <Link to="/products/submitted">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </Link>
+        
         <div className="row">
           <div
             className="modal fade  bd-example-modal-sm"
@@ -663,11 +697,7 @@ class BasicForm extends Component {
               })}
               <div className="col-12 px-1">
                 <div className="input-group mb-3">
-                  {this.state.isSubmitting ? (
-                    <div className="center">
-                      <LoadingSpinner />
-                    </div>
-                  ) : null}
+                 
                   <div className="custom-file">
                     <input
                       id="bulk"
@@ -999,15 +1029,27 @@ class BasicForm extends Component {
               <div className="col-6 px-1 mt-2">
                 {isSubmitting ? (
                   <button
-                    className="btn btn-success btn-block d-flex align-items-center justify-content-center"
-                    disabled
+                    className="btn btn-block d-flex align-items-center justify-content-center"
+                    
                   >
-                    <span
-                      className="spinner-border spinner-border-sm mr-2"
-                      role="status"
-                      aria-hidden="true"
-                    />
-                    Submit
+                   <div className="center">
+                      <Box position="relative" display="inline-flex">
+                      <CircularProgress variant="determinate" value={this.state.progress}  />
+                      <Box
+                        top={0}
+                        left={0}
+                        bottom={0}
+                        right={0}
+                        position="absolute"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Typography variant="caption" component="div" color="textSecondary">{`${this.state.progress}%`}</Typography>
+                      </Box>
+                      </Box>
+                    </div>
+                    
                   </button>
                 ) : (
                   <button
@@ -1027,6 +1069,7 @@ class BasicForm extends Component {
                   className="btn btn-danger mb-4 btn-block"
                 />
               </div>
+              
             </div>
           </div>
         </div>
