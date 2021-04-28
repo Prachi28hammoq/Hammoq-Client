@@ -13,6 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import {nanoid} from "nanoid";
 
 const $ = window.$;
 
@@ -23,32 +24,25 @@ class BasicForm extends Component {
       savedCards: [],
       username: "",
       password: "",
-      users: [],
       website: "",
-      otherssignal: false,
       loading: false,
       offeredRate: {},
-      input1: "",
-      input2: "",
-      input3: 0,
-      input4: 0,
-      input5: "",
-      input6: "",
-      input7: "",
-      input8: "",
-      input9: "",
-      input10: "",
-      input11: 0,
-      input12: 0,
+      itemCondition: "",
+      sku: "",
+      price: 0,
       costOfGoods: 0,
+      brand: "",
+      model: "",
+      note: "",
+      quantity: 0,
+      weightOZ: 0,
+      weightLB: 0,
+      waist: 0,
+      inseam: 0,
+      rise: 0,
       progress: 10,
       category: "",
       isSubmitting: false,
-      ebay: localStorage.getItem("ebay") === "true", //for selection presence
-      mercari: localStorage.getItem("mercari") === "true",
-      poshmark: localStorage.getItem("poshmark") === "true",
-      delist: localStorage.getItem("delist") === "true",
-      OtherState: localStorage.getItem("otherState" === "true"),
       images: [
         { key: "default_image", label: "Default", img: "" },
         { key: "brand_image", label: "Brand", img: "" },
@@ -63,85 +57,68 @@ class BasicForm extends Component {
         { key: "condition4_image", label: "Condition", img: "" },
         { key: "condition5_image", label: "Image Tag", img: "" },
       ],
-      Ebay: false, //for Login presence
-      Poshmark: false,
-      Mercari: false,
-      othersbool: false,
-      others: [],
-      othersstate: [],
       bal: 0,
       rates: {},
       fullimg: "",
       img: [],
       cid: "",
       open: false,
-      client_id: "",
       templates: [],
       templateId: "",
       productId: "",
+      marketPlaces: [],
+      otherFieldActive: false,
+      hasMarketPlaces: false,
+      isMarketPlaceSelected: false,
+      delist: false
     };
     this.handleChange.bind(this);
   }
 
   componentDidMount = () => {
     const { cid, images } = this.state;
+    var { marketPlaces, hasMarketPlaces } = this.state;
+
     Axios.get("/password/getstatus").then(({ data }) => {
-      this.setState({ Ebay: data.Ebay });
-      this.setState({ Poshmark: data.Poshmark });
-      this.setState({ Mercari: data.Mercari });
+      for(let item in data)
+      {
+        let website = {"Name":item,"Status":false}
+        marketPlaces.push(website);
+        hasMarketPlaces = true;
+      }
+      this.setState({marketPlaces:marketPlaces, hasMarketPlaces:hasMarketPlaces});
     });
 
 /*    Axios.get("/template")
          .then((data) => {this.setState({ templates: data.data.templates });})
          .catch((err) => {console.log(err);});*/
 
-    Axios.get("/password/getstatus/others").then(({ data }) => {
-      if (data.length > 0) {
-        this.setState({ othersbool: true });
-        data.map((d, i) => {
-          const others = [...this.state.others];
-          others.push(d);
-
-          this.setState({ others });
-          const otherss = [...this.state.othersstate];
-          otherss.push(localStorage.getItem(d) || false);
-          this.setState({ othersstate: otherss });
-
-        });
-      }
-    });
-
     Axios.get("/payment/rates")
          .then((res) => {this.setState({ rates: res.data[res.data.length - 1] });})
          .catch((err) => console.log(err));
 
-    Axios.get("/clientdetails")
+    Axios.get("/clientdetails/basiclisting")
       .then(({ data }) => {
         if (!data.isSubscribed) 
         {
           alert("You are not subscribed, Kindly Subscribe To Hammoq Listing Services To Continue.");
           window.open("/subscription", "_self");
         }
-        else if(parseInt(data.balance) < 5 && data.savedCards.length > 0) this.setState({ open: true });
+        else if(parseInt(data.balance) < 5 && data.savedCards.length > 0) 
+        {
+          this.setState({ open: true });
+        }
         else if (parseInt(data.balance) < 5 && data.savedCards.length == 0) 
         {
           window.alert("Low Payment and No card added, Please add a card and then add payment..");
           window.open("/subscription", "_self");
         }
-        this.setState({
-          bal: data.balance,
-          client_id: data._id,
-          savedCards: data.savedCards,
-          cid: data._id,
-          offeredRate: data.offeredRate || {},
-        });
-        this.setState({ cid: data._id }, () => localStorage.setItem("cid", this.state.cid));
+        this.setState({bal: data.balance, savedCards: data.savedCards, cid: data._id});
       })
       .catch((err) => console.log(err));
   };
 
   fetchimg = (src) => {
-    const { cid } = this.state;
     this.setState({ fullimg: src }, () => {$("#addTemplateModal1").modal("show");});
   };
 
@@ -150,137 +127,116 @@ class BasicForm extends Component {
   };
 
   setCategory = (str) => {
-    if (this.state.category === str) this.setState({ category: "" });
+    var { category } = this.state;
+
+    if (category === str) this.setState({ category: "" });
     else this.setState({ category: str });
   };
 
   onSubmit = async () => {
     //e.preventDefault();
-    const { images, cid } = this.state;
+    const { images, cid, itemCondition, sku, brand, model, quantity, price, costOfGoods, category, waist, inseam, rise, weightLB, weightOZ, marketPlaces, hasMarketPlaces, templateId, note, delist, rates, bal, savedCards } = this.state;
+    var { isMarketPlaceSelected } = this.state;
     const data = new FormData();
     var imagedata = new FormData();
-    var imageid={}
+    var imageid = {};
+    var ebayChecked = false;
+    var mercariChecked = false;
+    var poshmarkChecked = false;
+
+    for(let entries in marketPlaces)
+    {
+      if(marketPlaces[entries].Status === true) isMarketPlaceSelected = true;
+    }
   
-
+    if (localStorage.getItem("isSubscribed") === false || localStorage.getItem("isSubscribed") === "false") return alert("You are not subscribed, Kindly Subscribe To Hammoq Listing Services To Continue.");
     if (images[0].img == "") return alert("Atleast first image is required");
-    if (this.state.input1 == "Select Condition *" || this.state.input1 == "") return alert("Condition is required");
+    if (itemCondition == "Select Condition *" || itemCondition == "") return alert("Condition is required");
+    if (!hasMarketPlaces) return $("#addTemplateModal").modal("show");
+    if (!isMarketPlaceSelected) return alert("Please Selected At Least One MarketPlace");
 
-    var y = [];
-    this.state.others.map((o, i) => {
-      let obj = {
-        name: o,
-        status: this.state.othersstate[i],
-        url: "",
-      };
-      y.push(obj);
+    var otherSites = [];
+
+    marketPlaces.map((o, i) => {
+      switch(marketPlaces[i].Name)
+      {
+        case "Ebay":
+          ebayChecked = true;
+          break;
+        case "Mercari":
+          mercariChecked = true;
+          break;
+        case "Poshmark":
+          poshmarkChecked = true;          
+          break;
+        default:
+          let site = {name: marketPlaces[i].Name, status: marketPlaces[i].Status, url: ""};
+          otherSites.push(site);
+          break;
+      }
     });
 
-    var mplace = true;
-
-    if (this.state.Ebay == true || this.state.Poshmark == true || this.state.Mercari == true || this.state.others.length != 0) mplace = true;
-    else 
-    {
-      mplace = false;
-      return $("#addTemplateModal").modal("show");
-      return alert("Please Have At Least One Marketplace Login Entered")
-    }
-
-    var flag = 0;
-    this.state.othersstate.forEach((os) => {if (os == "true") flag = 1;});
-    if ((this.state.Ebay == true && this.state.ebay == true) || (this.state.Poshmark == true && this.state.poshmark == true) || (this.state.Mercari == true && this.state.mercari == true)) flag = 1;
-    if (mplace && flag == 0) return alert("Please Have At Least One Marketplace Login Selected");
-
-    //bal check routine
-    var cnt = 0;
-
-    if (this.state.Ebay && this.state.ebay == true) cnt++;
-    if (this.state.Poshmark && this.state.poshmark == true) cnt++;
-    if (this.state.Mercari && this.state.mercari == true) cnt++;
-
-    this.state.othersstate.forEach((os) => {if (os == "true") cnt++;});
+    var cnt = marketPlaces.length;
     var rate1 = 0, rate2 = 0, rate3 = 0;
     var total = 0;
-    rate1 = (this.state.rates.basic / 100) * 1;
-    rate2 = (this.state.rates.advance / 100) * (cnt - 1);
-    if (this.state.delist == true) rate3 = (this.state.rates.list / 100) * (cnt - 1);
+
+    rate1 = (rates.basic / 100) * 1;
+    rate2 = (rates.advance / 100) * (cnt - 1);
+
+    if (delist == true) rate3 = (rates.list / 100) * (cnt - 1);
+
     total = rate1 + rate2 + rate3;
 
-    if (this.state.bal - total < 0) 
+    if (bal - total < 0) 
     {
-      if (this.state.savedCards.length > 0) 
+      if (savedCards.length > 0) 
       {
         this.setState({ open: true });
-        window.alert("Insufficient balance");
+        return window.alert("Insufficient balance");
       } 
       else 
       {
         window.alert("Low Payment and No card added, Please add a card and then add payment..");
-        window.open("/subscription", "_self");
+        return window.open("/subscription", "_self");
       }
     }
 
-    data.append("sku", this.state.input2);
+    data.append("sku", sku);
+    data.append("quantity", quantity || 1);
 
-    if (this.state.input3 == 0) {
-      data.append("quantity", 1);
-    } else {
-      data.append("quantity", this.state.input3);
-    }
+    data.append("price", price);
+    data.append("brand", brand);
+    data.append("model", model);
+    data.append("note", note);
+    data.append("condition_name", itemCondition);
 
-    data.append("price", this.state.input4);
-    data.append("brand", this.state.input5);
-    data.append("model", this.state.input6);
-    data.append("note", this.state.input7);
-    data.append("condition_name", this.state.input1);
-    if (this.state.Ebay) {
-      data.append("ebayc", this.state.ebay);
-    } else {
-      data.append("ebayc", false);
-    }
-    if (this.state.Mercari) {
-      data.append("mercaric", this.state.mercari);
-    } else {
-      data.append("mercaric", false);
-    }
-    if (this.state.Poshmark) {
-      data.append("poshmarkc", this.state.poshmark);
-    } else {
-      data.append("poshmarkc", false);
-    }
-    // if(this.state.others){
-    //     for(let i = 0 ; i < this.state.others.length ; i++){
-    //     data.append(this.state.others[i],false)
-    // }
-    // }
+    data.append("ebay.check", ebayChecked);
+    data.append("mercari.check", mercariChecked);
+    data.append("poshmark.check", poshmarkChecked);
+    data.append("others", JSON.stringify(otherSites));
+    data.append("delist.check", delist);
 
-    data.append("waist", this.state.input8);
-    data.append("inseam", this.state.input9);
-    data.append("category", this.state.category);
-    data.append("rise", this.state.input10);
-    data.append("weightLB", this.state.input11);
-    data.append("weightOZ", this.state.input12);
-    data.append("delistc", this.state.delist);
+    data.append("waist", waist);
+    data.append("inseam", inseam);
+    data.append("category", category);
+    data.append("rise", rise);
+    data.append("weightLB", weightLB);
+    data.append("weightOZ", weightOZ);
     data.append("activity", "basic");
     data.append("status", true);
     data.append("listed", false);
-    data.append("costOfGoods", this.state.costOfGoods || 0);
-    data.append("others", JSON.stringify(y));
+    data.append("costOfGoods", costOfGoods);
     data.append("rate1", rate1);
     data.append("rate2", rate2);
     data.append("rate3", rate3);
-    data.append("prodStatus", "submitted");
+    data.append("prodStatus", "submit");
 
     this.setState({ isSubmitting: true });
 
-    if(localStorage.getItem("isSubscribed") === false || localStorage.getItem("isSubscribed") === "false")
-    {
-      alert("You are not subscribed, Kindly Subscribe To Hammoq Listing Services To Continue.");
-      return;
-    }
-    else
-    {
-      
-       await Promise.all(images.filter(image => !!image.img).map( async (image) => { if (!!image.img) {
+    Axios.post("/product/validateProduct", data, {headers: {"Content-Type": "multipart/form-data"}}).then(async(response) => {
+
+      await Promise.all(images.filter(image => !!image.img).map(async(image) => {if(!!image.img) 
+      {
         imagedata = new FormData();
         imagedata.append(image.key, image.img);
         let response = await Axios.post("/product/images", imagedata, {headers: {"Content-Type": "multipart/form-data"}})
@@ -288,26 +244,29 @@ class BasicForm extends Component {
         this.setState({ progress : this.state.progress + 7 })
       }}))
 
-   
       this.setState({ progress : 90})
-      data.append("images",JSON.stringify(imageid))
-      Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}})
-          .then((response) => {
-            this.setState({ progress : 98})
-            let productId = response.data.products
-                          ? response.data.products[response.data.products.length - 1]._id
-                          : response.data.products;
-        if (this.state.templateId) Axios.post("/producttemplate", { productId: productId, templateId: this.state.templateId }).then((response) => {});
+
+      data.append("images", JSON.stringify(imageid))
+      Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}}).then((response) => {
+        this.setState({ progress : 98})
+        //let productId = response.data.products ? response.data.products[response.data.products.length - 1]._id : response.data.products;
+        //if (templateId) Axios.post("/producttemplate", {productId: productId, templateId: templateId}).then((response) => {});
         window.open("/basic", "_self");
       })
-      .catch((err) => console.log(err));
-      
-      
-        
-  }
+      .catch((err) => {
+        this.setState({isSubmitting: false});
+        console.log(err)});
+    })
+    .catch((err) => {
+      this.setState({isSubmitting: false});
+      alert("Error: " + err.response.data.Error + "\n" + 
+              "Type: " + err.response.data.Type + "\n" + 
+              "Correction: " + err.response.data.Correction + "\n" +
+              "Message: " + err.response.data.OtherMessage);
+      console.log(err)});
   };
   
-  handleSubmit = (e) => {
+ handleSubmit = (e) => {
     const { website, username, password } = this.state;
     e.preventDefault();
     if (website != "" && username != "" && password != "") 
@@ -315,55 +274,11 @@ class BasicForm extends Component {
       this.setState({ loading: true });
 
       Axios.post("/password", {website: website, username: username, password: password})
-           .then((response) => {
-          //this.setState({ loading: false });
-          alert("Login details has been added");
-          if (website == "Ebay") {
-            this.setState({ Ebay: true });
-            this.setState({ loading: false });
-          } else if (website == "Poshmark") {
-            this.setState({ Poshmark: true });
-            this.setState({ loading: false });
-          } else if (website == "Mercari") {
-            this.setState({ Mercari: true });
-            this.setState({ loading: false });
-          } else {
-            // const others = [...this.state.others];
-            // others.push(website);
-            // this.setState({ others });
-            // const otherss = [...this.state.othersstate];
-            // otherss.push(true);
-            // this.setState({ othersstate: otherss });
-
-            Axios.get("/password/getstatus/others").then(({ data }) => {
-              //console.log(data);
-              this.setState({ loading: false });
-              if (data.length > 0) {
-                this.setState({ othersbool: true });
-                data.map((d, i) => {
-                  const others = [...this.state.others];
-                  others.push(d);
-                  this.setState({ others });
-
-                  const otherss = [...this.state.othersstate];
-                  otherss.push(true);
-                  this.setState({ othersstate: otherss });
-                });
-              }
-            });
-          }
-          //  Axios.get("/password/getstatus").then(({ data }) => {
-          //   //console.log(data);
-          //   this.setState({ Ebay: data.Ebay });
-          //   this.setState({ Poshmark: data.Poshmark });
-          //   this.setState({ Mercari: data.Mercari });
-          // });
-        })
-        .catch((err) => {
-          this.setState({ isSubmitting: true });
-          console.log(err) || alert(JSON.stringify({ err: err }));
-        });
-    } else {
+           .then((response) => {this.setState({ loading: false });})
+           .catch((err) => {this.setState({ loading: false }); console.log(err);});    
+    } 
+    else 
+    {
       alert("Fill up the details");
     }
   };
@@ -371,7 +286,8 @@ class BasicForm extends Component {
   handleChange = async (event) => {
     const { images, cid } = this.state;
     const idx = images.findIndex((image) => image.key === event.target.name);
-    try {
+    try 
+    {
       this.setState({ isSubmitting: true });
       images[idx].img = event.target.files[0];
       this.setState({images});
@@ -383,27 +299,6 @@ class BasicForm extends Component {
     }
   };
 
-  handleChangepop = (e) => {
-    const { name, value } = e.target;
-    if (value == "Others") {
-      this.setState({ otherssignal: true });
-    } else {
-      if (value == "Ebay" || value == "Poshmark" || value == "Mercari") {
-        this.setState({ otherssignal: false });
-      }
-      this.setState({ [name]: value });
-    }
-  };
-
-  handleOnClick = (o, i) => {
-    if (this.state.othersstate[i] == "false") {
-      this.state.othersstate[i] = "true";
-    } else if (this.state.othersstate[i] == "true") {
-      this.state.othersstate[i] = "false";
-    }
-    this.setState({ othersstate: this.state.othersstate });
-  };
-
   handleBulkUpload = async (e) => {
     const { images, cid } = this.state;
     var imgobj = [];
@@ -411,10 +306,12 @@ class BasicForm extends Component {
     const count = files.length;
 
     this.setState({ isSubmitting: true });
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) 
+    {
       const idx = images.findIndex((image) => !image.img);
       if (idx > -1) {
-        try {
+        try 
+        {
           images[idx].img = files[i];
           this.setState({ images }, () => console.log(this.state.images));
         } 
@@ -440,67 +337,117 @@ class BasicForm extends Component {
     images[idx].img = "";
     this.setState({ images });
   };
+
   handleClose = () => {
     this.setState({ open: false });
   };
+
   updatePayment = async (amount, stripeId) => {
-    let body = {customer_id: this.state.client_id, amount: amount, stripeId: stripeId};
+    const { cid } = this.state;
+    let body = {customer_id: cid, amount: amount, stripeId: stripeId};
     this.setState({ open: false });
     await Axios.post("/payment/payment", body)
                .then(({ data }) => {
-                if (data.success) {
+                if (data.success) 
+                {
                   alert(data.msg);
                   window.open("/basic", "_self");
-                } else {
+                } 
+                else 
+                {
                   alert("Credit Card is Not added");
                   window.open("/subscription", "_self");
                 }
               })
-              .catch((err) => console.log(err) || alert(JSON.stringify(err)));
+              .catch((err) => console.log(err));
   };
+
+  toggleMarketPlaces = (e, i) =>
+  {
+    var { marketPlaces } = this.state;
+
+    marketPlaces[i].Status = !marketPlaces[i].Status;
+
+    this.setState({marketPlaces});
+  }
+
+  handleMarketPlacePopUp = (e) =>
+  {
+    var { marketPlaces, otherFieldActive} = this.state;
+
+    let entry = {};
+
+    if(e.target.name === "website")
+    {
+      if(e.target.value === "other") 
+      {
+        this.setState({otherFieldActive: true});
+      }
+      else
+      {
+        entry = {Name:e.target.name, Status: false};
+        this.setState({website:e.target.value});
+      }
+    }
+    else if(e.target.name === "otherwebsite")
+    {
+      entry = {Name:e.target.name, Status: false};
+      this.setState({website:e.target.value});
+    }
+    else
+    {
+      this.setState({[e.target.name]:e.target.value});
+    }
+
+    marketPlaces.push(entry);
+
+    this.setState({marketPlaces:marketPlaces});
+  }
+
   render() {
     const {
       website,
       username,
       password,
-      users,
-      otherssignal,
       images,
       isSubmitting,
-      Ebay,
-      Poshmark,
-      Mercari,
-      othersbool,
-      others,
-      othersstate,
       fullimg,
       img,
       templates,
+      marketPlaces,
+      otherFieldActive,
+      hasMarketPlaces,
+      delist,
+      itemCondition,
+      sku,
+      brand,
+      weightLB,
+      weightOZ,
+      price,
+      quantity,
+      model,
+      note,
+      waist,
+      inseam,
+      rise,
+      progress,
+      open,
+      savedCards
     } = this.state;
     return (
-      <div className="container mt-5">
-         
-      
-        
+        <div className="basicListingContainer">
         <PaymentAlert
-          open={this.state.open}
+          open={open}
           handleClose={this.handleClose}
           updatePayment={this.updatePayment}
-          savedCards={this.state.savedCards}
+          savedCards={savedCards}
         />
-
-            {this.state.isSubmitting ? (
-                    
-                      
-                    <LinearProgress variant="determinate" value={this.state.progress}  />
-                    
-                 
-                ) : null}
+        {isSubmitting ? (<LinearProgress variant="determinate" value={progress}  />) : null}
         <Link to="/products/submitted">
-          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          <i className="fa fa-arrow-left" aria-hidden="true"></i>
         </Link>
         
-        <div className="row">
+        <div className="basicListingRow">
           <div
             className="modal fade  bd-example-modal-sm"
             id="addTemplateModal"
@@ -509,93 +456,88 @@ class BasicForm extends Component {
             aria-labelledby="addTemplateModalLabel"
             aria-hidden="true"
           >
-            <div
-              className="modal-dialog modal-sm  modal-dialog-centered"
-              role="document"
-            >
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h6 className="modal-title" id="addTemplateModalLabel">
-                    Logins
-                  </h6>
-                  <button
-                    type="button"
-                    className="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    <span aria-hidden="true">×</span>
-                  </button>
-                </div>
-                <div className="col-12 py-2">
-                  <div className="card p-3 mb-3">
-                    {this.state.loading ? (
-                      <div className="center">
-                        <LoadingSpinner asOverlay />
-                      </div>
-                    ) : null}
-                    <h6 className="mb-3  sub-heading">
-                      Please enter the logins for each site you want to list &
-                      list to
-                    </h6>
-                    <select
-                      className="form-control body-text"
-                      name="website"
-                      value={website}
-                      onChange={this.handleChangepop}
+          <div
+            className="modal-dialog modal-sm  modal-dialog-centered"
+            role="document"
+          >
+          <div className="modal-content">
+            <div className="modal-header">
+              <h6 className="modal-title" id="addTemplateModalLabel">
+                Logins
+              </h6>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+          <div className="col-12 py-2">
+            <div className="card p-3 mb-3">
+            {this.state.loading ? (
+              <div className="center">
+                <LoadingSpinner asOverlay />
+              </div>
+            ) : null}
+              <h6 className="mb-3  sub-heading">
+                Please enter the logins for each site you want to list &
+                list to
+              </h6>
+              <select
+                className="form-control body-text"
+                name="website"
+                value={website}
+                onChange={this.handleMarketPlacePopUp}
+              >
+                <option>Select Site</option>
+                <option value="Ebay">Ebay</option>
+                <option value="Poshmark">Poshmark</option>
+                <option value="Mercari">Mercari</option>
+                <option value="other">Others</option>
+              </select>
+              {otherFieldActive ? (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Website"
+                    className="form-control mt-3"
+                    name="otherwebsite"
+                    value={website}
+                    onChange={this.handleMarketPlacePopUp}
+                  />
+                </>
+              ) : null}
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    className="form-control mt-3 body-text"
+                    name="username"
+                    value={username}
+                    onChange={this.handleMarketPlacePopUp}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Password"
+                    className="form-control mt-3"
+                    name="password"
+                    value={password}
+                    onChange={this.handleMarketPlacePopUp}
+                  />
+                  <div className="text-center">
+                    <button
+                      className="btn btn-danger mt-3 text-center"
+                      onClick={this.handleSubmit}
                     >
-                      <option>Select Site</option>
-                      {Ebay ? null : <option value="Ebay">Ebay</option>}
-                      {Poshmark ? null : (
-                        <option value="Poshmark">Poshmark</option>
-                      )}
-                      {Mercari ? null : (
-                        <option value="Mercari">Mercari</option>
-                      )}
-                      <option value="other">Others</option>
-                    </select>
+                      Add
+                    </button>
                     <br />
-                    {otherssignal ? (
-                      <>
-                        <input
-                          type="text"
-                          placeholder="Website"
-                          className="form-control mt-3"
-                          name="website"
-                          value=""
-                          onChange={this.handleChangepop}
-                        />
-                      </>
-                    ) : null}
-                    <input
-                      type="text"
-                      placeholder="Username"
-                      className="form-control mt-3 body-text"
-                      name="username"
-                      value={username}
-                      onChange={this.handleChangepop}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Password"
-                      className="form-control mt-3"
-                      name="password"
-                      value={password}
-                      onChange={this.handleChangepop}
-                    />
-                    <div className="text-center">
-                      <button
-                        className="btn btn-danger mt-3 text-center"
-                        onClick={this.handleSubmit}
-                      >
-                        Add
-                      </button>
-                      <br />
-                      <br />
-                      <small className="ml-2">
-                        You can always add more logins under setting in the
-                        future
-                      </small>
+                    <br />
+                    <small className="ml-2">
+                      You can always add more logins under setting in the
+                      future
+                    </small>
                     </div>
                   </div>
                 </div>
@@ -606,7 +548,7 @@ class BasicForm extends Component {
             <div className="row m-auto">
               {images.map((image, idx) => {
                 return (
-                  <div className="col-4 col-md-3 px-1 ">
+                  <div className="col-4 col-md-3 px-1" key={nanoid(4)}>
                     <div
                       className="modal fade bd-example-modal-sm"
                       id="addTemplateModal1"
@@ -615,89 +557,88 @@ class BasicForm extends Component {
                       aria-labelledby="addTemplateModalLabel"
                       aria-hidden="true"
                     >
-                      <div
-                        className="modal-dialog modal-lg  modal-dialog-centered"
-                        role="document"
-                      >
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <button
-                              type="button"
-                              className="close"
-                              data-dismiss="modal"
-                              aria-label="Close"
-                            >
-                              <span aria-hidden="true">×</span>
-                            </button>
-                          </div>
-
-                          <img src={fullimg} style={{ height: "500px" }} />
-                        </div>
+                    <div
+                      className="modal-dialog modal-lg  modal-dialog-centered"
+                      role="document"
+                    >
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">×</span>
+                        </button>
                       </div>
-                    </div>
 
-                    <div className="card mb-3">
-                      <div className="card-body body-text text-center align-middle d-flex align-items-center justify-content-center p-2 px-1">
-                        {image.img ? (
-                          <div className="container p-0 m-0">
-                            <img
-                              src={
+                      <img src={fullimg} style={{ height: "500px" }} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="card mb-3">
+                  <div className="card-body body-text text-center align-middle d-flex align-items-center justify-content-center p-2 px-1">
+                    {image.img ? (
+                      <div className="container p-0 m-0">
+                        <img
+                          src={
+                            typeof image.img === "string"
+                              ? assetsURL + image.img
+                              : URL.createObjectURL(image.img)
+                          }
+                          style={{ width: "100%", height: "90px" }}
+                          onClick={() => {
+                            this.setState({ fullimg: image.key }, () => {
+                              this.fetchimg(
                                 typeof image.img === "string"
                                   ? assetsURL + image.img
                                   : URL.createObjectURL(image.img)
-                              }
-                              style={{ width: "100%", height: "90px" }}
-                              onClick={() => {
-                                this.setState({ fullimg: image.key }, () => {
-                                  this.fetchimg(
-                                    typeof image.img === "string"
-                                      ? assetsURL + image.img
-                                      : URL.createObjectURL(image.img)
-                                  );
-                                });
-                              }}
-                            />
-                            <button
-                              type="button"
-                              className="btn2 close mr-auto"
-                              data-dismiss="modal"
-                              aria-label="Close"
-                              onClick={() => this.removeImg(idx)}
-                            >
-                              <span aria-hidden="true">×</span>
-                            </button>
-                          </div>
-                        ) : (
-                          <div
-                            style={{
-                              width: "80px",
-                              height: "90px",
-                              margin: "0px!important",
-                            }}
-                            className="d-flex align-items-center justify-content-center"
-                          >
-                            <label>
-                              <div className="fas fa-plus"></div> <br />
-                              {image.label}
-                            </label>
-
-                            <input
-                              type="file"
-                              style={styles.inputFile}
-                              name={image.key}
-                              accept="image/*"
-                              onChange={this.handleChange}
-                            />
-                          </div>
-                        )}
+                              );
+                            });
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="btn2 close mr-auto"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                          onClick={() => this.removeImg(idx)}
+                        >
+                          <span aria-hidden="true">×</span>
+                        </button>
                       </div>
-                    </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: "80px",
+                          height: "90px",
+                          margin: "0px!important",
+                        }}
+                        className="d-flex align-items-center justify-content-center"
+                      >
+                        <label>
+                          <div className="fas fa-plus"></div> <br />
+                          {image.label}
+                        </label>
+
+                        <input
+                          type="file"
+                          style={styles.inputFile}
+                          name={image.key}
+                          accept="image/*"
+                          onChange={this.handleChange}
+                        />
+                      </div>
+                    )}
                   </div>
+                </div>
+              </div>
                 );
               })}
               <div className="col-12 px-1">
                 <div className="input-group mb-3">
-                 
                   <div className="custom-file">
                     <input
                       id="bulk"
@@ -705,12 +646,7 @@ class BasicForm extends Component {
                       accept="image/*"
                       className="custom-file-input"
                       multiple
-                      onChange={(e) => {
-                        this.handleBulkUpload(e);
-                      }}
-                      onClick={(e) => {
-                        console.log(e, "onclick");
-                      }}
+                      onChange={(e) => {this.handleBulkUpload(e)}}
                     ></input>
                     <label
                       className="custom-file-label"
@@ -730,7 +666,7 @@ class BasicForm extends Component {
                     id="template"
                     onChange={this.handleChangesTemplate}
                   >
-                    <option value="">Choose Template</option>
+                  <option value="">Choose Template</option>
                     {templates &&
                       templates.map((template) => {
                         return (
@@ -742,82 +678,73 @@ class BasicForm extends Component {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-6 pt-4 pt-lg-0">
-            <div className="row w-lg-75 mt-lg-0 m-auto">
-              <div className="col-sm-12 col-md-6  mb-4 px-1 my-4">
+          <div className="rightSideContainer">
+            <div className="rs_productDetails">
+            <div className="rs_header">Product Details: </div>
+            <div className="row_rightSide">
                 <select
                   className="custom-select"
-                  value={this.state.input1}
-                  name="input1"
+                  value={itemCondition}
+                  name="itemCondition"
                   onChange={(e) => this.change(e)}
                   required
                 >
                   <option>Select Condition *</option>
                   <option value="New">New</option>
                   <option value="New With Tags">New With Tags</option>
-                  <option value="New (Other/Open Box)">
-                    New (Other/Open Box)
-                  </option>
+                  <option value="New (Other/Open Box)">New (Other/Open Box)</option>
                   <option value="New With Defects">New With Defects</option>
                   <option value="Seller Refurbished">Seller Refurbished</option>
                   <option value="Used">Used</option>
                   <option value="Broken/For Repair">Broken/For Repair</option>
                 </select>
-              </div>
-              <div className="col-sm-12 col-md-6  mb-4 mt-4 px-1">
                 <input
                   type="text"
                   onChange={(e) => this.change(e)}
-                  value={this.state.input2}
-                  name="input2"
+                  value={sku}
+                  name="sku"
                   placeholder="SKU"
                   className="form-control"
                 />
-              </div>
-              <div className="col-sm-12 col-md-6  mb-4 px-1">
+            </div>
+              <div className="row_rightSide">
                 <input
                   type="text"
                   onChange={(e) => this.change(e)}
-                  value={this.state.input5}
-                  name="input5"
+                  value={brand}
+                  name="brand"
                   placeholder="Brand"
                   className="form-control"
                 />
-              </div>
-              <div className="col-sm-12 col-md-6  mb-4 px-1">
                 <input
                   type="text"
                   onChange={(e) => this.change(e)}
-                  value={this.state.input6}
-                  name="input6"
+                  value={model}
+                  name="model"
                   placeholder="Model"
                   className="form-control"
                 />
               </div>
-              <div className="col-4 mb-4 px-1">
+              <div className="row_rightSide"  style={{'paddingBottom':'4%'}}>
                 <input
                   type="number"
                   onChange={(e) => this.change(e)}
-                  value={this.state.input3 === 0 ? "" : this.state.input3}
-                  name="input3"
+                  value={quantity === 0 ? "" : quantity}
+                  name="quantity"
                   defaultValue="1"
                   placeholder="Quantity(1)"
                   min="1"
                   className="form-control"
                 />
-              </div>
-              <div className="col-4 mb-4 px-1">
                 <input
                   type="number"
                   onChange={(e) => this.change(e)}
-                  value={this.state.input4 === 0 ? "" : this.state.input4}
-                  name="input4"
+                  value={price === 0 ? "" : price}
+                  name="price"
                   placeholder="Selling Price"
                   min="0"
                   className="form-control"
                 />
-              </div>
-              <div className="col-4 mb-4 px-1">
                 <input
                   type="number"
                   name="costOfGoods"
@@ -828,7 +755,7 @@ class BasicForm extends Component {
                 />
               </div>
 
-              <div className="col-12 d-flex justify-content-between align-content-center border round p-3">
+              <div className="row_gender">
                 <ButtonGroup
                   category="Unisex Kids"
                   selectedCategory={this.state.category}
@@ -855,185 +782,106 @@ class BasicForm extends Component {
                   setCategory={this.setCategory}
                 />
               </div>
-              <div className="d-flex justify-content-between py-2 my-2">
-                <div className="mr-1">
-                  <input
-                    type="text"
-                    onChange={(e) => this.change(e)}
-                    value={this.state.input8}
-                    name="input8"
-                    placeholder="Waist"
-                    className="form-control"
-                  />
-                </div>
-                <div className="mr-1">
-                  <input
-                    type="text"
-                    onChange={(e) => this.change(e)}
-                    value={this.state.input9}
-                    name="input9"
-                    placeholder="Inseam"
-                    className="form-control"
-                  />
-                </div>
-                <div className="mr-1">
-                  <input
-                    type="text"
-                    onChange={(e) => this.change(e)}
-                    value={this.state.input10}
-                    name="input10"
-                    placeholder="Rise"
-                    className="form-control"
-                  />
-                </div>
-                <div className="mr-1">
+              <div className="row_rightSide2">
                   <input
                     type="number"
                     onChange={(e) => this.change(e)}
-                    value={this.state.input11 === 0 ? "" : this.state.input11}
-                    name="input11"
+                    value={waist}
+                    name="waist"
+                    placeholder="Waist"
+                    className="form-control"
+                  />
+                  <input
+                    type="number"
+                    onChange={(e) => this.change(e)}
+                    value={inseam}
+                    name="inseam"
+                    placeholder="Inseam"
+                    className="form-control"
+                  />
+                  <input
+                    type="number"
+                    onChange={(e) => this.change(e)}
+                    value={rise}
+                    name="rise"
+                    placeholder="Rise"
+                    className="form-control"
+                  />
+                  <input
+                    type="number"
+                    onChange={(e) => this.change(e)}
+                    value={weightLB === 0 ? "" : weightLB}
+                    name="weightLB"
                     placeholder="W (LB)"
                     min="0"
                     className="form-control"
                   />
-                </div>
-                <div className="">
                   <input
                     type="number"
                     onChange={(e) => this.change(e)}
-                    value={this.state.input12 === 0 ? "" : this.state.input12}
-                    name="input12"
+                    value={weightOZ === 0 ? "" : weightOZ}
+                    name="weightOZ"
                     placeholder="W (OZ)"
                     min="0"
                     className="form-control"
                   />
-                </div>
               </div>
-              <div className="col-sm-12  mb-4 px-1 py-2">
+              <div className="row_rightSide3">
                 <textarea
                   type="text"
                   onChange={(e) => this.change(e)}
-                  value={this.state.input7}
+                  value={note}
                   rows="4"
-                  name="input7"
+                  name="note"
                   placeholder="Notes For VA"
                   className="form-control"
                 ></textarea>
               </div>
-              <div className="col-12 col-lg-12">
-                {Ebay ? (
-                  <div className="col-12 col-lg-6">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={this.state.ebay}
-                        onChange={() =>
-                          this.setState({ ebay: !this.state.ebay })
-                        }
-                        id="ebay"
-                      />
-                      <label className="form-check-label" htmlFor="ebay">
-                        List on eBay
-                      </label>
-                    </div>
-                  </div>
-                ) : null}
-                {Poshmark ? (
-                  <div className="col-12 col-lg-6">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={this.state.poshmark}
-                        onChange={() =>
-                          this.setState({ poshmark: !this.state.poshmark })
-                        }
-                        defaultChecked="true"
-                        id="poshmark"
-                      />
-                      <label className="form-check-label" htmlFor="poshmark">
-                        List on Poshmark
-                      </label>
-                    </div>
-                  </div>
-                ) : null}
-                {Mercari ? (
-                  <div className="col-12 col-lg-6">
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={this.state.mercari}
-                        onChange={() =>
-                          this.setState({ mercari: !this.state.mercari })
-                        }
-                        id="mercari"
-                      />
-                      <label className="form-check-label" htmlFor="mercari">
-                        List on Mercari
-                      </label>
-                    </div>
-                  </div>
-                ) : null}
-                {othersbool
-                  ? others.map((o, i) => {
-                      return (
-                        <div
-                          className="col-12 col-lg-6"
-                          onClick={() => this.handleOnClick(o, i)}
-                        >
-                          <div className="form-check">
-                            {this.state.othersstate[i] == "true" ? (
+            </div>
+              <div className="row_rightSide4">
+                <div className="marketPlacesTitle">Listing Selection:</div>
+                  <div className="marketPlacesEntry">
+                  {hasMarketPlaces
+                    ? marketPlaces.map((o, i) => {
+                        return (
+                            <div className="form-check" key={nanoid(4)}>
                               <input
                                 className="form-check-input"
                                 type="checkbox"
-                                checked
+                                name={marketPlaces[i].Name}
+                                checked={marketPlaces[i].Status || false}
+                                onChange={(e) => {this.toggleMarketPlaces(e, i)}}
                               />
-                            ) : (
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                              />
-                            )}
-
-                            <label
-                              className="form-check-label"
-                              htmlFor="mercari"
-                            >
-                              List on {o}
-                            </label>
-                          </div>
-                        </div>
-                      );
-                    })
-                  : null}
-                <div className="col-12 col-lg-6">
+                              <label
+                                className="form-check-label"
+                                htmlFor="marketPlace"
+                              >
+                                List on {o.Name}
+                              </label>
+                            </div>
+                        );
+                      })
+                    : null}
                   <div className="form-check">
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      checked={this.state.delist}
-                      onChange={() =>
-                        this.setState({ delist: !this.state.delist })
-                      }
+                      checked={delist || false}
+                      onChange={() => this.setState({ delist: !delist })}
                       id="delist"
                     />
                     <label className="form-check-label" htmlFor="delist">
-                      Delist once item is sold
+                      Delist Once Item Is Sold?
                     </label>
                   </div>
-                </div>
+                </div>  
               </div>
 
-              <div className="col-6 px-1 mt-2">
+              <div className="row_rightSide5">
                 {isSubmitting ? (
-                  <button
-                    className="btn btn-block d-flex align-items-center justify-content-center"
-                    
-                  >
+                  <button className="btn btn-block d-flex align-items-center justify-content-center">
                    <div className="center">
-                      <Box position="relative" display="inline-flex">
+                    <Box position="relative" display="inline-flex">
                       <CircularProgress variant="determinate" value={this.state.progress}  />
                       <Box
                         top={0}
@@ -1049,33 +897,26 @@ class BasicForm extends Component {
                       </Box>
                       </Box>
                     </div>
-                    
                   </button>
                 ) : (
                   <button
                     type="button"
                     onClick={() => this.onSubmit()}
-                    className="btn btn-success mb-4 btn-block"
+                    className="btn btn-success controlButtons"
                   >
                     Submit
                   </button>
                 )}
-              </div>
-              <div className="col-6 px-1 mt-2">
                 <input
                   type="button"
                   value="Cancel"
                   onClick={() => this.props.history.push("/products")}
-                  className="btn btn-danger mb-4 btn-block"
+                  className="btn btn-danger controlButtons"
                 />
               </div>
-              
             </div>
           </div>
         </div>
-        <br />
-        <div style={{ marginBottom: "60px" }}></div>
-      </div>
     );
   }
 }

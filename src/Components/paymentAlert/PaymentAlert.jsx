@@ -9,6 +9,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import ReCAPTCHA from "react-google-recaptcha";
 import { BsFillTrashFill } from "react-icons/bs";
 import Axios from "../../services/Axios";
+import {nanoid} from "nanoid";
 export default function AlertDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [amount, setAmount] = React.useState(null);
@@ -67,7 +68,7 @@ export default function AlertDialog(props) {
           <div>
             {props.savedCards &&
               props.savedCards.map((card) => (
-                <div className="row">
+                <div className="row" key={nanoid(4)}>
                   <div className="col-2">
                     <input
                       type="radio"
