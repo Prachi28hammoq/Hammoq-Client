@@ -1,0 +1,24 @@
+.accounts-tab {
+    display: inline-block;
+    font-weight: 600;
+    margin: 6px;
+    padding: 7px 10px;
+    user-select: none;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    color: #565554;
+}
+
+.accounts-tab-selected {
+    border-bottom: 7px solid rgb(77, 195, 228) !important;    
+    background-color: #F1F5F2;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.accounts-tab:hover {
+    cursor: pointer;
+    border-bottom: 7px solid #c4eeed;    
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}

@@ -1,18 +1,16 @@
 import React, { Component } from "react";
-import LeftSection from "./Components/LeftSection";
-import RightSection from "./Components/RightSection";
-import "./Edit.css";
+import LeftSection from "./components/LeftSection/LeftSection";
+import RightSection from "./components/RightSection/RightSection";
+import "./EditForm.css";
 import Axios from "../../services/Axios";
-import { Link } from "react-router-dom";
-import { assetsURL } from "../../services/Axios";
-import imageCompression from "browser-image-compression";
-Axios.defaults.headers["x-access-token"] = localStorage.getItem("token");
+import jwt_decode from "jwt-decode";
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import IconButton from '@material-ui/core/IconButton';
+import { nanoid } from 'nanoid';
 
-const $ = window.$;
-
-export default class extends Component {
-  constructor() {
-    super();
+class EditForm extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
       data: {
         line1: { line1: "", value1: "" },
@@ -23,18 +21,17 @@ export default class extends Component {
         line6: { line6: "", value6: "" },
         line7: { line7: "", value7: "" },
         line8: { line8: "", value8: "" },
-        ebay: { title: "", check: "" },
-        poshmark: { title: "", check: "" },
-        mercari: { title: "", check: "" },
-        delist: { title: "", check: "" },
+        ebay: { title: "", check: "", url: "" },
+        poshmark: { title: "", check: "", url: "" },
+        mercari: { title: "", check: "", url: "" },
+        delist: { title: "", check: "", url: "" },
       },
-      templatename: "",
       isSubmitting: false,
       extraMeasures: [],
       extraDescriptions: [],
+      deletedDescriptions: [],
       count: 1,
-      count1 : 1,
-      templates: [],
+      count1: 1,
       images: [
         { key: "default_image", label: "Default", img: "" },
         { key: "brand_image", label: "Brand", img: "" },
@@ -49,110 +46,93 @@ export default class extends Component {
         { key: "condition4_image", label: "Condition", img: "" },
         { key: "condition5_image", label: "Image Tag", img: "" },
       ],
+      sku: "",
       Ebay: false,
       Poshmark: false,
       Mercari: false,
       othersbool: false,
+
       others: [],
       othersstate: [],
       otherfromdb: [],
       othertolist: [],
-
       othersurl: [],
-      ebayurl: "",
-      poshmarkurl: "",
-      mercariurl: "",
+
       showcat: false,
 
       rates: {},
-      bal: 0,
-      basiccheck: true,
-      advancecheck: true,
-      activity: "",
-      activity_check: true,
+
       editchange: false,
-      message : [],
-      productid : '',
-      inventoryCount : 0
+      productid : "",
+      clientid : "",
+      agentName : '',
+
+      ebayCategoryDropDownItems: [],
+      shippingDropDownItems: [],
+      shippingDomesticDropDownItems: [],
+      shippingInternationalDropDownItems: [],
+
+      clientEbayShippingDropDownItems: [],
+      clientEbayShippingDomesticDropDownItems: [],
+      clientEbayShippingInternationalDropDownItems: [],
+      clientEbayADCampaignDropDownItems: [],
+
+      ebayPayPalEmail: "",
+      ebayPayPalEmailActive: false,
+      ebayAutoPayActive: false,
+      ebayPaymentMethod: "",
+
+      companyBlurb: "",
+      mercariHashtags: "",
+
+      originZipCode: "",
+      calculatedShippingActive: false,
+      freeShippingActive: false,
+      flatShippingActive: false,
+      flatShippingRules: [],
+
+      bestOfferActive: false,
+      bestOfferSettings: [],
+
+      compPriceSetting: "",
+      compPriceIncreaseValue: 0,
+      compPriceIncreaseMethod: "",
+
+      internationalShipping: [],
+
+      internationalReturnsAccepted: false,
+      internationalReturnsRefundGivenAs: "",
+      internationalReturnsPaidBy: "",
+      internationalReturnsWithin: "",
+
+      domesticReturnsAccepted: false,
+      domesticReturnsRefundGivenAs: "",
+      domesticReturnsPaidBy: "",
+      domesticReturnsWithin: "",
+
+      rightSectionProps: [],
     };
+    const token = localStorage.getItem("token");
+    const decoded = jwt_decode(token);
+    this.agentid = decoded._doc._id;
   }
 
-  setTemplate = (tempid) => {
-    const { images } = this.state;
-    let { templatename } = this.state;
-    // images.forEach((i) => {
-    //   i.img = "";
-    // });
-    Axios.get(`/template/${tempid}`)
-      .then(({ data }) => {
-        if (!data.templates[0].data) {
-          data.templates[0].data = {};
-          this.state.data["ebay"]["check"] = false;
-          this.state.data["poshmark"]["check"] = false;
-          this.state.data["mercari"]["check"] = false;
-          this.state.data["delist"]["check"] = false;
-        } else {
-          Object.entries(this.state.data).map((item) => {
-            if (item[1] == "" || item[1] == undefined || item[1] == null) {
-              this.state.data[`${item[0]}`] =
-                data.templates[0].data[`${item[0]}`];
-            }
-          });
-
-          //this.setState({ data: data.templates[0].data });
-          templatename = data.templates[0].name;
-          this.setState({ templatename });
-
-          this.state.data["ebay"]["title"] = data.templates[0].data.ebay.title;
-          this.state.data["poshmark"]["title"] =
-            data.templates[0].data.poshmark.title;
-          this.state.data["mercari"]["title"] =
-            data.templates[0].data.mercari.title;
-          this.state.data["delist"]["title"] =
-            data.templates[0].data.delist.title;
-          // if (data.templates[0].data.images) {
-          //   images.forEach((image) => {
-          //     image.img = data.templates[0].data.images[image.key];
-          //   });
-          //   this.setState({ images });
-          // }
-
-          if (data.templates[0].data.extraMeasures) {
-            this.state.extraMeasures = JSON.parse(
-              data.templates[0].data.extraMeasures
-            );
-            this.state.count = this.state.extraMeasures.length + 1;
-          }
-
-          if (data.templates[0].data.others) {
-            this.state.otherfromdb = JSON.parse(data.templates[0].data.others);
-            console.log(this.state.otherfromdb);
-            this.state.otherfromdb.map((db, i) => {
-              this.state.othersstate[i] = db.status;
-            });
-          }
-        }
-      })
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-  };
-
   componentDidMount = () => {
-    Axios.get("/template")
-      .then(({ data }) => this.setState({ templates: data.templates }))
-      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-    Axios.get(
-      `/product/${this.props.match.params.id}`,
-      (Axios.defaults.headers.common["x-access-token"] = localStorage.getItem(
-        "token"
-      )),
+    const token = localStorage.getItem("token");
+    Axios.get(`/product/${this.props.match.params.id}`,
       {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
+          "x-access-token": token,
         },
       }
     ).then((res) => {
-      const { images, data } = this.state;
+      const { images } = this.state;
+      
       this.setState({ data: res.data.products[0] });
+
+      this.state.data['shortDescription'] = decodeURIComponent(res.data.products[0].shortDescription);
+
       if (res.data.products[0].extraMeasures) {
         this.state.extraMeasures = JSON.parse(
           res.data.products[0].extraMeasures
@@ -161,14 +141,13 @@ export default class extends Component {
       }
 
       if (res.data.products[0].line) {
-        this.state.extraDescriptions = JSON.parse(
-          res.data.products[0].line
-        );
-        this.setState({extraDescriptions: this.state.extraDescriptions , count1 : this.state.extraDescriptions.length + 1})
-        
+        this.state.extraDescriptions = JSON.parse(res.data.products[0].line);
+        this.setState({
+          extraDescriptions: this.state.extraDescriptions,
+          count1: this.state.extraDescriptions.length + 1,
+        });
       }
 
-      //this.state.templatename = this.state.data.title.substring(0,5)
       var yourString = this.state.data.title;
       var maxLength = 15;
       var trimmedString = yourString.substr(0, maxLength);
@@ -177,54 +156,83 @@ export default class extends Component {
         Math.min(trimmedString.length, trimmedString.lastIndexOf(" "))
       );
 
-      if (res.data.products[0].ebay.url != "") {
+      if (res.data.products[0].ebay.url !== "") {
         this.state.ebayurl = res.data.products[0].ebay.url;
-        console.log(this.state.ebayurl);
       }
-      if (res.data.products[0].poshmark.url != "") {
+      if (res.data.products[0].poshmark.url !== "") {
         this.state.poshmarkurl = res.data.products[0].poshmark.url;
-        console.log(this.state.poshmarkurl);
       }
-      if (res.data.products[0].mercari.url != "") {
+      if (res.data.products[0].mercari.url !== "") {
         this.state.mercariurl = res.data.products[0].mercari.url;
-        console.log(this.state.mercariurl);
       }
 
       if (
-        res.data.products[0].category != "Men" &&
-        res.data.products[0].category != "Women" &&
-        res.data.products[0].category != "Unisex Kids" &&
-        res.data.products[0].category != "Babies" &&
-        res.data.products[0].category != "Speacialty"
+        res.data.products[0].category !== "Men" &&
+        res.data.products[0].category !== "Women" &&
+        res.data.products[0].category !== "Unisex Kids" &&
+        res.data.products[0].category !== "Babies" &&
+        res.data.products[0].category !== "Speacialty"
       ) {
         this.setState({ showcat: true });
       }
 
       if (res.data.products[0].others) {
         this.state.otherfromdb = JSON.parse(res.data.products[0].others);
-        //console.log(this.state.otherfromdb);
-        this.state.otherfromdb.map((db, i) => {
+        this.state.otherfromdb.forEach((db, i) => {
           this.state.othersstate[i] = db.status;
-          if (db.status == true && db.url != undefined && db.url != "") {
+          if (db.status === true && db.url !== undefined && db.url !== "") {
             this.state.othersurl[i] = db;
           }
-          if (db.status == true) {
+          if (db.status === true) {
             this.state.othertolist[i] = db;
           }
         });
-        console.log(this.state.othersurl);
       }
 
-      if(res.data.products[0]._id) {
-        this.setState({productid : res.data.products[0]._id})
+      if(res.data.products[0])
+      {
+        const {data} = this.state;
+        if(res.data.products[0].domesticShippingService && res.data.products[0].domesticShippingService.length > 20)
+        {
+          let domesticShippingService = JSON.parse(res.data.products[0].domesticShippingService)
+          data["domesticShippingService"] = domesticShippingService;
+        }
+
+        if(res.data.products[0].internationalShippingService && res.data.products[0].internationalShippingService.length > 20)
+        {
+          let internationalShippingService = JSON.parse(res.data.products[0].internationalShippingService)
+          data["internationalShippingService"] = internationalShippingService;
+        }
+
+        if(res.data.products[0].ebayCategoryField && res.data.products[0].ebayCategoryField.length > 20)
+        {
+          let ebayCategoryField = JSON.parse(res.data.products[0].ebayCategoryField)
+          data["ebayCategoryField"] = ebayCategoryField;
+        }
+
+        if(res.data.products[0].domesticClientShippingPolicy && res.data.products[0].domesticClientShippingPolicy.length > 20)
+        {
+          let domesticClientShippingPolicy = JSON.parse(res.data.products[0].domesticClientShippingPolicy)
+          data["domesticClientShippingPolicy"] = domesticClientShippingPolicy;
+        }
+
+        if(res.data.products[0].internationalClientShippingPolicy && res.data.products[0].internationalClientShippingPolicy.length > 20)
+        {
+          let internationalClientShippingPolicy = JSON.parse(res.data.products[0].internationalClientShippingPolicy)
+          data["internationalClientShippingPolicy"] = internationalClientShippingPolicy;
+        }
+        this.setState({data});
       }
 
-      if(res.data.products[0].message){
-        console.log( res.data.products[0].message ,'msg value reading')
-        this.setState({message : res.data.products[0].message})
+      if (res.data.products[0]._id) 
+      {
+        this.setState({ productid: res.data.products[0]._id });
       }
 
-     
+      if (res.data.products[0].message) 
+      {
+        this.setState({ message: res.data.products[0].message });
+      }
 
       this.state.data["ebay"]["title"] = res.data.products[0].ebay.title;
       this.state.data["poshmark"]["title"] =
@@ -236,101 +244,184 @@ export default class extends Component {
           image.img = res.data.products[0].images[image.key];
         });
       this.setState({ images });
-     
 
-      //balance check
-
-      let activity = res.data.products[0].activity;
-      this.setState({ activity });
-
-      const message = async () => {
-        const response =  await   Axios.get(
-          `/message/${this.props.match.params.id}`,
-          (Axios.defaults.headers.common["x-access-token"] = localStorage.getItem(
-            "token"
-          )),
-          {
-            headers: {
-              "content-type": "application/json",
-            },
-          }
-        )
-        console.log(response)
-      }
-      console.log(message(),'response message check')
-    
-
-      if (localStorage.getItem("token")) {
-        Axios.get("/payment/rates")
-          .then((res) => {
-            //rates = res.data[res.data.length - 1];
-            this.setState({ rates: res.data[res.data.length - 1] });
-
-            Axios.get("/clientdetails")
-              .then(({ data }) => {
-                this.setState({ bal: data.balance });
-                if (this.state.rates.basic / 100 > this.state.bal) {
-                  this.setState({ basiccheck: false });
-                }
-                if (this.state.rates.advance / 100 > this.state.bal) {
-                  this.setState({ advancecheck: false });
-                }
-
-                if (this.state.activity == "basic") {
-                  this.setState({ activity_check: this.state.basiccheck });
-                } else {
-                  //advance
-                  this.setState({ activity_check: this.state.advancecheck });
-                }
-                //console.log(this.state.bal);
-              })
-              .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-          })
-          .catch((err) => console.log(err) || alert(JSON.stringify(err)));
-      }
     });
 
-    Axios.get("/password/getstatus").then(({ data }) => {
-      //console.log(data);
-      this.setState({ Ebay: data.Ebay });
-      this.setState({ Poshmark: data.Poshmark });
-      this.setState({ Mercari: data.Mercari });
+    Axios.get('ebay/itemSuggestionPopulater').then((res) => {this.setState({ebayCategoryDropDownItems : res.data.data})});
+    Axios.get('ebay/shippingPopulater').then((res) => {
+      this.setState({shippingDropDownItems : res.data.data.ShippingServiceDetails.map((item, key) => {return res.data.data.ShippingServiceDetails[key]})})
+      this.setState({shippingDomesticDropDownItems: res.data.data.ShippingServiceDetails
+                                                    .filter(item => item.ValidForSellingFlow === 'true')
+                                                    .filter(item => item.InternationalService === undefined)
+                                                    .map(item => {return item})
+                                                  })
+      this.setState({shippingInternationalDropDownItems: res.data.data.ShippingServiceDetails
+                                                        .filter(item => item.ValidForSellingFlow === 'true')
+                                                        .filter(item => item.InternationalService === 'true')
+                                                        .map(item => {return item})
+                                                  })
+      });
+    Axios.get('ebay/sellerShippingPolicies', {params: {userID: this.props.match.params.clientid}}).then((res) => {
+      this.setState({clientEbayShippingDropDownItems : res.data.data.fulfillmentPolicies.map((item, key) => {return res.data.data.fulfillmentPolicies[key]})})
+      this.setState({clientEbayShippingDomesticDropDownItems: res.data.data.fulfillmentPolicies
+                                                    .filter(item => (item.shippingOptions && item.shippingOptions[0]) ? (item.shippingOptions[0].optionType === "DOMESTIC") : false)
+                                                    .map(item => {
+                                                      return item})
+                                                  });
+      this.setState({clientEbayShippingInternationalDropDownItems: res.data.data.fulfillmentPolicies
+                                                        .filter(item => (item.shippingOptions && item.shippingOptions[1]) ? (item.shippingOptions[1].optionType === "INTERNATIONAL") : false)
+                                                        .map(item => {
+                                                          return item})
+                                                  });
     });
-
-    Axios.get("/password/getstatus/others").then(({ data }) => {
-      //console.log(data);
-      if (data.length > 0) {
-        this.setState({ othersbool: true });
-        data.map((d, i) => {
-          const others = [...this.state.others];
-          others.push(d);
-          this.setState({ others });
-
-          const otherss = [...this.state.othersstate];
-          otherss.push(false);
-          this.setState({ othersstate: otherss });
-          //console.log(this.state.othersstate);
-        });
-      }
+    Axios.get('ebay/getCampaigns', {params: {userID: this.props.match.params.clientid}}).then((res) => {
+      let campaignList = res.data.data.campaigns.map((item, key) => {return res.data.data.campaigns[key]})
+      campaignList.unshift({campaignName: 'None', campaignId:0})
+      this.setState({clientEbayADCampaignDropDownItems : campaignList})
     });
-    
-
-    localStorage.setItem("actionebay", "");
-    localStorage.setItem("actionposhmark", "");
-    localStorage.setItem("actionmercari", "");
-    localStorage.setItem("actionfb", "");
-    
   };
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    const { data } = this.state;
-    if (name == "title") {
-      data[name] = e.target.value.replace(/[^\w\s]/gi, "");
-    } else {
-      data[name] = value;
+    const { data, bestOfferSettings } = this.state;
+    if (name === "price")
+    {
+      
+      data["profit"] = value - data["costOfGoods"]  ;
+      if(bestOfferSettings)
+      {
+        if(bestOfferSettings.acceptOfferOf) data['bestOfferAcceptFloorValue'] = value * (bestOfferSettings.acceptOfferOf/100);
+        if(bestOfferSettings.declineOfferOf) data['bestOfferDeclineCeilingValue'] =  value * (bestOfferSettings.declineOfferOf/100);
+      }
     }
-    console.log(data);
+    if (name === "costOfGoods")
+    {
+      data["profit"] = data["price"] - value ;
+    }
+    data[name] = value;
+    this.setState({ data });
+    this.setState({ editchange: true });
+  };
+
+  handleMarketPlaceDataChange = (event, market, field) =>
+  {
+    const { value } = event.target;
+    const { data } = this.state;
+
+    data[market][field] = value;
+    this.setState({ data });
+  }
+
+  handleEbayClientShippingChange = (e, v) => {
+    const { data } = this.state;
+
+    if(v === 'CLEARDOM')
+    {
+      data['domesticClientShippingPolicy'] = '';
+    }
+
+    if(v === 'CLEARINT')
+    {
+      data['internationalClientShippingPolicy'] = '';
+    }
+
+    if(v.shippingOptions)
+    {
+      if((v.shippingOptions[0] !== undefined) && (v.shippingOptions[1] !== undefined) && (v.shippingOptions[0].optionType === "DOMESTIC") && (v.shippingOptions[1].optionType === "INTERNATIONAL"))
+      {
+        data['domesticClientShippingPolicy'] = v;
+        data['internationalClientShippingPolicy'] = v;
+
+        if(!data.domesticClientShippingPoliciesActive) data['domesticClientShippingPoliciesActive'] = true;
+        if(!data.internationalClientShippingPoliciesActive) data['internationalClientShippingPoliciesActive'] = true;
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined)
+        {
+          data['domesticShippingFreeShippingActive'] = v.shippingOptions[0].shippingServices[0].freeShipping;
+          data['domesticShippingCost'] = 0.0;
+        }
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined) data['domesticShippingFreeShippingActive'] = v.shippingOptions[0].shippingServices[0].freeShipping;
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] !== undefined)
+        {
+          data['internationalShippingFreeShippingActive'] = v.shippingOptions[1].shippingServices[0].freeShipping;
+          data['internationalShippingCost'] = 0.0;
+        }
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] !== undefined) data['internationalShippingFreeShippingActive'] = v.shippingOptions[1].shippingServices[0].freeShipping;
+
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].shippingCost && v.shippingOptions[0].shippingServices[0].shippingCost.value) data['domesticShippingCost'] = v.shippingOptions[0].shippingServices[0].shippingCost.value;
+
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] !== undefined && v.shippingOptions[1].shippingServices[0].shippingCost && v.shippingOptions[1].shippingServices[0].shippingCost.value) data['internationalShippingCost'] = v.shippingOptions[1].shippingServices[0].shippingCost.value;
+
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].additionalShippingCost && v.shippingOptions[0].shippingServices[0].additionalShippingCost.value) data['domesticShippingEachAdditional'] = v.shippingOptions[0].shippingServices[0].additionalShippingCost.value;
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] !== undefined && v.shippingOptions[1].shippingServices[0].additionalShippingCost && v.shippingOptions[1].shippingServices[0].additionalShippingCost.value) data['internationalShippingEachAdditional'] = v.shippingOptions[1].shippingServices[0].additionalShippingCost.value;
+
+        data['ebay']['ebaySellerShippingPolicyID'] = v.fulfillmentPolicyId;
+        data['ebay']['ebaySellerShippingPolicyName'] = v.name;
+      }
+
+      else if((v.shippingOptions[0] !== undefined) && (v.shippingOptions[1] === undefined) && (v.shippingOptions[0].optionType === "DOMESTIC"))
+      {
+        data['domesticClientShippingPolicy'] = v;
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].shippingCost && v.shippingOptions[0].shippingServices[0].shippingCost.value) data['domesticShippingCost'] = v.shippingOptions[0].shippingServices[0].shippingCost.value;
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].additionalShippingCost && v.shippingOptions[0].shippingServices[0].additionalShippingCost.value) data['domesticShippingEachAdditional'] = v.shippingOptions[0].shippingServices[0].additionalShippingCost.value;
+
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && v.shippingOptions[0].shippingServices[0].freeShipping)
+        {
+          data['domesticShippingFreeShippingActive'] = true;
+          data['domesticShippingCost'] = 0.0;
+        }
+
+        if(v.shippingOptions[0].shippingServices && v.shippingOptions[0].shippingServices[0] !== undefined && !v.shippingOptions[0].shippingServices[0].freeShipping) data['domesticShippingFreeShippingActive'] = false;
+
+        data['ebay']['ebaySellerShippingPolicyID'] = v.fulfillmentPolicyId;
+        data['ebay']['ebaySellerShippingPolicyName'] = v.name;
+      }
+
+      else if((v.shippingOptions[0] === undefined) && (v.shippingOptions[1] !== undefined) && (v.shippingOptions[1].optionType === "INTERNATIONAL"))
+      {
+        data['internationalClientShippingPolicy'] = v;
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] && v.shippingOptions[1].shippingServices[0].shippingCost && v.shippingOptions[1].shippingServices[0].shippingCost.value) data['internationalShippingCost'] = v.shippingOptions[1].shippingServices[0].shippingCost.value;
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] && v.shippingOptions[1].shippingServices[0].additionalShippingCost && v.shippingOptions[1].shippingServices[0].additionalShippingCost.value) data['internationalShippingEachAdditional'] = v.shippingOptions[1].shippingServices[0].additionalShippingCost.value;
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] && v.shippingOptions[1].shippingServices[0].freeShipping)
+        {
+          data['internationalShippingFreeShippingActive'] = true;
+          data['internationalShippingCost'] = 0.0;
+        }
+
+        if(v.shippingOptions[1].shippingServices && v.shippingOptions[1].shippingServices[0] && !v.shippingOptions[1].shippingServices[0].freeShipping) data['internationalShippingFreeShippingActive'] = false;
+
+        data['ebay']['ebaySellerShippingPolicyID'] = v.fulfillmentPolicyId;
+        data['ebay']['ebaySellerShippingPolicyName'] = v.name;
+      }
+    }
+
+    this.setState({data}); 
+  }
+
+  handleCampaignSelect = (e, v) =>
+  {
+    const { data } = this.state
+
+    data['ebayCampaign'] = v;
+
+    this.setState({data});
+  }
+
+  handleShippingChange = (e, v, name) => {
+    const { data } = this.state;
+    data['ebay'][e.target.name] = v.ShippingService;
+    data[name] = v;
     this.setState({ data });
     this.setState({ editchange: true });
   };
@@ -342,52 +433,44 @@ export default class extends Component {
     this.setState({ data });
   };
 
+  handleUrl = (e) => {
+    const { name, value } = e.target;
+    const { data } = this.state;
+    data[name]["url"] = value;
+    this.setState({ data });
+  };
+
   handleMeasureLabel = (id, e) => {
     const { value } = e.target;
     const { extraMeasures } = this.state;
-    extraMeasures.map((measure) => {
-      if (measure.id == id) {
+    extraMeasures.forEach((measure) => {
+      if (measure.id === id) {
         measure.label = value;
       }
     });
     this.setState({ extraMeasures });
-    console.log(extraMeasures);
   };
 
   handleDescriptionLabel = (id, e) => {
     const { value } = e.target;
     const { extraDescriptions } = this.state;
-    extraDescriptions.map((description) => {
-      if (description.id == id) {
+    extraDescriptions.forEach((description) => {
+      if (description.id === id) {
         description.key = value;
       }
     });
     this.setState({ extraDescriptions });
-    console.log(extraDescriptions);
   };
 
   handleMeasureChange = (id, e) => {
     const { value } = e.target;
     const { extraMeasures } = this.state;
-    extraMeasures.map((measure) => {
-      if (measure.id == id) {
+    extraMeasures.forEach((measure) => {
+      if (measure.id === id) {
         measure.val = value;
       }
     });
     this.setState({ extraMeasures });
-    console.log(extraMeasures);
-  };
-
-  handleDescriptionChange = (id, e) => {
-    const { value } = e.target;
-    const { extraDescriptions } = this.state;
-    extraDescriptions.map((description) => {
-      if (description.id == id) {
-        description.value = value;
-      }
-    });
-    this.setState({ extraDescriptions });
-    console.log(extraDescriptions);
   };
 
   addMeasure = (e) => {
@@ -397,58 +480,31 @@ export default class extends Component {
     this.setState({ count: count + 1 });
   };
 
-  addDescription = () => {
-    console.log("add description");
-    const { extraDescriptions, count1 } = this.state;
-    extraDescriptions.push({ key: "", value: "", id: count1 });
-    console.log(extraDescriptions);
-    this.setState({ extraDescriptions });
-    this.setState({ count1: count1 + 1 });
-  };
-
   removeMeasure = (id, e) => {
     const { extraMeasures, count } = this.state;
 
     this.setState({
       extraMeasures: extraMeasures.filter((measure) => {
-        return measure.id != id;
+        return measure.id !== id;
       }),
     });
     this.setState({ count: count - 1 });
   };
 
-  removeDescription = (id, e) => {
-    const { extraDescriptions, count1 } = this.state;
-    this.setState({
-      extraDescriptions: extraDescriptions.filter((description) => {
-        return description.id != id;
-      }),
-    });
-  };
-
-
-  onSubmit = (e) => {
+  onSubmit = (e,  value) => {
     e.preventDefault();
-    const { data, images, extraMeasures,extraDescriptions } = this.state;
+    const { data, images, extraMeasures, extraDescriptions } = this.state;
     const dataform = new FormData();
+    
     images.forEach((image) => {
-      if (!!image.img) dataform.append(image.key, image.img);
+      if(image.img)
+      {
+        dataform.append(image.key, image.img);
+      }
     });
-
-    if (images[0].img == "") {
-      return alert("Atleast First Image is required");
-    }
-
-    if (data.condition_name == "Select Condition") {
-      return alert("Condition is required");
-    }
-
-    // if (data.sku == undefined) {
-    //   return alert("SKU is required");
-    // }
 
     var y = [];
-    this.state.others.map((o, i) => {
+    this.state.others.forEach((o, i) => {
       let obj = {
         name: o,
         status: this.state.othersstate[i],
@@ -456,78 +512,237 @@ export default class extends Component {
       };
       y.push(obj);
     });
-    console.log(y);
+
+    //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
+    if(data.ebay.check)
+    {
+      this.state.data['ebay']['ebayListingType'] = 'FixedPriceItem';
+
+      switch(data.condition_name)
+      {
+        case "New":
+          this.state.data['ebayConditionID'] = 1000;
+          break;
+        case "Used":
+          this.state.data['ebayConditionID'] = 3000;
+          break;
+        case "New (Other/Open Box)":
+          this.state.data['ebayConditionID'] = 2750;
+          break;
+        case "Seller Refurbished":
+          this.state.data['ebayConditionID'] = 2500;
+          break;
+        case "Broken/For Repair":
+          this.state.data['ebayConditionID'] = 7000;
+          break;
+        default:
+          break;
+      }
+
+      if((data.ebay.ebayListingType === 'FixedPriceItem' && value === "inventory") || value === "submit")
+      {
+        this.state.data['ebay']['ebayListingDuration'] = 'GTC';
+      }
+      else
+      {
+        this.state.data['ebay']['ebayListingDuration'] = data.listingDuration || 0;
+      }
+
+      if(this.state.domesticReturnsAccepted)
+      {
+        this.state.data['ebay']['ebayDomesticReturnsAccepted'] = data.domesticReturnsAccepted;
+        this.state.data['ebay']['ebayDomesticReturnsShippingCostPaidBy'] = data.domesticReturnsPaidBy;
+        this.state.data['ebay']['ebayDomesticRefundOption'] = data.domesticReturnsRefundGivenAs;
+        this.state.data['ebay']['ebayDomesticReturnsWithin'] = data.domesticReturnsWithin;
+      }
+
+      if(this.state.internationalReturnsAccepted)
+      {
+        this.state.data['ebay']['ebayInternationalReturnsAccepted'] = data.internationalReturnsAccepted;
+        this.state.data['ebay']['ebayInternationalReturnsShippingCostPaidBy'] = data.internationalReturnsPaidBy;
+        this.state.data['ebay']['ebayInternationalRefundOption'] = data.internationalReturnsRefundGivenAs;
+        this.state.data['ebay']['ebayInternationalReturnsWithin'] = data.internationalReturnsWithin;
+      }
+
+      if(data.domesticShippingService)
+      {
+        this.state.data['ebay']['ebayDomesticShippingService'] = data.domesticShippingService.ShippingService;
+      }
+
+      if(data.internationalShippingService)
+      {
+        this.state.data['ebay']['ebayInternationalShippingService'] = data.internationalShippingService.ShippingService;
+      }
+
+      if(data.domesticShippingCost) this.state.data['ebay']['ebayDomesticShippingCost'] = data.domesticShippingCost;
+      if(data.domesticShippingEachAdditional) this.state.data['ebay']['domesticShippingEachAdditional'] = data.domesticShippingEachAdditional;
+      if(data.domesticShippingSurcharge) this.state.data['ebay']['ebayDomesticShippingSurcharge'] = data.domesticShippingSurcharge;
+
+      if(data.internationalShippingCost) this.state.data['ebay']['ebayInternationalShippingCost'] = data.internationalShippingCost;
+      if(data.internationalShippingEachAdditional) this.state.data['ebay']['ebayInternationalShippingEachAdditional'] = data.internationalShippingEachAdditional;
+      if(data.internationalShippingSurcharge) this.state.data['ebay']['ebayInternationalShippingSurcharge'] = data.internationalShippingSurcharge;
+    }
+
 
     this.setState({ isSubmitting: true });
 
     dataform.append("sku", data.sku);
+    dataform.append("upc", data.upc);
     dataform.append("quantity", data.quantity);
     dataform.append("price", data.price);
+
     dataform.append("extraMeasures", JSON.stringify(extraMeasures));
+    dataform.append("extraDescription", JSON.stringify(extraDescriptions));
+
     dataform.append("brand", data.brand);
     dataform.append("model", data.model);
+
     dataform.append("title", data.title);
-    dataform.append("shortDescription", data.shortDescription);
+    dataform.append("shortDescription", encodeURIComponent(data.shortDescription));
     dataform.append("condition_name", data.condition_name);
-    dataform.append("ebay", data.ebay.title);
+
     dataform.append("mercari", data.mercari.title);
     dataform.append("poshmark", data.poshmark.title);
     dataform.append("delist", data.delist.title);
-    dataform.append("ebayc", data.ebay.check);
     dataform.append("mercaric", data.mercari.check);
     dataform.append("poshmarkc", data.poshmark.check);
     dataform.append("delistc", data.delist.check);
-    dataform.append("colorShade", data.colorShade);
-    dataform.append("material", data.material);
-    dataform.append("modelNo", data.modelNo || "");
+
     dataform.append("size", data.size);
-    dataform.append("style", data.style);
-    dataform.append("pattern", data.pattern);
+    dataform.append("lotSize", data.lotSize);
     dataform.append("category", data["category"]);
-    dataform.append("seasonOrWeather", data.seasonOrWeather);
-    dataform.append("care", data.care);
+
+    dataform.append("givingWorksCharityID", data.givingWorksCharityID);
+    dataform.append("givingWorksDonationPercentage", data.givingWorksDonationPercentage);
+    dataform.append("storeCategoryOne", data.storeCategoryOne);
+    dataform.append("storeCategoryTwo", data.storeCategoryTwo);
+
+    dataform.append("listingDuration", data.listingDuration);
+
     dataform.append("inseam", data.inseam);
     dataform.append("rise", data.rise);
     dataform.append("waist", data.waist);
-    dataform.append("bottomDescription", data.bottomDescription);
+
     dataform.append("msrp", data.msrp);
-    dataform.append("upc", data.upc);
     dataform.append("mrp", data.mrp);
     dataform.append("keywords", data.keywords);
-    dataform.append("note", data.note);
+    dataform.append("notes", data.notes);
+
     dataform.append("weightLB", data.weightLB);
     dataform.append("weightOZ", data.weightOZ);
-    dataform.append("zipCode", data.zipCode);
     dataform.append("packageLength", data.packageLength);
     dataform.append("packageWidth", data.packageWidth);
     dataform.append("packageHeight", data.packageHeight);
+
     dataform.append("costOfGoods", data.costOfGoods);
+    dataform.append("zipCode", data.zipCode);
+
     dataform.append("shippingFees", data.shippingFees);
+    dataform.append("domesticClientShippingPoliciesActive", data.domesticClientShippingPoliciesActive);
+    dataform.append("domesticClientShippingPolicy", JSON.stringify(data.domesticClientShippingPolicy));
+    dataform.append("domesticShippingService", JSON.stringify(data.domesticShippingService));
+    dataform.append("domesticShippingCost", data.domesticShippingCost);
+    dataform.append("domesticShippingEachAdditional", data.domesticShippingEachAdditional);
+    dataform.append("domesticShippingSurcharge", data.domesticShippingSurcharge);
+    dataform.append("domesticShippingFreeShippingActive", data.domesticShippingFreeShippingActive);
+    dataform.append("internationalClientShippingPoliciesActive", data.internationalClientShippingPoliciesActive);
+    dataform.append("internationalClientShippingPolicy", JSON.stringify(data.internationalClientShippingPolicy));
+    dataform.append("internationalShippingService", JSON.stringify(data.internationalShippingService));
+    dataform.append("internationalShippingCost", data.internationalShippingCost);
+    dataform.append("internationalShippingEachAdditional", data.internationalShippingEachAdditional);
+    dataform.append("internationalShippingSurcharge", data.internationalShippingSurcharge);
+    dataform.append("internationalShippingFreeShippingActive", data.internationalShippingFreeShippingActive);
+    dataform.append("calculatedShippingActive", data.calculatedShippingActive);
+    dataform.append("calculatedShipping", data.calculatedShipping);
+
+
     dataform.append("profit", data.profit);
     dataform.append("status", true);
-    dataform.append("activity", "basic");
-    dataform.append("line", JSON.stringify(extraDescriptions))
-    // const value1 = { line1: data.line1, value1: data.value1 };
-    // const value2 = { line2: data.line2, value2: data.value2 };
-    // const value3 = { line3: data.line3, value3: data.value3 };
-    // const value4 = { line4: data.line4, value4: data.value4 };
-    // const value5 = { line5: data.line5, value5: data.value5 };
-    // const value6 = { line6: data.line6, value6: data.value6 };
-    // const value7 = { line7: data.line7, value7: data.value7 };
-    // const value8 = { line8: data.line8, value8: data.value8 };
-    // dataform.append("line1", JSON.stringify(value1));
-    // dataform.append("line2", JSON.stringify(value2));
-    // dataform.append("line3", JSON.stringify(value3));
-    // dataform.append("line4", JSON.stringify(value4));
-    // dataform.append("line6", JSON.stringify(value6));
-    // dataform.append("line7", JSON.stringify(value7));
-    // dataform.append("line8", JSON.stringify(value8));
-    // dataform.append("line5", JSON.stringify(value5));
+    dataform.append("line", JSON.stringify(extraDescriptions));
+    dataform.append("note", data.note)
     dataform.append("madeIn", data.madeIn);
     dataform.append("gender", data.gender || "");
-    dataform.append("notes", data.notes)
     dataform.append("others", JSON.stringify(y));
 
+    dataform.append("bestOfferActive", data.bestOfferActive);
+    dataform.append("bestOfferAcceptFloorActive", data.bestOfferAcceptFloorActive);
+    dataform.append("bestOfferDeclineCeilingActive", data.bestOfferDeclineCeilingActive);
+    dataform.append("bestOfferAcceptFloorValue", data.bestOfferAcceptFloorValue);
+    dataform.append("bestOfferDeclineCeilingValue", data.bestOfferDeclineCeilingValue);
+
+    dataform.append("compPriceSetting", data.compPriceSetting);
+    dataform.append("compPriceIncreaseValue", data.compPriceIncreaseValue);
+    dataform.append("compPriceIncreaseMethod", data.compPriceIncreaseMethod);
+
+    dataform.append("mercariHashtags", data.mercariHashtags);
+
+    dataform.append("companyBlurb", data.companyBlurb);
+
+    dataform.append("ebayCategoryField", JSON.stringify(data.ebayCategoryField));
+    dataform.append("ebayOptionalFieldsActive", data.ebayOptionalFieldsActive);
+
+    dataform.append("promotedListingActive", data.promotedListingActive);
+    dataform.append("promotedListingPercentage", data.promotedListingPercentage);
+    dataform.append("ebayCampaign", JSON.stringify(data.ebayCampaign));
+
+    dataform.append("clientSettingsLoaded", data.clientSettingsLoaded);
+
+    dataform.append("isListingGood", data.isListingGood);
+
+    ////////////////////EBAY////////////////////////////////
+    dataform.append("ebayc", data.ebay.check);
+    dataform.append("ebay", data.ebay.title);
+
+    dataform.append("ebay.ebayCategoryID", data.ebay.ebayCategoryID);
+    dataform.append("ebay.ebayConditionID", data.ebay.ebayConditionID); //https://developer.ebay.com/devzone/finding/callref/enums/conditionIdList.html
+
+    dataform.append("ebay.ebayListingType", data.ebay.ebayListingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ListingTypeCodeType.html
+    dataform.append("ebay.ebayListingDuration", data.ebay.ebayListingDuration); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ListingDurationCodeType.html
+
+    dataform.append("ebay.ebayAutoPayActive", data.ebay.ebayAutoPayActive);
+    dataform.append("ebay.ebayPaymentMethod", data.ebay.ebayPaymentMethod); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/BuyerPaymentMethodCodeType.html https://developer.ebay.com/devzone/xml/docs/reference/ebay/extra/additm.rqst.itm.pymntmthds.html Paypal or Autopay.
+    dataform.append("ebay.ebayPayPalEmail", data.ebay.ebayPayPalEmail);
+    dataform.append("ebay.ebayPayPalEmailActive", data.ebay.ebayPayPalEmailActive);
+
+    dataform.append("ebay.ebayGlobalShippingActive", data.ebay.ebayGlobalShippingActive);
+    dataform.append("ebay.ebaySellerShippingPolicyID", data.ebay.ebaySellerShippingPolicyID);
+    dataform.append("ebay.ebaySellerShippingPolicyName", data.ebay.ebaySellerShippingPolicyName);
+
+    dataform.append("ebay.ebayDomesticShippingType", data.ebay.ebayDomesticShippingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingTypeCodeType.html
+    dataform.append("ebay.ebayDomesticShippingService", data.ebay.ebayDomesticShippingService); // https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingServiceCodeType.html
+    dataform.append("ebay.ebayDomesticShippingCost", data.ebay.ebayDomesticShippingCost);
+    dataform.append("ebay.ebayDomesticShippingEachAdditional", data.ebay.ebayDomesticShippingEachAdditional);
+    dataform.append("ebay.ebayDomesticShippingSurcharge", data.ebay.ebayDomesticShippingSurcharge);
+    dataform.append("ebay.ebayDomesticShippingFreeShippingActive", data.ebay.ebayDomesticShippingFreeShippingActive);
+
+    dataform.append("ebay.ebayInternationalShippingService", data.ebay.ebayInternationalShippingService); // https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingServiceCodeType.html
+    dataform.append("ebay.ebayInternationalShippingType", data.ebay.ebayInternationalShippingType); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingTypeCodeType.html
+    dataform.append("ebay.ebayInternationalShippingCost", data.ebay.ebayInternationalShippingCost);
+    dataform.append("ebay.ebayInternationalShippingEachAdditional", data.ebay.ebayInternationalShippingEachAdditional);
+    dataform.append("ebay.ebayInternationalShippingSurcharge", data.ebay.ebayInternationalShippingSurcharge);
+    dataform.append("ebay.ebayInternationalShippingFreeShippingActive", data.ebay.ebayInternationalShippingFreeShippingActive);
+
+    dataform.append("ebay.ebayDomesticReturnsShippingCostPaidBy", data.ebay.ebayDomesticReturnsShippingCostPaidBy); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingCostPaidByOptionsCodeType.html
+    dataform.append("ebay.ebayDomesticRefundOption", data.ebay.ebayDomesticRefundOption); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/RefundOptionsCodeType.html
+    dataform.append("ebay.ebayDomesticReturnsAccepted", data.ebay.ebayDomesticReturnsAccepted); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsAcceptedOptionsCodeType.html
+    dataform.append("ebay.ebayDomesticReturnsWithin", data.ebay.ebayDomesticReturnsWithin); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsWithinOptionsCodeType.html
+
+    dataform.append("ebay.ebayInternationalReturnsShippingCostPaidBy", data.ebay.ebayInternationalReturnsShippingCostPaidBy); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ShippingCostPaidByOptionsCodeType.html
+    dataform.append("ebay.ebayInternationalRefundOption", data.ebay.ebayInternationalRefundOption); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/RefundOptionsCodeType.html
+    dataform.append("ebay.ebayInternationalReturnsAccepted", data.ebay.ebayInternationalReturnsAccepted); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsAcceptedOptionsCodeType.html
+    dataform.append("ebay.ebayInternationalReturnsWithin", data.ebay.ebayInternationalReturnsWithin); //https://developer.ebay.com/devzone/xml/docs/reference/ebay/types/ReturnsWithinOptionsCodeType.html
+
+    dataform.append("ebay.ebayPromotedListingActive", data.ebay.ebayPromotedListingActive);
+    dataform.append("ebay.ebayPromotedListingPercentage", data.ebay.ebayPromotedListingPercentage);
+    dataform.append("ebay.ebayADCampaign", JSON.stringify(data.ebay.ebayADCampaign));
+    ////////////////////EBAY///////////////////////////////
+
+
+    if(value === "draft")
+    {
+      dataform.append("prodStatus", "draft");
+    }
+    
     Axios.put(`/product/${this.props.match.params.id}`, dataform, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -535,8 +750,11 @@ export default class extends Component {
       },
     })
       .then((response) => {
-        console.log(response, "image");
-        window.open("/searchcart", "_self");
+        if(value === "draft")
+        {
+          alert('Product Is Saved As Draft.')
+        }
+        window.open(`/products/${data.prodStatus}`, "_self");
       })
       .catch((err) => {
         this.setState({ isSubmitting: false });
@@ -546,6 +764,7 @@ export default class extends Component {
 
   toggleSelectedWebsite = (str) => {
     const { data } = this.state;
+    
     data[str]["check"] = !data[str]["check"];
     this.setState({ data });
   };
@@ -558,20 +777,13 @@ export default class extends Component {
 
   handleImageChange = async (event) => {
     const { images } = this.state;
-    const options = {
-      maxSizeMB: 0.3,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
+
     const idx = images.findIndex((image) => image.key === event.target.name);
     try {
       this.setState({ isSubmitting: true });
-      let compressedFile = await imageCompression(
-        event.target.files[0],
-        options
-      );
-      console.log(compressedFile);
-      images[idx].img = compressedFile;
+
+      images[idx].img = event.target.files[0];
+
       this.setState({
         images,
       });
@@ -586,20 +798,12 @@ export default class extends Component {
     const files = e.target.files;
     const count = files.length;
 
-    const options = {
-      maxSizeMB: 0.3,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
     this.setState({ isSubmitting: true });
     for (let i = 0; i < count; i++) {
       const idx = images.findIndex((image) => !image.img);
       if (idx > -1) {
         try {
-          console.log(files[i]);
-          let compressedFile = await imageCompression(files[i], options);
-          console.log(compressedFile);
-          images[idx].img = compressedFile;
+          images[idx].img = files[i];
           this.setState({ images }, () => console.log(this.state.images));
         } catch (error) {
           console.log(error);
@@ -609,313 +813,176 @@ export default class extends Component {
     this.setState({ isSubmitting: false });
   };
 
+  handleToggleButton = (booleanValue, name) => {
+    const { data } = this.state;
+
+    data[name] = !booleanValue;
+
+    this.setState({ data });
+    this.setState({ editchange: true });
+  }
+
+  handleCheckboxToggle = (booleanValue, name) => {
+    const { data } = this.state;
+
+    data[name] = booleanValue;
+
+    this.setState({ data });
+    this.setState({ editchange: true });
+  }
+
   removeImg = (idx) => {
     const { images } = this.state;
     images[idx].img = "";
     this.setState({ images });
   };
 
-  listHandler = (website) => {
-    if (this.state.editchange == true) {
-      return alert("Please save changes before listing");
-    }
-    if (website == "ebay") {
-      localStorage.setItem("actionebay", "listebay");
-      window.location.reload();
-      // window.open(
-      //   "https://bulksell.ebay.com/ws/eBayISAPI.dll?SingleList&sellingMode=AddItem"
-      // );
-    }
-    if (website == "poshmark") {
-      localStorage.setItem("actionposhmark", "listposhmark");
-      window.location.reload();
-      // window.open("https://poshmark.com/create-listing");
-    }
-    if (website == "mercari") {
-      localStorage.setItem("actionmercari", "listmercari");
-      window.location.reload();
-      // window.open("https://www.mercari.com/sell/");
-    }
-    if (website == "facebook") {
-      localStorage.setItem("actionfb", "listfb");
-      window.location.reload();
-      // window.open("https://www.facebook.com/marketplace/");
-    }
+  skuChange = (e) => {
+    this.setState({ sku: e.target.value });
   };
 
-  editHandler = (website) => {
-    if (this.state.editchange == true) {
-      return alert("Please save changes before listing");
-    }
-    if (website == "ebay") {
-      localStorage.setItem("actionebay", "editebay");
-      localStorage.setItem("ebaydelisturl", this.state.ebayurl);
-      window.location.reload();
-      // window.open("https://www.ebay.com/sh/lst/active");
-    }
-    if (website == "poshmark") {
-      localStorage.setItem("actionposhmark", "editposhmark");
-      localStorage.setItem("poshmarkdelisturl", this.state.poshmarkurl);
-      window.location.reload();
-      // window.open(this.state.poshmarkurl);
-    }
-    if (website == "mercari") {
-      localStorage.setItem("actionmercari", "editmercari");
-      localStorage.setItem("mercaridelisturl", this.state.mercariurl);
-      window.location.reload();
-      // window.open(this.state.mercariurl);
-    }
-  };
-
-  listHandlerAll = () => {
-    if (this.state.editchange == true) {
-      return alert("Please save changes before listing");
-    }
-    if (this.state.Ebay && this.state.data["ebay"]["check"]) {
-      localStorage.setItem("actionebay", "listebay");
-      window.location.reload();
-      // window.open(
-      //   "https://bulksell.ebay.com/ws/eBayISAPI.dll?SingleList&sellingMode=AddItem"
-      // );
-    }
-    if (this.state.Poshmark && this.state.data["poshmark"]["check"]) {
-      localStorage.setItem("actionposhmark", "listposhmark");
-      window.location.reload();
-      //window.open("https://poshmark.com/create-listing");
-    }
-    if (this.state.Mercari && this.state.data["mercari"]["check"]) {
-      localStorage.setItem("actionmercari", "listmercari");
-      window.location.reload();
-      //window.open("https://www.mercari.com/sell/");
-    }
-  };
-
-  editHandlerAll = () => {
-    if (this.state.editchange == true) {
-      return alert("Please save changes before listing");
-    }
-    if (
-      this.state.Ebay &&
-      this.state.data["ebay"]["check"] &&
-      this.state.ebayurl
-    ) {
-      localStorage.setItem("actionebay", "editebay");
-      localStorage.setItem("ebaydelisturl", this.state.ebayurl);
-      window.location.reload();
-      //window.open("https://www.ebay.com/sh/lst/active");
-    }
-    if (
-      this.state.Poshmark &&
-      this.state.data["poshmark"]["check"] &&
-      this.state.poshmarkurl
-    ) {
-      localStorage.setItem("actionposhmark", "editposhmark");
-      localStorage.setItem("poshmarkdelisturl", this.state.poshmarkurl);
-      window.location.reload();
-      //window.open(this.state.poshmarkurl);
-    }
-    if (
-      this.state.Mercari &&
-      this.state.data["mercari"]["check"] &&
-      this.state.mercariurl
-    ) {
-      localStorage.setItem("actionmercari", "editmercari");
-      localStorage.setItem("mercaridelisturl", this.state.mercariurl);
-      window.location.reload();
-      //window.open(this.state.mercariurl);
-    }
-  };
-
-  delistHandler = (website) => {
-    if (this.state.editchange == true) {
-      return alert("Please save changes before listing");
-    }
-    if (website == "ebay") {
-      localStorage.setItem("actionebay", "delistebay");
-      localStorage.setItem("ebaydelisturl", this.state.ebayurl);
-      window.location.reload();
-      // window.open("https://www.ebay.com/sh/lst/active");
-    }
-    if (website == "poshmark") {
-      localStorage.setItem("actionposhmark", "delistposhmark");
-      localStorage.setItem("poshmarkdelisturl", this.state.poshmarkurl);
-      window.location.reload();
-      // window.open(this.state.poshmarkurl);
-    }
-    if (website == "mercari") {
-      localStorage.setItem("actionmercari", "delistmercari");
-      localStorage.setItem("mercaridelisturl", this.state.mercariurl);
-      window.location.reload();
-      // window.open(this.state.mercariurl);
-    }
-    if (website == "facebook") {
-      localStorage.setItem("actionfb", "delistfb");
-      window.location.reload();
-      this.state.othersurl.map((db, i) => {
-        if (db.name == "facebook") {
-          window.open(db.url);
-        }
-      });
-    }
-  };
-
-  delistHandlerAll = () => {
-    if (this.state.editchange == true) {
-      return alert("Please save changes before listing");
-    }
-    if (
-      this.state.Ebay &&
-      this.state.data["ebay"]["check"] &&
-      this.state.ebayurl
-    ) {
-      localStorage.setItem("actionebay", "delistebay");
-      localStorage.setItem("ebaydelisturl", this.state.ebayurl);
-      window.location.reload();
-      //window.open("https://www.ebay.com/sh/lst/active");
-    }
-    if (
-      this.state.Poshmark &&
-      this.state.data["poshmark"]["check"] &&
-      this.state.poshmarkurl
-    ) {
-      localStorage.setItem("actionposhmark", "delistposhmark");
-      localStorage.setItem("poshmarkdelisturl", this.state.poshmarkurl);
-      window.location.reload();
-      //window.open(this.state.poshmarkurl);
-    }
-    if (
-      this.state.Mercari &&
-      this.state.data["mercari"]["check"] &&
-      this.state.mercariurl
-    ) {
-      localStorage.setItem("actionmercari", "delistmercari");
-      localStorage.setItem("mercaridelisturl", this.state.mercariurl);
-      window.location.reload();
-      //window.open(this.state.mercariurl);
-    }
-  };
-
-  listallow = () => {
-    var allow = 0,
-      cnt = 0;
-    if (this.state.Ebay && this.state.data.ebay.check) {
-      cnt++;
-      if (this.state.ebayurl == null || this.state.ebayurl == "") {
-        allow++;
-      }
-    }
-    if (this.state.Poshmark && this.state.data.poshmark.check) {
-      cnt++;
-      if (this.state.poshmarkurl == null || this.state.poshmarkurl == "") {
-        allow++;
-      }
-    }
-    if (this.state.Mercari && this.state.data.mercari.check) {
-      cnt++;
-      if (this.state.mercariurl == null || this.state.mercariurl == "") {
-        allow++;
-      }
-    }
-
-    if (allow == cnt && cnt != 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  delistallow = () => {
-    var deallow = 0,
-      cnt = 0;
-    if (this.state.Ebay && this.state.data.ebay.check) {
-      cnt++;
-      if (
-        this.state.ebayurl != null &&
-        this.state.ebayurl != "d" &&
-        this.state.ebayurl != ""
-      ) {
-        deallow++;
-      }
-    }
-    if (this.state.Poshmark && this.state.data.poshmark.check) {
-      cnt++;
-      if (
-        this.state.poshmarkurl != null &&
-        this.state.poshmarkurl != "d" &&
-        this.state.poshmarkurl != ""
-      ) {
-        deallow++;
-      }
-    }
-    if (this.state.Mercari && this.state.data.mercari.check) {
-      cnt++;
-      if (
-        this.state.mercariurl != null &&
-        this.state.mercariurl != "d" &&
-        this.state.mercariurl != ""
-      ) {
-        deallow++;
-      }
-    }
-
-    if (deallow == cnt && cnt != 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  nonelisted = () => {
-    var bol = 0,
-      cnt = 0;
-    if (this.state.Ebay && this.state.data.ebay.check) {
-      cnt++;
-      if (
-        this.state.ebayurl != null &&
-        this.state.ebayurl != "d" &&
-        this.state.ebayurl != ""
-      ) {
-        bol++;
-      }
-    }
-    if (this.state.Poshmark && this.state.data.poshmark.check) {
-      cnt++;
-      if (
-        this.state.poshmarkurl != null &&
-        this.state.poshmarkurl != "d" &&
-        this.state.poshmarkurl != ""
-      ) {
-        bol++;
-      }
-    }
-    if (this.state.Mercari && this.state.data.mercari.check) {
-      cnt++;
-      if (
-        this.state.mercariurl != null &&
-        this.state.mercariurl != "d" &&
-        this.state.mercariurl != ""
-      ) {
-        bol++;
-      }
-    }
-
-    if (bol == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
   setCategory = (str) => {
     const { data } = this.state;
     data["category"] = str;
     this.setState({ data });
   };
-  handleUrl = (e) => {
-    const { name, value } = e.target;
-    const { data } = this.state;
-    data[name]["url"] = value;
+
+  clearExtraDescriptions = () => {
+    this.setState({ extraDescriptions: [] });
+    this.setState({ deletedDescriptions: [] });
+  };
+
+  handleSelectedLeaf = (itemAspectsArray) => {
+    var { extraDescriptions, count1 } = this.state;
+    extraDescriptions = [];
+    Object.keys(itemAspectsArray.data.aspects).forEach((item, index) => {
+      extraDescriptions.push({
+        id: index,
+        key: itemAspectsArray.data.aspects[index].localizedAspectName,
+        aspectUsage: itemAspectsArray.data.aspects[index].aspectConstraint.aspectUsage,
+        suggestedValues: itemAspectsArray.data.aspects[index].aspectValues,
+        aspectRequired: itemAspectsArray.data.aspects[index].aspectConstraint.aspectRequired,
+        value: ""
+      });
+      count1 = count1 + 1;
+    });
+
+    this.setState({ extraDescriptions: extraDescriptions, count1: count1 });
+  };
+
+  handleSelectedEbayCategory = (category) => {
+    const url = "/ebay/itemAspects/" + category.categoryId;
+    var { data } = this.state;
+
+    data['ebay']['ebayCategoryID'] = category.categoryId;
+    Axios.get(url)
+      .then((response) => response.data)
+      .then((data) => {
+        this.handleSelectedLeaf(data);
+      })
+      .catch((err) => console.log(err));
+
+      data['ebayCategoryField'] = category;
+      this.setState({ data });
+  };
+
+  handleDescriptionLabel = (id, e) => {
+    const { value } = e.target;
+    const { extraDescriptions } = this.state;
+    extraDescriptions.forEach((description) => {
+      if (description.id === id) {
+        description.key = value;
+      }
+    });
+    this.setState({ extraDescriptions });
+  };
+
+  handleDescriptionChange = (id, value) => {
+    const { extraDescriptions } = this.state;
+    extraDescriptions.forEach((description) => {
+      if (description.id === id) {
+        description.value = value;
+      }
+    });
+    this.setState({ extraDescriptions });
+  };
+
+  addDescription = () => {
+    const { extraDescriptions, count1 } = this.state;
+    extraDescriptions.push({ key: "", value: "", id: count1 });
+    this.setState({ extraDescriptions });
+    this.setState({ count1: count1 + 1 });
+  };
+
+  arrayFilterStorage = (item, filterValue) => 
+  {
+    var {deletedDescriptions} = this.state;
+
+    if(item.id !== filterValue)
+    {
+      return true;
+    }
+    else if(item.id === filterValue)
+    {
+      deletedDescriptions.push(item);
+      this.setState({deletedDescriptions});
+      return false;
+    }
+  }
+
+  removeDescription = (id, e) => {
+    const { extraDescriptions } = this.state;
+
+    this.setState({extraDescriptions: extraDescriptions.filter((description) => {return this.arrayFilterStorage(description, id)})});
+  };
+
+  toggleOptional = () => {
+    var { data } = this.state;
+    data['ebayOptionalFieldsActive'] = !data.ebayOptionalFieldsActive;
     this.setState({ data });
   };
+
+  setEbayCategoryField = (categoryName) => {
+    var { data } = this.state
+    data['ebayCategoryField'] = categoryName;
+    this.setState({ data });
+  };
+
+  repopulateExtraDescriptions = () => {
+    var { extraDescriptions, deletedDescriptions } = this.state;
+
+    var concatenatedArray = extraDescriptions.concat(deletedDescriptions);
+
+    this.setState({deletedDescriptions: []});
+    this.setState({extraDescriptions:concatenatedArray});
+  }
+
+  priceCalculation = () => {
+    var { data } = this.state;
+    if(data['compPriceIncreaseMethod'] || data['compPriceIncreaseValue'] === 'undefined' || data['compPriceIncreaseMethod'] || data['compPriceIncreaseValue'] === 'null')
+    {
+      alert("User does not have increase comp price settings set.");
+    }
+    else
+    {
+      if(data['compPriceIncreaseMethod'] === 'dollar')
+      {
+        data['price'] = parseFloat(data['price']) + parseFloat(data['compPriceIncreaseValue']);
+        data["profit"] = data['price'] - data["costOfGoods"];
+      }
+      if(data['compPriceIncreaseMethod'] === 'percent')
+      {
+        data['price'] = parseFloat(data['price']) + (parseFloat(data['price']) * (parseFloat(data['compPriceIncreaseValue'])/100));
+        data["profit"] = data['price'] - data["costOfGoods"];
+      }
+    }
+
+    this.setState({data});
+  };
+
+  goToPreviousPath = () => {
+    this.props.history.goBack();
+  }
 
   render = () => {
     const {
@@ -923,506 +990,91 @@ export default class extends Component {
       images,
       isSubmitting,
       extraMeasures,
-      templates,
+      extraDescriptions,
       Ebay,
       Poshmark,
       Mercari,
-      templatename,
-      othersbool,
       others,
-      othersstate,
-      otherfromdb,
-      othertolist,
-      othersurl,
-      ebayurl,
-      poshmarkurl,
-      mercariurl,
-      activity_check,
-      showcat,
+      ebayCategoryDropDownItems,
+      shippingDropDownItems,
+      shippingDomesticDropDownItems,
+      shippingInternationalDropDownItems,
+      clientEbayShippingDomesticDropDownItems,
+      clientEbayShippingInternationalDropDownItems,
+      clientEbayADCampaignDropDownItems
     } = this.state;
-
-    console.log(this.state.images, 'images')
+    
     return (
-      <div className="container-fluid px-3 template">
-        <Link to="/products">
-          <i className="fa fa-arrow-left mt-3" aria-hidden="true"></i>
-        </Link>
-        <h2 className="text-dark d-flex justify-content-lg-center pb-4">
-          Create or Edit Listing: {templatename}
-        </h2>
-        <div className="row">
-          <div className="col-12 mt-3">
-            <div className="dropdown">
-              <button
-                className="btn btn-outline-primary dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-                style={{ width: "200px" }}
-              >
-                Choose Template
-                <span className="caret"></span>
-              </button>
-              <ul className="dropdown-menu">
-                {templates &&
-                  templates.map((template) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt border-0"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="dropdownMenuOffset"
-                          onClick={() => this.setTemplate(template._id)}
-                        >
-                          {template.name}
-                        </button>
-                      </li>
-                    );
-                  })}
-              </ul>
-            </div>
-          </div>
-
-          <div className="col-12 col-lg-6 pr-4 order-2 order-lg-1">
-            {/* <div className="col-12 col-lg-6 pr-4"> */}
-            <LeftSection
-              data={data}
-              images={images}
-              Ebay={Ebay}
-              Poshmark={Poshmark}
-              Mercari={Mercari}
-              othersbool={othersbool}
-              others={others}
-              othersstate={othersstate}
-              showcat={showcat}
-              isSubmitting={isSubmitting}
-              toggleSelectedOthersWebsite={this.toggleSelectedOthersWebsite}
-              handleChange={this.handleChange}
-              extraMeasures={extraMeasures}
-              addMeasure={this.addMeasure}
-              removeMeasure={this.removeMeasure}
-              handleMeasureChange={this.handleMeasureChange}
-              handleMeasureLabel={this.handleMeasureLabel}
-              removeImg={this.removeImg}
-              handleBulkUpload={this.handleBulkUpload}
-              handleImageChange={this.handleImageChange}
-              handleOtherTitles={this.handleOtherTitles}
-              toggleSelectedWebsite={this.toggleSelectedWebsite}
-              setCategory={this.setCategory}
-              message = {this.state.message}
-              productid = {this.state.productid}
-            />
-          </div>
-          <div className="col-12 col-lg-6 pl-lg-3 order-1 order-lg-2">
-            <RightSection
-              data={data}
-              toggleSelectedWebsite={this.toggleSelectedWebsite}
-              handleChange={this.handleChange}
-              images={images}
-              extraMeasures={extraMeasures}
-              extraDescriptions={this.state.extraDescriptions}
-              addMeasure={this.addMeasure}
-              addDescription={this.addDescription}
-              handleUrl={this.handleUrl}
-              handleMeasureChange={this.handleMeasureChange}
-              handleDescriptionChange={this.handleDescriptionChange}
-              handleMeasureLabel={this.handleMeasureLabel}
-              handleDescriptionLabel={this.handleDescriptionLabel}
-              removeDescription={this.removeDescription}
-              removeMeasure={this.removeMeasure}
-              removeImg={this.removeImg}
-              handleBulkUpload={this.handleBulkUpload}
-              handleImageChange={this.handleImageChange}
-              handleOtherTitles={this.handleOtherTitles}
-              message = {this.state.message}
-              productid = {this.state.productid}
-            />
-          </div>
+      <div className='app'>
+        <div className='app__body'>
+        <div style={{'display':'flex', 'alignItems': 'flex-start'}}>
+        <IconButton aria-label="close" onClick={this.goToPreviousPath}>
+          <KeyboardBackspaceIcon />
+        </IconButton>
         </div>
-
-        <div className="d-flex justify-content-center">
-          <div className="dropdown mr-2">
-            <button
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              data-toggle="dropdown"
-              style={{ width: "200px" }}
-            >
-              Listing
-              <span className="caret"></span>
-            </button>
-            <ul className="dropdown-menu">
-              <li>{activity_check ? null : <p>Insufficent balance</p>}</li>
-              <li>
-                {data["ebay"]["check"] &&
-                activity_check &&
-                (ebayurl == null || ebayurl == "") ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="ebay"
-                    onClick={() => {
-                      this.listHandler("ebay");
-                    }}
-                  >
-                    Ebay
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {data["poshmark"]["check"] &&
-                activity_check &&
-                (poshmarkurl == null || poshmarkurl == "") ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="poshmark"
-                    onClick={() => {
-                      this.listHandler("poshmark");
-                    }}
-                  >
-                    Poshmark
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {" "}
-                {data["mercari"]["check"] &&
-                activity_check &&
-                (mercariurl == null || mercariurl == "") ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="mercari"
-                    onClick={() => {
-                      this.listHandler("mercari");
-                    }}
-                  >
-                    Mercari
-                  </button>
-                ) : null}
-              </li>
-
-              {othersbool && activity_check
-                ? othertolist.map((o, i) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="othersstate"
-                          onClick={() => {
-                            this.listHandler(o.name);
-                          }}
-                        >
-                          {o.name}
-                        </button>
-                      </li>
-                    );
-                  })
-                : null}
-              <li>
-                {activity_check && this.listallow() ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="listall"
-                    onClick={() => {
-                      this.listHandlerAll();
-                    }}
-                  >
-                    List All
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                <button
-                  className="btn colorIt"
-                  style={{ width: "100%", textAlign: "left" }}
-                  id="none"
-                >
-                  None
-                </button>
-              </li>
-              {/* <li>
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delist"
-                  >
-                    Delist
-                  </button>
-                </li> */}
-            </ul>
-          </div>
-
-          <div className="dropdown mr-2">
-            <button
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              data-toggle="dropdown"
-              style={{ width: "200px" }}
-            >
-              Delist
-              <span className="caret"></span>
-            </button>
-            <ul className="dropdown-menu">
-              <li>
-                {Ebay &&
-                data["ebay"]["check"] &&
-                ebayurl != "d" &&
-                ebayurl != null &&
-                ebayurl != "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="ebay"
-                    onClick={() => {
-                      this.delistHandler("ebay");
-                    }}
-                  >
-                    Ebay
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {Poshmark &&
-                data["poshmark"]["check"] &&
-                poshmarkurl != "d" &&
-                poshmarkurl != null &&
-                poshmarkurl != "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="poshmark"
-                    onClick={() => {
-                      this.delistHandler("poshmark");
-                    }}
-                  >
-                    Poshmark
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {Mercari &&
-                data["mercari"]["check"] &&
-                mercariurl != "d" &&
-                mercariurl != null &&
-                mercariurl != "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="mercari"
-                    onClick={() => {
-                      this.delistHandler("mercari");
-                    }}
-                  >
-                    Mercari
-                  </button>
-                ) : null}
-              </li>
-
-              {othersbool
-                ? othersurl.map((o, i) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="othersstate"
-                          onClick={() => {
-                            this.delistHandler(o.name);
-                          }}
-                        >
-                          {o.name}
-                        </button>
-                      </li>
-                    );
-                  })
-                : null}
-              <li>
-                {this.delistallow() ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delistall"
-                    onClick={() => {
-                      this.delistHandlerAll();
-                    }}
-                  >
-                    Delist All
-                  </button>
-                ) : null}
-              </li>
-              <li>{this.nonelisted() ? "None Listed" : null}</li>
-              {/* <li>
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delist"
-                  >
-                    Delist
-                  </button>
-                </li> */}
-            </ul>
-          </div>
-
-          <div className="dropdown mr-2">
-            <button
-              className="btn btn-outline-primary dropdown-toggle"
-              type="button"
-              data-toggle="dropdown"
-              style={{ width: "200px" }}
-            >
-              Edit
-              <span className="caret"></span>
-            </button>
-            <ul className="dropdown-menu">
-              <li>
-                {Ebay &&
-                data["ebay"]["check"] &&
-                ebayurl != "d" &&
-                ebayurl != null &&
-                ebayurl != "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="ebay"
-                    onClick={() => {
-                      this.editHandler("ebay");
-                    }}
-                  >
-                    Ebay
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {Poshmark &&
-                data["poshmark"]["check"] &&
-                poshmarkurl != "d" &&
-                poshmarkurl != null &&
-                poshmarkurl != "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="poshmark"
-                    onClick={() => {
-                      this.editHandler("poshmark");
-                    }}
-                  >
-                    Poshmark
-                  </button>
-                ) : null}
-              </li>
-              <li>
-                {Mercari &&
-                data["mercari"]["check"] &&
-                mercariurl != "d" &&
-                mercariurl != null &&
-                mercariurl != "" ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="mercari"
-                    onClick={() => {
-                      this.editHandler("mercari");
-                    }}
-                  >
-                    Mercari
-                  </button>
-                ) : null}
-              </li>
-
-              {othersbool
-                ? othersurl.map((o, i) => {
-                    return (
-                      <li>
-                        <button
-                          className="btn colorIt"
-                          style={{ width: "100%", textAlign: "left" }}
-                          id="othersstate"
-                          onClick={() => {
-                            this.editHandler(o.name);
-                          }}
-                        >
-                          {o.name}
-                        </button>
-                      </li>
-                    );
-                  })
-                : null}
-              <li>
-                {this.delistallow() ? (
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delistall"
-                    onClick={() => {
-                      this.editHandlerAll();
-                    }}
-                  >
-                    Edit All
-                  </button>
-                ) : null}
-              </li>
-              <li>{this.nonelisted() ? "None Listed" : null}</li>
-              {/* <li>
-                  <button
-                    className="btn colorIt"
-                    style={{ width: "100%", textAlign: "left" }}
-                    id="delist"
-                  >
-                    Delist
-                  </button>
-                </li> */}
-            </ul>
-          </div>
-        </div>
-        <br />
-        <div className="row d-lg-flex justify-content-lg-center">
-          <div className="col-12 col-lg-2 mt-2">
-            {isSubmitting ? (
-              <button
-                className="btn btn-success mb-4 btn-block col-12 mr-auto col-lg-12"
-                disabled
-              >
-                <span
-                  className="spinner-border spinner-border-sm mr-2"
-                  role="status"
-                  aria-hidden="true"
-                />
-                Submitting...
-              </button>
-            ) : (
-              <button
-                className="btn btn-success mb-4 btn-block col-12 mr-auto col-lg-12"
-                onClick={this.onSubmit}
-              >
-                Save
-              </button>
-            )}
-          </div>
-
-          <div className="col-12 col-lg-2 mt-2">
-            <input
-              type="button"
-              defaultValue="Cancel"
-              onClick={() => window.open("/products", "_self")}
-              className="btn btn-danger mb-4 btn-block col-12 mr-auto col-lg-12"
-            />
-          </div>
+          <LeftSection
+            key='LeftSection'
+            nanoid={nanoid}
+            data={data}
+            images={images}
+            Ebay={Ebay}
+            Poshmark={Poshmark}
+            Mercari={Mercari}
+            others={others}
+            isSubmitting={isSubmitting}
+            handleChange={this.handleChange}
+            removeImg={this.removeImg}
+            handleBulkUpload={this.handleBulkUpload}
+            handleImageChange={this.handleImageChange}
+            toggleSelectedOthersWebsite={this.toggleSelectedOthersWebsite}
+            toggleSelectedWebsite={this.toggleSelectedWebsite}
+            extraDescriptions={extraDescriptions}
+            extraMeasures={extraMeasures}
+              />
+          <RightSection
+            key='RightSection'
+            nanoid={nanoid}
+            data={data}
+            handleChange={this.handleChange}
+            addMeasure={this.addMeasure}
+            removeMeasure={this.removeMeasure}
+            extraMeasures={extraMeasures}
+            handleMeasureChange={this.handleMeasureChange}
+            handleMeasureLabel={this.handleMeasureLabel}
+            clearExtraDescriptions={this.clearExtraDescriptions}
+            addDescription={this.addDescription}
+            extraDescriptions={this.state.extraDescriptions}
+            handleDescriptionChange={this.handleDescriptionChange}
+            handleDescriptionLabel={this.handleDescriptionLabel}
+            removeDescription={this.removeDescription}
+            repopulateExtraDescriptions={this.repopulateExtraDescriptions}
+            handleSelectedLeaf={this.handleSelectedLeaf}
+            handleSelectedEbayCategory={this.handleSelectedEbayCategory}
+            handleOtherTitles={this.handleOtherTitles}
+            toggleOptional={this.toggleOptional}
+            handleUrl={this.handleUrl}
+            ebayCategoryDropDownItems={ebayCategoryDropDownItems}
+            shippingDropDownItems={shippingDropDownItems}
+            shippingDomesticDropDownItems={shippingDomesticDropDownItems}
+            shippingInternationalDropDownItems={shippingInternationalDropDownItems}
+            handleCheckboxToggle={this.handleCheckboxToggle}
+            handleToggleButton={this.handleToggleButton}
+            onSubmit={this.onSubmit}
+            isSubmitting={this.isSubmitting}
+            setEbayCategoryField={this.setEbayCategoryField}
+            priceCalculation={this.priceCalculation}
+            handleShippingChange={this.handleShippingChange}
+            handleMarketPlaceDataChange={this.handleMarketPlaceDataChange}
+            clientEbayShippingDomesticDropDownItems={clientEbayShippingDomesticDropDownItems}
+            clientEbayShippingInternationalDropDownItems={clientEbayShippingInternationalDropDownItems}
+            handleEbayClientShippingChange={this.handleEbayClientShippingChange}
+            clientEbayADCampaignDropDownItems={clientEbayADCampaignDropDownItems}
+            handleCampaignSelect={this.handleCampaignSelect}
+              />
         </div>
       </div>
     );
-  };
+  }
 }
 
-const styles = {
-  inputFile: {
-    position: "absolute",
-    top: "0",
-    left: "0",
-    height: "100%",
-    width: "100%",
-    opacity: 0,
-  },
-};
+export default EditForm;

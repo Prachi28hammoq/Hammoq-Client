@@ -1,7 +1,7 @@
 import React from "react";
-import { v4 as uuid } from "uuid";
+import nanoid from "nanoid";
 
-export default (props) => (
+const Select = (props) => (
   <div className="form-group mb-4 row align-items-center">
     <div className="col-sm-8">
       <select
@@ -9,7 +9,7 @@ export default (props) => (
         {...props}
       >
         {props.selectOptions.map((option) => (
-          <option value={option} key={uuid()}>
+          <option value={option} key={nanoid(6)}>
             {option}
           </option>
         ))}
@@ -23,3 +23,4 @@ export default (props) => (
     </label>
   </div>
 );
+export default Select;
