@@ -3,6 +3,7 @@ import Axios from "../../services/Axios";
 import "./signupmin.css";
 import Logo from "../../Components/images/hammock.svg";
 import { Link } from "react-router-dom";
+//import { Document, Page } from 'react-pdf';
 
 class Signup extends Component {
   constructor() {
@@ -21,10 +22,19 @@ class Signup extends Component {
       password: "",
       confirmPassword: "",
       referralCode: "",
-      term1: false,
-      term2: false,
       isSubmitting: false,
+      PrivacyAgreement: false,
+      TermsOfService: false,
+      samplePDF: {}
     };
+  }
+
+  componentWillMount = () =>
+  {
+    //const TermsOfServiceDoc = new docx.Document();
+    //const PrivacyAgreementDoc = new docx.Document();
+    var { samplePDF } =
+    Axios.get('https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_PrivacyPolicy_Apr28th2021.pdf')
   }
 
   handleChange = (e) => {
@@ -41,8 +51,8 @@ class Signup extends Component {
     this.setState({ isSubmitting: true });
     e.preventDefault();
     const {
-      term1,
-      term2,
+      PrivacyAgreement,
+      TermsOfService,
       address1,
       address2,
       password,
@@ -55,10 +65,15 @@ class Signup extends Component {
       lastName,
       email,
       phoneno,
-      referralCode,
+      referralCode
     } = this.state;
 
-    if (!term1) {
+    if (!PrivacyAgreement) {
+      this.setState({ isSubmitting: false });
+      return alert("Accept all the terms.");
+    }
+
+    if (!TermsOfService) {
       this.setState({ isSubmitting: false });
       return alert("Accept all the terms.");
     }
@@ -106,6 +121,8 @@ class Signup extends Component {
 
   render() {
     const {
+      PrivacyAgreement,
+      TermsOfService,
       firstName,
       lastName,
       address1,
@@ -119,10 +136,13 @@ class Signup extends Component {
       password,
       confirmPassword,
       isSubmitting,
-      referralCode,
+      referralCode
     } = this.state;
     return (
       <div className="row col-lg-5 m-auto">
+        {/*//<Document file={samplePDF}>
+        //  <Page pageNumber={1} />
+        //</Document>*/}
         <form className="formIt mt-7">
           <div className="d-flex align-items-center justify-content-between mb-5 ml-5 mr-5">
             <img src={Logo} alt="hammoq" className="img" />
@@ -200,7 +220,7 @@ class Signup extends Component {
             required
           ></input>
           <a href="" target="_blank">
-            Terms and Conditions
+            Terms Of Service
           </a>
           <div className="form-check">
             <input
@@ -210,7 +230,21 @@ class Signup extends Component {
               className="form-check-input"
             ></input>
             <label htmlFor="accept-terms" className="form-check-label mb-4">
-              I HAVE READ AND AGREE FOR TERMS SERVICE
+              I HAVE READ AND AGREE TO THE TERMS OF SERVICE.
+            </label>
+          </div>
+          <a href="" target="_blank">
+            Privacy Agreement
+          </a>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              name="term1"
+              onChange={this.handleToggleCheckbox}
+              className="form-check-input"
+            ></input>
+            <label htmlFor="accept-terms" className="form-check-label mb-4">
+              I HAVE READ AND AGREE TO THE PRIVACY AGREEMENT.
             </label>
           </div>
           {isSubmitting ? (
@@ -224,7 +258,7 @@ class Signup extends Component {
             </button>
           ) : (
             <button className="btn btn-primary" onClick={this.handleSubmit}>
-              SIGNUP
+              SIGN UP
             </button>
           )}
         </form>

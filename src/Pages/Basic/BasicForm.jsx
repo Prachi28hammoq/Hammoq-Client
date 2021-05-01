@@ -229,7 +229,7 @@ class BasicForm extends Component {
     data.append("rate1", rate1);
     data.append("rate2", rate2);
     data.append("rate3", rate3);
-    data.append("prodStatus", "submit");
+    data.append("prodStatus", "submitted");
 
     this.setState({ isSubmitting: true });
 
@@ -239,7 +239,7 @@ class BasicForm extends Component {
       {
         imagedata = new FormData();
         imagedata.append(image.key, image.img);
-        let response = await Axios.post("/product/images", imagedata, {headers: {"Content-Type": "multipart/form-data"}})
+        let response = await Axios.post("/product/images", imagedata, {headers: {"Content-Type": "multipart/form-data"}}).catch((err) => {this.setState({ isSubmitting: false });console.log(err);});
         imageid[image.key] = response.data.imageid
         this.setState({ progress : this.state.progress + 7 })
       }}))
