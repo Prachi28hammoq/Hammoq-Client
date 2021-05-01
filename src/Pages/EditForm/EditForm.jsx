@@ -9,15 +9,27 @@ class EditForm extends Component {
     this.state = {};
   }
 
+  goToPreviousPath = () => {
+    this.props.history.goBack();
+  };
+
   render = () => {
   const { id } = this.props.match.params;
 
   return(
+    <>
+    <div style={{ display: "flex", alignItems: "flex-start" }}>
+      <IconButton aria-label="close" onClick={this.goToPreviousPath}>
+        {/*RETURN BACK TO GOBACK FUNCTION.*/}
+        <KeyboardBackspaceIcon />
+      </IconButton>
+    </div>
     <AdvanceListing
     assetsURL={assetsURL}
     Axios={Axios}
     productid={id}
     />
+    </>
     );
   }
 }
