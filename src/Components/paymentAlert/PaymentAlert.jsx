@@ -158,7 +158,7 @@ export default function AlertDialog({ open, handleClose }) {
                 {" "}
                 <ReCAPTCHA
                   sitekey="6LeB67kaAAAAAD6pFtXtvzLRqE6VXuyT6uCfIzAq"
-                  {/*sitekey="6Lc6LMgZAAAAADLubDJkLQMTfnmLKbhcZjzJfdGa"*/}
+                  //sitekey="6Lc6LMgZAAAAADLubDJkLQMTfnmLKbhcZjzJfdGa"
                   onChange={callback}
                 />
               </div>
