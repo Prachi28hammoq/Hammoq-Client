@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import Input from "@material-ui/core/Input";
@@ -9,21 +9,53 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import ReCAPTCHA from "react-google-recaptcha";
 import { BsFillTrashFill } from "react-icons/bs";
 import Axios from "../../services/Axios";
-import {nanoid} from "nanoid";
-export default function AlertDialog(props) {
-  const [open, setOpen] = React.useState(false);
-  const [amount, setAmount] = React.useState(null);
-  const [captchaValue, setCaptchaValue] = React.useState(null);
-  const [stripeId, setStripeIdValue] = React.useState(null);
 
-  const handleClose = () => {
+export default function AlertDialog({ open, handleClose }) {
+  const [amount, setAmount] = useState(null);
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const [stripeId, setStripeIdValue] = useState(null);
+  const [savedCards, setSavedCards] = useState([]);
+
+  useEffect(() => {
+    getSavedCards();
+  }, []);
+
+  const handleModalClose = () => {
     setAmount(null);
     setCaptchaValue(null);
-    setOpen(false);
-    props.handleClose();
+    handleClose();
   };
+
   const callback = (value) => {
     setCaptchaValue(value);
+  };
+
+  const getSavedCards = async () => {
+    try {
+      let response = await Axios.get("/subscription/details");
+      setSavedCards(response.data.User.savedCards);
+    } catch (err) {
+      alert("Error in fetching card details...");
+    }
+  };
+
+  const updatePayment = async (amount, stripeId) => {
+    let body = {
+      amount: amount,
+      stripeId: stripeId,
+    };
+
+    await Axios.post("/payment/payment", body)
+      .then(({ data }) => {
+        if (data.success) {
+          alert(data.msg);
+          window.location.reload();
+        } else {
+          alert("Credit Card is Not added");
+          window.open("/subscription", "_self");
+        }
+      })
+      .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
 
   const handelCardDelete = async (cardId) => {
@@ -32,32 +64,28 @@ export default function AlertDialog(props) {
     );
     if (confirm) {
       const response = await Axios.delete(`/payment/card/${cardId}`);
-      if (response.data.success === true) {
+      if (response.data.success == true) {
         window.alert("Deleted");
-        window.location.reload();
+        getSavedCards();
       } else {
         window.alert("Something went wrong.");
       }
     }
   };
   // specifying verify callback
-  const updatePayment = () => {
-    setOpen(true);
-    if (stripeId !== null) {
-      props.updatePayment(amount, stripeId);
+  const handleUpdatePayment = () => {
+    if (stripeId != null) {
+      updatePayment(amount, stripeId);
     } else {
       window.alert("Please select any card.");
     }
   };
-  React.useEffect(() => {
-    setOpen(props.open);
-  }, [props.open]);
 
   return (
     <div>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={handleModalClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -66,9 +94,9 @@ export default function AlertDialog(props) {
         </DialogTitle>
         <DialogContent>
           <div>
-            {props.savedCards &&
-              props.savedCards.map((card) => (
-                <div className="row" key={nanoid(4)}>
+            {savedCards &&
+              savedCards.map((card) => (
+                <div className="row">
                   <div className="col-2">
                     <input
                       type="radio"
@@ -101,7 +129,7 @@ export default function AlertDialog(props) {
               <div className="col">
                 <Button
                   variant="outlined"
-                  color={amount === 100 ? "secondary" : "primary"}
+                  color={amount == 100 ? "secondary" : "primary"}
                   onClick={() => setAmount(100)}
                 >
                   $ 100.00
@@ -110,7 +138,7 @@ export default function AlertDialog(props) {
               <div className="col">
                 <Button
                   variant="outlined"
-                  color={amount === 500 ? "secondary" : "primary"}
+                  color={amount == 500 ? "secondary" : "primary"}
                   onClick={() => setAmount(500)}
                 >
                   $ 500.00
@@ -125,12 +153,12 @@ export default function AlertDialog(props) {
                 ></Input>
               </div>
             </div>
-            {amount !== null && (
+            {amount != null && (
               <div className="row d-flex justify-content-center">
                 {" "}
                 <ReCAPTCHA
                   sitekey="6LeB67kaAAAAAD6pFtXtvzLRqE6VXuyT6uCfIzAq"
-                  //sitekey="6Lc6LMgZAAAAADLubDJkLQMTfnmLKbhcZjzJfdGa"
+                  {/*sitekey="6Lc6LMgZAAAAADLubDJkLQMTfnmLKbhcZjzJfdGa"*/}
                   onChange={callback}
                 />
               </div>
@@ -138,11 +166,11 @@ export default function AlertDialog(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleModalClose} color="primary">
             Close
           </Button>
           <Button
-            onClick={updatePayment}
+            onClick={handleUpdatePayment}
             color="primary"
             disabled={captchaValue == null ? true : false}
           >

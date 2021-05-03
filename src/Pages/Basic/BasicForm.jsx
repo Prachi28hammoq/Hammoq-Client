@@ -259,10 +259,13 @@ class BasicForm extends Component {
     })
     .catch((err) => {
       this.setState({isSubmitting: false});
-      alert("Error: " + err.response.data.Error + "\n" + 
-              "Type: " + err.response.data.Type + "\n" + 
-              "Correction: " + err.response.data.Correction + "\n" +
-              "Message: " + err.response.data.OtherMessage);
+      if(err.response && err.response.data)
+      {
+        alert("Error: " + err.response.data.Error + "\n" + 
+                "Type: " + err.response.data.Type + "\n" + 
+                "Correction: " + err.response.data.Correction + "\n" +
+                "Message: " + err.response.data.OtherMessage);
+      }
       console.log(err)});
   };
   

@@ -18,7 +18,6 @@ export default function SubscriptionModal(props) {
   );
 }
 
-//////////////////////////////////////////////////////////////////
 const PaymentModal = ({ props }) => {
   const [loading, setLoading] = useState(false);
   const elements = useElements(),
@@ -48,7 +47,7 @@ const PaymentModal = ({ props }) => {
       }
     } catch (err) {
       setLoading(false);
-      console.log(err);
+      
     }
   };
 
@@ -69,9 +68,9 @@ const PaymentModal = ({ props }) => {
       <Modal.Body>
         {/* <h4>Centered Modal</h4> */}
         <p>
-          This is a metered plan, you will be charged{" "}
-          <b>99$ - the amount you use</b>, and if you use more than 99$ then you
-          won't get charged.
+          This is a subscription plan of $99 a month that will be added to your
+          account for use. If not used, it does not roll over to next month.
+          Anything extra addedstays in your account and does roll over.
         </p>
         <hr />
         <CardElement />

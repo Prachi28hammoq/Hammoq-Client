@@ -37,7 +37,6 @@ export default function Subscription() {
   }, []);
   ////////////////////////////////////////////////////////////////////////////////////
 
-
   const getClientDetails = async () => {
     try {
       let response = await Axios.get("/subscription/details");
@@ -94,7 +93,6 @@ export default function Subscription() {
     }
   };
 
-
   const handleCancelSubscription = (id) => {
     setCancelSubscriptionModalDetails({
       ...cancelSubscriptionModalDetails,
@@ -115,7 +113,7 @@ export default function Subscription() {
         {message.msg}
       </Alert>
 
-      <PaymentCard savedCards={clientDetails.savedCards} />
+      <PaymentCard/>
 
       <SubscriptionDetails
         subscriptions={subscriptions}
@@ -128,19 +126,7 @@ export default function Subscription() {
         handleCancelSubscription={handleCancelSubscription}
       />
       <TransactionCard />
-      {/* Plan cards section */}
-      {/* <div className="row">
-        {plans &&
-          plans.map((plan, idx) => {
-            return (
-              <div className="col-md-6 col-lg-3" key={idx}>
-                <Card plan={plan} handleSelectedPlan={handleSelectedPlan} />
-              </div>
-            );
-          })}
-      </div> */}
 
-      {/* Modal to subscribe */}
       <SubscriptionModal
         show={subscriptionModalDetails.show}
         onHide={() =>
@@ -150,7 +136,6 @@ export default function Subscription() {
           })
         }
         subscriptionModalDetails={subscriptionModalDetails}
-        // savedCards={clientDetails.savedCards}
         getSubscriptionDetails={getSubscriptionDetails}
         setMessage={setMessage}
       />
