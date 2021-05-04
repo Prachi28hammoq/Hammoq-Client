@@ -70,12 +70,12 @@ class Signup extends Component {
 
     if (!PrivacyAgreement) {
       this.setState({ isSubmitting: false });
-      return alert("Accept all the terms.");
+      return alert("Please Accept The Privacy Ageement To Continue.");
     }
 
     if (!TermsOfService) {
       this.setState({ isSubmitting: false });
-      return alert("Accept all the terms.");
+      return alert("Please Accept The Terms Of Service To Continue.");
     }
 
     if (email == "") {
@@ -225,7 +225,7 @@ class Signup extends Component {
           <div className="form-check">
             <input
               type="checkbox"
-              name="term1"
+              name="TermsOfService"
               onChange={this.handleToggleCheckbox}
               className="form-check-input"
             ></input>
@@ -239,7 +239,7 @@ class Signup extends Component {
           <div className="form-check">
             <input
               type="checkbox"
-              name="term1"
+              name="PrivacyAgreement"
               onChange={this.handleToggleCheckbox}
               className="form-check-input"
             ></input>
