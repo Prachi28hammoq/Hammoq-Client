@@ -33,8 +33,11 @@ class Signup extends Component {
   {
     //const TermsOfServiceDoc = new docx.Document();
     //const PrivacyAgreementDoc = new docx.Document();
-    var { samplePDF } =
+    var privacyPolicyPDF =
     Axios.get('https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_PrivacyPolicy_Apr28th2021.pdf')
+
+    var termsOfServicePDF =
+    Axios.get('https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_TermsOfService_Apr28th2021.pdf')
   }
 
   handleChange = (e) => {
@@ -219,7 +222,7 @@ class Signup extends Component {
             className="form-control mb-4"
             required
           ></input>
-          <a href="" target="_blank">
+          <a href="https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_TermsOfService_Apr28th2021.pdf" target="_blank">
             Terms Of Service
           </a>
           <div className="form-check">
@@ -233,7 +236,7 @@ class Signup extends Component {
               I HAVE READ AND AGREE TO THE TERMS OF SERVICE.
             </label>
           </div>
-          <a href="" target="_blank">
+          <a href="https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_PrivacyPolicy_Apr28th2021.pdf" target="_blank">
             Privacy Agreement
           </a>
           <div className="form-check">
