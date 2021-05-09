@@ -11,7 +11,7 @@ import PaymentCard from "./Components/PaymentCard";
 export default function Subscription() {
   const [message, setMessage] = useState({
     show: false,
-    varient: "primary",
+    variant: "primary",
     msg: "",
   });
   const [subscriptionModalDetails, setSubscriptionModalDetails] = useState({
@@ -46,22 +46,21 @@ export default function Subscription() {
         if (!response.data.User.isSubscribed)
           setMessage({
             show: true,
-            msg:
-              "You are not subscribed to any plan yet, Choose any of the given plan",
-            varient: "warning",
+            msg: "You are not subscribed to any subscription plan yet, please choose a subscription plan.",
+            variant: "warning",
           });
       } else {
         setMessage({
-          varient: "danger",
+          variant: "danger",
           show: true,
-          msg: "Error in fetching client details",
+          msg: "Error in fetching client details!",
         });
       }
     } catch (err) {
       setMessage({
-        varient: "danger",
+        variant: "danger",
         show: true,
-        msg: "Error in fetching client details",
+        msg: "Error in fetching client details!",
       });
     }
   };
@@ -86,9 +85,9 @@ export default function Subscription() {
     } catch (err) {
       console.log(err);
       setMessage({
-        varient: "danger",
+        variant: "danger",
         show: true,
-        msg: "Unable to get subscription details",
+        msg: "Unable to get subscription details!",
       });
     }
   };
@@ -106,7 +105,7 @@ export default function Subscription() {
       {/* Error msg section  */}
       <Alert
         show={message.show}
-        variant={message.varient}
+        variant={message.variant}
         onClose={() => setMessage({ ...message, show: false })}
         dismissible
       >

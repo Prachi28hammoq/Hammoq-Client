@@ -23,7 +23,7 @@ export default function PaymentCard({ savedCards }) {
           alert(data.msg);
           window.location.reload();
         } else {
-          alert("Credit Card is Not added");
+          alert("A Credit Card Is Not Added.");
           window.open("/subscription", "_self");
         }
       })

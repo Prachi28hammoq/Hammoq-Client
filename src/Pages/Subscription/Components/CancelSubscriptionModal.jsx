@@ -17,15 +17,14 @@ export default function CancelSubscriptionModal(props) {
       onHide();
       getSubscriptionDetails();
       setMessage({
-        varient: "success",
+        variant: "success",
         show: true,
-        msg:
-          "Request to cancel your subscription at current period end has been made successfully.",
+        msg: "The request to cancel your subscription has been made successfully.",
       });
-    } catch (err) {
-      alert(
-        "There is error in cancelling the subscription, try again after sometime or contact admin.."
-      );
+    } 
+    catch (err) 
+    {
+      alert("There is a error when cancelling the subscription, please try again after 2 minutes or please contact customer support.");
     }
   };
   return (
@@ -37,7 +36,7 @@ export default function CancelSubscriptionModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Cancel Subscription
+          Cancel Active Subscription
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -46,14 +45,14 @@ export default function CancelSubscriptionModal(props) {
             className=" btn btn-outline-success"
             onClick={onHide}
           >
-            No, Don't cancel my subscription.
+            No, Do Not Cancel My Active Subscription.
           </button>
           or
           <button
             className=" btn btn-outline-danger"
             onClick={handleCancelAtPeriodEndClick}
           >
-            Yes, Cancel my subscription
+            Yes, Please Cancel My Active Subscription.
           </button>
         </div>
       </Modal.Body>
@@ -62,13 +61,12 @@ export default function CancelSubscriptionModal(props) {
           <ul>
           
             <li>
-              By clicking on <b>Yes, Cancel my subscription</b>, your active plan will
-              be cancled after your current period end and you won't be charged
-              anymore for subscription.
+              By clicking on <b>Yes, Cancel My Active Subscription</b>, your subscription will
+              expire at the end of your current period and you will not be charged
+              again.
             </li>
             <li>
-              Once cancelled, you won't be able to use any of our services
-              associated with the plan, But you can always resubscribe later.
+              Once canceled, you will not be able to use any of our services, but you are still able to resubscribe later.
             </li>
           </ul>
         </small>

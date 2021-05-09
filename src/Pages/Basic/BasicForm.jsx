@@ -149,11 +149,11 @@ class BasicForm extends Component {
       if(marketPlaces[entries].Status === true) isMarketPlaceSelected = true;
     }
   
-    if (localStorage.getItem("isSubscribed") === false || localStorage.getItem("isSubscribed") === "false") return alert("You are not subscribed, Kindly Subscribe To Hammoq Listing Services To Continue.");
-    if (images[0].img == "") return alert("Atleast first image is required");
-    if (itemCondition == "Select Condition *" || itemCondition == "") return alert("Condition is required");
+    if (localStorage.getItem("isSubscribed") === false || localStorage.getItem("isSubscribed") === "false") return alert("You are not subscribed, Please Subscribe To Hammoq Listing Services To Continue.");
+    if (images[0].img == "") return alert("The First Image Is Required");
+    if (itemCondition == "Select Condition *" || itemCondition == "") return alert("A Condition Is Required");
     if (!hasMarketPlaces) return $("#addTemplateModal").modal("show");
-    if (!isMarketPlaceSelected) return alert("Please Selected At Least One MarketPlace");
+    if (!isMarketPlaceSelected) return alert("Please Selected At Least One Marketplace");
 
     var otherSites = [];
 
@@ -192,11 +192,11 @@ class BasicForm extends Component {
       if (savedCards.length > 0) 
       {
         this.setState({ open: true });
-        return window.alert("Insufficient balance");
+        return window.alert("Insufficient Balance.");
       } 
       else 
       {
-        window.alert("Low Payment and No card added, Please add a card and then add payment..");
+        window.alert("Low Payment and No Card Added, Please add a card and then add to your balance.");
         return window.open("/subscription", "_self");
       }
     }
@@ -222,7 +222,8 @@ class BasicForm extends Component {
     data.append("rise", rise);
     data.append("weightLB", weightLB);
     data.append("weightOZ", weightOZ);
-    data.append("activity", "basic");
+    data.append("activity", "Basic");
+    data.append("action", "Move");
     data.append("status", true);
     data.append("listed", false);
     data.append("costOfGoods", costOfGoods);
@@ -282,7 +283,7 @@ class BasicForm extends Component {
     } 
     else 
     {
-      alert("Fill up the details");
+      alert("Complete The Product Details.");
     }
   };
 
@@ -358,7 +359,7 @@ class BasicForm extends Component {
                 } 
                 else 
                 {
-                  alert("Credit Card is Not added");
+                  alert("A Credit Card Is Not Added");
                   window.open("/subscription", "_self");
                 }
               })
@@ -485,8 +486,7 @@ class BasicForm extends Component {
               </div>
             ) : null}
               <h6 className="mb-3  sub-heading">
-                Please enter the logins for each site you want to list &
-                list to
+                Please enter the logins for each site you want to delist or list to
               </h6>
               <select
                 className="form-control body-text"
@@ -538,8 +538,7 @@ class BasicForm extends Component {
                     <br />
                     <br />
                     <small className="ml-2">
-                      You can always add more logins under setting in the
-                      future
+                      You can always add more logins under settings in the future
                     </small>
                     </div>
                   </div>

@@ -28,7 +28,7 @@ export default function TransactionCard() {
       setCompData({
         ...compData,
         showMsg: true,
-        msg: "Error in getting data",
+        msg: "Error in getting data client transaction data.",
       });
     }
   };

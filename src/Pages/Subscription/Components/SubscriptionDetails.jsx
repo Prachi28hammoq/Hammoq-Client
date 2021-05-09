@@ -29,7 +29,7 @@ export default function SubscriptionDetails({
             current_period_start,
             cancel_at_period_end,
             id,
-            plan: { amount },
+            subscription: { amount },
           }) => {
             return (
               <div
@@ -47,14 +47,12 @@ export default function SubscriptionDetails({
                 <div className="col-12">
                   {cancel_at_period_end ? (
                     <p className="m-0">
-                      This subscription will be canceled at {current_period_end}
-                      .
+                      This subscription will be inactive on {current_period_end}.
                     </p>
                   ) : (
                     <>
                       <p className="m-0">
-                        This subscription will automatically renewed at{" "}
-                        {current_period_end}.
+                        This subscription will automatically renew on {current_period_end}.
                       </p>
                       <small className="m-0">
                         You can cancel you subscription by clicking{" "}
@@ -79,9 +77,9 @@ export default function SubscriptionDetails({
         )
       ) : (
         <>
-          <p className="m-0">You don't have any active plan.</p>
+          <p className="m-0">You do not have any active subscriptions.</p>
           <button onClick={showSubscriptionModal} className="btn btn-primary">
-            Get started
+            Subscribe
           </button>
         </>
       )}

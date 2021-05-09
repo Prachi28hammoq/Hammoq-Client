@@ -3,6 +3,7 @@ import Axios from "../../services/Axios";
 import "./signupmin.css";
 import Logo from "../../Components/images/hammock.svg";
 import { Link } from "react-router-dom";
+import legalDocuments from "../ClientLegal";
 //import { Document, Page } from 'react-pdf';
 
 class Signup extends Component {
@@ -22,22 +23,12 @@ class Signup extends Component {
       password: "",
       confirmPassword: "",
       referralCode: "",
+      PrivacyAgreementInfo: legalDocuments.PRIVACYAGREEMENT,
+      TermsOfServiceInfo: legalDocuments.TERMSOFSERVICE,
       isSubmitting: false,
       PrivacyAgreement: false,
-      TermsOfService: false,
-      samplePDF: {}
+      TermsOfService: false
     };
-  }
-
-  componentWillMount = () =>
-  {
-    //const TermsOfServiceDoc = new docx.Document();
-    //const PrivacyAgreementDoc = new docx.Document();
-    var privacyPolicyPDF =
-    Axios.get('https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_PrivacyPolicy_Apr28th2021.pdf')
-
-    var termsOfServicePDF =
-    Axios.get('https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_TermsOfService_Apr28th2021.pdf')
   }
 
   handleChange = (e) => {
@@ -55,7 +46,9 @@ class Signup extends Component {
     e.preventDefault();
     const {
       PrivacyAgreement,
+      PrivacyAgreementInfo,
       TermsOfService,
+      TermsOfServiceInfo,
       address1,
       address2,
       password,
@@ -222,7 +215,7 @@ class Signup extends Component {
             className="form-control mb-4"
             required
           ></input>
-          <a href="https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_TermsOfService_Apr28th2021.pdf" target="_blank">
+          <a href={legalDocuments.TERMSOFSERVICE} target="_blank">
             Terms Of Service
           </a>
           <div className="form-check">
@@ -236,7 +229,7 @@ class Signup extends Component {
               I HAVE READ AND AGREE TO THE TERMS OF SERVICE.
             </label>
           </div>
-          <a href="https://storage.googleapis.com/hammoq-assets/legalAssets/Current/Hammoq_PrivacyPolicy_Apr28th2021.pdf" target="_blank">
+          <a href={legalDocuments.PRIVACYAGREEMENT} target="_blank">
             Privacy Agreement
           </a>
           <div className="form-check">

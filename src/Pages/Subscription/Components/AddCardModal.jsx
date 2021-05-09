@@ -33,12 +33,8 @@ const AddCard = ({ props }) => {
         alert(token.error.message);
         setLoading(false);
       }
-      const res = await Axios.post("/payment/firstpayment", {
-        // email: this.state.email,
-        card_details: token,
-        price: 1, //$1
-      });
-      alert("Card added successfully.");
+      const res = await Axios.post("/payment/firstpayment", {card_details: token, price: 1});
+      alert("Card successfully added.");
       onHide();
       setLoading(false);
     } catch (err) {
@@ -74,7 +70,7 @@ const AddCard = ({ props }) => {
           <ul>
             <li>
               You will be charged $1 for adding this card, that amount will be
-              added to your balance.
+              added to your current balance.
             </li>
           </ul>
         </small>
