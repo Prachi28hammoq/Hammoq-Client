@@ -113,7 +113,7 @@ class Searchcart extends Component {
   handleSearchChange = (e) => {
     const { value } = e.target;
     const { products } = this.state;
-    this.setState({ searchedProducts: Search(products, value), search: value }, () => this.setState({searchedProducts: this.state.searchedProducts.filter((filtered) => {return filtered.status == true;})}));
+    this.setState({ searchedProducts: Search(products, value), search: value });
   };
 
 
