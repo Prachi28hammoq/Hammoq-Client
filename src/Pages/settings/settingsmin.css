@@ -3,13 +3,16 @@ body {
 }
 
 .settingsIt2 {
-  width: 270px;
+  width: 100%;
   margin: auto;
   padding-top: 50px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 #settingsBackground2 {
-  background-color: #52c4d3;
+  background-color: #007bff;
   border-radius: 5px;
   text-align: center;
   height: 65px;
@@ -18,38 +21,22 @@ body {
   padding-top: 10px;
 }
 
-@media (max-width: 411px) {
-  #settingsBackground2 {
-    border: 2px solid #e0e0e0;
-    border-radius: 5px;
-    text-align: center;
-    height: 75px;
-    width: 395px;
-    padding-top: 10px;
-    margin-left: 8px;
-    margin-right: 8px;
-  }
-
-  #profilephoto2 {
-    padding-top: 30px;
-    padding-left: 30px;
-    width: 83%;
-  }
-
-  .settingsIt2 {
-    width: 409px;
-    margin: auto;
-    padding-top: 50px;
-    text-align: center;
-  }
-}
 #profilephoto2 {
   padding-top: 30px;
-  padding-left: 30px;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#preferences {
+.MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff !important;
+}
+
+.MuiInputBase-root.Mui-disabled {
+  color: #000000 !important;
+}
+
+.preferences {
   display: inline;
 }
 

@@ -25,7 +25,6 @@ class Passwords extends Component {
     });
 
     Axios.get("/password/getstatus").then(({ data }) => {
-      console.log(data);
       this.setState({ Ebay: !data.Ebay });
       this.setState({ Poshmark: !data.Poshmark });
       this.setState({ Mercari: !data.Mercari });
@@ -59,7 +58,6 @@ class Passwords extends Component {
         password: password,
       })
         .then((response) => {
-          console.log(response,'ebay response')
           // let user = {
           //   website: website,
           //   username: username,
@@ -92,16 +90,6 @@ class Passwords extends Component {
     } else {
       alert("Fill up the details");
     }
-  };
-  handleeBaySubmit = () => {
-    Axios.get("/ebay/consent")
-      .then((response) => {
-        var authWindow = window.open(response.data.authURL, "_blank");
-      })
-
-      .catch((err) => {
-        console.log(err) || alert(JSON.stringify({ err: err }));
-      });
   };
 
   handleDelete =  async (id) => {
@@ -193,19 +181,21 @@ class Passwords extends Component {
                     onChange={this.handleChange}
                   />
                   <br />
-                  <div>
+                  <div style={{'display':'flex'}}>
                     <button
                       className="btn btn-danger mt-3"
                       onClick={this.handleSubmit}
                     >
                       Add
                     </button>
-                    <button
-                      className="btn btn-danger ml-2 mt-3"
-                      onClick={this.handleeBaySubmit}
-                    >
-                      Authorize eBay Access
-                    </button>
+                    <div style={{'flexGrow':'1'}}/>
+                    <Link to={`/accounts/ebayAccounts`}>
+                      <button
+                        className="btn btn-danger ml-2 mt-3"
+                      >
+                        Go To API Accounts
+                      </button>
+                    </Link>
                     {/* <small className="ml-2">
                       Note: For “Hammoq Lite” only eBay, Poshmark, and Mercari
                       are supported

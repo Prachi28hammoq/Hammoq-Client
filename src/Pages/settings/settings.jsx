@@ -3,6 +3,7 @@ import "./settingsmin.css";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import { Link } from "react-router-dom";
 import Axios from "../../services/Axios";
+import TextField from '@material-ui/core/TextField';
 
 class settings extends Component {
   constructor() {
@@ -104,35 +105,26 @@ class settings extends Component {
           savedCards={this.state.savedCards}
         />
         <div className="row" id="profilephoto2">
-            <form onSubmit={this.editinfo} className="modal-body">
-                <i className="fa fa-user col-2 mt-2" aria-hidden="true"></i>
-                <input
-                  type="text"
-                  className="form-control border-0 rounded-1-right mb-1 w-20 align-middle pl-1 bg-white"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-lg"
-                  placeholder="Username"
-                  required
-                  name="username"
-                  onChange={this.handleChange}
-                  value={username}
-                ></input>
-                <i className="fa fa-envelope col-2" aria-hidden="true"></i>
-                <input
-                  type="text"
-                  className="form-control border-0 rounded-1-left mb-2 align-middle pl-1 bg-white"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-lg"
-                  placeholder="email"
-                  required
-                  name="email"
-                  onChange={this.handleChange}
-                  value={email}
-                ></input>
-                  <button type="submit" className="btn btn-primary">
-                    <i className="fa fa-pencil d-inline mr-1">Edit</i>
-                  </button>
-            </form>
+          <TextField
+            variant="outlined"
+            type="text"
+            className="profileDataField"
+            placeholder="Username"
+            disabled
+            name="username"
+            value={username}
+            InputProps={{startAdornment: (<i className="fa fa-user col-2 mt-2" aria-hidden="true"></i>)}}
+          ></TextField>
+          <TextField
+            variant="outlined"
+            type="text"
+            className="profileDataField"
+            placeholder="email"
+            disabled
+            name="email"
+            value={email}
+            InputProps={{startAdornment: (<i className="fa fa-envelope col-2" aria-hidden="true"></i>)}}
+          ></TextField>
         </div>
 
         <a href="/transactions" className="row" id="settingsBackground2">
@@ -203,7 +195,7 @@ class settings extends Component {
             <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
-
+{/* 
         <Link to="/config" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
@@ -212,13 +204,14 @@ class settings extends Component {
               aria-hidden="true"
             ></i>
           </div>
-          <div className="col-6">
+         <div className="col-6">
             <h6 className="paddingfornames">Config</h6>
           </div>
           <div className="col-3">
             <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
+*/}
         <Link to="/accounts/ebayAccounts" className="row" id="settingsBackground2">
           <div className="col-3">
             <i

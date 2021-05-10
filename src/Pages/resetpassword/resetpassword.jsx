@@ -51,62 +51,52 @@ class resetpassword extends Component {
     //const { oldp, newp } = this.state;
     return (
       <div className="settingsIt">
-        <div className="row" id="profilephoto">
-          <div className="col-6">
-            <input type="checkbox" onClick={this.show} />
-            Show/Hide
-            <form onSubmit={this.reset} className="modal-body">
-              <div className="row">
-                <i className="fa fa-user col-2 mt-2" aria-hidden="true"></i>
-
-                <input
-                  type={this.state.hidden ? "password" : "text"}
-                  className="form-control border-1 col-10 w-100 rounded-1-right mb-2 align-middle pl-2 bg-white"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-lg"
-                  placeholder="Old password"
-                  required
-                  name="oldp"
-                  onChange={this.handleChange}
-                  value={this.state.oldp}
-                ></input>
-              </div>
-              <div className="row">
-                <i className="fa fa-lock col-2" aria-hidden="true"></i>
-                <input
-                  type={this.state.hidden ? "password" : "text"}
-                  className="form-control border-1 col-10 w-100 rounded-1-right mb-2 align-middle pl-2 bg-white"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-lg"
-                  placeholder="New Password"
-                  required
-                  name="newp"
-                  onChange={this.handleChange}
-                  value={this.state.newp}
-                ></input>
-              </div>
-              <div className="row">
-                <i className="fa fa-lock col-2" aria-hidden="true"></i>
-                <input
-                  type={this.state.hidden ? "password" : "text"}
-                  className="form-control border-1 col-10 w-100 rounded-1-right mb-2 align-middle pl-2 bg-white"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-lg"
-                  placeholder="Confirm Password"
-                  required
-                  name="cnewp"
-                  onChange={this.handleChange}
-                  value={this.state.cnewp}
-                ></input>
-              </div>
-
-              <button type="submit" className="btn btn-primary">
-                Confirm Change
-              </button>
-            </form>
-          </div>
+        <form onSubmit={this.reset}>
+        <div className="dataRow">
+        <label> Show/Hide: <input type="checkbox" onClick={this.show}/></label>
         </div>
-      </div>
+        <div className="dataRow">
+          <i className="fa fa-user" aria-hidden="true"></i>
+          <input
+            type={this.state.hidden ? "password" : "text"}
+            className="dataFieldInput"
+            placeholder="Old password"
+            required
+            name="oldp"
+            onChange={this.handleChange}
+            value={this.state.oldp}
+          ></input>
+        </div>
+        <div className="dataRow">
+          <i className="fa fa-lock" aria-hidden="true"></i>
+          <input
+            type={this.state.hidden ? "password" : "text"}
+            className="dataFieldInput"
+            placeholder="New Password"
+            required
+            name="newp"
+            onChange={this.handleChange}
+            value={this.state.newp}
+          ></input>
+        </div>
+        <div className="dataRow">
+          <i className="fa fa-lock" aria-hidden="true"></i>
+          <input
+            type={this.state.hidden ? "password" : "text"}
+            className="dataFieldInput"
+            placeholder="Confirm Password"
+            required
+            name="cnewp"
+            onChange={this.handleChange}
+            value={this.state.cnewp}
+          ></input>
+        </div>
+
+        <button type="submit" className="btn btn-primary dataButton">
+          Confirm Change
+        </button>
+      </form>
+    </div>
     );
   }
 }
