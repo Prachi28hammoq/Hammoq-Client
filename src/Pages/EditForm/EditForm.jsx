@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import ReactDOM from 'react-dom';
 import {AdvanceListing} from "@hammoq/hammoq-recycledcomponents";
-import Axios, { assetsURL } from "../../services/Axios";
+import Axios, { assetsURL, assetsThumbnailURL } from "../../services/Axios";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -28,6 +28,7 @@ class EditForm extends Component {
     </div>
     <AdvanceListing
     assetsURL={assetsURL}
+    assetsThumbnailURL={assetsThumbnailURL}
     Axios={Axios}
     productid={id}
     />

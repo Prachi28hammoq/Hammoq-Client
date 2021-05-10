@@ -2,6 +2,7 @@ import Axios from "axios";
 
 var baseURL = "http://localhost:8000/api";
 var assetsURL = "https://hammoq-assets.storage.googleapis.com/assets/";
+var assetsThumbnailURL = "https://hammoq-assets.storage.googleapis.com/assetsThumbnail/";
 
 if(process.env.REACT_APP_STAGE === 'devlocal')
 {
@@ -36,4 +37,4 @@ if(process.env.REACT_APP_STAGE !== 'devlocal')
 }
 
 export default Axios;
-export { baseURL, assetsURL };
+export { baseURL, assetsURL, assetsThumbnailURL };

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./searchcartmin.css";
 import Search from "../utils/Search";
-import Axios, { assetsURL } from "../../services/Axios";
+import Axios, { assetsURL, assetsThumbnailURL } from "../../services/Axios";
 import LoadingSpinner from "../utils/loader";
 import Pagination from "../../Components/pagination/Pagination";
 import Badge from "@material-ui/core/Badge";
@@ -287,17 +287,17 @@ class Searchcart extends Component {
           </thead>
           <tbody>            
             {(newproducts && newproducts.length > 0) ? (newproducts.map((product, idx) => {
+             const thumbnailPath = product.images.default_image ? (product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "http" && product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "https" ? assetsThumbnailURL + product.images.default_image : product.images.default_image) : ("");
+             const fullSizePath = product.images.default_image ? (product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "http" && product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "https" ? assetsURL + product.images.default_image : product.images.default_image) : ("");
              return(
              <React.Fragment key={nanoid(4)}>
              <tr>
                <td>{idx + 1 + (page - 1) * rowsPerPage}</td>
                <td>
                 <img
-                  src={product.images.default_image ?
-                       (product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "http" && 
-                       product.images.default_image.substring(0, product.images.default_image.indexOf(":")) !== "https" ? 
-                       assetsURL + product.images.default_image : product.images.default_image) : ("")}
+                  src={thumbnailPath}
                   className="product-img"
+                  onError={(e) => {if(e.target.src !== fullSizePath) {e.target.src = fullSizePath} e.target.onerror = null;}}
                   alt="Default Image Missing"
                 />
                 </td>
