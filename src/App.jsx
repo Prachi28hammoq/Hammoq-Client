@@ -4,7 +4,7 @@ import {
   Route,
   Redirect,
   withRouter,
-  Switch,
+  Switch
 } from "react-router-dom";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./App.css";
@@ -34,6 +34,12 @@ import BasicForm from "./Pages/Basic/BasicForm";
 import EditForm from "./Pages/EditForm/EditForm";
 import Accounts from "./Pages/Accounts/Accounts";
 import ClientMessagesProvider from '../src/ContextProviders/ClientMessagesProvider';
+
+import { createBrowserHistory } from 'history';
+import tokenChecker from './services/interceptor';
+
+const history = createBrowserHistory();
+tokenChecker.setupInterceptors(history);
 
 const Routes = withRouter((props) => {
   const { pathname } = props.history.location;

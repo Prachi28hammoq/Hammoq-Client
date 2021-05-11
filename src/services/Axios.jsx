@@ -1,5 +1,4 @@
 import Axios from "axios";
-import {Redirect} from "react-router-dom";
 
 var baseURL = "http://localhost:8000/api";
 var assetsURL = "https://hammoq-assets.storage.googleapis.com/assets/";
@@ -36,17 +35,6 @@ if(process.env.REACT_APP_STAGE !== 'devlocal')
 {
 	Axios.defaults.withCredentials = true
 }
-
-Axios.interceptors.response.use(function (response) {
-    return response;
-  }, function (error) {
-  	if(error && error.response && error.response.data && error.response.data.message === 'Invalid Token.') 
-  		{	
-  			localStorage.removeItem("token");
-			<Redirect to="/signin" />
-  		}
-    return Promise.reject(error);
-  });
 
 export default Axios;
 export { baseURL, assetsURL, assetsThumbnailURL };
