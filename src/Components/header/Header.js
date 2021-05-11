@@ -43,7 +43,7 @@ const Header = (props) => {
 
       await Axios.get("/tokenversion")
                  .then(({ data }) => {if(!data.valid) logoutHandler()})
-                 .catch((err) => console.log(err));
+                 .catch((err) => {if(err.response.data.message === 'Invalid Token.') this.logout();});
       }
     }
 
