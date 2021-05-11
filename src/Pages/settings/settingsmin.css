@@ -28,11 +28,11 @@ body {
   align-items: center;
 }
 
-.MuiOutlinedInput-notchedOutline {
+.profileDataField .MuiOutlinedInput-notchedOutline {
   border-color: #ffffff !important;
 }
 
-.MuiInputBase-root.Mui-disabled {
+.profileDataField .MuiInputBase-root.Mui-disabled {
   color: #000000 !important;
 }
 
