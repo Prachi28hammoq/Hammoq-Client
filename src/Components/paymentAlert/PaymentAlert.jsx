@@ -58,7 +58,7 @@ export default function AlertDialog({ open, handleClose }) {
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
 
-  const handelCardDelete = async (cardId) => {
+  const handleCardDelete = async (cardId) => {
     const confirm = window.confirm(
       "Are you sure, you want to remove this card?"
     );
@@ -116,7 +116,7 @@ export default function AlertDialog({ open, handleClose }) {
                   </div>
                   <div
                     className="col-2"
-                    onClick={() => handelCardDelete(card._id)}
+                    onClick={() => handleCardDelete(card._id)}
                   >
                     <BsFillTrashFill />
                   </div>
@@ -157,8 +157,7 @@ export default function AlertDialog({ open, handleClose }) {
               <div className="row d-flex justify-content-center">
                 {" "}
                 <ReCAPTCHA
-                  sitekey="6LeB67kaAAAAAD6pFtXtvzLRqE6VXuyT6uCfIzAq"
-                  //sitekey="6Lc6LMgZAAAAADLubDJkLQMTfnmLKbhcZjzJfdGa"
+                  sitekey="6Lc6LMgZAAAAADLubDJkLQMTfnmLKbhcZjzJfdGa"
                   onChange={callback}
                 />
               </div>

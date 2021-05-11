@@ -21,32 +21,38 @@ export default function SubscriptionModal(props) {
 const PaymentModal = ({ props }) => {
   const [loading, setLoading] = useState(false);
   const elements = useElements(),
-    stripe = useStripe();
-
+    stripe = useStripe(),
+    { onHide, getSubscriptionDetails, setMessage } = props;
+    
   const handleSubscription = async () => {
     try {
       setLoading(true);
       const card = elements.getElement(CardElement),
-        { onHide, getSubscriptionDetails, setMessage } = props,
         token = await stripe.createToken(card);
       if (token.error) {
         setLoading(false);
         alert(token.error.message);
       } else {
         const tokenId = token.token.id,
-        response = await Axios.post("/subscription/", {tokenId});
+          response = await Axios.post("/subscription/", {
+            tokenId,
+          });
         getSubscriptionDetails();
         setMessage({
-          msg: "Subscribed Successfully!",
+          msg: "Subscribed successfully!",
           show: true,
-          variant: "success",
+          varient: "success",
         });
         onHide();
         setLoading(false);
       }
     } catch (err) {
       setLoading(false);
-      
+      setMessage({
+        msg: "Error when subscribing!",
+        show: true,
+        varient: "danger",
+      });
     }
   };
 

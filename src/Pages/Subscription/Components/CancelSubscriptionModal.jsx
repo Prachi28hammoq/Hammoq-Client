@@ -24,7 +24,12 @@ export default function CancelSubscriptionModal(props) {
     } 
     catch (err) 
     {
-      alert("There is a error when cancelling the subscription, please try again after 2 minutes or please contact customer support.");
+      setMessage({
+        varient: "danger",
+        show: true,
+        msg:
+          "There is a error when cancelling the subscription, please try again after 2 minutes or please contact customer support.",
+      });
     }
   };
   return (

@@ -103,7 +103,7 @@ export default function TransactionCard() {
                   return (
                     <tr>
                       <td>{idx + 1}</td>
-                      <td>{new Date(trans.date).toDateString()}</td>
+                      <td>{new Date(trans.date).toLocaleString()}</td>
                       <td>{trans.amount.toFixed(2)}</td>
                       <td>
                         {isURL(trans.receipt_url) ? (
