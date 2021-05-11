@@ -43,7 +43,7 @@ Axios.interceptors.response.use(function (response) {
   	if(error && error.response && error.response.data && error.response.data.message === 'Invalid Token.') 
   		{	
   			localStorage.removeItem("token");
-			<Redirect to="signin" />
+			<Redirect to="/signin" />
   		}
     return Promise.reject(error);
   });
