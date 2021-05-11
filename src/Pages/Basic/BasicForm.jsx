@@ -8,7 +8,6 @@ import LoadingSpinner from "../utils/loader";
 import { assetsURL, socketCon } from "../../services/Axios";
 import io from "socket.io-client";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
-import imageCompression from "browser-image-compression";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
