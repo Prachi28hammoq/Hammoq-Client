@@ -33,9 +33,8 @@ const PaymentModal = ({ props }) => {
         setLoading(false);
         alert(token.error.message);
       } else {
-        const response = await Axios.post("/subscription/", {
-          token,
-        });
+        const tokenId = token.token.id,
+        response = await Axios.post("/subscription/", {tokenId});
         getSubscriptionDetails();
         setMessage({
           msg: "Subscribed Successfully!",
@@ -68,9 +67,9 @@ const PaymentModal = ({ props }) => {
       <Modal.Body>
         {/* <h4>Centered Modal</h4> */}
         <p>
-          This is a subscription of $99 a month. 99$ will be added to your
+          This is a subscription of $99 a month. $99 will be added to your
           current account balance for service costs. If the balance is not used, it will not be refunded or usable the next month.
-          Any extra balance added other than the initial 99$ will stay in your account and will be accessible the next month.
+          Any extra balance added other than the initial $99 will stay in your account and will be accessible the next month.
         </p>
         <hr />
         <CardElement />
