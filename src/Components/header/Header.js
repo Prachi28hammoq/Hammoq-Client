@@ -5,8 +5,6 @@ import Logo from "../images/hammock.svg";
 import Axios from "../../services/Axios";
 import { ClientMessagesContext } from '../../ContextProviders/ClientMessagesProvider';
 
-let refreshTokenInterval;
-
 const Header = (props) => {
 
   const { contextUnreadMessagesCount, setContextClientId } = useContext(ClientMessagesContext);
@@ -24,9 +22,6 @@ const Header = (props) => {
 
       if (localStorage.getItem("token")) {
 
-        refreshUserTokenForAllEbayAccounts();
-        refreshTokenInterval = setInterval(() => refreshUserTokenForAllEbayAccounts(), 7100000);
-
         await Axios.get("/clientdetails/headerinfo")
                    .then(({ data }) => {
                       if (parseInt(data.balance) < 5) setOpen(true);
@@ -40,30 +35,17 @@ const Header = (props) => {
                           localStorage.setItem("isSubscribed", data.isSubscribed);
                     })
                     .catch((err) => console.log(err));
-
-      await Axios.get("/tokenversion")
-                 .then(({ data }) => {if(!data.valid) logoutHandler()})
-                 .catch((err) => {if(err.response.data.message === 'Invalid Token.') this.logout();});
       }
     }
 
     mountComponent();
     setClientMessageSeenCount(contextUnreadMessagesCount);
 
-    return () => {
-      clearInterval(refreshTokenInterval);
-    };
-
   }, []);
 
   useEffect(() => {
     setClientMessageSeenCount(contextUnreadMessagesCount);
   }, [contextUnreadMessagesCount])
-
-
-  const refreshUserTokenForAllEbayAccounts = async () => {
-    await Axios.post('/ebayAuth/refreshtokens/');
-  }
 
   const logoutHandler = () => {
     localStorage.removeItem("token");
