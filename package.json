@@ -14,7 +14,6 @@
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.14.0",
     "axios": "^0.21.1",
-    "bootstrap": "^4.6.0",
     "canvas": "^2.7.0",
     "chart.js": "^2.9.4",
     "font-awesome": "^4.7.0",

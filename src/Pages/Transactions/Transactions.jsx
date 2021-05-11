@@ -1,5 +1,4 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
 import "./Transactions.css";
 import Axios from "../../services/Axios";
 import { nanoid } from "nanoid";
