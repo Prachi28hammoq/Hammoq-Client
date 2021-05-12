@@ -59,7 +59,7 @@ class Searchcart extends Component {
                                             });
                               if(!data.data || (data.count.inventoryCount === 0 && data.count.draftCount === 0 && data.count.submittedCount === 0))
                               {
-                                window.open("No Products, Please Add One....");
+                                window.alert("No Products, Please Add One....");
                                 window.open("/basic", "_self");
                               }
 
@@ -67,7 +67,7 @@ class Searchcart extends Component {
       })
       .catch((error) => {
           this.setState({ loading: false });
-          window.open("No Products, Please Add One....");
+          window.alert("No Products, Please Add One....");
           window.open("/basic", "_self");
           console.log(error);
         });
