@@ -6,7 +6,6 @@ import CancleSubscriptionModal from "./Components/CancelSubscriptionModal";
 import SubscriptionDetails from "./Components/SubscriptionDetails";
 import Alert from "react-bootstrap/Alert";
 import TransactionCard from "./Components/TransactionCard";
-import PaymentCard from "./Components/PaymentCard";
 ////////////////////////////////////////////////////////////////////////////////////
 export default function Subscription() {
   const [message, setMessage] = useState({
@@ -112,8 +111,6 @@ export default function Subscription() {
         {message.msg}
       </Alert>
 
-      <PaymentCard/>
-
       <SubscriptionDetails
         subscriptions={subscriptions}
         showSubscriptionModal={() =>
@@ -124,6 +121,7 @@ export default function Subscription() {
         }
         handleCancelSubscription={handleCancelSubscription}
       />
+
       <TransactionCard />
 
       <SubscriptionModal

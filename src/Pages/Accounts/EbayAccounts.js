@@ -83,9 +83,7 @@ const EbayAccounts = (props) => {
   }*/
 
   const getAllEbayAccountsLinkedToThisHammoqUser = async () => {
-
     let res = await Axios.get('/ebayAuth/ebayaccounts');
-
     return res?.data || [];
   }
 
@@ -95,39 +93,29 @@ const EbayAccounts = (props) => {
       .then((response) => {
         window.open(response.data.authURL, "_blank");
       })
-
       .catch((err) => {
         console.log(err) || alert(JSON.stringify({ err: err }));
       });
   }
 
   const sendAuthorizationToken = async (location) => {
-
     if (location.pathname === '/accounts/ebayAccounts' && location.search && location.search?.length > 0) {
       let res = await Axios.post('/ebayAuth/ebayaccounts' + location.search);
-      if (res.data)
-        setTimeout(() => { window.close() }, 100);
+      if (res.data) setTimeout(() => { window.close() }, 100);
     }
   }
 
   const refreshEbayUserToken = async (ebayUserName) => {
-
     await Axios.post('/ebayAuth/refreshtokens/' + ebayUserName);
-
   }
 
   const removeEbayAccountFromHammoqAccount = async (ebayUserName) => {
-
     await Axios.delete('/ebayAuth/ebayaccounts/' + ebayUserName);
-
     setEbayAccounts(ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName !== ebayUserName));
-
   }
 
   const refreshUserTokenForAllEbayAccounts = async () => {
-
     await Axios.post('/ebayAuth/refreshtokens/');
-
   }
 
   return (
