@@ -66,6 +66,9 @@ class Searchcart extends Component {
           this.setState({ loading: false });
       })
       .catch((error) => {
+          this.setState({ loading: false });
+          window.open("No Products, Please Add One....");
+          window.open("/basic", "_self");
           console.log(error);
         });
 
