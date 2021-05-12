@@ -29,7 +29,7 @@ export default function SubscriptionDetails({
             current_period_start,
             cancel_at_period_end,
             id,
-            subscription: { amount },
+            plan: { amount },
           }) => {
             return (
               <div
