@@ -23,11 +23,9 @@ class Signup extends Component {
       password: "",
       confirmPassword: "",
       referralCode: "",
-      PrivacyAgreementInfo: legalDocuments.PRIVACYAGREEMENT,
-      TermsOfServiceInfo: legalDocuments.TERMSOFSERVICE,
       isSubmitting: false,
-      PrivacyAgreement: false,
-      TermsOfService: false
+      privacyAgreement: false,
+      termsOfService: false
     };
   }
 
@@ -45,10 +43,8 @@ class Signup extends Component {
     this.setState({ isSubmitting: true });
     e.preventDefault();
     const {
-      PrivacyAgreement,
-      PrivacyAgreementInfo,
-      TermsOfService,
-      TermsOfServiceInfo,
+      privacyAgreement,
+      termsOfService,
       address1,
       address2,
       password,
@@ -64,12 +60,12 @@ class Signup extends Component {
       referralCode
     } = this.state;
 
-    if (!PrivacyAgreement) {
+    if (!privacyAgreement) {
       this.setState({ isSubmitting: false });
       return alert("Please Accept The Privacy Ageement To Continue.");
     }
 
-    if (!TermsOfService) {
+    if (!termsOfService) {
       this.setState({ isSubmitting: false });
       return alert("Please Accept The Terms Of Service To Continue.");
     }
@@ -117,8 +113,8 @@ class Signup extends Component {
 
   render() {
     const {
-      PrivacyAgreement,
-      TermsOfService,
+      privacyAgreement,
+      termsOfService,
       firstName,
       lastName,
       address1,
@@ -221,7 +217,7 @@ class Signup extends Component {
           <div className="form-check">
             <input
               type="checkbox"
-              name="TermsOfService"
+              name="termsOfService"
               onChange={this.handleToggleCheckbox}
               className="form-check-input"
             ></input>
@@ -235,7 +231,7 @@ class Signup extends Component {
           <div className="form-check">
             <input
               type="checkbox"
-              name="PrivacyAgreement"
+              name="privacyAgreement"
               onChange={this.handleToggleCheckbox}
               className="form-check-input"
             ></input>
