@@ -24,8 +24,8 @@ class Signup extends Component {
       confirmPassword: "",
       referralCode: "",
       isSubmitting: false,
-      privacyAgreement: false,
-      termsOfService: false
+      privacyagreement: false,
+      termsofservice: false
     };
   }
 
@@ -43,8 +43,8 @@ class Signup extends Component {
     this.setState({ isSubmitting: true });
     e.preventDefault();
     const {
-      privacyAgreement,
-      termsOfService,
+      privacyagreement,
+      termsofservice,
       address1,
       address2,
       password,
@@ -60,12 +60,12 @@ class Signup extends Component {
       referralCode
     } = this.state;
 
-    if (!privacyAgreement) {
+    if (!privacyagreement) {
       this.setState({ isSubmitting: false });
       return alert("Please Accept The Privacy Ageement To Continue.");
     }
 
-    if (!termsOfService) {
+    if (!termsofservice) {
       this.setState({ isSubmitting: false });
       return alert("Please Accept The Terms Of Service To Continue.");
     }
@@ -113,8 +113,8 @@ class Signup extends Component {
 
   render() {
     const {
-      privacyAgreement,
-      termsOfService,
+      privacyagreement,
+      termsofservice,
       firstName,
       lastName,
       address1,
@@ -217,7 +217,7 @@ class Signup extends Component {
           <div className="form-check">
             <input
               type="checkbox"
-              name="termsOfService"
+              name="termsofservice"
               onChange={this.handleToggleCheckbox}
               className="form-check-input"
             ></input>
@@ -231,7 +231,7 @@ class Signup extends Component {
           <div className="form-check">
             <input
               type="checkbox"
-              name="privacyAgreement"
+              name="privacyagreement"
               onChange={this.handleToggleCheckbox}
               className="form-check-input"
             ></input>
