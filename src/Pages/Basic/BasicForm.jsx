@@ -251,7 +251,8 @@ class BasicForm extends Component {
         this.setState({ progress : 98})
         //let productId = response.data.products ? response.data.products[response.data.products.length - 1]._id : response.data.products;
         //if (templateId) Axios.post("/producttemplate", {productId: productId, templateId: templateId}).then((response) => {});
-        window.open("/basic", "_self");
+        window.alert("Product was successfully uploaded.");
+        this.setState({isSubmitting: false, progress: 10});
       })
       .catch((err) => {
         this.setState({isSubmitting: false});
