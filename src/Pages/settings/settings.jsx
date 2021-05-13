@@ -127,12 +127,12 @@ class settings extends Component {
           ></TextField>
         </div>
 
-        <a href="/transactions" className="row" id="settingsBackground2">
+        <Link to="/transactions" className="row" id="settingsBackground2">
           <div className="col-3">
             <i className="fa fa-user-circle fa-2x" id=""></i>
           </div>
           <div className="col-6">
-            <h6 className="paddingfornames">Payment Details</h6>
+            <h6 className="paddingfornames">Transactions</h6>
           </div>
           <div className="col-3">
             <i
@@ -140,7 +140,22 @@ class settings extends Component {
               aria-hidden="true"
             ></i>
           </div>
-        </a>
+        </Link>
+
+        <Link to="/subscription" className="row" id="settingsBackground2">
+          <div className="col-3">
+            <i className="fa fa-sync fa-2x" id=""></i>
+          </div>
+          <div className="col-6">
+            <h6 className="paddingfornames">Subscriptions</h6>
+          </div>
+          <div className="col-3">
+            <i
+              className="fa fa-arrow-circle-right fa-2x t backgroundarrow"
+              aria-hidden="true"
+            ></i>
+          </div>
+        </Link>
 
         <Link to="/addpayment" className="row" id="settingsBackground2">
           <div className="col-3">

@@ -19,7 +19,7 @@ export default function SubscriptionDetails({
         className="row col-12 m-0 my-1"
         style={{ borderBottom: "1px #eff0f2 solid" }}
       >
-        <h2>Subscription details</h2>
+        <h2>Subscription Details</h2>
       </div>
       {subscriptions.length > 0 ? (
         subscriptions.map(
@@ -44,7 +44,8 @@ export default function SubscriptionDetails({
                 </div>
                 <div className="col-4">Amount : </div>
                 <div className="col-8">${amount / 100}</div>
-                <div className="col-12">
+                <div className="col-4">Status : </div>
+                <div className="col-8">
                   {cancel_at_period_end ? (
                     <p className="m-0">
                       This subscription will be inactive on {current_period_end}.
@@ -55,7 +56,7 @@ export default function SubscriptionDetails({
                         This subscription will automatically renew on {current_period_end}.
                       </p>
                       <small className="m-0">
-                        You can cancel you subscription by clicking{" "}
+                        You can cancel your subscription by clicking{" "}
                         <span
                           style={{
                             cursor: "pointer",
