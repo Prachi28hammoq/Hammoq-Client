@@ -196,7 +196,7 @@ class BasicForm extends Component {
       else 
       {
         window.alert("Low Payment and No Card Added, Please add a card and then add to your balance.");
-        return window.open("/subscription", "_self");
+        return window.open("/addpayment", "_self");
       }
     }
 

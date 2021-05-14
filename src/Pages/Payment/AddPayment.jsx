@@ -44,7 +44,7 @@ class AddPayment extends Component {
             if (price === 1) {
               alert("$1 has been added");
               this.setState({ loading: false });
-              window.open("/setting", "_self");
+              window.open("/basic", "_self");
             } else {
               alert("$100 has been added");
               this.setState({ loading: false });
