@@ -17,8 +17,13 @@ body {
   text-align: center;
   height: 65px;
   width: 300px;
+  color:#000000;
+  align-content: center;
+}
+
+#settingsBackground2:hover{
   color:#ffffff;
-  padding-top: 10px;
+
 }
 
 #profilephoto2 {

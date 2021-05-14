@@ -85,66 +85,43 @@ const Header = (props) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav ml-auto">
-            {/* <li className="nav-item dropdown">
-              <li className="nav-item">
-                <a
-                  href="/basic"
-                  className="nav-link"
-                  style={{ color: "white" }}
-                >
-                  Listing
-                </a>
-              </li>
-            </li> */}
-
             <li className="nav-item">
-              <Link to="/basic" className="nav-link" style={{ color: "white" }}>
+              <a href="/basic" className="nav-link" style={{'color':'black'}}>
+                <i className="fas fa-hand-holding-usd mr-1"></i>
                 Basic Listing
-              </Link>
+              </a>
             </li>
             <li className="nav-item">
-              <Link
-                to="/messages"
-                className="nav-link"
-                style={{ color: "white" }}
-              >
+              <a href="/messages" className="nav-link" style={{'color':'black'}}>
+                <i className="fas fa-envelope mr-1"></i>
                 Messages({clientMessageSeenCount})
-              </Link>
+              </a>
             </li>
 
-{/*<li className="nav-item">
+            {/*<li className="nav-item">
               <a
                 href="/templates"
                 className="nav-link"
-                style={{ color: "white" }}
               >
                 Templates
               </a>
             </li>*/}
-            {/* <li className="nav-item">
-              <a
-                href="/accounts"
-                className="nav-link"
-                style={{ color: "white" }}
-              >
-                Accounts
-              </a>
-            </li> */}
             <li className="nav-item">
-              <a
-                href="/accounting"
-                className="nav-link"
-                style={{ color: "white" }}
-              >
+              <a href="/accounting" className="nav-link" style={{'color':'black'}}>
+                <i className="fas fa-file-invoice-dollar mr-1"></i>
                 Accounting
               </a>
             </li>
-            <a href="/setting" className="nav-link" style={{ color: "white" }}>
-              Setting
-            </a>
+            <li className="nav-item">
+              <a href="/setting" className="nav-link" style={{'color':'black'}}>
+              <i className="fas fa-user-cog mr-1"></i>
+                Setting
+              </a>
+            </li>
             <li className="nav-item">
               <span
                 onClick={logoutHandler}
+                style={{'color':'red'}}
                 className="nav-link c-pointer text-danger"
               >
                 <div className="fas fa-sign-out-alt mr-1"></div>
