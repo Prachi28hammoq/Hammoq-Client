@@ -110,7 +110,7 @@ class BasicForm extends Component {
         else if (parseInt(data.balance) < 5 && data.savedCards.length == 0) 
         {
           window.alert("Low Payment and No card added, Please add a card and then add payment..");
-          window.open("/subscription", "_self");
+          window.open("/addpayment", "_self");
         }
         this.setState({bal: data.balance, savedCards: data.savedCards, cid: data._id});
       })
