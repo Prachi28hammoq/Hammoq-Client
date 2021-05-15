@@ -252,7 +252,7 @@ class BasicForm extends Component {
       Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}}).then((response) => {
         //let productId = response.data.products ? response.data.products[response.data.products.length - 1]._id : response.data.products;
         //if (templateId) Axios.post("/producttemplate", {productId: productId, templateId: templateId}).then((response) => {});
-        this.setState({isSubmitting: false, images: imagesSchema});
+        this.setState({isSubmitting: false, progress:10, images: imagesSchema});
         window.alert("Product was successfully uploaded.");
         
       })
