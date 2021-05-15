@@ -16,6 +16,21 @@ import {nanoid} from "nanoid";
 
 const $ = window.$;
 
+let imagesSchema = [
+        { key: "default_image", label: "Default", img: "" },
+        { key: "brand_image", label: "Brand", img: "" },
+        { key: "model_image", label: "Model", img: "" },
+        { key: "side1_image", label: "Side", img: "" },
+        { key: "side2_image", label: "Side", img: "" },
+        { key: "front_image", label: "Front", img: "" },
+        { key: "back_image", label: "Back", img: "" },
+        { key: "condition1_image", label: "Condition", img: "" },
+        { key: "condition2_image", label: "Condition", img: "" },
+        { key: "condition3_image", label: "Condition", img: "" },
+        { key: "condition4_image", label: "Condition", img: "" },
+        { key: "condition5_image", label: "Image Tag", img: "" },
+      ];
+
 class BasicForm extends Component {
   constructor(props) {
     super(props);
@@ -42,20 +57,7 @@ class BasicForm extends Component {
       progress: 10,
       category: "",
       isSubmitting: false,
-      images: [
-        { key: "default_image", label: "Default", img: "" },
-        { key: "brand_image", label: "Brand", img: "" },
-        { key: "model_image", label: "Model", img: "" },
-        { key: "side1_image", label: "Side", img: "" },
-        { key: "side2_image", label: "Side", img: "" },
-        { key: "front_image", label: "Front", img: "" },
-        { key: "back_image", label: "Back", img: "" },
-        { key: "condition1_image", label: "Condition", img: "" },
-        { key: "condition2_image", label: "Condition", img: "" },
-        { key: "condition3_image", label: "Condition", img: "" },
-        { key: "condition4_image", label: "Condition", img: "" },
-        { key: "condition5_image", label: "Image Tag", img: "" },
-      ],
+      images: imagesSchema,
       bal: 0,
       rates: {},
       fullimg: "",
@@ -252,7 +254,7 @@ class BasicForm extends Component {
         //let productId = response.data.products ? response.data.products[response.data.products.length - 1]._id : response.data.products;
         //if (templateId) Axios.post("/producttemplate", {productId: productId, templateId: templateId}).then((response) => {});
         window.alert("Product was successfully uploaded.");
-        this.setState({isSubmitting: false, progress: 10});
+        this.setState({isSubmitting: false, progress: 10, images: imagesSchema});
       })
       .catch((err) => {
         this.setState({isSubmitting: false});
