@@ -94,7 +94,7 @@ class BasicForm extends Component {
     const { cid, images } = this.state;
     var { marketPlaces, hasMarketPlaces } = this.state;
     let marketList = localStorage.getItem("marketSetting");
-    marketList = marketList.split(",");
+    if(marketList !== null) marketList = marketList.split(",");
 
     Axios.get("/password/getstatus").then(({ data }) => {
       for(let item in data)
