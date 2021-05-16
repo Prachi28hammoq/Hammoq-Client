@@ -52,6 +52,8 @@ const Header = (props) => {
     localStorage.removeItem("isSubscribed");
     localStorage.removeItem("customerName");
     localStorage.removeItem("cid");
+    localStorage.removeItem("condSetting");
+    localStorage.removeItem("marketSetting");
     window.open("/login", "_self");
   };
 

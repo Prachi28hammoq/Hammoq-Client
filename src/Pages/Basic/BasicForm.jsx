@@ -73,17 +73,35 @@ class BasicForm extends Component {
       isMarketPlaceSelected: false,
       delist: false
     };
+    this.baseState = this.state;
     this.handleChange.bind(this);
   }
 
   componentDidMount = () => {
     const { cid, images } = this.state;
     var { marketPlaces, hasMarketPlaces } = this.state;
+    let marketList = localStorage.getItem("marketSetting");
+    marketList = marketList.split(",");
 
     Axios.get("/password/getstatus").then(({ data }) => {
       for(let item in data)
       {
-        let website = {"Name":item,"Status":false}
+        let website = {"Name":item,"Status":false};
+        if(marketList !== null)
+        {
+          for(let entry in marketList)
+          {
+              if(marketList[entry] === item) 
+              {
+                website = {"Name":item,"Status":true};
+              }
+              else if(marketList[entry] === 'delist')
+              {
+                this.setState({delist:true})
+              }
+          }
+        }
+
         marketPlaces.push(website);
         hasMarketPlaces = true;
       }
@@ -117,6 +135,12 @@ class BasicForm extends Component {
         this.setState({bal: data.balance, savedCards: data.savedCards, cid: data._id});
       })
       .catch((err) => console.log(err));
+
+      let condSetting = localStorage.getItem("condSetting");
+      if(condSetting !== null)
+      {
+        this.setState({itemCondition:condSetting});
+      }
   };
 
   fetchimg = (src) => {
@@ -144,10 +168,20 @@ class BasicForm extends Component {
     var ebayChecked = false;
     var mercariChecked = false;
     var poshmarkChecked = false;
+    var marketList = "";
 
     for(let entries in marketPlaces)
     {
-      if(marketPlaces[entries].Status === true) isMarketPlaceSelected = true;
+      if(marketPlaces[entries].Status === true) 
+        {
+          isMarketPlaceSelected = true;
+          marketList += marketPlaces[entries].Name + ',';
+        }
+    }
+
+    if(delist)
+    {
+      marketList += 'delist';
     }
   
     if (localStorage.getItem("isSubscribed") === false || localStorage.getItem("isSubscribed") === "false") return alert("You are not subscribed, Please Subscribe To Hammoq Listing Services To Continue.");
@@ -236,7 +270,6 @@ class BasicForm extends Component {
     this.setState({ isSubmitting: true });
 
     Axios.post("/product/validateProduct", data, {headers: {"Content-Type": "multipart/form-data"}}).then(async(response) => {
-
       await Promise.all(images.filter(image => !!image.img).map(async(image) => {if(!!image.img) 
       {
         imagedata = new FormData();
@@ -252,9 +285,15 @@ class BasicForm extends Component {
       Axios.post("/product", data, {headers: {"Content-Type": "multipart/form-data"}}).then((response) => {
         //let productId = response.data.products ? response.data.products[response.data.products.length - 1]._id : response.data.products;
         //if (templateId) Axios.post("/producttemplate", {productId: productId, templateId: templateId}).then((response) => {});
-        this.setState({isSubmitting: false, progress:10, images: imagesSchema});
+        localStorage.setItem("condSetting",itemCondition);
+        localStorage.setItem("marketSetting",marketList);
+        this.baseState['itemCondition'] = itemCondition;
+        this.baseState['marketPlaces'] = marketPlaces;
+        this.baseState['hasMarketPlaces'] = hasMarketPlaces;
+        this.baseState['delist'] = delist;
+        this.setState({...this.baseState});
+        this.setState({images:imagesSchema});
         window.alert("Product was successfully uploaded.");
-        
       })
       .catch((err) => {
         this.setState({isSubmitting: false});
