@@ -34,7 +34,7 @@ class Login extends Component {
         await Axios.post("/forgotpassword/update", {
           email: this.state.email,
           newPassword: this.state.password,
-        })
+        },{headers: {"x-access-token": localStorage.getItem("token")}})
           .then(({ data }) => {
             if (data.assert === true) {
               //console.log(data);
