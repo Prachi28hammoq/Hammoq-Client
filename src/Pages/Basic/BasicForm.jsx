@@ -315,6 +315,8 @@ class BasicForm extends Component {
         this.baseState['hasMarketPlaces'] = hasMarketPlaces;
         this.baseState['delist'] = delist;
         this.baseState['rates'] = rates;
+        this.baseState['bal'] = bal;
+        this.baseState['savedCards'] = savedCards;
         this.setState({...this.baseState, images:imagesSchema});
         window.alert("Product was successfully uploaded.");
       })
