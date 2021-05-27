@@ -182,11 +182,13 @@ class BasicForm extends Component {
     var mercariChecked = false;
     var poshmarkChecked = false;
     var marketList = "";
+    var cnt = 0;
 
     for(let entries in marketPlaces)
     {
       if(marketPlaces[entries].Status === true) 
         {
+          cnt++;
           isMarketPlaceSelected = true;
           marketList += marketPlaces[entries].Name + ',';
         }
@@ -209,13 +211,22 @@ class BasicForm extends Component {
       switch(marketPlaces[i].Name)
       {
         case "Ebay":
-          ebayChecked = true;
+          if(marketPlaces[i].Status)
+          {
+            ebayChecked = true;
+          }
           break;
         case "Mercari":
-          mercariChecked = true;
+          if(marketPlaces[i].Status)
+          {
+            mercariChecked = true;
+          }
           break;
         case "Poshmark":
-          poshmarkChecked = true;          
+          if(marketPlaces[i].Status)
+          {
+            poshmarkChecked = true;
+          }       
           break;
         default:
           let site = {name: marketPlaces[i].Name, status: marketPlaces[i].Status, url: ""};
@@ -224,7 +235,6 @@ class BasicForm extends Component {
       }
     });
 
-    var cnt = marketPlaces.length;
     var rate1 = 0, rate2 = 0, rate3 = 0;
     var total = 0;
 
@@ -304,6 +314,7 @@ class BasicForm extends Component {
         this.baseState['marketPlaces'] = marketPlaces;
         this.baseState['hasMarketPlaces'] = hasMarketPlaces;
         this.baseState['delist'] = delist;
+        this.baseState['rates'] = rates;
         this.setState({...this.baseState, images:imagesSchema});
         window.alert("Product was successfully uploaded.");
       })
@@ -399,6 +410,10 @@ class BasicForm extends Component {
     this.setState({ open: false });
   };
 
+  removeBackgrounds = async() => {
+    await Axios.post("https://bgremove-dot-hammock-272305.wl.r.appspot.com/", {"imageData":this.state.images.img} , {headers: {"Content-Type": "application/json", "Access-Control-Allow-Origin":"*"}}).then((data) => {console.log(data)});
+  }
+
   updatePayment = async (amount, stripeId) => {
     const { cid } = this.state;
     let body = {customer_id: cid, amount: amount, stripeId: stripeId};
@@ -493,6 +508,7 @@ class BasicForm extends Component {
     } = this.state;
     return (
         <div className="basicListingContainer">
+        <button onClick={this.removeBackgrounds}/>
         <PaymentAlert
           open={open}
           handleClose={this.handleClose}
