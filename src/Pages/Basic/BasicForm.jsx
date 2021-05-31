@@ -6,7 +6,6 @@ import "./BasicForm.css";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
 import { assetsURL, socketCon } from "../../services/Axios";
-import io from "socket.io-client";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
