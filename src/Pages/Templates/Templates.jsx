@@ -32,17 +32,19 @@ class Templates extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { templates, templateName } = this.state;
-
+    const data=new FormData();
+    data.append("name", templateName);
     const idx =
       templates && templates.findIndex((a) => a.name === templateName);
     if (idx > -1) return alert("Template with same name already exists");
 
-    Axios.post("/template", { name: this.state.templateName, data: {} })
+    Axios.post("/template", data)
       .then(({ data }) => {
         console.log(data, 'teempalated')
         const { templateName } = this.state;
         
         const idx = data.templates.findIndex((a) => a.name === templateName);
+        alert(data.msg);
         window.open("/template/" + data.templates[idx]._id, "_self");
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));

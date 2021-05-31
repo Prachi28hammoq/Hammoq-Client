@@ -100,14 +100,15 @@ const Header = (props) => {
               </a>
             </li>
 
-            {/*<li className="nav-item">
+            <li className="nav-item">
               <a
                 href="/templates"
                 className="nav-link"
+                style={{'color':'black'}}
               >
                 Templates
               </a>
-            </li>*/}
+            </li>
             <li className="nav-item">
               <a href="/accounting" className="nav-link" style={{'color':'black'}}>
                 <i className="fas fa-file-invoice-dollar mr-1"></i>

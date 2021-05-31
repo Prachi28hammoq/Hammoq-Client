@@ -836,11 +836,13 @@ class RightSection extends Component {
                 onChange={handleChange}
               >
                 <option>Select Condition *</option>
-                <option defaultValue="New with tags">New with tags</option>
-                <option defaultValue="New without tags">
-                  New without tags
-                </option>
-                <option defaultValue="Used">Used</option>
+                  <option value="New">New</option>
+                  <option value="New With Tags">New With Tags</option>
+                  <option value="New (Other/Open Box)">New (Other/Open Box)</option>
+                  <option value="New With Defects">New With Defects</option>
+                  <option value="Seller Refurbished">Seller Refurbished</option>
+                  <option value="Used">Used</option>
+                  <option value="Broken/For Repair">Broken/For Repair</option>
               </select>
             </div>
             <label

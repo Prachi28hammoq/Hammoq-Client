@@ -594,12 +594,13 @@ export default class extends Component {
     templateid
       ? Axios.put(`/template/${templateid}`, dataform, {
           headers: {
-            "Content-Type": "multipart/form-data",
-            "x-access-token": `${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data"
           },
         })
           .then((response) => {
-            console.log(response)
+            console.log(response);
+            this.setState({ isSubmitting: false });
+            alert(response.data.msg);
             window.open("/templates", "_self");
           })
           .catch((err) => {
@@ -608,8 +609,7 @@ export default class extends Component {
           })
       : Axios.post("/product", dataform, {
           headers: {
-            "Content-Type": "multipart/form-data",
-            "x-access-token": `${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data"
           },
         })
           .then((response) => {
@@ -783,12 +783,9 @@ export default class extends Component {
     handleDelete = async () => {
      const id = this.props.match.params.templateid
      
-     Axios.delete(`/template/${id}`, {
-      headers: {
-        "x-access-token": `${localStorage.getItem("token")}`,
-      },
-    }) 
+     Axios.delete(`/template/${id}`) 
     .then((response) => {
+      alert( response.data.msg);
       window.open("/templates", "_self");
     })
     .catch((err) => {
@@ -954,8 +951,8 @@ export default class extends Component {
               </button>
               <ul className="dropdown-menu">
                 {templates && templates.length !== 0 ? (
-                  templates.forEach((template) => {
-                    return (
+                  templates.map((template) => {
+                      return (
                       <li>
                         <button
                           className="btn colorIt"
@@ -966,7 +963,7 @@ export default class extends Component {
                           {template.name}
                         </button>
                       </li>
-                    );
+                      );
                   })
                 ) : (
                   <li>No Templates created</li>
