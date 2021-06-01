@@ -145,7 +145,7 @@ class BasicForm extends Component {
           window.alert("Low Payment and No card added, Please add a card and then add payment..");
           window.open("/addpayment", "_self");
         }
-        this.setState({bal: data.balance, savedCards: data.savedCards, cid: data._id});
+        this.setState({bal: parseInt(data.balance), savedCards: data.savedCards, cid: data._id});
       })
       .catch((err) => console.log(err));
 
@@ -234,6 +234,16 @@ class BasicForm extends Component {
           break;
       }
     });
+
+    if(price && price < 0)
+    {
+      price = 0;
+    }
+
+    if(quantity && quantity < 0)
+    {
+      quantity = 1;
+    }
 
     var rate1 = 0, rate2 = 0, rate3 = 0;
     var total = 0;
@@ -510,7 +520,6 @@ class BasicForm extends Component {
     } = this.state;
     return (
         <div className="basicListingContainer">
-        <button onClick={this.removeBackgrounds}/>
         <PaymentAlert
           open={open}
           handleClose={this.handleClose}
@@ -556,7 +565,7 @@ class BasicForm extends Component {
                 <LoadingSpinner asOverlay />
               </div>
             ) : null}
-              <h6 className="mb-3  sub-heading">
+              <h6 className="mb-3 sub-heading">
                 Please enter the logins for each site you want to delist or list to
               </h6>
               <select

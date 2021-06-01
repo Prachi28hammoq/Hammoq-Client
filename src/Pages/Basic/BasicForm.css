@@ -10,6 +10,7 @@
 .rightSideContainer {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .rs_header {
@@ -37,10 +38,9 @@
 }
 
 .row_gender {
-  display: flex;
+  display: inline-flex;
   width: 90%;
   background-color: #f0f0f0;
-  justify-content: space-evenly;
   border-width: 1.5px !important;
   border-style: solid !important;
   border: black;
@@ -54,7 +54,7 @@
   border-bottom-right-radius: 5px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  gap: 3%;
+  justify-content: space-between;
 }
 
 .row_rightSide2 {
