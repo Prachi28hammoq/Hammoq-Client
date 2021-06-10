@@ -7,6 +7,8 @@ import SubscriptionDetails from "./Components/SubscriptionDetails";
 import Alert from "react-bootstrap/Alert";
 import TransactionCard from "./Components/TransactionCard";
 import PaymentCard from "./Components/PaymentCard";
+import LoadingSpinner from "../utils/loader";
+
 ////////////////////////////////////////////////////////////////////////////////////
 export default function Subscription() {
   const [message, setMessage] = useState({
@@ -30,11 +32,15 @@ export default function Subscription() {
   const [clientDetails, setClientDetails] = useState({});
   const [subscriptions, setSubscriptions] = useState([]);
   const [subscriptionStatus, setSubscriptionStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   ////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
     // getPlans();
+    setLoading(true)
     getSubscriptionDetails();
     getClientDetails();
+    
   }, []);
   ////////////////////////////////////////////////////////////////////////////////////
 
@@ -89,6 +95,7 @@ export default function Subscription() {
       });
 
       setSubscriptions(subscriptions);
+      setLoading(false)
     } catch (err) {
       console.log(err);
       setMessage({
@@ -110,6 +117,7 @@ export default function Subscription() {
   return (
     <>
       {/* Error msg section  */}
+
       <Alert
         show={message.show}
         variant={message.variant}
@@ -118,7 +126,11 @@ export default function Subscription() {
       >
         {message.msg}
       </Alert>
-
+      {loading ? (
+              <div className="center">
+                <LoadingSpinner asOverlay />
+              </div>
+            ) : null}
       {subscriptionStatus ? (<PaymentCard/>) : ("")}
 
 
