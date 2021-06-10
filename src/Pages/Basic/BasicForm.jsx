@@ -96,45 +96,11 @@ class BasicForm extends Component {
     let marketList = localStorage.getItem("marketSetting");
     
     if(marketList !== null){
-      console.log(marketList); 
       marketList = marketList.split(",");
     } 
-    /********** Bora Added *******/
     this.getWebsiteDetails();
-   /********** Bora Added *******/
 
-   /* 
-    Axios.get("/password/getstatus").then(({ data }) => {
-      for(let item in data)
-      {
-        let website = {"Name":item,"Status":false};
-        if(marketList !== null)
-        {
-          for(let entry in marketList)
-          {
-              if(marketList[entry] === item) 
-              {
-                website = {"Name":item,"Status":true};
-              }
-              else if(marketList[entry] === 'delist')
-              {
-                this.setState({delist:true})
-              }
-          }
-        }
-
-        marketPlaces.push(website);
-        hasMarketPlaces = true;
-      }
-      console.log(marketPlaces);
-      this.setState({marketPlaces:marketPlaces, hasMarketPlaces:hasMarketPlaces});
-    });
-    */
-
-/*    Axios.get("/template")
-         .then((data) => {this.setState({ templates: data.data.templates });})
-         .catch((err) => {console.log(err);});*/
-
+  
     Axios.get("/payment/rates")
          .then((res) => {this.setState({ rates: res.data[res.data.length - 1] });})
          .catch((err) => console.log(err));
@@ -167,14 +133,12 @@ class BasicForm extends Component {
   };
 
 
-  //***************Bora Added ************/
   getWebsiteDetails = () => {
     var { marketPlaces, hasMarketPlaces } = this.state;
     var testMarketPlaces = [];
     let marketList = localStorage.getItem("marketSetting");
     if(marketList !== null){
       marketList = marketList.split(",");
-      console.log(marketList);
     } 
 
     Axios.get("/password/getstatus").then(({ data }) => {
@@ -188,7 +152,6 @@ class BasicForm extends Component {
               if(marketList[entry] === item) 
               {
                 website = {"Name":item,"Status":true};
-                console.log(website)
               }
               else if(marketList[entry] === 'delist')
               {
@@ -198,16 +161,13 @@ class BasicForm extends Component {
 
           }
         }
-        console.log(website)
         testMarketPlaces.push(website)
         marketPlaces.push(website);
         hasMarketPlaces = true;
       }
-      console.log(marketPlaces);
       this.setState({marketPlaces:testMarketPlaces, hasMarketPlaces:hasMarketPlaces});
     });
   }
-//***************Bora Added ************/
 
   fetchimg = (src) => {
     this.setState({ fullimg: src }, () => {$("#addTemplateModal1").modal("show");});
@@ -225,7 +185,6 @@ class BasicForm extends Component {
   };
 
   onSubmit = async () => {
-    //e.preventDefault();
     const { images, cid, itemCondition, sku, brand, model, quantity, price, costOfGoods, category, waist, inseam, rise, weightLB, weightOZ, marketPlaces, hasMarketPlaces, templateId, note, delist, rates, bal, savedCards } = this.state;
     var { isMarketPlaceSelected } = this.state;
     const data = new FormData();
@@ -478,9 +437,7 @@ class BasicForm extends Component {
   };
 
   handleClose = () => {
-    /*********** Bora Added *********/
     this.getWebsiteDetails();
-    /*********** Bora Added *********/
 
     this.setState({ open: false });
   };
@@ -547,7 +504,6 @@ class BasicForm extends Component {
     }
 
     marketPlaces.push(entry);
-    console.log(marketPlaces)
     this.setState({marketPlaces:marketPlaces});
   }
 

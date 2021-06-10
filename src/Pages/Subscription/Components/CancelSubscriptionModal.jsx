@@ -50,22 +50,7 @@ export default function CancelSubscriptionModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* <div className="d-flex justify-content-around">
-          <button
-            className=" btn btn-outline-success"
-            onClick={onHide}
-          >
-            No, Do Not Cancel My Active Subscription.
-          </button>
-          or
-          <button
-            className=" btn btn-outline-danger"
-            onClick={handleCancelAtPeriodEndClick}
-          >
-            Yes, Please Cancel My Active Subscription.
-          </button>
-        </div>
-       */}
+       
              <div class="container">
                
                   <div className="row">

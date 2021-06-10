@@ -7,15 +7,13 @@
     "url": "https://github.com/Hammoq-Inc/Hammoq-Client.git"
   },
   "dependencies": {
-    "@hammoq-inc/hammoq-recycledcomponents": "^1.1.67",
+    "@hammoq-inc/hammoq-recycledcomponents": "^1.3.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.14.0",
     "axios": "^0.21.1",
-    "browserslist": "^4.16.6",
-    "caniuse-lite": "^1.0.30001236",
     "canvas": "^2.7.0",
     "chart.js": "^2.9.4",
     "font-awesome": "^4.7.0",
@@ -38,7 +36,7 @@
     "socket.io-client": "^2.4.0"
   },
   "scripts": {
-    "recycledcomponents": "npm config set @hammoq-inc:registry=https://npm.pkg.github.com/ && npm install @hammoq-inc/hammoq-recycledcomponents@beta",
+    "recycledcomponents": "npm config set @hammoq-inc:registry=https://npm.pkg.github.com/ && npm install @hammoq-inc/hammoq-recycledcomponents@1.3.0",
     "optimize": "npm --depth 15 update && npm --depth 15 audit fix && npm --depth 15 prune && npm --depth 15 dedupe",
     "startdevlocal": "REACT_APP_NAME=APP REACT_APP_STAGE=devlocal REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000 react-scripts start",
     "startdevhost": "REACT_APP_NAME=APP REACT_APP_STAGE=devhost REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000 react-scripts start",
