@@ -1,4 +1,5 @@
-import React from "react";
+import { withWidth } from "@material-ui/core";
+import React,{ useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Axios from "../../../services/Axios";
 export default function CancelSubscriptionModal(props) {
@@ -6,8 +7,9 @@ export default function CancelSubscriptionModal(props) {
     cancelSubscriptionModalDetails: { subscriptionId },
     getSubscriptionDetails,
     onHide,
-    setMessage,
+    setMessage
   } = props;
+  const [color, setradiovalue] = useState(null);
 
   const handleCancelAtPeriodEndClick = async () => {
     try {
@@ -32,6 +34,9 @@ export default function CancelSubscriptionModal(props) {
       });
     }
   };
+
+
+
   return (
     <Modal
       {...props}
@@ -45,7 +50,7 @@ export default function CancelSubscriptionModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="d-flex justify-content-around">
+        {/* <div className="d-flex justify-content-around">
           <button
             className=" btn btn-outline-success"
             onClick={onHide}
@@ -60,6 +65,43 @@ export default function CancelSubscriptionModal(props) {
             Yes, Please Cancel My Active Subscription.
           </button>
         </div>
+       */}
+             <div class="container">
+               
+                  <div className="row">
+                  <div className="col-12">
+                  <h6>If you proceed, you will lose all of your listings on Hammoq..</h6>
+                  <p>Can you please help us understand why you are canceling so that we may do better in the future?</p>
+                  </div>
+                  <div className="col-8">
+                    <label><input type="radio" name="feedback" value="1" onChange={(e) => {setradiovalue(e.target.value);}}/> Quality of listings are too low</label><br></br>
+                    <label><input type="radio" name="feedback" value="2" onChange={(e) => {setradiovalue(e.target.value);}}/> Service price is too high</label><br></br>
+                    <label><input type="radio" name="feedback" value="3" onChange={(e) => {setradiovalue(e.target.value);}}/> Stopped reselling</label><br></br>
+                    <label><input type="radio" name="feedback" value="4" onChange={(e) => {setradiovalue(e.target.value);}}/> Don't need listing and crosslisting services</label><br></br>
+                    <label><input type="radio" name="feedback" value="5" onChange={(e) => {setradiovalue(e.target.value);}}/> Found another solution that works better for me</label><br></br>
+                    <label><input type="radio" name="feedback" value="6" onChange={(e) => {setradiovalue(e.target.value);}}/> Doesn't have the features I want</label><br></br>
+                  
+                  </div>
+                </div> 
+                <div className="row">
+                <div className="col-12">
+                <textarea type="text" name="suggestions" placeholder="  Write some suggestions...." style={{width:"80%",height:50}}/>
+                </div>
+                </div>
+                <h6>Are you sure you wish to continue?</h6>
+                <div className="row">
+                <div className="col-2"></div>
+                <div className="col-4">
+                <button className=" btn btn-outline-success"onClick={onHide}> No, Do Not Cancel My Active Subscription.</button> 
+                </div>
+                <div className="col-4">
+                <button className=" btn btn-outline-danger" onClick={handleCancelAtPeriodEndClick}> Yes, Please Cancel My Active Subscription.</button>
+                </div>
+                <div className="col-2"></div>
+                </div>
+        </div>
+      
+ 
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center">
         <small>

@@ -94,8 +94,16 @@ class BasicForm extends Component {
     const { cid, images } = this.state;
     var { marketPlaces, hasMarketPlaces } = this.state;
     let marketList = localStorage.getItem("marketSetting");
-    if(marketList !== null) marketList = marketList.split(",");
+    
+    if(marketList !== null){
+      console.log(marketList); 
+      marketList = marketList.split(",");
+    } 
+    /********** Bora Added *******/
+    this.getWebsiteDetails();
+   /********** Bora Added *******/
 
+   /* 
     Axios.get("/password/getstatus").then(({ data }) => {
       for(let item in data)
       {
@@ -118,8 +126,10 @@ class BasicForm extends Component {
         marketPlaces.push(website);
         hasMarketPlaces = true;
       }
+      console.log(marketPlaces);
       this.setState({marketPlaces:marketPlaces, hasMarketPlaces:hasMarketPlaces});
     });
+    */
 
 /*    Axios.get("/template")
          .then((data) => {this.setState({ templates: data.data.templates });})
@@ -155,6 +165,49 @@ class BasicForm extends Component {
         this.setState({itemCondition:condSetting});
       }
   };
+
+
+  //***************Bora Added ************/
+  getWebsiteDetails = () => {
+    var { marketPlaces, hasMarketPlaces } = this.state;
+    var testMarketPlaces = [];
+    let marketList = localStorage.getItem("marketSetting");
+    if(marketList !== null){
+      marketList = marketList.split(",");
+      console.log(marketList);
+    } 
+
+    Axios.get("/password/getstatus").then(({ data }) => {
+      for(let item in data)
+      {
+        let website = {"Name":item,"Status":false};
+        if(marketList !== null)
+        {
+          for(let entry in marketList)
+          {
+              if(marketList[entry] === item) 
+              {
+                website = {"Name":item,"Status":true};
+                console.log(website)
+              }
+              else if(marketList[entry] === 'delist')
+              {
+                this.setState({delist:true})
+              }
+             
+
+          }
+        }
+        console.log(website)
+        testMarketPlaces.push(website)
+        marketPlaces.push(website);
+        hasMarketPlaces = true;
+      }
+      console.log(marketPlaces);
+      this.setState({marketPlaces:testMarketPlaces, hasMarketPlaces:hasMarketPlaces});
+    });
+  }
+//***************Bora Added ************/
 
   fetchimg = (src) => {
     this.setState({ fullimg: src }, () => {$("#addTemplateModal1").modal("show");});
@@ -202,7 +255,10 @@ class BasicForm extends Component {
     if (localStorage.getItem("isSubscribed") === false || localStorage.getItem("isSubscribed") === "false") return alert("You are not subscribed, Please Subscribe To Hammoq Listing Services To Continue.");
     if (images[0].img == "") return alert("The First Image Is Required");
     if (itemCondition == "Select Condition *" || itemCondition == "") return alert("A Condition Is Required");
-    if (!hasMarketPlaces) return $("#addTemplateModal").modal("show");
+    if (!hasMarketPlaces) return $("#addTemplateModal").modal({
+      backdrop: 'static',
+      keyboard: false
+  });
     if (!isMarketPlaceSelected) return alert("Please Selected At Least One Marketplace");
 
     var otherSites = [];
@@ -354,7 +410,10 @@ class BasicForm extends Component {
       this.setState({ loading: true });
 
       Axios.post("/password", {website: website, username: username, password: password})
-           .then((response) => {this.setState({ loading: false });})
+           .then((response) => {
+             this.setState({ loading: false });
+            
+          })
            .catch((err) => {this.setState({ loading: false }); console.log(err);});    
     } 
     else 
@@ -419,6 +478,10 @@ class BasicForm extends Component {
   };
 
   handleClose = () => {
+    /*********** Bora Added *********/
+    this.getWebsiteDetails();
+    /*********** Bora Added *********/
+
     this.setState({ open: false });
   };
 
@@ -451,7 +514,7 @@ class BasicForm extends Component {
     var { marketPlaces } = this.state;
 
     marketPlaces[i].Status = !marketPlaces[i].Status;
-
+   
     this.setState({marketPlaces});
   }
 
@@ -484,7 +547,7 @@ class BasicForm extends Component {
     }
 
     marketPlaces.push(entry);
-
+    console.log(marketPlaces)
     this.setState({marketPlaces:marketPlaces});
   }
 
@@ -553,7 +616,8 @@ class BasicForm extends Component {
                 type="button"
                 className="close"
                 data-dismiss="modal"
-                aria-label="Close"
+                aria-label="Close" 
+                onClick={this.handleClose}
               >
                 <span aria-hidden="true">×</span>
               </button>
@@ -864,6 +928,7 @@ class BasicForm extends Component {
                   setCategory={this.setCategory}
                 />
               </div>
+              
               <div className="row_rightSide2">
                   <input
                     type="number"
