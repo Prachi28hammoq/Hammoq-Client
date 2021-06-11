@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import ReactDOM from 'react-dom';
-import {AdvanceListing} from "@hammoq/hammoq-recycledcomponents";
+import {AdvanceListing} from "@hammoq-inc/hammoq-recycledcomponents";
 import Axios, { assetsURL, assetsThumbnailURL } from "../../services/Axios";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import IconButton from "@material-ui/core/IconButton";
@@ -31,6 +31,7 @@ class EditForm extends Component {
     assetsThumbnailURL={assetsThumbnailURL}
     Axios={Axios}
     productid={id}
+    isTemplate={false}
     />
     </>
     );

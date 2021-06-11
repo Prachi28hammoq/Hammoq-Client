@@ -78,6 +78,7 @@ class BasicForm extends Component {
       cid: "",
       open: false,
       templates: [],
+      template: {},
       templateId: "",
       templateName: "",
       productId: "",
@@ -250,7 +251,7 @@ class BasicForm extends Component {
 
   onSubmit = async () => {
     //e.preventDefault();
-    const { images, cid, itemCondition, sku, brand, model, quantity, price, costOfGoods, category, waist, inseam, rise, weightLB, weightOZ, marketPlaces, hasMarketPlaces, templateId, note, delist, rates, bal, savedCards } = this.state;
+    const { images, cid, itemCondition, sku, brand, model, quantity, price, costOfGoods, category, waist, inseam, rise, weightLB, weightOZ, marketPlaces, hasMarketPlaces, templateId, template, note, delist, rates, bal, savedCards } = this.state;
     var { isMarketPlaceSelected } = this.state;
     const data = new FormData();
     var imagedata = new FormData();
@@ -259,11 +260,46 @@ class BasicForm extends Component {
     var mercariChecked = false;
     var poshmarkChecked = false;
     var marketList = "";
+    if (template) {
+      for (let key in template) {
+        data.append(key, template[key]);
+      }
+      data.delete("activity");
+      data.delete("sku");
+      data.delete("quantity");
 
-    for(let entries in marketPlaces)
-    {
-      if(marketPlaces[entries].Status === true) 
-        {
+      data.delete("price");
+      data.delete("brand");
+      data.delete("model");
+      data.delete("note");
+      data.delete("condition_name");
+
+      data.delete("ebay.check");
+      data.delete("mercari.check");
+      data.delete("poshmark.check");
+      data.delete("others");
+      data.delete("delist.check");
+
+      data.delete("waist");
+      data.delete("inseam");
+      data.delete("category");
+      data.delete("rise");
+      data.delete("weightLB");
+      data.delete("weightOZ");
+      data.delete("activity");
+      data.delete("action");
+      data.delete("status");
+      data.delete("listed");
+      data.delete("costOfGoods");
+      data.delete("rate1");
+      data.delete("rate2");
+      data.delete("rate3");
+      data.delete("prodStatus");
+      data.delete("extraDescriptions");
+      data.append("extraDescriptions", JSON.stringify(template["extraDescriptions"]));
+    }
+    for (let entries in marketPlaces) {
+      if (marketPlaces[entries].Status === true) {
           isMarketPlaceSelected = true;
           marketList += marketPlaces[entries].Name + ',';
         }
@@ -463,7 +499,22 @@ class BasicForm extends Component {
   };
 
   setTemplate = (id) => {
-    const {templates,marketPlaces}= this.state;
+    console.log({"template": id})
+    this.setState({ templateId: id });
+    if(id=="")this.setState({
+      quantity: 0,
+      itemCondition: "",
+      category: "",
+      waist: 0,
+      inseam: 0,
+      rise: 0,
+      weightLB: 0,
+      weightOZ: 0,
+      note: "",
+      delist: false,
+      template: {}
+    });
+    const { templates, marketPlaces } = this.state;
     templates.forEach((template) => {
       if(template._id ==id) {
         console.log("template found");
@@ -479,7 +530,8 @@ class BasicForm extends Component {
           weightLB: template.weightLB,
           weightOZ: template.weightOZ,
           note: template.note,
-          delist: template.delist.check
+          delist: template.delist.check,
+          template: template
         });
         marketPlaces.map( (o,i) => {
           marketPlaces[i].Status = template[marketPlaces[i].Name.toLowerCase()]["check"];
@@ -833,14 +885,15 @@ class BasicForm extends Component {
                   </select>
                 </div>
               </div>
-              <div class="form-popup" id="askTemplateForm">
+              <div className="col-12 px-1">
               <form action="#" class="form-container">
 
-                <label><b>Template Name</b></label>
+                  <label className="form-check-label">Wanna save it as template?</label>
                 <input 
                   type="text" 
                   placeholder="Enter Template name" 
                   name="templateName" 
+                    className="form-control"
                   value={templateName} 
                   onChange={(e) => this.change(e)}
                   required></input>
@@ -848,7 +901,7 @@ class BasicForm extends Component {
                 <button
                     type="button"
                     onClick={() => this.createTemplate()}
-                    className="btn btn-success controlButtons"
+                    className="btn btn-success"
                   >
                     Save as Template
                   </button>
