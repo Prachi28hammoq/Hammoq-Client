@@ -294,7 +294,7 @@ class Searchcart extends Component {
                   ) : null}
                   {product.delist.check ? (<div><small> Delist - {product.delist.url === "" ? "false" : "true"}</small></div>
                   ) : null}
-                  {product.others ? JSON.parse(product.others).map((items) => {if (items.status) {console.log(items); return (<div><small>{items.name} - {items.url === "" ? "false" : "true"}</small></div>);}}) : null}
+                  {product.others ? JSON.parse(product.others).map((items) => {if (items.status) {return (<div><small>{items.name} - {items.url === "" ? "false" : "true"}</small></div>);}}) : null}
                 </td>
                 <td>
                   <a href={`/edit/${product._id}`}>
