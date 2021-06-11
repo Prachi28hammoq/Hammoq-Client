@@ -147,7 +147,7 @@ class BasicForm extends Component {
           window.alert("Low Payment and No card added, Please add a card and then add payment..");
           window.open("/addpayment", "_self");
         }
-        this.setState({bal: data.balance, savedCards: data.savedCards, cid: data._id});
+        this.setState({bal: parseInt(data.balance), savedCards: data.savedCards, cid: data._id});
       })
       .catch((err) => console.log(err));
 
@@ -298,8 +298,13 @@ class BasicForm extends Component {
       data.delete("extraDescriptions");
       data.append("extraDescriptions", JSON.stringify(template["extraDescriptions"]));
     }
-    for (let entries in marketPlaces) {
-      if (marketPlaces[entries].Status === true) {
+    var cnt = 0;
+
+    for(let entries in marketPlaces)
+    {
+      if(marketPlaces[entries].Status === true) 
+        {
+          cnt++;
           isMarketPlaceSelected = true;
           marketList += marketPlaces[entries].Name + ',';
         }
@@ -322,13 +327,22 @@ class BasicForm extends Component {
       switch(marketPlaces[i].Name)
       {
         case "Ebay":
-          ebayChecked = true;
+          if(marketPlaces[i].Status)
+          {
+            ebayChecked = true;
+          }
           break;
         case "Mercari":
-          mercariChecked = true;
+          if(marketPlaces[i].Status)
+          {
+            mercariChecked = true;
+          }
           break;
         case "Poshmark":
-          poshmarkChecked = true;          
+          if(marketPlaces[i].Status)
+          {
+            poshmarkChecked = true;
+          }       
           break;
         default:
           let site = {name: marketPlaces[i].Name, status: marketPlaces[i].Status, url: ""};
@@ -337,7 +351,16 @@ class BasicForm extends Component {
       }
     });
 
-    var cnt = marketPlaces.length;
+    if(price && price < 0)
+    {
+      price = 0;
+    }
+
+    if(quantity && quantity < 0)
+    {
+      quantity = 1;
+    }
+
     var rate1 = 0, rate2 = 0, rate3 = 0;
     var total = 0;
 
@@ -417,6 +440,9 @@ class BasicForm extends Component {
         this.baseState['marketPlaces'] = marketPlaces;
         this.baseState['hasMarketPlaces'] = hasMarketPlaces;
         this.baseState['delist'] = delist;
+        this.baseState['rates'] = rates;
+        this.baseState['bal'] = bal;
+        this.baseState['savedCards'] = savedCards;
         this.setState({...this.baseState, images:imagesSchema});
         window.alert("Product was successfully uploaded.");
       })
@@ -551,6 +577,10 @@ class BasicForm extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
+  removeBackgrounds = async() => {
+    await Axios.post("https://bgremove-dot-hammock-272305.wl.r.appspot.com/", {"imageData":this.state.images.img} , {headers: {"Content-Type": "application/json", "Access-Control-Allow-Origin":"*"}}).then((data) => {console.log(data)});
+  }
 
   updatePayment = async (amount, stripeId) => {
     const { cid } = this.state;
@@ -692,7 +722,7 @@ class BasicForm extends Component {
                 <LoadingSpinner asOverlay />
               </div>
             ) : null}
-              <h6 className="mb-3  sub-heading">
+              <h6 className="mb-3 sub-heading">
                 Please enter the logins for each site you want to delist or list to
               </h6>
               <select

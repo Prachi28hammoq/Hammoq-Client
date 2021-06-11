@@ -19,10 +19,6 @@ class Searchcart extends Component {
       search: "",
       searchedProducts: [],
       bal: 0,
-      Ebay: false,
-      Poshmark: false,
-      Mercari: false,
-      othersbool: false,
       others: [],
       othersstate: [],
       loading: false,
@@ -45,6 +41,7 @@ class Searchcart extends Component {
     const prodStatus = this.props.match.params.prodStatus;
     this.setState({ prodStatus: this.props.match.params.prodStatus });
     this.setState({ loading: true });
+    
     Axios.get("/payment/rates")
       .then((res) => {this.setState({ rates: res.data[res.data.length-1] });})
       .catch((error) => {console.log(error)});
@@ -75,29 +72,6 @@ class Searchcart extends Component {
     Axios.get("/clientdetails")
       .then(({ data }) => {this.setState({ bal: data.balance, clientdetails: data });})
       .catch((error) => {console.log(error)});
-
-    Axios.get("/password/getstatus").then(({ data }) => {
-      this.setState({ Ebay: data.Ebay });
-      this.setState({ Poshmark: data.Poshmark });
-      this.setState({ Mercari: data.Mercari });
-    })
-    .catch((error) => {console.log(error)});
-
-    Axios.get("/password/getstatus/others")
-         .then(({ data }) => {
-      if (data.length > 0) {
-        this.setState({ othersbool: true });
-        data.forEach((d, i) => {
-          const others = [...this.state.others];
-          others.push(d);
-          this.setState({ others });
-          const otherss = [...this.state.othersstate];
-          otherss.push(false);
-          this.setState({ othersstate: otherss });
-        });
-      }
-    })
-    .catch((error) => {console.log(error)});
   };
 
 
@@ -312,15 +286,15 @@ class Searchcart extends Component {
                   <div>{product.price}</div>
                 </td>
                 <td>
-                  {product.ebay.check && Ebay ? (<div><small>{product.ebay.url === "" || product.ebay.url === null ? (<p className="text-danger">Ebay</p>) : product.ebay.url === "d" ? ("Ebay") : (<a href={product.ebay.url} target="_blank" rel="noreferrer">Ebay</a>)}</small></div>
+                  {product.ebay.check ? (<div><small>{product.ebay.url === "" || product.ebay.url === null ? (<p className="text-danger">Ebay</p>) : product.ebay.url === "d" ? ("Ebay") : (<a href={product.ebay.url} target="_blank" rel="noreferrer">Ebay</a>)}</small></div>
                   ) : null}
-                  {product.poshmark.check && Poshmark ? (<div><small>{product.poshmark.url === "" || product.poshmark.url === null ? (<p className="text-danger">Poshmark</p>) : product.poshmark.url === "d" ? ("Poshmark") : (<a href={product.poshmark.url} target="_blank" rel="noreferrer"> Poshmark </a>)}</small></div>
+                  {product.poshmark.check ? (<div><small>{product.poshmark.url === "" || product.poshmark.url === null ? (<p className="text-danger">Poshmark</p>) : product.poshmark.url === "d" ? ("Poshmark") : (<a href={product.poshmark.url} target="_blank" rel="noreferrer"> Poshmark </a>)}</small></div>
                   ) : null}
-                  {product.mercari.check && Mercari ? (<div><small>{product.mercari.url === "" || product.mercari.url === null ? (<p className="text-danger">Mercari</p>) : product.mercari.url === "d" ? ("Mercari") : ( <a href={product.mercari.url} target="_blank" rel="noreferrer"> Mercari </a>)}</small></div>
+                  {product.mercari.check ? (<div><small>{product.mercari.url === "" || product.mercari.url === null ? (<p className="text-danger">Mercari</p>) : product.mercari.url === "d" ? ("Mercari") : ( <a href={product.mercari.url} target="_blank" rel="noreferrer"> Mercari </a>)}</small></div>
                   ) : null}
                   {product.delist.check ? (<div><small> Delist - {product.delist.url === "" ? "false" : "true"}</small></div>
                   ) : null}
-                  {(othersbool && product.others) && JSON.parse(product.others).forEach((items) => {if (items.status) {return (<div><small>{items.name} - {items.url === "" ? "false" : "true"}</small></div>);}})}
+                  {product.others ? JSON.parse(product.others).map((items) => {if (items.status) {return (<div><small>{items.name} - {items.url === "" ? "false" : "true"}</small></div>);}}) : null}
                 </td>
                 <td>
                   <a href={`/edit/${product._id}`}>

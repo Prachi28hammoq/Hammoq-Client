@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import Axios from "../../services/Axios";
 // import Card from "./Components/Card";
 import SubscriptionModal from "./Components/SubscriptionModal";
-import CancleSubscriptionModal from "./Components/CancelSubscriptionModal";
+import CancelSubscriptionModal from "./Components/CancelSubscriptionModal";
 import SubscriptionDetails from "./Components/SubscriptionDetails";
 import Alert from "react-bootstrap/Alert";
 import TransactionCard from "./Components/TransactionCard";
+import PaymentCard from "./Components/PaymentCard";
 ////////////////////////////////////////////////////////////////////////////////////
 export default function Subscription() {
   const [message, setMessage] = useState({
@@ -28,6 +29,7 @@ export default function Subscription() {
 
   const [clientDetails, setClientDetails] = useState({});
   const [subscriptions, setSubscriptions] = useState([]);
+  const [subscriptionStatus, setSubscriptionStatus] = useState(false);
   ////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
     // getPlans();
@@ -43,11 +45,17 @@ export default function Subscription() {
       if (response.data) {
         setClientDetails(response.data.User);
         if (!response.data.User.isSubscribed)
+        {
           setMessage({
             show: true,
             msg: "You are not subscribed to any subscription plan yet, please choose a subscription plan.",
             variant: "warning",
           });
+        }
+        else if(response.data.User.isSubscribed)
+        {
+          setSubscriptionStatus(true);
+        }
       } else {
         setMessage({
           variant: "danger",
@@ -111,6 +119,9 @@ export default function Subscription() {
         {message.msg}
       </Alert>
 
+      {subscriptionStatus ? (<PaymentCard/>) : ("")}
+
+
       <SubscriptionDetails
         subscriptions={subscriptions}
         showSubscriptionModal={() =>
@@ -137,7 +148,7 @@ export default function Subscription() {
         setMessage={setMessage}
       />
 
-      <CancleSubscriptionModal
+      <CancelSubscriptionModal
         show={cancelSubscriptionModalDetails.show}
         cancelSubscriptionModalDetails={cancelSubscriptionModalDetails}
         onHide={() =>
@@ -148,7 +159,7 @@ export default function Subscription() {
         }
         setMessage={setMessage}
         getSubscriptionDetails={getSubscriptionDetails}
-      ></CancleSubscriptionModal>
+      ></CancelSubscriptionModal>
     </>
   );
 }
