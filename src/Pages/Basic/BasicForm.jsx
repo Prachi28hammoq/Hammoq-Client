@@ -241,7 +241,7 @@ class BasicForm extends Component {
     sendData.append("rise", rise);
     sendData.append("weightLB", weightLB);
     sendData.append("weightOZ", weightOZ);
-      sendData.append("name", templateName);
+    sendData.append("name", templateName);
       
     Axios.post("/template", sendData, {headers: {"Content-Type": "multipart/form-data"}}).then(async(response) => {
       return alert(response.data.msg);
@@ -295,7 +295,6 @@ class BasicForm extends Component {
       data.delete("rate3");
       data.delete("prodStatus");
       data.delete("extraDescriptions");
-      data.append("extraDescriptions", JSON.stringify(template["extraDescriptions"]));
     }
     var cnt = 0;
 
