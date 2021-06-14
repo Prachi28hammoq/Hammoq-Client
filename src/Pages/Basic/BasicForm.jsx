@@ -243,7 +243,6 @@ class BasicForm extends Component {
     sendData.append("weightOZ", weightOZ);
       sendData.append("name", templateName);
       
-      console.log(sendData);
     Axios.post("/template", sendData, {headers: {"Content-Type": "multipart/form-data"}}).then(async(response) => {
       return alert(response.data.msg);
     });
@@ -525,7 +524,6 @@ class BasicForm extends Component {
   };
 
   setTemplate = (id) => {
-    console.log({"template": id})
     this.setState({ templateId: id });
     if(id=="")this.setState({
       quantity: 0,
@@ -543,8 +541,6 @@ class BasicForm extends Component {
     const { templates, marketPlaces } = this.state;
     templates.forEach((template) => {
       if(template._id ==id) {
-        console.log("template found");
-        console.log(template);
         template=template.data;
         this.setState({
           quantity: template.quantity,
