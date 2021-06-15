@@ -1,5 +1,5 @@
 .logotitle {
-  font-family: "Amatic SC", cursive;
+  font-family: "Poppins", sans-serif;
 }
 
 
@@ -43,7 +43,7 @@
   flex-wrap: wrap;
 }
 .login100-form-title {
-  font-family: Raleway-Medium;
+  font-family: "Poppins", sans-serif;
   font-size: 30px;
   color: #555;
   line-height: 1.2;
@@ -56,7 +56,7 @@
   padding-bottom: 32px;
 }
 .txt1 {
-  font-family: Raleway-SemiBold;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   color: #555;
   line-height: 1.4;
@@ -81,7 +81,7 @@
   margin-bottom: 36px;
 }
 .input100 {
-  font-family: Raleway-Medium;
+  font-family: "Poppins", sans-serif;
   color: #555;
   line-height: 1.2;
   font-size: 18px;
@@ -132,7 +132,7 @@ button, input, optgroup, select, textarea {
   transform: scaleX(1.1) scaleY(1.3);
 }
 .txt1 {
-  font-family: Raleway-SemiBold;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   color: #555;
   line-height: 1.4;
@@ -190,14 +190,14 @@ button, input, optgroup, select, textarea {
 }
 
 .txt3 {
-  font-family: Raleway-Regular;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   color: #555;
   line-height: 1.4;
 }
 
 a {
-  font-family: Raleway-Regular;
+  font-family: "Poppins", sans-serif;
   font-size: 14px;
   line-height: 1.7;
   color: #666;
@@ -214,7 +214,7 @@ a {
   flex-wrap: wrap;
 }
 .login100-form-btn {
-  font-family: Raleway-Bold;
+  font-family: "Poppins", sans-serif;
   font-size: 16px;
   color: #fff;
   line-height: 1.2;
