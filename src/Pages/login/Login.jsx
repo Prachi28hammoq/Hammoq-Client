@@ -39,7 +39,8 @@ class Login extends Component {
     const { email, password, isSubmitting, loginError } = this.state;
     return (
       <div>
-        <div className="row login-page">
+    
+        {/* <div className="row login-page">
           <div className="col-lg-5 m-auto">
             <div className="row">
               <img
@@ -160,6 +161,84 @@ class Login extends Component {
             </div>
           </div>
         </div>
+     */}
+
+            <div class="container-login100">
+                <div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+                        <div className="row">
+                              <img
+                                src={hammock}
+                                className="m-auto col-8"
+                                style={{ width: "150px", height: "100px" }}
+                                alt="Alt PlaceHolder"
+                              ></img>
+                            </div>
+                        <form class="login100-form validate-form flex-sb flex-w" onSubmit={this.handleSubmit}>
+                          <span class="login100-form-title p-b-32">
+                          Sign In
+                          </span>
+                          {loginError && (
+                                <span class="login100-form-title p-b-32" style={{ color: "red", width: "20" }}>
+                                    <i class="fa fa-times-circle text-danger"
+                                          aria-hidden="true"
+                                          style={{ width: "20" }}>
+                                          <h6>Incorrect Email or Password</h6>
+                                        </i>
+                                  </span>
+                                        
+                                      
+                                  
+                                  )}
+                                  <br></br>
+                          <span class="txt1 p-b-11">
+                            Email
+                          </span>
+                          <div class="wrap-input100 validate-input m-b-36" data-validate="Username is required">
+                            <input class="input100" type="email" value={email} name="email" onChange={this.handleChange} required/>
+                            <span class="focus-input100"></span>
+                          </div>
+
+                          <span class="txt1 p-b-11">
+                            Password
+                          </span>
+                          <div class="wrap-input100 validate-input m-b-12" data-validate="Password is required">
+                            <span class="btn-show-pass">
+                              <i class="fa fa-eye"></i>
+                            </span>
+                            <input class="input100" type="password" name="password" value={password} onChange={this.handleChange} required/>
+                            <span class="focus-input100"></span>
+                          </div>
+
+                          <div class="flex-sb-m w-full p-b-48">
+                          <div>
+                              <a href="/signup" class="txt3">
+                              Create new account
+                              </a>
+                            </div>
+
+                            <div>
+                              <a href="/forgotpassword" class="txt3">
+                                Forgot Password?
+                              </a>
+                            </div>
+                          </div>
+
+                          <div class="container-login100-form-btn">
+                          {isSubmitting ? (
+                          <button class="login100-form-btn" disabled>
+                              LOGGING IN...
+                            </button>
+                            ) : (
+                              <button class="login100-form-btn" type="submit">
+                              LOGIN
+                            </button>
+                            )}
+                          </div>
+
+                        </form>
+                      </div>    
+            </div>
+
       </div>
     );
   }

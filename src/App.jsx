@@ -52,7 +52,7 @@ const Routes = withRouter((props) => {
           </ClientMessagesProvider>
         </div>
       )}
-      <div className="container-fluid px-5 py-5 admin my-5">
+      <div className="container-fluid px-5 py-5 admin">
         {localStorage.getItem("token") ? (
             <Switch>
               <Route exact path="/passwords" component={Passwords} />
