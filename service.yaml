@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: hammoq-testdev
+  name: hammoq-testdev
+  namespace: default
+  selfLink: /api/v1/namespaces/default/services/hammoq-testdev
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: hammoq-testdev
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
