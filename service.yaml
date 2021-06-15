@@ -3,10 +3,10 @@ kind: Service
 metadata:
   annotations:
   labels:
-    app: hammoq-testdev
-  name: hammoq-testdev
+    app: hammoq-client-test
+  name: hammoq-client-test
   namespace: default
-  selfLink: /api/v1/namespaces/default/services/hammoq-testdev
+  selfLink: /api/v1/namespaces/default/services/hammoq-client-test
 spec:
   externalTrafficPolicy: Cluster
   ports:
@@ -14,7 +14,7 @@ spec:
     protocol: TCP
     targetPort: 3000
   selector:
-    app: hammoq-testdev
+    app: hammoq-client-test
   sessionAffinity: None
   type: LoadBalancer
 status:

@@ -16,7 +16,7 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    myapp = docker.build("gcr.io/hammock-272305/hammoq-testdev")
+                    myapp = docker.build("gcr.io/hammock-272305/hammoq-client-test")
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
             steps {
                  script {
                         docker.withRegistry('https://gcr.io', 'gcr:testdev') {
-                            sh "docker push gcr.io/hammock-272305/hammoq-testdev:latest"
+                            sh "docker push gcr.io/hammock-272305/hammoq-client-test:latest"
                     }
                  }
             }
