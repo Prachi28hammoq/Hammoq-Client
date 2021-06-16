@@ -1,14 +1,8 @@
 import React, { Component } from "react";
 import moment from 'moment'
-
-//import { makeStyles } from '@material-ui/core/styles';
-//import Popover from '@material-ui/core/Popover';
-
-//import $ from "jquery";
 import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import Axios from "../../services/Axios";
-import socket from "../../services/socket";
+import socket from "../../../src/services/socket";
 
 //let socket = require.main.exports.socket;
 
@@ -20,7 +14,6 @@ class message extends Component {
       messages : [],
       message: '',
       customerName : localStorage.getItem('customerName'),
-       
     }
     socket.on('messages', (data) => {if(data){this.setState({messages : data.messages})}} )
     socket.on('newmessage', (data) => {var messages = this.state.messages 
@@ -29,16 +22,6 @@ class message extends Component {
    })
   }
 
-  
-
-  // componentDidMount = async () => {
-  //   const response = await Axios.get(`/globalmessage/agent`, {
-  //       headers : {
-  //         'x-access-token' : localStorage.getItem('token')
-  //       }
-  //   })
-  //   this.setState({agents : response.data}) 
-  // }
   componentDidMount = () => {
     socket.emit('user-connected', {roomId:this.state.clientId,tag:'client'})
   }
@@ -103,12 +86,12 @@ class message extends Component {
                 })
               }
             </div>
-          <div class="type_msg">
-            <div class="input_msg_write">
+          <div className="type_msg">
+            <div className="input_msg_write">
               <TextareaAutosize
                 rowsMax={2}
                 aria-label="maximum height"
-                class="write_msg"
+                className="write_msg"
                 placeholder="Type a message"
                 value = {this.state.message}
                 id="msg"
@@ -117,11 +100,11 @@ class message extends Component {
               />
 
               <button
-                class="msg_send_btn"
+                className="msg_send_btn"
                 type="button"
                 onClick={this.handleMessageSend}
               >
-                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
               </button>
             </div>
           </div>

@@ -1,14 +1,9 @@
 import React, { Component } from "react";
-//import Input from "./Input";
-//import { Link } from "react-router-dom";
 import ButtonGroup from "./ButtonGroup";
-import { assetsURL, /*socketCon*/ } from "../../../services/Axios";
-//import io from "socket.io-client";
-//import SocketIOFileUpload from "socketio-file-upload";
+import { assetsURL } from "../../../services/Axios";
 import LoadingSpinner from "../../utils/loader";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa"
 
-// const socket = io(socketCon);
 const max = 5000;
 const $ = window.$;
 

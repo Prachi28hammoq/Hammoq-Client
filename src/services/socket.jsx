@@ -1,8 +1,15 @@
 import socketIOClient from "socket.io-client";
 
 var serverURL = "";
+let socket = undefined;
 
-if(process.env.REACT_APP_STAGE === 'devhost')
+if(process.env.REACT_APP_STAGE === 'devlocal')
+{
+    let url = "http://localhost:8000/";
+    socket = socketIOClient(url, {transports: [ "websocket" ]});
+}
+
+else if(process.env.REACT_APP_STAGE === 'devhost')
 {
 	serverURL = "https://devapi.hammoq.com/";
 }
@@ -17,18 +24,9 @@ else if(process.env.REACT_APP_STAGE === 'production')
 	serverURL = "https://api.hammoq.com/";
 }
 
-let socket = socketIOClient(serverURL, {path: '/chat/'},
+if(process.env.REACT_APP_STAGE !== 'devlocal')
 {
-  transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-});
-
-if(process.env.REACT_APP_STAGE === 'devlocal')
-{
-    URL = "http://localhost:8000/";
-    socket = socketIOClient(URL, {
-    transportOptions: { polling: { extraHeaders: { Accept: "*/*" } } },
-    });
+	socket = socketIOClient(serverURL, {transports: ["websocket"], withCredentials: true});
 }
-
 
 export default socket;

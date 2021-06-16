@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import "./addpayment.css";
 import { CardElement } from "@stripe/react-stripe-js";
-//import { Link } from "react-router-dom";
-//import Header from "../../Components/header/header";
-//import hammock from "../../Components/images/hammock.svg";
 import Axios from "../../services/Axios";
 import LoadingSpinner from "../utils/loader";
 
@@ -27,13 +24,11 @@ class AddPayment extends Component {
     const result = await stripe.createToken(card);
     let price = 100; //dollars
 
-    //console.log(result);
     this.setState({ loading: true });
     if (localStorage.getItem("paymentadded") === "true") {
       price = 1; //dollars
     }
     if (result.error) {
-      //console.log(result.error)
       alert("Fill up the details");
       this.setState({ loading: false });
     }
@@ -49,7 +44,7 @@ class AddPayment extends Component {
             if (price === 1) {
               alert("$1 has been added");
               this.setState({ loading: false });
-              window.open("/setting", "_self");
+              window.open("/basic", "_self");
             } else {
               alert("$100 has been added");
               this.setState({ loading: false });
@@ -64,7 +59,6 @@ class AddPayment extends Component {
             alert("Something went wrong.");
             console.log(err);
           });
-        //window.open("/products", "_self");
       })
       .catch((err) => {
         this.setState({ loading: false });
@@ -76,18 +70,8 @@ class AddPayment extends Component {
   componentDidMount(prevProps) {
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        console.log(data,'client detail')
         this.setState({ email: data.email });
         this.setState({ name: data.firstName });
-
-        if (
-          data.paymentStatus === true &&
-          !localStorage.getItem("paymentadded")
-        ) {
-          console.log(data);
-          localStorage.setItem("paymentadded", data.paymentStatus);
-          window.open("/basic", "_self");
-        }
       })
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   }
@@ -117,7 +101,7 @@ class AddPayment extends Component {
                       style={{ color: "#4db0cc" }}
                     >
                       <i
-                        class="fa fa-exclamation-triangle"
+                        className="fa fa-exclamation-triangle"
                         aria-hidden="true"
                         style={{ color: "red" }}
                       ></i>{" "}

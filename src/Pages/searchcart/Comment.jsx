@@ -1,8 +1,5 @@
 import React, { Component, Fragment } from "react";
-// import { socket } from "../../services/socket";
-// import $ from "jquery";
 import { Divider, Avatar, Grid, Paper } from "@material-ui/core";
-// import "./chat.css";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 
 class Comment extends Component {
@@ -63,12 +60,12 @@ class Comment extends Component {
               })}
           </Paper>
         </div>
-        <div class="type_msg p-1">
-          <div class="input_msg_write">
+        <div className="type_msg p-1">
+          <div className="input_msg_write">
             <TextareaAutosize
               rowsMax={2}
               aria-label="maximum height"
-              class="write_msg"
+              className="write_msg"
               placeholder="Type a message"
               id="comment"
               style={{ width: "85%" }}
@@ -76,11 +73,11 @@ class Comment extends Component {
             />
 
             <button
-              class="msg_send_btn"
+              className="msg_send_btn"
               type="button"
               onClick={this.handleNewUserMessage}
             >
-              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+              <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
             </button>
           </div>
         </div>

@@ -3,6 +3,8 @@ import Axios from "../../services/Axios";
 import "./signupmin.css";
 import Logo from "../../Components/images/hammock.svg";
 import { Link } from "react-router-dom";
+import legalDocuments from "../ClientLegal";
+//import { Document, Page } from 'react-pdf';
 
 class Signup extends Component {
   constructor() {
@@ -21,9 +23,9 @@ class Signup extends Component {
       password: "",
       confirmPassword: "",
       referralCode: "",
-      term1: false,
-      term2: false,
       isSubmitting: false,
+      privacyagreement: false,
+      termsofservice: false
     };
   }
 
@@ -41,8 +43,8 @@ class Signup extends Component {
     this.setState({ isSubmitting: true });
     e.preventDefault();
     const {
-      term1,
-      term2,
+      privacyagreement,
+      termsofservice,
       address1,
       address2,
       password,
@@ -58,9 +60,14 @@ class Signup extends Component {
       referralCode
     } = this.state;
 
-    if (!term1) {
+    if (!privacyagreement) {
       this.setState({ isSubmitting: false });
-      return alert("Accept all the terms.");
+      return alert("Please Accept The Privacy Ageement To Continue.");
+    }
+
+    if (!termsofservice) {
+      this.setState({ isSubmitting: false });
+      return alert("Please Accept The Terms Of Service To Continue.");
     }
 
     if (email == "") {
@@ -70,7 +77,7 @@ class Signup extends Component {
 
     if (phoneno == "") {
       this.setState({ isSubmitting: false });
-      return alert("Phone.no field is required.");
+      return alert("Phone Number field is required.");
     }
 
     if (firstName == "" || lastName == "") {
@@ -85,29 +92,29 @@ class Signup extends Component {
 
     const body = { ...this.state };
     Axios.post("/signup", body)
-      .then((res) => {
-        if (res.data.errors) {
+      .then((response) => {
+        if (response.err) {
           this.setState({ isSubmitting: false });
-          return alert(res.data.errors);
+          return alert(response.err);
         }
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("paymentadded", false);
-        window.open("/addpayment", "_self");
+        localStorage.setItem("token", response.data.token);
+        window.open("/subscription", "_self");
       })
-      .catch((err) => {
+      .catch((error) => {
         this.setState({ isSubmitting: false });
-        console.log(JSON.stringify(err));
-        if (err) {
-          return alert(err);
-      }
-     console.log(err);
-        alert("Something went wrong. Can't SignUp");
-        console.log(err);
+        if (error.response.data.err) 
+        {
+          console.log(error.response);
+          return alert(error.response.data.err);
+        }
+        alert("Something went wrong. Can't Sign Up");
       });
   };
 
   render() {
     const {
+      privacyagreement,
+      termsofservice,
       firstName,
       lastName,
       address1,
@@ -125,6 +132,9 @@ class Signup extends Component {
     } = this.state;
     return (
       <div className="row col-lg-5 m-auto">
+        {/*//<Document file={samplePDF}>
+        //  <Page pageNumber={1} />
+        //</Document>*/}
         <form className="formIt mt-7">
           <div className="d-flex align-items-center justify-content-between mb-5 ml-5 mr-5">
             <img src={Logo} alt="hammoq" className="img" />
@@ -201,18 +211,32 @@ class Signup extends Component {
             className="form-control mb-4"
             required
           ></input>
-          <a href="" target="_blank">
-            Terms and Conditions
+          <a href={legalDocuments.TERMSOFSERVICE} target="_blank">
+            Terms Of Service
           </a>
           <div className="form-check">
             <input
               type="checkbox"
-              name="term1"
+              name="termsofservice"
               onChange={this.handleToggleCheckbox}
               className="form-check-input"
             ></input>
             <label htmlFor="accept-terms" className="form-check-label mb-4">
-              I HAVE READ AND AGREE FOR TERMS SERVICE
+              I HAVE READ AND AGREE TO THE TERMS OF SERVICE.
+            </label>
+          </div>
+          <a href={legalDocuments.PRIVACYAGREEMENT} target="_blank">
+            Privacy Agreement
+          </a>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              name="privacyagreement"
+              onChange={this.handleToggleCheckbox}
+              className="form-check-input"
+            ></input>
+            <label htmlFor="accept-terms" className="form-check-label mb-4">
+              I HAVE READ AND AGREE TO THE PRIVACY AGREEMENT.
             </label>
           </div>
           {isSubmitting ? (
@@ -225,10 +249,10 @@ class Signup extends Component {
               SIGNING UP...
             </button>
           ) : (
-              <button className="btn btn-primary" onClick={this.handleSubmit}>
-                SIGNUP
-              </button>
-            )}
+            <button className="btn btn-primary" onClick={this.handleSubmit}>
+              SIGN UP
+            </button>
+          )}
         </form>
       </div>
     );

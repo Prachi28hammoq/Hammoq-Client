@@ -11,10 +11,11 @@ import TemplateForm from "./TemplateForm/TemplateForm";
 import Templates from "./Templates/Templates";
 import ResetPassword from "./resetpassword/resetpassword";
 import Charts from "./Charts/charts";
-import Config from "./config/title";
 import AcceptUrl from "./AcceptUrl/AcceptUrl";
-import ListingSettings from "./ListingSettings/ListingSettings";
+import ListingSettingsPortal from "./ListingSettings/ListingSettingsPortal";
 import Accounting from "./Accounting/Accounting";
+import Subscription from "./Subscription/Subscription";
+import Messages from "./Messages/Messages";
 
 export {
   Signup,
@@ -30,8 +31,9 @@ export {
   ResetPassword,
   forgotpassword,
   Charts,
-  Config,
   AcceptUrl,
-  ListingSettings,
-  Accounting
+  ListingSettingsPortal,
+  Accounting,
+  Subscription,
+  Messages
 };

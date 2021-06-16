@@ -34,7 +34,7 @@ class Login extends Component {
         await Axios.post("/forgotpassword/update", {
           email: this.state.email,
           newPassword: this.state.password,
-        })
+        },{headers: {"x-access-token": localStorage.getItem("token")}})
           .then(({ data }) => {
             if (data.assert === true) {
               //console.log(data);
@@ -58,7 +58,6 @@ class Login extends Component {
         )
           .then(({ data }) => {
             if (data.assert === true) {
-              //console.log(data);
               localStorage.setItem("token", data.token);
               alert(
                 "Code verified : Change new password or goto Products page"
@@ -76,7 +75,6 @@ class Login extends Component {
     if (this.state.codesent === false) {
       await Axios.get(`/forgotpassword/${this.state.email}`)
         .then(({ data }) => {
-          console.log(data,'sdfhkjsdhfj');
           if (data.assert === true) {
             alert(data.data);
             this.setState({ codesent: true });
@@ -125,7 +123,7 @@ class Login extends Component {
                       <div className="col d-flex justify-content-center">
                         <div className="row">
                           <i
-                            class="fa fa-times-circle text-danger"
+                            className="fa fa-times-circle text-danger"
                             aria-hidden="true"
                             style={{ width: "50" }}
                           ></i>
@@ -135,18 +133,18 @@ class Login extends Component {
                         </div>
                       </div>
                     )}
-                    <div class="input-group input-group-lg mt-3">
-                      <div class="input-group-prepend">
+                    <div className="input-group input-group-lg mt-3">
+                      <div className="input-group-prepend">
                         <span
-                          class="input-group-text bg-white border-0 rounded-1-left pr-1"
+                          className="input-group-text bg-white border-0 rounded-1-left pr-1"
                           id="inputGroup-sizing-lg"
                         >
-                          <div class="fas fa-envelope" aria-hidden="true"></div>
+                          <div className="fas fa-envelope" aria-hidden="true"></div>
                         </span>
                       </div>
                       <input
                         type="email"
-                        class="form-control border-0 rounded-1-right pl-3 bg-white"
+                        className="form-control border-0 rounded-1-right pl-3 bg-white"
                         aria-label="Sizing example input"
                         aria-describedby="inputGroup-sizing-lg"
                         placeholder="Email"
@@ -165,20 +163,20 @@ class Login extends Component {
                         : "input-group input-group-lg mt-3 hide"
                       }
                     >
-                      <div class="input-group-prepend">
+                      <div className="input-group-prepend">
                         <span
-                          class="input-group-text bg-white border-0 rounded-1-left pr-1"
+                          className="input-group-text bg-white border-0 rounded-1-left pr-1"
                           id="inputGroup-sizing-lg"
                         >
                           <div
-                            class="fas fa-shield-alt"
+                            className="fas fa-shield-alt"
                             aria-hidden="true"
                           ></div>
                         </span>
                       </div>
                       <input
                         type="text"
-                        class="form-control border-0 rounded-1-right pl-3 bg-white"
+                        className="form-control border-0 rounded-1-right pl-3 bg-white"
                         aria-label="Sizing example input"
                         aria-describedby="inputGroup-sizing-lg"
                         placeholder="code"
@@ -195,12 +193,12 @@ class Login extends Component {
                           : "input-group input-group-lg mt-3 hide"
                       }
                     >
-                      <div class="input-group-prepend mb-2">
+                      <div className="input-group-prepend mb-2">
                         <span
-                          class="input-group-text bg-white border-0 rounded-1-left pr-1"
+                          className="input-group-text bg-white border-0 rounded-1-left pr-1"
                           id="inputGroup-sizing-lg"
                         >
-                          <div class="fas fa-lock" aria-hidden="true"></div>
+                          <div className="fas fa-lock" aria-hidden="true"></div>
                         </span>
                       </div>
                       <input

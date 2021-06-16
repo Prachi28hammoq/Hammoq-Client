@@ -3,53 +3,45 @@ body {
 }
 
 .settingsIt2 {
-  width: 270px;
+  width: 100%;
   margin: auto;
   padding-top: 50px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 #settingsBackground2 {
-  border: 2px solid #4db0cc;
-  background-color: #cdcdcd;
+  background-color: #007bff;
   border-radius: 5px;
   text-align: center;
   height: 65px;
   width: 300px;
-  padding-top: 10px;
+  color:#000000;
+  align-content: center;
 }
 
-@media (max-width: 411px) {
-  #settingsBackground2 {
-    border: 2px solid #4db0cc;
-    border-radius: 5px;
-    text-align: center;
-    height: 75px;
-    width: 395px;
-    padding-top: 10px;
-    margin-left: 8px;
-    margin-right: 8px;
-  }
+#settingsBackground2:hover{
+  color:#ffffff;
 
-  #profilephoto2 {
-    padding-top: 30px;
-    padding-left: 30px;
-    width: 83%;
-  }
-
-  .settingsIt2 {
-    width: 409px;
-    margin: auto;
-    padding-top: 50px;
-    text-align: center;
-  }
 }
+
 #profilephoto2 {
   padding-top: 30px;
-  padding-left: 30px;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#preferences {
+.profileDataField .MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff !important;
+}
+
+.profileDataField .MuiInputBase-root.Mui-disabled {
+  color: #000000 !important;
+}
+
+.preferences {
   display: inline;
 }
 
@@ -64,6 +56,6 @@ body {
   padding-right: 5px;
 }
 
-.logout {
-  color: #007bff;
+#logout {
+  
 }

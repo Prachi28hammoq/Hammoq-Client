@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Accounting.css';
 import TabPanel from './Components/TabPanel.js';
 import { Route, useHistory } from 'react-router-dom';
 import Reports from './Reports';
 import Analytics from './Analytics';
-import Axios from "../../services/Axios";
 
 const Accounting = () => {
 
@@ -22,6 +21,8 @@ const Accounting = () => {
             case 'Analytics': history.push('/accounting/analytics');
                 break;
             case 'Reports': history.push('/accounting/reports');
+                break;
+            default:
                 break;
         }
 
@@ -46,6 +47,7 @@ const Accounting = () => {
                     </Route>
                 </div>
             </div>
+            
         </div>
     );
 }

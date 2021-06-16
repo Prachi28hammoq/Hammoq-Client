@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import AddIcon from '@material-ui/icons/Add';
-import socket from "../../../src/services/socket.jsx";
+//import { ebaySocket as socket } from "../../../src/services/socket";
 import Axios from "../../services/Axios";
 import { useLocation } from 'react-router-dom';
 import './EbayAccounts.css';
+import { nanoid } from "nanoid";
 
 const $ = window.$;
 
@@ -18,7 +19,7 @@ const EbayAccounts = (props) => {
   useEffect(() => {
 
     const init = async () => {
-      registerListenerForNewlyCreatedEbayAccounts();
+      //registerListenerForNewlyCreatedEbayAccounts();
 
       setAreAccountsLoading(true);
 
@@ -35,11 +36,11 @@ const EbayAccounts = (props) => {
 
   useEffect(() => {
 
-    if (areAccountsLoading == true)
+    if (areAccountsLoading === true)
       setShowNoAccountsFoundMessage(false);
 
-    if (areAccountsLoading == false) {
-      if (ebayAccounts.length == 0)
+    if (areAccountsLoading === false) {
+      if (ebayAccounts.length === 0)
         setShowNoAccountsFoundMessage(true);
       else
         setShowNoAccountsFoundMessage(false);
@@ -57,18 +58,18 @@ const EbayAccounts = (props) => {
 
   }, [location]);
 
-  const registerListenerForNewlyCreatedEbayAccounts = () => {
+/*  const registerListenerForNewlyCreatedEbayAccounts = () => {
 
     socket.on("newebayaccount", data => {
 
       setEbayAccounts(ebayAccounts => {
 
-        if (!ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName == data.ebayUserName).length > 0) {
+        if (!ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName === data.ebayUserName).length > 0) {
           return [...ebayAccounts, { ebayUserName: data.ebayUserName, ebayUserTokenStatus: data.ebayUserTokenStatus }];
         } else {
           return ebayAccounts.map(ebayAccount => {
 
-            if (ebayAccount.ebayUserName == data.ebayUserName)
+            if (ebayAccount.ebayUserName === data.ebayUserName)
               return { ...ebayAccount, ebayUserName: data.ebayUserName, ebayUserTokenStatus: data.ebayUserTokenStatus };
 
             return ebayAccount;
@@ -79,12 +80,10 @@ const EbayAccounts = (props) => {
 
     });
 
-  }
+  }*/
 
   const getAllEbayAccountsLinkedToThisHammoqUser = async () => {
-
     let res = await Axios.get('/ebayAuth/ebayaccounts');
-
     return res?.data || [];
   }
 
@@ -92,41 +91,31 @@ const EbayAccounts = (props) => {
 
     Axios.get("/ebay/consent")
       .then((response) => {
-        var authWindow = window.open(response.data.authURL, "_blank");
+        window.open(response.data.authURL, "_blank");
       })
-
       .catch((err) => {
         console.log(err) || alert(JSON.stringify({ err: err }));
       });
   }
 
   const sendAuthorizationToken = async (location) => {
-
-    if (location.pathname == '/accounts/ebayAccounts' && location.search && location.search?.length > 0) {
+    if (location.pathname === '/accounts/ebayAccounts' && location.search && location.search?.length > 0) {
       let res = await Axios.post('/ebayAuth/ebayaccounts' + location.search);
-      if (res.data)
-        setTimeout(() => { window.close() }, 100);
+      if (res.data) setTimeout(() => { window.close() }, 100);
     }
   }
 
   const refreshEbayUserToken = async (ebayUserName) => {
-
-    let res = await Axios.post('/ebayAuth/refreshtokens/' + ebayUserName);
-
+    await Axios.post('/ebayAuth/refreshtokens/' + ebayUserName);
   }
 
   const removeEbayAccountFromHammoqAccount = async (ebayUserName) => {
-
-    let res = await Axios.delete('/ebayAuth/ebayaccounts/' + ebayUserName);
-
-    setEbayAccounts(ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName != ebayUserName));
-
+    await Axios.delete('/ebayAuth/ebayaccounts/' + ebayUserName);
+    setEbayAccounts(ebayAccounts.filter(ebayAccount => ebayAccount.ebayUserName !== ebayUserName));
   }
 
   const refreshUserTokenForAllEbayAccounts = async () => {
-
-    let res = await Axios.post('/ebayAuth/refreshtokens/');
-
+    await Axios.post('/ebayAuth/refreshtokens/');
   }
 
   return (
@@ -135,14 +124,14 @@ const EbayAccounts = (props) => {
         <div className="row">
           <div className="col-2"></div>
           <div className="col-8 d-flex justify-content-end">
-            <button type="button" class="btn btn-success" disabled={ebayAccounts.length >= 1} onClick={openEbayUserAuthorizationWindow}><AddIcon />&nbsp;Add Ebay Account</button>
+            <button type="button" className="btn btn-success" disabled={ebayAccounts.length >= 1} onClick={openEbayUserAuthorizationWindow}><AddIcon />&nbsp;Add Ebay Account</button>
           </div>
         </div>
         <div className="row">
           <div className="col-2"></div>
           <div className="col-8">
             <table className="table">
-              <thead class="thead-light">
+              <thead className="thead-light">
                 <tr>
                   <th scope="col">Ebay Username</th>
                   <th scope="col">Status</th>
@@ -152,7 +141,7 @@ const EbayAccounts = (props) => {
               <tbody>
                 {ebayAccounts.map(ebayAccount => {
                   return (
-                    <tr>
+                    <tr key={nanoid(3)}>
                       <th scope="col">{ebayAccount?.ebayUserName}</th>
                       <th scope="col">
                         {ebayAccount?.ebayUserTokenStatus ?
@@ -189,24 +178,24 @@ const EbayAccounts = (props) => {
           <div className="col-2"></div>
         </div>
 
-        <div class="modal fade" id="removeEbayAccountModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Remove Ebay Account?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div className="modal fade" id="removeEbayAccountModal" data-backdrop="static" tabIndex="-1" role="dialog" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Remove Ebay Account?</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 Do you wish to remove the Ebay account : <span style={{ color: '#FF5A5F' }}>{accountToBeRemoved}</span> ?
                             </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-danger"
+              <div className="modal-footer">
+                <button type="button" className="btn btn-danger"
                   onClick={() => { removeEbayAccountFromHammoqAccount(accountToBeRemoved); $("#removeEbayAccountModal").modal("hide"); }}>
                   Yes, please delete
                                 </button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
 
               </div>
             </div>

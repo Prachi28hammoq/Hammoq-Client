@@ -14,22 +14,20 @@ class Login extends Component {
   }
 
   handleSubmit = async (e) => {
-    this.setState({ isSubmitting: true });
-    e.preventDefault();
-    await Axios.get("/signin", { params: this.state })
-      .then(({ data }) => {
-        if (data.err) {
-          this.setState({ isSubmitting: false });
-          this.setState({ loginError: true });
-          return;
-        }
-        localStorage.setItem("token", data.token);
-        window.open("/basic", "_self");
-      })
-      .catch((err) => {
-        this.setState({ isSubmitting: false });
-        this.setState({ loginError: true });
-      });
+    try {
+      e.preventDefault();
+      this.setState({ isSubmitting: true });
+      const { email, password } = this.state;
+      if (email == "" || password == "") {
+        return alert("Email and password is required");
+      }
+      const res = await Axios.post("/signin", { email, password });
+      localStorage.setItem("token", res.data.token);
+      window.open("/basic", "_self");
+    } catch (err) {
+      alert(`Error in login: ${err?.response?.data?.err[0]}`);
+      this.setState({ isSubmitting: false, loginError: true });
+    }
   };
 
   handleChange = (e) => {

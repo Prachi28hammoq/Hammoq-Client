@@ -11,21 +11,21 @@ const AccountsTabBar = () => {
 
     useEffect(() => {
 
-        console.log(window.location.href);
-
         switch (selectedTab) {
             case "Ebay Accounts": history.push('/accounts/ebayAccounts');
                 break;
+            default:
+                break;
         }
 
-    }, [selectedTab])
+    }, [selectedTab, history])
 
     return (
         <div className="container-fluid">
             <div className="row">
                 <div className="col-2"></div>
                 <div className="col-8 d-flex justify-content-start">
-                    <AccountsTab onClick={setSelectedTab} tabName="Ebay Accounts" isSelected={selectedTab == "Ebay Accounts"} />                    
+                    <AccountsTab onClick={setSelectedTab} tabName="Ebay Accounts" isSelected={selectedTab === "Ebay Accounts"} />                    
                 </div>
             </div>
         </div>);

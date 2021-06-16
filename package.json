@@ -4,52 +4,49 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/Hammoq/Hammoq-Client.git"
+    "url": "https://github.com/Hammoq-Inc/Hammoq-Client.git"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
+    "@hammoq-inc/hammoq-recycledcomponents": "^1.3.0",
+    "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "@stripe/react-stripe-js": "^1.4.0",
-    "@stripe/stripe-js": "^1.13.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
+    "@stripe/stripe-js": "^1.14.0",
     "axios": "^0.21.1",
-    "bootstrap": "^4.6.0",
-    "browser-image-compression": "^1.0.14",
+    "canvas": "^2.7.0",
     "chart.js": "^2.9.4",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.6.0",
     "jwt-decode": "^3.0.0",
     "lodash": "^4.17.21",
-    "material-ui-popup-state": "^1.7.2",
-    "nanoid": "^3.1.20",
-    "popper.js": "^1.16.1",
+    "moment": "^2.29.1",
+    "nanoid": "^3.1.21",
     "react": "^16.14.0",
-    "react-alice-carousel": "^1.19.3",
-    "react-bootstrap": "^1.5.1",
-    "react-chartjs-2": "^2.11.1",
-    "react-date-picker": "^8.0.7",
+    "react-bootstrap": "^1.6.1",
+    "react-chartjs-2": "^2.11.2",
+    "react-date-picker": "^8.2.0",
     "react-dom": "^16.14.0",
     "react-google-recaptcha": "^2.1.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^3.11.0",
     "react-loader-spinner": "^3.1.14",
-    "react-recaptcha": "^2.3.10",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
-    "react-scrollbar": "^0.5.6",
     "react-window": "^1.8.6",
-    "socket.io-client": "^2.4.0",
-    "typescript": "^4.2.3"
+    "socket.io-client": "^2.4.0"
   },
   "scripts": {
-    "optimize": "npm --depth 18 update && npm --depth 18 audit fix && npm --depth 18 prune && npm --depth 18 dedupe",
+    "recycledcomponents": "npm config set @hammoq-inc:registry=https://npm.pkg.github.com/ && npm install @hammoq-inc/hammoq-recycledcomponents@beta",
+    "optimize": "npm --depth 15 update && npm --depth 15 audit fix && npm --depth 15 prune && npm --depth 15 dedupe",
     "startdevlocal": "REACT_APP_NAME=APP REACT_APP_STAGE=devlocal REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000 react-scripts start",
     "startdevhost": "REACT_APP_NAME=APP REACT_APP_STAGE=devhost REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w PORT=3000 react-scripts start",
     "startstage": "REACT_APP_NAME=APP REACT_APP_STAGE=staging REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w react-scripts build && serve -l 3000 -s build",
-    "startproduction": "REACT_APP_NAME=APP REACT_APP_STAGE=production REACT_APP_STRIPE=pk_live_eHRa9qUfyNNMG2lgJVYOj9Js00hCyttVfu react-scripts build && serve -l 3000 -s build"
+    "startproduction": "REACT_APP_NAME=APP REACT_APP_STAGE=production REACT_APP_STRIPE=pk_live_eHRa9qUfyNNMG2lgJVYOj9Js00hCyttVfu react-scripts build && serve -l 3000 -s build",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "resolutions": {
+    "postcss": "8.3.0",
+    "browserslist": "4.16.6"
   },
   "eslintConfig": {
     "extends": "react-app"

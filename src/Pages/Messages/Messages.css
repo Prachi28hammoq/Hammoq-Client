@@ -1,0 +1,5 @@
+.client_messages_container {
+    display: flex;
+    justify-content: center;
+    height: 80vh;
+}

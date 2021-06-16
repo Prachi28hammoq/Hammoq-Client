@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import LineChart from './Components/LineChart';
 import BarChart from './Components/BarChart';
 import DoughnutChart from './Components/DoughnutChart';
 import Axios from "../../services/Axios";
-import socket from "../../../src/services/socket.jsx";
+//import { accountingSocket as socket} from "../../../src/services/socket";
 import './Analytics.css';
 import _ from 'lodash';
+import { NavLink  } from 'react-router-dom'
 import { nanoid } from 'nanoid';
-//const { v4: uuidv4 } = require('uuid');
-
-//uuidv4();
+import AddIcon from '@material-ui/icons/Add';
 
 const Analytics = (props) => {
 
@@ -58,15 +56,15 @@ const Analytics = (props) => {
             setEbayAccounts(await getAllEbayAccountsLinkedToThisHammoqUser());
         })();
 
-        return () => {
-            socket.disconnect();
+/*        return () => {
+            //socket.disconnect();
             socket.off('connect');
             socket.off("updateAnalyticsProgress");
-        };
+        };*/
 
     }, [])
 
-    useEffect(() => {
+/*    useEffect(() => {
         if (room.length > 0) {
             socket.connect();
             socket.on('connect', function () {
@@ -79,7 +77,7 @@ const Analytics = (props) => {
             });
         }
 
-    }, [room])
+    }, [room])*/
 
     useEffect(() => {
 
@@ -130,12 +128,15 @@ const Analytics = (props) => {
         setExpenses(currentMonthOrders.reduce((acc, item) => acc
             + (parseFloat(item.deliveryCost) || 0)
             + (parseFloat(item.tax) || 0)
+            + (parseFloat(item.totalMarketplaceFee) || 0), 0) + previousMonthOrders.reduce((acc, item) => acc
+            + (parseFloat(item.deliveryCost) || 0)
+            + (parseFloat(item.tax) || 0)
             + (parseFloat(item.totalMarketplaceFee) || 0), 0))
         setProfitLoss(currentMonthOrders.reduce((acc, item) => acc
             + (isNaN(item.costOfGoods) ? 0 : (parseInt(item.totalDueSeller) || 0)
                 - (parseInt(item.costOfGoods) || 0)), 0))
 
-    }, [currentMonthOrders])
+    }, [currentMonthOrders, previousMonthOrders])
 
 
     useEffect(() => {
@@ -146,9 +147,9 @@ const Analytics = (props) => {
 
     useEffect(() => {
 
-        setIncome(currentMonthRevenue.reduce((acc, item) => acc + item, 0));
+        setIncome(currentMonthRevenue.reduce((acc, item) => acc + item, 0) + previousMonthRevenue.reduce((acc, item) => acc + item, 0));
 
-    }, [currentMonthRevenue])
+    }, [currentMonthRevenue, previousMonthRevenue])
 
     useEffect(() => {
 
@@ -172,7 +173,7 @@ const Analytics = (props) => {
     return (
         <div className="container-fluid">
             <div className="row">
-                <div className="col-9"></div>
+                <div className="col-9"><NavLink   className="btn btn-success" style={{ height:'40px', textAlign:'center'}}  to="/accounts/ebayAccounts"><AddIcon />&nbsp;Add Ebay Account</NavLink ></div>
                 <div className="col-3">
                     <div className="ebay-analytics-control-bar">
                         <div className="ebay-analytics-progress-bar">
@@ -182,9 +183,9 @@ const Analytics = (props) => {
                         </div>
                         <div style={{ padding: '10px 7px' }}>
                             <select id="inputState" value={selectedEbayAccount} onChange={(event) => setSelectedEbayAccount(event.target.value)}>
-                                <option selected>Choose Ebay Account</option>
+                                <option defaultValue>Choose Ebay Account</option>
                                 <option value="All accounts">All accounts</option>
-                                {ebayAccounts.map(ebayAccount => <option value={ebayAccount.ebayUserName}>{ebayAccount.ebayUserName}</option>)}
+                                {ebayAccounts.map(ebayAccount => <option value={ebayAccount.ebayUserName} key={nanoid(3)}>{ebayAccount.ebayUserName}</option>)}
                             </select>
                             <button type="button" className="btn btn-success btn-sm" style={{ marginLeft: '10px' }} onClick={() => getAnalyticsData()} disabled={isLoading}>
                                 Load Data

@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import "./settingsmin.css";
-//import imageresponse from "../../Components/images/imagebackgroud.jpg";
 import PaymentAlert from "../../Components/paymentAlert/PaymentAlert";
 import { Link } from "react-router-dom";
 import Axios from "../../services/Axios";
-//import { Button } from "@material-ui/core";
-
-//import ListingSettings from "../ListingSettings/ListingSettings";
+import TextField from '@material-ui/core/TextField';
 
 class settings extends Component {
   constructor() {
@@ -15,7 +12,6 @@ class settings extends Component {
       username: "",
       email: "",
       open: false,
-      client_id: "",
       client_id: "",
       savedCards: [],
     };
@@ -62,7 +58,6 @@ class settings extends Component {
   componentDidMount(prevProps) {
     Axios.get("/clientdetails")
       .then(({ data }) => {
-        //console.log(data,'data')
         this.setState({
           username: data.firstName,
           client_id: data._id,
@@ -98,14 +93,6 @@ class settings extends Component {
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
   };
 
-  handlePaymentAdd = () => {
-    if(this.state.savedCards.length>0){
-      return this.setState({ open: true });
-    }else{
-      window.open('/addpayment','_self')
-    }
-  };
-
   render() {
     const { username, email } = this.state;
 
@@ -118,108 +105,101 @@ class settings extends Component {
           savedCards={this.state.savedCards}
         />
         <div className="row" id="profilephoto2">
-          <div className="col-12 d-flex justify-content-center align-items-center">
-            <form onSubmit={this.editinfo} className="modal-body">
-              <div className="row">
-                <i class="fa fa-user col-2 mt-2" aria-hidden="true"></i>
-                <input
-                  type="text"
-                  className="form-control border-0 rounded-1-right mb-1 w-20 align-middle pl-1 bg-white"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-lg"
-                  placeholder="Username"
-                  required
-                  name="username"
-                  onChange={this.handleChange}
-                  value={username}
-                ></input>
-              </div>
-              <div className="row">
-                <i class="fa fa-envelope col-2" aria-hidden="true"></i>
-                <input
-                  type="text"
-                  className="form-control border-0 rounded-1-left mb-2 align-middle pl-1 bg-white"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-lg"
-                  placeholder="email"
-                  required
-                  name="email"
-                  onChange={this.handleChange}
-                  value={email}
-                ></input>
-              </div>
-              <div className="row">
-                <div className="col-4">
-                  <button type="submit" className="btn btn-primary">
-                    <i className="fa fa-pencil d-inline mr-1">Edit</i>
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
+          <TextField
+            variant="outlined"
+            type="text"
+            className="profileDataField"
+            placeholder="Username"
+            disabled
+            name="username"
+            value={username}
+            InputProps={{startAdornment: (<i className="fa fa-user col-2 mt-2" aria-hidden="true"></i>)}}
+          ></TextField>
+          <TextField
+            variant="outlined"
+            type="text"
+            className="profileDataField"
+            placeholder="email"
+            disabled
+            name="email"
+            value={email}
+            InputProps={{startAdornment: (<i className="fa fa-envelope col-2" aria-hidden="true"></i>)}}
+          ></TextField>
         </div>
 
-        <a href="/transactions" className="row" id="settingsBackground2">
+        <Link to="/transactions" className="row" id="settingsBackground2">
           <div className="col-3">
-            <i className="fa fa-user-circle fa-2x" id="backgroundIt"></i>
+            <i className="fa fa-user-circle fa-2x" id=""></i>
           </div>
           <div className="col-6">
-            <h6 className="paddingfornames">Payment Details</h6>
+            <h6 className="paddingfornames">Transactions</h6>
           </div>
           <div className="col-3">
             <i
-              class="fa fa-arrow-circle-right fa-2x t backgroundarrow"
+              className="fa fa-arrow-circle-right fa-2x t backgroundarrow"
               aria-hidden="true"
             ></i>
           </div>
-        </a>
+        </Link>
+
+        <Link to="/subscription" className="row" id="settingsBackground2">
+          <div className="col-3">
+            <i className="fa fa-sync fa-2x" id=""></i>
+          </div>
+          <div className="col-6">
+            <h6 className="paddingfornames">Subscriptions</h6>
+          </div>
+          <div className="col-3">
+            <i
+              className="fa fa-arrow-circle-right fa-2x t backgroundarrow"
+              aria-hidden="true"
+            ></i>
+          </div>
+        </Link>
 
         <Link to="/addpayment" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              className="fa fa-credit-card fa-2x colorIt"
-              id="backgroundIt"
+              className="fa fa-credit-card fa-2x "
+              id=""
             ></i>
           </div>
           <div className="col-6">
             <h6 className="paddingfornames">Add Credit Card</h6>
           </div>
           <div className="col-3">
-            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+            <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
-        <Link className="row" id="settingsBackground2">
+        <Link to="/addpayment" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              className="fa fa-money fa-2x colorIt"
-              id="backgroundIt"
+              className="fa fa-money fa-2x "
             ></i>
           </div>
           <div className="col-6">
-            <h6 className="paddingfornames" onClick={this.handlePaymentAdd}>
-              Add Payment
-            </h6>
+            <h6 className="paddingfornames">Add Payment</h6>
           </div>
           <div className="col-3">
-            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+            <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
         <Link to="/resetpassword" className="row" id="settingsBackground2">
           <div className="col-3">
-            <i className="fa fa-lock fa-2x colorIt" id="backgroundIt"></i>
+            <i className="fa fa-lock fa-2x " id=""></i>
           </div>
           <div className="col-6 p-0">
             <h6 className="paddingfornames">Change Password</h6>
           </div>
           <div className="col-3">
-            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+            <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
         <Link to="/passwords" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              class="fa fa-envelope-o  fa-2x colorIt"
-              id="backgroundIt"
+              className="fa fa-envelope-o  fa-2x "
+              id=""
               aria-hidden="true"
             ></i>
           </div>
@@ -227,31 +207,47 @@ class settings extends Component {
             <h6 className="paddingfornames">Logins</h6>
           </div>
           <div className="col-3">
-            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+            <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
-
+{/* 
         <Link to="/config" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              class="fa fa-envelope-o  fa-2x colorIt"
-              id="backgroundIt"
+              className="fa fa-cogs  fa-2x "
+              id=""
+              aria-hidden="true"
+            ></i>
+          </div>
+         <div className="col-6">
+            <h6 className="paddingfornames">Config</h6>
+          </div>
+          <div className="col-3">
+            <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+          </div>
+        </Link>
+*/}
+        <Link to="/accounts/ebayAccounts" className="row" id="settingsBackground2">
+          <div className="col-3">
+            <i
+              className="fa fa-at  fa-2x "
+              id=""
               aria-hidden="true"
             ></i>
           </div>
           <div className="col-6">
-            <h6 className="paddingfornames">Config</h6>
+            <h6 className="paddingfornames">Accounts</h6>
           </div>
           <div className="col-3">
-            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+            <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
 
         <Link to="/listingsettings" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              class="fa fa-envelope-o  fa-2x colorIt"
-              id="backgroundIt"
+              className="fa fa-list  fa-2x "
+              id=""
               aria-hidden="true"
             ></i>
           </div>
@@ -259,14 +255,14 @@ class settings extends Component {
             <h6 className="paddingfornames">Listing Settings</h6>
           </div>
           <div className="col-3">
-            <i class="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
+            <i className="fa fa-arrow-circle-right fa-2x" aria-hidden="true"></i>
           </div>
         </Link>
 
         {/* <Link to="/charts" className="row" id="settingsBackground2">
           <div className="col-3">
             <i
-              class="fa fa-line-chart  fa-3x colorIt"
+              className="fa fa-line-chart  fa-3x colorIt"
               id="backgroundIt"
               aria-hidden="true"
             ></i>
@@ -275,7 +271,7 @@ class settings extends Component {
             <h4 className="paddingfornames">Analytics</h4>
           </div>
           <div className="col-3">
-            <i class="fa fa-arrow-circle-right fa-3x" aria-hidden="true"></i>
+            <i className="fa fa-arrow-circle-right fa-3x" aria-hidden="true"></i>
           </div>
         </Link> */}
 
@@ -285,7 +281,7 @@ class settings extends Component {
           onClick={this.logoutHandler}
         >
           <div className="col-12">
-            <h6 className="paddingfornames logout">LOGOUT</h6>
+            <h6 className="paddingfornames ">LOGOUT</h6>
           </div>
         </button>
       </div>

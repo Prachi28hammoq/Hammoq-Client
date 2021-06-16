@@ -3,13 +3,8 @@ import LeftSection from "./Components/LeftSection";
 import RightSection from "./Components/RightSection";
 import "./Template.css";
 import Axios from "../../services/Axios";
-//import { socketCon } from "../../services/Axios";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../utils/loader";
-//import io from "socket.io-client";
-import imageCompression from "browser-image-compression";
-
-// const socket = io(socketCon);
 
 const $ = window.$;
 
@@ -705,73 +700,6 @@ export default class extends Component {
     this.setState({ othersstate });
   };
 
-  handleImageChange = async (event) => {
-    const { images, /*cid*/ } = this.state;
-    const options = {
-      maxSizeMB: 0.3,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
-    const idx = images.findIndex((image) => image.key === event.target.name);
-    try {
-      this.setState({ isSubmitting: true });
-      let compressedFile = await imageCompression(
-        event.target.files[0],
-        options
-      );
-      images[idx].img = compressedFile;
-      this.setState({
-        images,
-      });
-      this.setState({ isSubmitting: false });
-    } catch (error) {
-      console.log(error);
-    }
-    // console.log(images);
-
-    // var reader = new FileReader();
-    // reader.readAsDataURL(event.target.files[0]);
-    // reader.onload = function () {
-    //   //console.log(reader.result);
-    //   socket.emit("img", {
-    //     key: images[idx].key,
-    //     base64: reader.result,
-    //     cid: cid,
-    //   });
-    // };
-    // reader.onerror = function (error) {
-    //   console.log("Error: ", error);
-    // };
-  };
-
-  handleBulkUpload = async (e) => {
-    const { images, /*cid*/ } = this.state;
-    //var imgobj = [];
-    const files = e.target.files;
-    const count = files.length;
-    console.log("bulk image change");
-    const options = {
-      maxSizeMB: 0.3,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
-    this.setState({ isSubmitting: true });
-    for (let i = 0; i < count; i++) {
-      const idx = images.findIndex((image) => !image.img);
-      if (idx > -1) {
-        try {
-          console.log(files[i]);
-          let compressedFile = await imageCompression(files[i], options);
-          console.log(compressedFile);
-          images[idx].img = compressedFile;
-          this.setState({ images }, () => console.log(this.state.images));
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    this.setState({ isSubmitting: false });
-
     //this.setState({ images }, () => console.log(this.state.images));
 
     // images.forEach((i) => {
@@ -824,8 +752,7 @@ export default class extends Component {
     //   // }, 5000);
     //   //}
     // }, 2000);
-  };
-
+    
   removeImg = (idx) => {
     const { images } = this.state;
     images[idx].img = "";

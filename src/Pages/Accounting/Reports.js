@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-date-picker';
 import Axios from "../../services/Axios";
-import socket from "../../../src/services/socket.jsx";
+//import { accountingSocket as socket} from "../../../src/services/socket";
 import './Reports.css';
-import _ from 'lodash';
 import { nanoid } from 'nanoid';
-//const { v4: uuidv4 } = require('uuid');
+import AddIcon from '@material-ui/icons/Add';
+import { NavLink  } from 'react-router-dom'
 
 const Reports = (props) => {
 
@@ -36,16 +36,15 @@ const Reports = (props) => {
 
         loadEbayAccounts();
 
-        return () => {
-            socket.disconnect();
+/*        return () => {
+            //socket.disconnect();
             socket.off('connect');
             socket.off("updateAnalyticsProgress");
-        };
+        };*/
 
     }, []);
 
-    useEffect(() => {
-        console.log(room);
+/*    useEffect(() => {
         if (room.length > 0) {
             socket.connect();
             socket.on('connect', function () {
@@ -58,7 +57,7 @@ const Reports = (props) => {
             });
         }
 
-    }, [room])
+    }, [room])*/
 
     useEffect(() => {
 
@@ -117,8 +116,6 @@ const Reports = (props) => {
 
     const updateCostOfGoods = async (index, orderId, value) => {
 
-        let re = /^[0-9\b]+$/;
-
         if (!isNaN(value)) {
             setOrders(orders => orders.map((order, idx) => {
                 if (idx == index) return { ...orders[index], costOfGoods: value };
@@ -156,7 +153,9 @@ const Reports = (props) => {
     return (
         <>
             <div className="row">
+            <NavLink   className="btn btn-success" style={{ height:'40px', 'textAlign':'center'}}  to="/accounts/ebayAccounts"><AddIcon />&nbsp;Add Ebay Account</NavLink >
                 <div style={{ display: 'inline-block', float: 'right', margin: '7px 0px' }} className="ml-auto">
+                
                     <div className="ebay-reports-control-bar">
                         <div className="ebay-reports-progress-bar">
                             <div className="ebay-reports-progress-bar-indicator" style={{ width: isLoading ? progressIndicatorPercentage + '%' : '100%' }}>
@@ -166,9 +165,9 @@ const Reports = (props) => {
                         <div style={{ padding: '10px 7px' }}>
                             <div style={{ display: 'inline-block' }}>
                                 <select id="inputState" value={selectedEbayAccount} onChange={(event) => setSelectedEbayAccount(event.target.value)}>
-                                    <option selected>Choose Ebay Account</option>
+                                    <option defaultValue>Choose Ebay Account</option>
                                     <option value="All accounts">All accounts</option>
-                                    {ebayAccounts.map(ebayAccount => <option value={ebayAccount.ebayUserName}>{ebayAccount.ebayUserName}</option>)}
+                                    {ebayAccounts.map(ebayAccount => <option value={ebayAccount.ebayUserName} key={nanoid(3)}>{ebayAccount.ebayUserName}</option>)}
                                 </select>
                             </div>
                             <div style={{ display: 'inline-block' }}>
@@ -197,7 +196,7 @@ const Reports = (props) => {
                 </div>
             </div>
             <div className="row" style={{ height: '60vh', overflow: 'scroll' }}>
-                <table class="table table-hover">
+                <table className="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
