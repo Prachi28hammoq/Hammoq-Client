@@ -5,7 +5,7 @@ pipeline {
         LOCATION = 'us-central1-c'
         CREDENTIALS_ID = 'testdev'
         BUCKET = 'hammoq-client'
-        PATTERN = '**/build/**'
+        PATTERN = '/build/**'
     }
     stages {
         stage("Checkout code") {
