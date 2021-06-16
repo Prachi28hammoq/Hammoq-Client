@@ -26,15 +26,16 @@ pipeline {
         }
         stage('Store to GCS') {
             steps{
-                sh 'ls'
-                sh 'pwd'
-                sh 'cd build'
-                sh 'pwd'
+            sh script:'''
+                #!/bin/bash
+                echo "This is start $(pwd)"
+                cd ./build
+                echo "This is $(pwd)"
+            '''
                 // If we name pattern build_environment.txt, this will upload the local file to our GCS bucket.
                 step([$class: 'ClassicUploadStep', credentialsId: env
                         .CREDENTIALS_ID,  bucket: "gs://${env.BUCKET}/",
                       pattern: env.PATTERN])
-                sh 'pwd'
             }
         }
     }    
