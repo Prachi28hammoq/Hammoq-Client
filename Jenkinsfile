@@ -5,7 +5,7 @@ pipeline {
         LOCATION = 'us-central1-c'
         CREDENTIALS_ID = 'testdev'
         BUCKET = 'hammoq-client'
-        PATTERN = '*'
+        PATTERN = 'build/**'
     }
     stages {
         stage("Checkout code") {
@@ -28,11 +28,13 @@ pipeline {
             steps{
                 sh 'ls'
                 sh 'pwd'
+                sh 'cd build'
+                sh 'pwd'
                 // If we name pattern build_environment.txt, this will upload the local file to our GCS bucket.
-                step(sh 'cd build'
-                 [$class: 'ClassicUploadStep', credentialsId: env
-                        .CREDENTIALS_ID,  bucket: "gs://${env.BUCKET}",
+                step([$class: 'ClassicUploadStep', credentialsId: env
+                        .CREDENTIALS_ID,  bucket: "gs://${env.BUCKET}/",
                       pattern: env.PATTERN])
+                sh 'pwd'
             }
         }
     }    
