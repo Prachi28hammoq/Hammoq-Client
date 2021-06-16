@@ -19,7 +19,7 @@ pipeline {
                 script {
                     sh 'npm run recycledcomponents'
                     sh 'npm install'
-                    sh 'npm install react-scripts'
+                    //sh 'npm install react-scripts'
                     sh "REACT_APP_NAME=APP REACT_APP_STAGE=devhost REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w react-scripts build"
                 }
             }
