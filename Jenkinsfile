@@ -2,10 +2,9 @@ pipeline {
     agent any
     environment {
         PROJECT_ID = 'hammock-272305'
+        CLUSTER_NAME = 'hammock-cluster'
         LOCATION = 'us-central1-c'
         CREDENTIALS_ID = 'testdev'
-        BUCKET = 'hammoq-client'
-        PATTERN = 'build/**'
     }
     stages {
         stage("Checkout code") {
@@ -14,22 +13,35 @@ pipeline {
             }
         }
 
-        stage('Build Project') {
+        stage('Build image') {
             steps {
                 script {
-                    sh 'npm run recycledcomponents'
-                    sh 'npm install'
-                    //sh 'npm install react-scripts'
-                    sh "REACT_APP_NAME=APP REACT_APP_STAGE=devhost REACT_APP_STRIPE=pk_test_lC5HYE8HU7h3YulsALN8XO0Y00QcNkc02w CI=false react-scripts build"
+                    myapp = docker.build("gcr.io/hammock-272305/hammoq-testdev")
                 }
             }
         }
-        stage('Store to GCS') {
+        // stage("Push image") {
+        //     steps {
+        //                 docker.withDockerRegistry(registry: [credentialsId: 'dockerhub']) { withRegistry('https://gcr.io', 'gcr:testdev') {
+        //                     myapp.push("${env.BUILD_NUMBER}")
+        //                     myapp.push("latest")
+        //             }
+        //     }
+        // } 
+        stage("Push image") {
+            steps {
+                 script {
+                        docker.withRegistry('https://gcr.io', 'gcr:testdev') {
+                            sh "docker push gcr.io/hammock-272305/hammoq-testdev:latest"
+                    }
+                 }
+            }
+        } 
+        stage('Deploy to GKE') {
             steps{
-                // If we name pattern build_environment.txt, this will upload the local file to our GCS bucket.
-                step([$class: 'ClassicUploadStep', credentialsId: env
-                        .CREDENTIALS_ID,  bucket: "gs://${env.BUCKET}/",
-                      pattern: env.PATTERN])
+                sh "kubectl apply -f deployment.yaml"
+                sh "kubectl apply -f service.yaml"
+                //step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
             }
         }
     }    
