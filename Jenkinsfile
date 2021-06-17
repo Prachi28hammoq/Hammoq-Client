@@ -16,7 +16,7 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    myapp = docker.build("gcr.io/hammock-272305/hammoq-testdev")
+                    myapp = docker.build("gcr.io/hammock-272305/hammoq-client-dev")
                 }
             }
         }
@@ -32,19 +32,19 @@ pipeline {
             steps {
                  script {
                         docker.withRegistry('https://gcr.io', 'gcr:testdev') {
-                            sh "docker push gcr.io/hammock-272305/hammoq-testdev:latest"
+                            sh "docker push gcr.io/hammock-272305/hammoq-client-dev:latest"
                     }
                  }
             }
         } 
-        // stage('Deploy to GKE') {
-        //     steps{
-        //         sh "kubectl delete -f deployment.yaml"
-        //         sh "kubectl delete -f service.yaml"
-        //         sh "kubectl create -f deployment.yaml"
-        //         sh "kubectl create -f service.yaml"
-        //         //step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-        //     }
-        // }
+        stage('Deploy to GKE') {
+            steps{
+                sh "kubectl delete -f deployment.yaml"
+                sh "kubectl delete -f service.yaml"
+                sh "kubectl create -f deployment.yaml"
+                sh "kubectl create -f service.yaml"
+                //step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            }
+        }
     }    
 }

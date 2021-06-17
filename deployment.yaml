@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hammoq-client-test
+  name: hammoq-client-dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hammoq-client-test
+      app: hammoq-client-dev
   template:
     metadata:
       labels:
-        app: hammoq-client-test
+        app: hammoq-client-dev
     spec:
       containers:
-      - name: hammoq-client-test
-        image: gcr.io/hammock-272305/hammoq-client-test:latest
+      - name: hammoq-client-dev
+        image: gcr.io/hammock-272305/hammoq-client-dev:latest
         ports:
         - containerPort: 3000
 
