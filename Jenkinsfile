@@ -28,7 +28,7 @@ pipeline {
         //             }
         //     }
         // } 
-        stage("Push image") {
+        stage("Push image to gcr") {
             steps {
                  script {
                         docker.withRegistry('https://gcr.io', 'gcr:testdev') {
