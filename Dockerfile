@@ -2,6 +2,7 @@ FROM node:14 as build
 WORKDIR /usr/src/app
 COPY package*.json ./
 COPY . .
+RUN npm cache clean -f
 RUN npm run recycledcomponents
 RUN npm install
 RUN npm -g install react-scripts
