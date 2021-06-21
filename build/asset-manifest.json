@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.2776bf21.chunk.css",
-    "main.js": "/static/js/main.73ea4310.chunk.js",
-    "main.js.map": "/static/js/main.73ea4310.chunk.js.map",
+    "main.css": "/static/css/main.5f3eb5b1.chunk.css",
+    "main.js": "/static/js/main.b19bc8a5.chunk.js",
+    "main.js.map": "/static/js/main.b19bc8a5.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.81c57db2.js",
     "runtime-main.js.map": "/static/js/runtime-main.81c57db2.js.map",
     "static/css/2.9be5424a.chunk.css": "/static/css/2.9be5424a.chunk.css",
-    "static/js/2.4b4d0154.chunk.js": "/static/js/2.4b4d0154.chunk.js",
-    "static/js/2.4b4d0154.chunk.js.map": "/static/js/2.4b4d0154.chunk.js.map",
+    "static/js/2.df2893f3.chunk.js": "/static/js/2.df2893f3.chunk.js",
+    "static/js/2.df2893f3.chunk.js.map": "/static/js/2.df2893f3.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.9be5424a.chunk.css.map": "/static/css/2.9be5424a.chunk.css.map",
-    "static/css/main.2776bf21.chunk.css.map": "/static/css/main.2776bf21.chunk.css.map",
-    "static/js/2.4b4d0154.chunk.js.LICENSE.txt": "/static/js/2.4b4d0154.chunk.js.LICENSE.txt",
+    "static/css/main.5f3eb5b1.chunk.css.map": "/static/css/main.5f3eb5b1.chunk.css.map",
+    "static/js/2.df2893f3.chunk.js.LICENSE.txt": "/static/js/2.df2893f3.chunk.js.LICENSE.txt",
     "static/media/ebay.png": "/static/media/ebay.8c7294b7.png",
     "static/media/font-awesome.min.css": "/static/media/fontawesome-webfont.f691f37e.woff",
     "static/media/hammock.71a200b0.svg": "/static/media/hammock.71a200b0.svg",
@@ -21,8 +21,8 @@
   "entrypoints": [
     "static/js/runtime-main.81c57db2.js",
     "static/css/2.9be5424a.chunk.css",
-    "static/js/2.4b4d0154.chunk.js",
-    "static/css/main.2776bf21.chunk.css",
-    "static/js/main.73ea4310.chunk.js"
+    "static/js/2.df2893f3.chunk.js",
+    "static/css/main.5f3eb5b1.chunk.css",
+    "static/js/main.b19bc8a5.chunk.js"
   ]
 }

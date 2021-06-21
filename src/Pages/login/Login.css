@@ -4,13 +4,12 @@
 
 
 
-
-
 .wrap-login100 {
   width: 560px;
   background: #fff;
   border-radius: 10px;
   position: relative;
+  margin-top: -50px;
 }
 
 .p-r-85 {
@@ -269,4 +268,5 @@ button, input, optgroup, select, textarea {
   background-color: #fff;
     width: 100%;
     height: 100%;
+    margin-top: 50px;
 }

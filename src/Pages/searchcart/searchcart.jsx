@@ -95,7 +95,12 @@ class Searchcart extends Component {
 
 
   handleDelete = async (itemId) => {
-    window.confirm("Are You Sure?");
+
+    //window.confirm("Are You Sure?");
+    var result = window.confirm("Are You Sure?");
+
+    if (result) {
+
     const data = {status: false,};
 
     try {
@@ -109,6 +114,8 @@ class Searchcart extends Component {
     {
       console.log(error);
     }
+  }
+
   };
 
   handleChangePage = async (newPage) => {
