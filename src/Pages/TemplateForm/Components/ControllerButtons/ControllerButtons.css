@@ -1,0 +1,32 @@
+.decision_buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 1%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  /* border: 1px solid black; */
+  width: 30%;
+  margin-left: 1%;
+}
+.save_to_draft {
+  border-radius: 5px;
+  background-color: #007df0;
+  color: white;
+  border: 1px solid white;
+  width: 100%;
+}
+
+.submit {
+  border-radius: 5px;
+  background-color: #007df0;
+  color: white;
+  border: 1px solid white;
+}
+
+.cancel {
+  border-radius: 5px;
+  background-color: red;
+  color: white;
+  border: 1px solid white;
+}

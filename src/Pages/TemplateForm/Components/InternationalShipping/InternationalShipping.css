@@ -1,0 +1,69 @@
+.int_ship {
+  padding-left: 10px;
+}
+
+.label__style {
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+.brz__btn {
+  border: 1px solid #007df0;
+  background-color: white;
+  color: #007df0;
+  border-radius: 7px;
+  height: 30px;
+  margin-left: 3px;
+}
+
+.int__header {
+  background-color: rgb(221, 221, 221);
+  margin-top: 7px;
+  width: 98%;
+  border-radius: 7px;
+  font-weight: 1000;
+  padding-top: 5px;
+}
+
+.int__body {
+  display: flex;
+  margin-top: 2px;
+  background-color: #f0f0f0;
+  border-radius: 7px;
+  width: 98;
+  justify-content: space-between;
+  font-weight: 400;
+  padding: 40px;
+}
+
+.free__ship_int {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.arrange__col_int {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.label__style_free {
+  width: 100%;
+}
+
+.arrange__main_int {
+  margin-top: -20px;
+  width: 33%;
+}
+
+.int_ship2 {
+  padding-left: 10px;
+}
+
+.int__input {
+  border-radius: 7px;
+  border: 1px solid gray;
+  display: flex;
+}

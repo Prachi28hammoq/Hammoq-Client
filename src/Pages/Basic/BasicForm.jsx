@@ -36,6 +36,7 @@ class BasicForm extends Component {
     super(props);
     this.state = {
       savedCards: [],
+      changedFields: new Set(),
       username: "",
       password: "",
       website: "",
@@ -164,6 +165,15 @@ class BasicForm extends Component {
 
   change = (e) => {
     this.setState({[e.target.name]: e.target.value});
+    if(e.target.value && e.target.value!="Select Condition *" && e.target.value != 0){
+      this.setState({changedFields: this.state.changedFields.add(e.target.name)});
+    }
+    else{
+      this.state.changedFields.delete(e.target.name);
+      this.setState(this.state.changedFields);
+    }
+    console.log(e.target.value);
+    console.log(this.state.changedFields);
   };
 
   setCategory = (str) => {
@@ -173,80 +183,6 @@ class BasicForm extends Component {
     else this.setState({ category: str });
   };
 
-  createTemplate = async () => {  //on Creating template
-    const { templateName, cid, itemCondition, sku, brand, model, quantity, price, costOfGoods, category, waist, inseam, rise, weightLB, weightOZ, marketPlaces, hasMarketPlaces, templateId, note, delist, rates, bal, savedCards } = this.state;
-    var { isMarketPlaceSelected } = this.state;
-    var sendData = new FormData();
-    var ebayChecked = false;
-    var mercariChecked = false;
-    var poshmarkChecked = false;
-    var marketList = "";
-    if (templateName == "") return alert("Template Name Is Required");
-
-    for(let entries in marketPlaces)
-    {
-      if(marketPlaces[entries].Status === true) 
-        {
-          isMarketPlaceSelected = true;
-          marketList += marketPlaces[entries].Name + ',';
-        }
-    }
-
-    if(delist)
-    {
-      marketList += 'delist';
-    }
-  
-    if (itemCondition == "Select Condition *" || itemCondition == "") return alert("A Condition Is Required");
-    if (!hasMarketPlaces) return $("#addTemplateModal").modal("show");
-
-    var otherSites = [];
-
-    marketPlaces.map((o, i) => {
-      switch(marketPlaces[i].Name)
-      {
-        case "Ebay":
-          ebayChecked = true;
-          break;
-        case "Mercari":
-          mercariChecked = true;
-          break;
-        case "Poshmark":
-          poshmarkChecked = true;          
-          break;
-        default:
-          let site = {name: marketPlaces[i].Name, status: marketPlaces[i].Status, url: ""};
-          otherSites.push(site);
-          break;
-      }
-    });
-    sendData.append("sku", sku);
-    sendData.append("quantity", quantity || 1);
-
-    sendData.append("price", price);
-    sendData.append("brand", brand);
-    sendData.append("model", model);
-    sendData.append("note", note);
-    sendData.append("condition_name", itemCondition);
-
-    sendData.append("ebay.check", ebayChecked);
-    sendData.append("mercari.check", mercariChecked);
-    sendData.append("poshmark.check", poshmarkChecked);
-    sendData.append("others", JSON.stringify(otherSites));
-    sendData.append("delist.check", delist);
-
-    sendData.append("waist", waist);
-    sendData.append("inseam", inseam);
-    sendData.append("category", category);
-    sendData.append("rise", rise);
-    sendData.append("weightLB", weightLB);
-    sendData.append("weightOZ", weightOZ);
-    sendData.append("name", templateName);
-      
-    Axios.post("/template", sendData, {headers: {"Content-Type": "multipart/form-data"}}).then(async(response) => {
-      return alert(response.data.msg);
-    });
-  }
 
   onSubmit = async () => {
     //e.preventDefault();
@@ -266,7 +202,7 @@ class BasicForm extends Component {
       data.delete("activity");
       data.delete("sku");
       data.delete("quantity");
-
+      data.delete("_id");
       data.delete("price");
       data.delete("brand");
       data.delete("model");
@@ -294,7 +230,8 @@ class BasicForm extends Component {
       data.delete("rate2");
       data.delete("rate3");
       data.delete("prodStatus");
-      data.delete("extraDescriptions");
+      // data.delete("extraDescriptions");
+      // data.append("extraDescriptions", JSON.parse(template["extraDescriptions"]));s
     }
     var cnt = 0;
 
@@ -520,40 +457,39 @@ class BasicForm extends Component {
 
   handleChangesTemplate = (e) => {
     this.setTemplate(e.target.value);
+    console.log("template")
   };
 
   setTemplate = (id) => {
     this.setState({ templateId: id });
-    if(id=="")this.setState({
-      quantity: 0,
-      itemCondition: "",
-      category: "",
-      waist: 0,
-      inseam: 0,
-      rise: 0,
-      weightLB: 0,
-      weightOZ: 0,
-      note: "",
-      delist: false,
-      template: {}
-    });
+    const fields=["quantity","itemCondition","sku","brand","model","category","waist","inseam","price","costOfGoods","rise","weightLB","weightOZ","note","delist"];
+    
+    if(id==""){
+      fields.forEach(field =>{
+        if(!this.state.changedFields.has(field)){
+          if(field=="delist") this.setState({[field]:false});
+          if(field=="itemCondition") this.setState({[field]:"Select Condition *"});
+          else this.setState({[field]:""})
+        }
+      })
+      this.setState({template: {}});
+      return;
+    }
     const { templates, marketPlaces } = this.state;
+    console.log(marketPlaces);
     templates.forEach((template) => {
       if(template._id ==id) {
         template=template.data;
-        this.setState({
-          quantity: template.quantity,
-          itemCondition: template.itemCondition,
-          category: template.category,
-          waist: template.waist,
-          inseam: template.inseam,
-          rise: template.rise,
-          weightLB: template.weightLB,
-          weightOZ: template.weightOZ,
-          note: template.note,
-          delist: template.delist.check,
-          template: template
-        });
+        console.log(template);
+        this.setState({template:template});
+        fields.forEach(field =>{
+          if(!this.state.changedFields.has(field)){
+            if(field=="delist") this.setState({[field]:template[field].check});
+            if(field=="itemCondition") this.setState({[field]:template.condition_name});
+            else this.setState({[field]:template[field]})
+            console.log([field],this.state[field])
+          }
+        })
         marketPlaces.map( (o,i) => {
           marketPlaces[i].Status = template[marketPlaces[i].Name.toLowerCase()]["check"];
         } );
@@ -910,28 +846,6 @@ class BasicForm extends Component {
                   </select>
                 </div>
               </div>
-              <div className="col-12 px-1">
-              <form action="#" class="form-container">
-
-                  <label className="form-check-label">Wanna save it as template?</label>
-                <input 
-                  type="text" 
-                  placeholder="Enter Template name" 
-                  name="templateName" 
-                    className="form-control"
-                  value={templateName} 
-                  onChange={(e) => this.change(e)}
-                  required></input>
-
-                <button
-                    type="button"
-                    onClick={() => this.createTemplate()}
-                    className="btn btn-success"
-                  >
-                    Save as Template
-                  </button>
-              </form>
-          </div>
             </div>
           </div>
           <div className="rightSideContainer">
