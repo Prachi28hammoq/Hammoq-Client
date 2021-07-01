@@ -23,6 +23,8 @@ class Signup extends Component {
       password: "",
       confirmPassword: "",
       referralCode: "",
+      isemailvalid: false,
+      isphonenovalid: false,
       isSubmitting: false,
       privacyagreement: false,
       termsofservice: false
@@ -31,6 +33,22 @@ class Signup extends Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
+    var fieldsToCheck=["email","phoneno"];
+    if (fieldsToCheck.includes(name)) {
+      let re ={
+        "email": /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "phoneno": /^[0-9+\(\)#\.\s\/ext-]+$/,
+      };
+      var isValid="is"+[name]+"valid";
+      if (re[name].test(value)) {
+        this.setState({ [isValid]: true });
+        console.log({ [isValid]: true });
+      }
+      else {
+        this.setState({ [isValid]: false });
+        console.log({ [isValid]: false });
+      }
+    }
     this.setState({ [name]: value });
   };
 
@@ -56,6 +74,8 @@ class Signup extends Component {
       firstName,
       lastName,
       email,
+      isemailvalid,
+      isphonenovalid,
       phoneno,
       referralCode
     } = this.state;
@@ -70,14 +90,14 @@ class Signup extends Component {
       return alert("Please Accept The Terms Of Service To Continue.");
     }
 
-    if (email == "") {
+    if (!isemailvalid) {
       this.setState({ isSubmitting: false });
-      return alert("Email field is required.");
+      return alert("Please enter valid Email Address.");
     }
 
-    if (phoneno == "") {
+    if (!isphonenovalid) {
       this.setState({ isSubmitting: false });
-      return alert("Phone Number field is required.");
+      return alert("Please enter valid Phone Number.");
     }
 
     if (firstName == "" || lastName == "") {
