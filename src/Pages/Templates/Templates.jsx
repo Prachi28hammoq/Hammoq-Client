@@ -40,7 +40,6 @@ class Templates extends Component {
 
     Axios.post("/template/addTemplate", data)
       .then(({ data }) => {
-        console.log(data, 'teempalated')
         const { templateName } = this.state;
         
         const idx = data.templates.findIndex((a) => a.name === templateName);

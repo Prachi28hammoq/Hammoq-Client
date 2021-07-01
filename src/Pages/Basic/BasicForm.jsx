@@ -172,8 +172,6 @@ class BasicForm extends Component {
       this.state.changedFields.delete(e.target.name);
       this.setState(this.state.changedFields);
     }
-    console.log(e.target.value);
-    console.log(this.state.changedFields);
   };
 
   setCategory = (str) => {
@@ -457,7 +455,6 @@ class BasicForm extends Component {
 
   handleChangesTemplate = (e) => {
     this.setTemplate(e.target.value);
-    console.log("template")
   };
 
   setTemplate = (id) => {
@@ -476,7 +473,6 @@ class BasicForm extends Component {
       return;
     }
     const { templates, marketPlaces } = this.state;
-    console.log(marketPlaces);
     templates.forEach((template) => {
       if(template._id ==id) {
         template=template.data;
@@ -487,7 +483,6 @@ class BasicForm extends Component {
             if(field=="delist") this.setState({[field]:template[field].check});
             if(field=="itemCondition") this.setState({[field]:template.condition_name});
             else this.setState({[field]:template[field]})
-            console.log([field],this.state[field])
           }
         })
         marketPlaces.map( (o,i) => {

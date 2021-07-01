@@ -126,7 +126,6 @@ class Images extends Component {
                                 e.target.src = image.URL;
                               }
                               e.target.onerror = null;
-                              console.log(image);
                             }}
                             style={{ width: "90px", height: "90px" }}
                             alt="+"

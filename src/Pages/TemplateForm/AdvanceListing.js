@@ -246,8 +246,6 @@ export default class AdvanceListing extends React.Component {
               if (productData.extraDescriptions) 
               {
                 let extraDescriptions = JSON.parse(productData.extraDescriptions);
-                console.log(extraDescriptions);
-                console.log(productData.extraDescriptions);
                 this.setState({extraDescriptions: extraDescriptions, count1: extraDescriptions.length + 1});
               }
 
@@ -268,7 +266,6 @@ export default class AdvanceListing extends React.Component {
 
               if (productData.others) {
                 productData['others'] = JSON.parse(productData['others']);
-                console.log(productData['others']);
                 let otherfromdb = productData.others;
                 let othersurl = [];
                 let othertolist = [];
@@ -1067,7 +1064,6 @@ export default class AdvanceListing extends React.Component {
         },
       })
         .then((response) => {
-          console.log(response);
           this.setState({ isSubmitting: false });
           alert(response.data.msg);
           window.open("/templates", "_self");
