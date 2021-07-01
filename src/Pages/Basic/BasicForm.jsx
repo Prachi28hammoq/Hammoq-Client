@@ -476,7 +476,6 @@ class BasicForm extends Component {
     templates.forEach((template) => {
       if(template._id ==id) {
         template=template.data;
-        console.log(template);
         this.setState({template:template});
         fields.forEach(field =>{
           if(!this.state.changedFields.has(field)){
