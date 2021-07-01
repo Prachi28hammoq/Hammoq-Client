@@ -384,6 +384,9 @@ class BasicForm extends Component {
     var imgobj = [];
     const files = e.target.files;
     const count = files.length;
+    if(count>12){
+      window.alert("Only 12 images can be selected");
+    }
 
     this.setState({ isSubmitting: true });
     for (let i = 0; i < count; i++) 
