@@ -16,7 +16,7 @@ class Templates extends Component {
   }
 
   componentDidMount = () => {
-    Axios.get("/template")
+    Axios.get("/template/getTemplate")
        .then(({ data }) => this.setState({ templates: data.templates }))
       .catch((err) => console.log(err) || alert(JSON.stringify(err)));
     $("#addTemplateModal").on("hidden.bs.modal", (e) => {
