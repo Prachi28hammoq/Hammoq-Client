@@ -480,7 +480,7 @@ class BasicForm extends Component {
         fields.forEach(field =>{
           if(!this.state.changedFields.has(field)){
             if(field=="delist") this.setState({[field]:template[field].check});
-            if(field=="itemCondition") this.setState({[field]:template.condition_name});
+            else if(field=="itemCondition") this.setState({[field]:template.condition_name});
             else this.setState({[field]:template[field]})
           }
         })
