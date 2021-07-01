@@ -124,7 +124,7 @@ class BasicForm extends Component {
       this.setState({marketPlaces:marketPlaces, hasMarketPlaces:hasMarketPlaces});
     });
 
-    Axios.get("/template")
+    Axios.get("/template/getTemplate")
          .then((data) => {this.setState({ templates: data.data.templates });})
          .catch((err) => {console.log(err);});
 

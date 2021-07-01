@@ -38,7 +38,7 @@ class Templates extends Component {
       templates && templates.findIndex((a) => a.name === templateName);
     if (idx > -1) return alert("Template with same name already exists");
 
-    Axios.post("/template", data)
+    Axios.post("/template/addTemplate", data)
       .then(({ data }) => {
         console.log(data, 'teempalated')
         const { templateName } = this.state;

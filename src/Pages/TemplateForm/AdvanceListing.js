@@ -214,7 +214,7 @@ export default class AdvanceListing extends React.Component {
   this.setState({isDataLoading: true});
   var url,headers={};
   if(isTemplate){
-    url= `/template/${productid}`;
+    url= `/template/getTemplate/${productid}`;
   }
   else{
     url=`/product/${clientid}/${productid}`;
@@ -1061,7 +1061,7 @@ export default class AdvanceListing extends React.Component {
         console.log(err);
       });
       else
-      Axios.put(`/template/${productid}`, dataform, {
+      Axios.put(`/template/updateTemplate/${productid}`, dataform, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
@@ -1614,7 +1614,7 @@ export default class AdvanceListing extends React.Component {
   handleDelete = async () => {
     const id = this.props.productid
     
-    Axios.delete(`/template/${id}`) 
+    Axios.delete(`/template/deleteTemplate/${id}`) 
    .then((response) => {
      alert( response.data.msg);
      window.open("/templates", "_self");
